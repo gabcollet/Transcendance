@@ -2,8 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import "./NavBar.css";
+import "./Footer.css";
 import App from "./App";
-import TopBanner from "./NavBar";
+import NavBar from "./NavBar";
+import Footer from "./Footer";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -11,13 +13,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <div className="top-banner">
-      <TopBanner></TopBanner>
+      <NavBar></NavBar>
     </div>
-    <div className="middle">
-      <div className="content">
-        <App></App>
-      </div>
+    <div className="content">
+      <App></App>
     </div>
-    <div className="footer"></div>
+    <div className="footer">
+      <Footer></Footer>
+    </div>
   </React.StrictMode>
 );
