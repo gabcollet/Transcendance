@@ -1,9 +1,0 @@
-@import "App.css";
-
-.footer-bar {
-  position: relative;
-  height: 200px;
-  width: 100%;
-  background-color: rgb(54, 53, 53);
-  display: block;
-}
