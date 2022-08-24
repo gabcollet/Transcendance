@@ -1,1 +1,13 @@
 @import "../../index.css";
+
+li {
+  position: absolute;
+  list-style: none;
+  color: #f3efff;
+  transform: rotate(calc(360dev / 8));
+}
+
+li menu-button menu-button-transition {
+  font-size: 500px;
+  z-index: 5000;
+}

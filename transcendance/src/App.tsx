@@ -3,7 +3,11 @@ import "./App.css";
 import Menu from "./components/Menu/Menu";
 
 const App = () => {
-  return <Menu />;
+  return (
+    <div className="app-content">
+      <Menu />
+    </div>
+  );
 };
 
 export default App;

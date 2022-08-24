@@ -3,12 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface _Button {
   icon: any;
+  className: string;
 }
 
 const MenuButton = (props: _Button) => {
-  console.log("TYPE IS" + typeof props.icon);
+  console.log(props.className);
   return (
-    <li>
+    <li className={props.className}>
       <a href="#">
         <FontAwesomeIcon icon={props.icon}></FontAwesomeIcon>
       </a>

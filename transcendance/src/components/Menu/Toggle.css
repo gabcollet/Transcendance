@@ -1,1 +1,33 @@
 @import "../../index.css";
+
+.toggle {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  font-size: 125px;
+  background-color: #ff005c;
+  color: aliceblue;
+  cursor: pointer;
+  z-index: 2;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.15);
+}
+
+.toggle-test {
+  background-color: #00bfff;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  font-size: 125px;
+  color: aliceblue;
+  cursor: pointer;
+  z-index: 2;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.15);
+}

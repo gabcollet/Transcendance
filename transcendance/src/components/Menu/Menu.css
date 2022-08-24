@@ -1,4 +1,26 @@
 @import "../../index.css";
+
 .menu-wrap {
-  background-color: rgb(0, 255, 0);
+  background: linear-gradient(
+    45deg,
+    #e70055,
+    #980049,
+    #3c0119,
+    #26013c,
+    #04013c
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.menu {
+  position: relative;
+  height: 400px;
+  width: 400px;
+  /* background: greenyellow; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
