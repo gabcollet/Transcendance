@@ -9,7 +9,6 @@ interface _Button {
 }
 
 const MenuButton = (props: _Button) => {
-  console.log(props.className);
   return (
     <li className={props.className}>
       <a href="#">
