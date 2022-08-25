@@ -17,36 +17,63 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const Menu = () => {
-  const [iconName, setIconName] = useState("toggle");
+  const [toggleName, setToggleName] = useState("toggle");
   const [opening, setOpening] = useState(false);
+  const [iconName, setIconName] = useState("");
   const [toggleIcon, setToggleicon] = useState(faBars);
   const openMenu: MouseEventHandler<HTMLDivElement> = () => {
     if (opening == false) {
       setOpening(true);
       setToggleicon(faX);
-      setIconName("toggle-test");
+      setIconName("-t");
+      setToggleName("toggle-open");
       console.log(opening);
     } else {
       setOpening(false);
       setToggleicon(faBars);
       console.log(opening);
-      setIconName("toggle");
+      setIconName("");
+      setToggleName("toggle");
     }
   };
   let MenuComp = (
     <div className="menu-wrap">
       <div className="menu">
         <Toggle
-          className={iconName}
+          className={toggleName}
           onClick={openMenu}
           icon={toggleIcon}
         ></Toggle>
-        {/* <MenuButton className={iconName} icon={faPlayCircle}></MenuButton>
-        <MenuButton className={iconName} icon={faBinoculars}></MenuButton>
-        <MenuButton className={iconName} icon={faUser}></MenuButton>
-        <MenuButton className={iconName} icon={faRankingStar}></MenuButton>
-        <MenuButton className={iconName} icon={faTrophy}></MenuButton>
-        <MenuButton className={iconName} icon={faCommentDots}></MenuButton> */}
+        <MenuButton
+          className={"zero" + iconName}
+          icon={faPlayCircle}
+          iconClassName="play"
+        ></MenuButton>
+        <MenuButton
+          className={"one" + iconName}
+          icon={faBinoculars}
+          iconClassName="bino"
+        ></MenuButton>
+        <MenuButton
+          className={"two" + iconName}
+          icon={faUser}
+          iconClassName="user"
+        ></MenuButton>
+        <MenuButton
+          className={"three" + iconName}
+          icon={faRankingStar}
+          iconClassName="leader"
+        ></MenuButton>
+        <MenuButton
+          className={"four" + iconName}
+          icon={faTrophy}
+          iconClassName="achiev"
+        ></MenuButton>
+        <MenuButton
+          className={"five" + iconName}
+          icon={faCommentDots}
+          iconClassName="chat"
+        ></MenuButton>
       </div>
     </div>
   );

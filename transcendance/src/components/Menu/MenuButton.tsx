@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 interface _Button {
   icon: any;
   className: string;
+  iconClassName: string;
+  //   i: number;
 }
 
 const MenuButton = (props: _Button) => {
@@ -11,7 +13,10 @@ const MenuButton = (props: _Button) => {
   return (
     <li className={props.className}>
       <a href="#">
-        <FontAwesomeIcon icon={props.icon}></FontAwesomeIcon>
+        <FontAwesomeIcon
+          className={props.iconClassName}
+          icon={props.icon}
+        ></FontAwesomeIcon>
       </a>
     </li>
   );

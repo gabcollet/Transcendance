@@ -17,8 +17,8 @@
 
 .menu {
   position: relative;
-  height: 400px;
-  width: 400px;
+  height: 800px;
+  width: 800px;
   /* background: greenyellow; */
   display: flex;
   align-items: center;
