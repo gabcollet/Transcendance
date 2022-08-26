@@ -17,6 +17,15 @@ li {
   transform: rotate(0deg) translateX(300px);
   transform-origin: 400px;
   left: 0;
+
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.15);
+}
+
+.button-wrapper {
+}
+
+a {
+  color: #f3efff;
 }
 
 a:visited {
@@ -25,7 +34,7 @@ a:visited {
 }
 
 a:hover {
-  color: rgb(52, 0, 94);
+  color: rgb(91, 0, 165);
 }
 
 .zero-t {

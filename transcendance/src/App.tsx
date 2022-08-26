@@ -1,7 +1,7 @@
 import React, { MouseEventHandler, useState } from "react";
 import "./App.css";
-import Menu from "./components/Menu/Menu";
-import Login from "./components/Login/Login";
+import Menu from "./Pages/Menu";
+import Login from "./Pages/Login";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const App = () => {
