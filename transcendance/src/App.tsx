@@ -3,6 +3,7 @@ import "./App.css";
 import Menu from "./Pages/Menu";
 import Login from "./Pages/Login";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Pong from './components/Pong/Pong';
 
 const App = () => {
   //   const [pageState, setPageState] = useState("menu");
@@ -24,7 +25,9 @@ const App = () => {
         <Route path="/Menu" element={<Menu></Menu>} />
         <Route
           path="/Pong"
-          element={<div style={{ color: "white", fontSize: "75px" }}>PONG</div>}
+          element={<div style={{fontSize: '0px', border: '2px solid white' }}>
+              <Pong />
+            </div>}
         />
         <Route
           path="/Spectate"
