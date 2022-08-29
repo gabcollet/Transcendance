@@ -1,9 +1,39 @@
 @import "../index.css";
 
-.login-wrap {
+.login-container {
   color: whitesmoke;
+  display: flex;
+  width: 800px;
+  height: 800px;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
 }
 
 .login-wrap:hover {
   cursor: pointer;
+}
+
+.login-btn {
+  color: #f3efff;
+  background-color: #ff005c;
+  border-radius: 50%;
+  width: 225px;
+  height: 225px;
+  cursor: pointer;
+  border: none;
+  align-content: center;
+  justify-content: center;
+  transition: 0.5s;
+}
+
+.login-btn:hover {
+  color: #5b00a5;
+  width: 235px;
+  height: 235px;
+  transition: 0.5s;
+}
+
+.login-icon {
+  scale: 1000%;
 }
