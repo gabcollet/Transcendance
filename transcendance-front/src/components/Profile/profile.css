@@ -1,0 +1,44 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding:0;
+}
+
+.profile-container {
+    border-style: solid;
+    width: 80vw;
+    height: 80vh;
+}
+
+.profile-header {
+    border-style: solid;
+    border-color: red;
+    height: 20%;
+    max-width: 100%;
+    display: flex;
+}
+
+.primary-stats {
+    border-style: solid;
+    border-color: blue;
+    max-width: 60%;
+    min-width: 60%;
+    max-height: 100%;
+    min-height: 100%;
+    display: grid;
+    align-items: center;
+}
+
+img {
+    display: inline-block;
+    max-width: 40%;
+    min-width: 40%;
+    min-height: 100%;
+    max-height: 100%;
+}
+
+h3 {
+    border-style: solid;
+    border-color: green;
+    font-size: 2rem;
+}
