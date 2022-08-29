@@ -1,0 +1,10 @@
+@import "../index.css";
+
+.menu {
+  height: 800px;
+  width: 800px;
+  /* background: greenyellow; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
