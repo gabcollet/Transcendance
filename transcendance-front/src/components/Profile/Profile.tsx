@@ -19,6 +19,7 @@ const Profile = () => {
         <section className="profile-container">
             <ProfileHeader />
             <ProfileAchievements />
+            <ProfileFriends />
         </section>
     );
 }
@@ -27,6 +28,14 @@ const ProfileAchievements = () => {
     return (
         <section className="profile-achievements-container">
             <p>these are the achievemetns</p>
+        </section>
+    );
+}
+
+const ProfileFriends = () => {
+    return (
+        <section className="profile-friends-container">
+            <p>these are the friends</p>
         </section>
     );
 }

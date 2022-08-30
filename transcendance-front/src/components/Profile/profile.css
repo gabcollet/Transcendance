@@ -8,6 +8,8 @@
     border-style: solid;
     width: 80vw;
     height: 80vh;
+    display: grid;
+    grid-template-rows: 1fr 2fr 2fr;
 }
 
 .profile-header {
@@ -20,6 +22,7 @@
     grid-template-rows: 4fr 1fr;
 }
 
+/* Profile header */
 .primary-stats {
     border-style: solid;
     border-color: blue;
@@ -51,29 +54,25 @@
     border-radius: 50%;
     border-style: solid;
     border-color: pink;
-    /* min-width: 80%; */
     min-width: 100px;
     max-width: 100px;
     max-height: 100px;
     margin: auto;
 }
 
-/* Achievements */
-.profile-achievements {
+.primary-stats h3 {
+    border-style: solid;
+    border-color: green;
+    font-size: 2rem;
+}
+
+/* Profile Achievements */
+.profile-achievements-container {
     border-style: solid;
     border-color: cyan;
 }
 
-img {
-    display: inline-block;
-    max-width: 40%;
-    min-width: 40%;
-    min-height: 80%;
-    max-height: 80%;
-}
-
-h3 {
-    border-style: solid;
-    border-color: green;
-    font-size: 2rem;
+/* Profile Friends */
+.profile-friends-container {
+    
 }
