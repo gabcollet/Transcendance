@@ -16,7 +16,7 @@
     height: 20%;
     max-width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 2fr;
     grid-template-rows: 4fr 1fr;
 }
 
@@ -27,6 +27,10 @@
     min-width: 60%;
     max-height: 100%;
     min-height: 100%;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    grid-column-start: 2;
+    grid-column-end: 3;
     display: grid;
     align-items: center;
 }
@@ -39,11 +43,25 @@
 }
 
 .profile-name-text {
-    font-size: 1rem;
+    margin: auto;
+    font-size: 1.25rem;
 }
 
 .profile-image {
     border-radius: 50%;
+    border-style: solid;
+    border-color: pink;
+    /* min-width: 80%; */
+    min-width: 100px;
+    max-width: 100px;
+    max-height: 100px;
+    margin: auto;
+}
+
+/* Achievements */
+.profile-achievements {
+    border-style: solid;
+    border-color: cyan;
 }
 
 img {
