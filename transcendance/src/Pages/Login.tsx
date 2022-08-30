@@ -1,24 +1,32 @@
 import "./Login.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
-import LoginForm from "../components/Login/LoginForm";
+import { FC, useState } from "react";
+import { Link } from "react-router-dom";
 
-const Login = () => {
-  const [showForm, setshowForm] = useState(false);
+const Login: FC<{ onChangeBg: (newClassName: string) => void }> = (props) => {
+  const [isClicked, setIsClicked] = useState(false);
+  const [login42, setLogin42] = useState("login-btn");
 
-  const forDisplayHandler = () => {
-    setshowForm(!showForm);
+  const login42Handler = () => {
+    setIsClicked(!isClicked);
+    setLogin42("login-42-btn");
   };
 
-  return !showForm ? (
+  const changeBGHandler = () => {
+    props.onChangeBg("root-default");
+  };
+
+  return !isClicked ? (
     <div className="login-container">
-      <button className="login-btn" onClick={forDisplayHandler}>
-        <FontAwesomeIcon className="login-icon" icon={faUser}></FontAwesomeIcon>
+      <button className="login-btn" onClick={login42Handler}>
+        Are you Ready to Transcend ?
       </button>
     </div>
   ) : (
-    <LoginForm />
+    <div className="login-container">
+      <Link className="link" to="/Menu" onClick={changeBGHandler}>
+        <button className={login42}>Login with 42</button>
+      </Link>
+    </div>
   );
 };
 

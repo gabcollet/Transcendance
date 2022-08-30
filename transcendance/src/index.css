@@ -1,11 +1,14 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+:root {
+  --dark_background: linear-gradient(
+    45deg,
+    #010012,
+    #020018,
+    #020124,
+    #020124,
+    #03012a
+  );
 
-.root {
-  background: linear-gradient(
+  --default_background: linear-gradient(
     45deg,
     #e70055,
     #980049,
@@ -13,11 +16,26 @@
     #26013c,
     #04013c
   );
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.root-login {
+  background: var(--dark_background);
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
 }
 
-body {
+.root-default {
+  background: var(--default_background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
