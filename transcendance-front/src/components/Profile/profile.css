@@ -103,7 +103,6 @@
     height: 40px;
     min-height: 40px;
     max-height: 40px;
-
 }
 
 .selector-button {
@@ -136,8 +135,8 @@
     grid-template-columns: 100px 200px;
     grid-template-rows: 1fr 1fr;
     grid-template-areas: 
-        "image name"
-        "image status";
+    "image name"
+    "image status";
 }
 
 .individual-id img {
@@ -159,6 +158,18 @@
     grid-area: status;
 }
 
+.individual-buttons {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.individual-buttons button {
+    padding: 0px 10px;
+    white-space: nowrap;
+}
+
 .individual-stats {
     padding: 10px;
     min-width: 100px;
@@ -166,4 +177,65 @@
 
 .individual-stats h3 {
     font-size: 1.5rem;
+}
+
+/* History Content */
+.match-content-individual {
+    border-style: solid;
+    border-color: gold;
+    height: 120px;
+    display: flex;
+}
+
+.match-content-individual > * {
+    border-style: solid;
+    border-color: cyan;
+}
+
+.me-id {
+    display: flex;
+    flex-direction: column;
+}
+
+.match-id {
+    display: flex;
+}
+
+.match-id h3 {
+    margin: auto 10px;
+    font-size: 2rem;
+}
+
+.match-id .me-id img {
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    margin: 5px 10px;
+    border-style: solid;
+    border-color: red;
+}
+
+.match-id .me-id h4 {
+    font-size: 1rem;
+    border-style: solid;
+    border-color: green;
+}
+.foe-id {
+    display: flex;
+    flex-direction: column;
+}
+
+.match-id .foe-id img {
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    margin: 5px 10px;
+    border-style: solid;
+    border-color: red;
+}
+
+.match-id .foe-id h4 {
+    font-size: 1rem;
+    border-style: solid;
+    border-color: green;
 }

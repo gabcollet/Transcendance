@@ -100,6 +100,10 @@ const FriendsContent = () => {
               <h4>{friend.name}</h4>
               <p>status: {friend.status}</p>
             </div>
+            <div className="individual-buttons">
+              <button>Add friend</button>
+              <button>Message</button>
+            </div>
             <div className="individual-stats">
               <h3>W: {friend.victories}</h3>
               <h3>L: {friend.defeats}</h3>
@@ -115,11 +119,26 @@ const FriendsContent = () => {
 }
 
 const HistoryContent = () => {
+  const matchesElement = data.matches.map((match) => {
     return (
-        <section className="history-content-container">
-            <p>This is history...</p>
-        </section>
+      <div className="match-content-individual">
+        <div className="match-id">
+          <div className="me-id">
+            <img src={data.profile_image} alt={data.name} />
+            <h4>{data.name}</h4>
+          </div>
+          <h3>VS.</h3>
+          <div className="foe-id">
+            <img src={match.foe_profile_image} alt={data.name} />
+            <h4>{data.name}</h4>
+          </div>
+        </div>
+      </div>
     );
+  });
+  return (
+    <section className="history-content-container">{matchesElement}</section>
+  );
 }
 
 const AchievementsContent = () => {
