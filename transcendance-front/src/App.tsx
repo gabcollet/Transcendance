@@ -3,7 +3,9 @@ import "./App.css";
 import Menu from "./Pages/Menu";
 import Login from "./Pages/Login";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Pong from './components/Pong/Pong';
+import Pong from "./components/Pong/Pong";
+import Chat from "./Pages/Chat";
+import { SocketContext, socket } from "./context/socket";
 
 const App = () => {
   //   const [pageState, setPageState] = useState("menu");
@@ -19,15 +21,18 @@ const App = () => {
   //     return <Menu></Menu>;
   //   }
   return (
+    // <SocketContext.Provider value={socket}>
     <Router>
       <Routes>
         <Route path="/" element={<Login></Login>} />
         <Route path="/Menu" element={<Menu></Menu>} />
         <Route
           path="/Pong"
-          element={<div style={{fontSize: '0px', border: '2px solid white' }}>
+          element={
+            <div style={{ fontSize: "0px", border: "2px solid white" }}>
               <Pong />
-            </div>}
+            </div>
+          }
         />
         <Route
           path="/Spectate"
@@ -53,12 +58,10 @@ const App = () => {
             <div style={{ color: "white", fontSize: "75px" }}>ACHIEVMENT</div>
           }
         />
-        <Route
-          path="/Chat"
-          element={<div style={{ color: "white", fontSize: "75px" }}>CHAT</div>}
-        />
+        <Route path="/Chat" element={<Chat></Chat>} />
       </Routes>
     </Router>
+    // </SocketContext.Provider>
   );
 };
 
