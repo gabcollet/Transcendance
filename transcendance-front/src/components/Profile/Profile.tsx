@@ -66,7 +66,9 @@ const ProfileContent = () => {
             Achievements
           </button>
         </div>
-        <SpecificContent contentType={contentType} />
+        <div className="specific-content">
+          <SpecificContent contentType={contentType} />
+        </div>
       </section>
     );
 }
