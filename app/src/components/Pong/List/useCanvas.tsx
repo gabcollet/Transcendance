@@ -7,12 +7,15 @@ const useCanvas = (options={}) => {
     //------------------------- Backend //-------------------------
     let P1_y: number;
     const socket = io("localhost:9006");
+    let roomID: string;
 
-    /* socket.on('room', function(data) {
-        console.log('You have joined the room: ', data);
+    socket.emit('joinRoom');
+    socket.on('joinedRoom', room => {
+        console.log('Connected');
+        roomID = room;
     });
 
-    socket.on('exception', function(data) {
+    /* socket.on('exception', function(data) {
         console.log('event ', data);
     });
 
