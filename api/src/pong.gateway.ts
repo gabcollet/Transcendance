@@ -1,14 +1,63 @@
-import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import { Server } from 'http';
+import { Logger } from '@nestjs/common';
+import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse } from '@nestjs/websockets';
+import { Server, Socket } from 'socket.io';
+import uuidv4 from 'uuid';
 
-@WebSocketGateway(9006, {cors:'*'})
-export class PongGateway {
+@WebSocketGateway(9006, {cors: '*'})
+export class PongGateway implements OnGatewayInit/* , OnGatewayConnection, OnGatewayDisconnec */{
 
-  @WebSocketServer()
-  server: Server;
-  @SubscribeMessage('message')
-  handleMessage(@MessageBody() input: number): void {
-    // console.log('api input :', input);
-    this.server.emit('message', input);
+  private logger: Logger = new Logger('PongGateway');
+
+  //This is usefull to pass the payload to everyone
+  @WebSocketServer() server: Server;
+
+  afterInit(server: Server) {
+    this.logger.log('Pong server initialized');
+  }
+  
+  /* handleConnection(client: Socket, ...args: any[]) {
+    this.logger.log(`Client connected: ${client.id}`);
+  }
+
+  handleDisconnect(client: Socket) {
+    this.logger.log(`Client disconnected: ${client.id}`);
+  } */
+
+  @SubscribeMessage('msgToServer')
+  handleMessage(client: Socket, payload: number) /* WsResponse<number> */ {
+    // this.server.to(payload.room).emit('msgToClient', payload.position);
+    this.server.emit('msgToClient', payload);
+    
+    // this.server.emit('msgToClient', payload);
+    /* return {
+      event: 'msgToClient',
+      data: payload
+    }; */
+  }
+
+  roomiD: string = '';
+  isWaiting = false;
+  private createRoom(): string {
+    const { v4: uuidv4 } = require('uuid');
+
+    if (!this.isWaiting){
+      this.roomiD = uuidv4();
+    }
+    this.isWaiting = !this.isWaiting;
+    return this.roomiD;
+  }
+
+  @SubscribeMessage('joinRoom')
+  handleJoinRoom(client: Socket) {
+    const room = this.createRoom();
+    client.join(room);    
+    this.logger.log(`${client.id} joined room ${room}`);
+    client.emit('joinedRoom', room);
+  }
+
+  @SubscribeMessage('leaveRoom')
+  handleLeaveRoom(client: Socket, room: string) {
+    client.leave(room);
+    client.emit('leaveRoom', room);
   }
 }

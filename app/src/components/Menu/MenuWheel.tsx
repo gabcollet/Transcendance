@@ -45,7 +45,7 @@ const MenuWheel = (props: _MenuWheel) => {
           onClick={openMenu}
           icon={toggleIcon}
         ></Toggle>
-        <Link className="link" to="/Pong">
+        <Link className="link" to="/PongRoom">
           <MenuButton
             className={"zero" + iconName}
             icon={faPlayCircle}

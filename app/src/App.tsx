@@ -3,6 +3,7 @@ import "./App.css";
 import Menu from "./Pages/Menu";
 import Login from "./Pages/Login";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import PongRoom from "./Pages/PongRoom";
 import Pong from './components/Pong/Pong';
 
 const App = () => {
@@ -21,14 +22,10 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login></Login>} />
-        <Route path="/Menu" element={<Menu></Menu>} />
-        <Route
-          path="/Pong"
-          element={<div style={{fontSize: '0px', border: '2px solid white' }}>
-              <Pong />
-            </div>}
-        />
+        <Route path="/" element={<Login/>} />
+        <Route path="/Menu" element={<Menu/>} />
+        <Route path='/PongRoom' element={<PongRoom/>} />
+        <Route path="/Pong" element={<Pong/>} />
         <Route
           path="/Spectate"
           element={

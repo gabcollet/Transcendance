@@ -1,3 +1,4 @@
+import './Pong.css'
 import useCanvas from './List/useCanvas'
 
 const Pong = () => {
@@ -6,7 +7,9 @@ const Pong = () => {
     const canvasRef = useCanvas(/* {context} */);
 
     return (
-        <canvas ref={canvasRef} /* {...moreConfig} *//>
+        <div className = "pong-wrap">
+            <canvas ref={canvasRef} /* {...moreConfig} *//>
+        </div>
     );
 };
 

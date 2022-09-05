@@ -5,29 +5,30 @@ import io, { Socket } from 'socket.io-client'
 
 const useCanvas = (options={}) => {
     //------------------------- Backend //-------------------------
-    // const [socket, setSocket] = useState<Socket>();
     let P1_y: number;
     const socket = io("localhost:9006");
-    
-    // useEffect(() => {
-    //     const newSocket = io("localhost:9006");
-    //     setSocket(newSocket);
-    // },[setSocket])
-    
-/*     const send = (value: number) => {
-        socket?.emit("message", value);
-    } */
+
+    /* socket.on('room', function(data) {
+        console.log('You have joined the room: ', data);
+    });
+
+    socket.on('exception', function(data) {
+        console.log('event ', data);
+    });
+
+    socket.on('disconnect', function() {
+        console.log('Disconnected');
+    }); */
+
     const messageListener = (input: number) => {
-        console.log('App input :', input);
+        // console.log('App input :', input);
         P1_y = input;
     }
     
     useEffect(() => {
-        socket?.on("message", messageListener);
-        return () => {
-            socket?.off("message", messageListener);
-        }
-    }, [messageListener])
+        socket.on('msgToClient', messageListener);
+    },[messageListener])
+
     //-------------------------
     
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -86,11 +87,12 @@ const useCanvas = (options={}) => {
             if (e.key === 'q') {
                 // p1.isMoving = true;
                 // p1.keyPressed = e;
-                p1.y -= 24;
+                P1_y -= 24;
             } else if (e.key === 'a'){
-                p1.y += 24;
+                P1_y += 24;
             }
-            socket.emit('message', p1.y);
+            
+            socket.emit('msgToServer', P1_y);
         })
        
         document.addEventListener('keyup', (e) => {
