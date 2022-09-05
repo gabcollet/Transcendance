@@ -1,11 +1,37 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { board, Player, Ball } from  './assets'
 import resizeCanvas from './sizeCanvas'
+import io, { Socket } from 'socket.io-client'
 
 const useCanvas = (options={}) => {
+    //------------------------- Backend //-------------------------
+    // const [socket, setSocket] = useState<Socket>();
+    let P1_y: number;
+    const socket = io("localhost:9006");
+    
+    // useEffect(() => {
+    //     const newSocket = io("localhost:9006");
+    //     setSocket(newSocket);
+    // },[setSocket])
+    
+/*     const send = (value: number) => {
+        socket?.emit("message", value);
+    } */
+    const messageListener = (input: number) => {
+        console.log('App input :', input);
+        P1_y = input;
+    }
+    
+    useEffect(() => {
+        socket?.on("message", messageListener);
+        return () => {
+            socket?.off("message", messageListener);
+        }
+    }, [messageListener])
+    //-------------------------
     
     const canvasRef = useRef<HTMLCanvasElement>(null);
-        
+    
     useEffect(() => {
         const canvas : HTMLCanvasElement | null = canvasRef.current;
         const w = canvas!.width = 800;
@@ -14,7 +40,8 @@ const useCanvas = (options={}) => {
         let animationFrameId : number;
         let frameCount: number = 0;
         
-        let p1 = new Player(w*0.02, (h/2) - (h*.06), h*.1);
+        P1_y = (h/2) - (h*.06);
+        let p1 = new Player(w*0.02, P1_y, h*.1);
         let p2 = new Player(w - (w*0.03), (h/2) - (h*.06), h*.1);
         let ball : Ball;
         if (Math.random() < 0.5){
@@ -26,15 +53,15 @@ const useCanvas = (options={}) => {
         const render = () => {
             frameCount++;
             ctx!.clearRect(0,0,w,h);
-            
+
             board(ctx!, w, h, p1.score, p2.score);
-            p1.draw(ctx!, w, h);
-            p2.draw(ctx!, w, h);
-            ball.draw(ctx!);
+            p1.draw(ctx!, w, h, P1_y);
+            // p2.draw(ctx!, w, h);
+            // ball.draw(ctx!);
             
-            p1.move(h);
-            p2.move(h);
-            ball.update(w, h, p1, p2);
+            // p1.move(h);
+            // p2.move(h);
+            // ball.update(w, h, p1, p2);
 
             if (frameCount % 300 == 0){
                 ball.dx *= 1.2;
@@ -56,10 +83,14 @@ const useCanvas = (options={}) => {
                 p2.isMoving = true;
                 p2.keyPressed = e; 
             }
-            if (e.key === 'q' || e.key === 'a'){
-                p1.isMoving = true;
-                p1.keyPressed = e; 
+            if (e.key === 'q') {
+                // p1.isMoving = true;
+                // p1.keyPressed = e;
+                p1.y -= 24;
+            } else if (e.key === 'a'){
+                p1.y += 24;
             }
+            socket.emit('message', p1.y);
         })
        
         document.addEventListener('keyup', (e) => {

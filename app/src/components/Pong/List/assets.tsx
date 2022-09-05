@@ -30,8 +30,8 @@ class Player{
     height: number;
     score: number;
 
-    draw = (ctx: CanvasRenderingContext2D, w: number, h: number) => {
-        drawRectangle(ctx, {x: this.x, y: this.y}, w*.01, this.height, 'white');
+    draw = (ctx: CanvasRenderingContext2D, w: number, h: number, y:number) => {
+        drawRectangle(ctx, {x: this.x, y: y}, w*.01, this.height, 'white');
     }
 
     move = (h: number) => {
