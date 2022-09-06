@@ -1,13 +1,15 @@
 import { useRef, useEffect, useState } from 'react'
 import { board, Player, Ball } from  './assets'
 import resizeCanvas from './sizeCanvas'
-import io, { Socket } from 'socket.io-client'
+import io from 'socket.io-client'
 
-const useCanvas = (options={}) => {
+
+const useCanvas = () => {
     //------------------------- Backend //-------------------------
     let P1_y: number;
-    const socket = io("localhost:9006");
     let roomID: string;
+    
+    const socket = io("localhost:9006");
 
     socket.emit('joinRoom');
     socket.on('joinedRoom', room => {
@@ -24,7 +26,7 @@ const useCanvas = (options={}) => {
     }); */
 
     const messageListener = (input: number) => {
-        // console.log('App input :', input);
+        console.log('App input :', input);
         P1_y = input;
     }
     
@@ -58,7 +60,7 @@ const useCanvas = (options={}) => {
             frameCount++;
             ctx!.clearRect(0,0,w,h);
 
-            board(ctx!, w, h, p1.score, p2.score);
+            board(ctx!, w, h, p1.score, p2.score, roomID);
             p1.draw(ctx!, w, h, P1_y);
             // p2.draw(ctx!, w, h);
             // ball.draw(ctx!);
@@ -94,8 +96,9 @@ const useCanvas = (options={}) => {
             } else if (e.key === 'a'){
                 P1_y += 24;
             }
+            // console.log(roomID);
             
-            socket.emit('msgToServer', P1_y);
+            socket.emit('msgToServer', {room: roomID ,pos: P1_y});
         })
        
         document.addEventListener('keyup', (e) => {

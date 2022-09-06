@@ -24,9 +24,11 @@ export class PongGateway implements OnGatewayInit/* , OnGatewayConnection, OnGat
   } */
 
   @SubscribeMessage('msgToServer')
-  handleMessage(client: Socket, payload: number) /* WsResponse<number> */ {
-    // this.server.to(payload.room).emit('msgToClient', payload.position);
-    this.server.emit('msgToClient', payload);
+  handleMessage(client: Socket, payload: {room: string, pos: number}) /* WsResponse<number> */ {
+    this.server.to(payload.room).emit('msgToClient', payload.pos);
+    // console.log(payload.pos);
+    
+    // this.server.emit('msgToClient', payload.pos);
     
     // this.server.emit('msgToClient', payload);
     /* return {

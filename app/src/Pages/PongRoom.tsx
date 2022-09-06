@@ -1,7 +1,7 @@
 import "./PongRoom.css";
 import { Link } from "react-router-dom";
 
-const PongRoom = (props: any) => {
+const PongRoom = () => {
 
   return (
     <div className="pongRoom-wrap">

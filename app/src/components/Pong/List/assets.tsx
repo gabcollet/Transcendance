@@ -1,6 +1,11 @@
 import { drawRectangle, drawLine } from './draw'
 
-const board = (ctx : CanvasRenderingContext2D, w: number, h: number, scoreP1: number, scoreP2: number) => {
+const board = (ctx : CanvasRenderingContext2D, 
+            w: number, 
+            h: number, 
+            scoreP1: number, 
+            scoreP2: number,
+            roomID: string) => {
     drawRectangle(ctx, {x:0, y:0}, w, h, 'black');
     ctx.setLineDash([10, 10]);
     drawLine(ctx, {x: w/2, y:0}, {x: w/2, y: h}, 'white', 4);
@@ -12,6 +17,8 @@ const board = (ctx : CanvasRenderingContext2D, w: number, h: number, scoreP1: nu
         ctx.fillText(scoreP1.toString(), w/2 - 150, h/6);
     }
     ctx.fillText(scoreP2.toString(), w/2 + 50, h/6);
+    ctx.font = "10px Times New Roman";
+    ctx.fillText(roomID, 10, h-10);
 }
 
 class Player{

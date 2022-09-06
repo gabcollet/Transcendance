@@ -5,10 +5,14 @@ const Pong = () => {
 
     // const { context, ...moreConfig } = options;
     const canvasRef = useCanvas(/* {context} */);
+    
 
     return (
-        <div className = "pong-wrap">
-            <canvas ref={canvasRef} /* {...moreConfig} *//>
+        <div>
+            <div className = "pong-wrap">
+                <canvas ref={canvasRef} /* {...moreConfig} *//>
+            </div>
+            <p>{roomID}</p>
         </div>
     );
 };
