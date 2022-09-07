@@ -1,6 +1,6 @@
 import "./Toggle.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { MouseEventHandler } from "react";
+import { MouseEventHandler } from "react";
 
 interface _Toggle {
   icon: any;
