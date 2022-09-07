@@ -1,5 +1,5 @@
 import './Pong.css'
-import useCanvas, {roomID} from './List/useCanvas'
+import useCanvas, { roomID, pID } from './List/useCanvas'
 
 const Pong = () => {
 
@@ -7,6 +7,7 @@ const Pong = () => {
 
     return (
         <div>
+            <p className = "pong-text">Player {pID}</p>
             <div className = "pong-wrap">
                 <canvas ref={canvasRef}/>
             </div>

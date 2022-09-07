@@ -24,8 +24,8 @@ export class PongGateway implements OnGatewayInit/* , OnGatewayConnection, OnGat
   } */
 
   @SubscribeMessage('msgToServer')
-  handleMessage(client: Socket, payload: {room: string, pos: number}) /* WsResponse<number> */ {
-    this.server.to(payload.room).emit('msgToClient', payload.pos);
+  handleMessage(client: Socket, payload: {room: string, pos1: number, pos2: number}) /* WsResponse<number> */ {
+    this.server.to(payload.room).emit('msgToClient', [payload.pos1, payload.pos2]);
     // console.log(payload.pos);
     
     // this.server.emit('msgToClient', payload.pos);
@@ -54,7 +54,7 @@ export class PongGateway implements OnGatewayInit/* , OnGatewayConnection, OnGat
     const room = this.createRoom();
     client.join(room);    
     this.logger.log(`${client.id} joined room ${room}`);
-    client.emit('joinedRoom', room);
+    client.emit('joinedRoom', [room, this.isWaiting]);
   }
 
   @SubscribeMessage('leaveRoom')

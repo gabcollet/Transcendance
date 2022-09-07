@@ -1,51 +1,46 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect } from 'react'
 import { board, Player, Ball } from  './assets'
-import resizeCanvas from './sizeCanvas'
+// import resizeCanvas from './sizeCanvas'
 import io from 'socket.io-client'
 
 export let roomID: string;
+export let pID: number;
 
 const socket = io("localhost:9006");
 
 export function joinRoom() {
-    return new Promise((resolve) => {
+    return new Promise<string>((resolve) => {
         socket.emit('joinRoom');
-        socket.on('joinedRoom', async function (room){
-            console.log('Connected');
+        socket.on('joinedRoom', async function ([room, pid]){
+            pID = pid ? 1 : 2;
             roomID = room;
             resolve(roomID);
-            console.log(roomID);
+            console.log('Player', pID, 'Connected');
+            console.log('Room:', roomID);
         });
     });
 }
 
-/* socket.on('exception', function(data) {
-    console.log('event ', data);
-});
-
-socket.on('disconnect', function() {
+/* socket.on('disconnect', function() {
     console.log('Disconnected');
 }); */
 
 const useCanvas = () => {
     //------------------------- Backend //-------------------------
     let P1_y: number;
+    let P2_y: number;
     
-    
-    
-    const messageListener = (input: number) => {
-        console.log('App input :', input);
-        P1_y = input;
+    const posListener = (input: number[]) => {
+        // console.log('App input :', input);
+        P1_y = input[0];
+        P2_y = input[1];
     }
-    
     useEffect(() => {
-        socket.on('msgToClient', messageListener);
-    },[messageListener])
-    
+        socket.on('msgToClient', posListener);
+    },[posListener])
     //-------------------------
     
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    
     
     useEffect(() => {
         const canvas : HTMLCanvasElement | null = canvasRef.current;
@@ -56,8 +51,9 @@ const useCanvas = () => {
         let frameCount: number = 0;
         
         P1_y = (h/2) - (h*.06);
+        P2_y = (h/2) - (h*.06);
         let p1 = new Player(w*0.02, P1_y, h*.1);
-        let p2 = new Player(w - (w*0.03), (h/2) - (h*.06), h*.1);
+        let p2 = new Player(w - (w*0.03), P2_y, h*.1);
         let ball : Ball;
         if (Math.random() < 0.5){
             ball = new Ball(w/2, h/2, w, -4);
@@ -71,14 +67,14 @@ const useCanvas = () => {
 
             board(ctx!, w, h, p1.score, p2.score, roomID);
             p1.draw(ctx!, w, h, P1_y);
-            // p2.draw(ctx!, w, h);
+            p2.draw(ctx!, w, h, P2_y);
             // ball.draw(ctx!);
             
             // p1.move(h);
             // p2.move(h);
             // ball.update(w, h, p1, p2);
 
-            if (frameCount % 300 == 0){
+            if (frameCount % 300 === 0){
                 ball.dx *= 1.2;
                 ball.dy *= 1.2;
             }
@@ -94,18 +90,39 @@ const useCanvas = () => {
         }
 
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowUp' || e.key === 'ArrowDown'){
+            /* if (e.key === 'ArrowUp' || e.key === 'ArrowDown'){
                 p2.isMoving = true;
                 p2.keyPressed = e; 
-            }
-            if (e.key === 'q') {
+            } */
+            if ((e.key === 'q' || e.key === 'ArrowUp')) {
                 // p1.isMoving = true;
                 // p1.keyPressed = e;
-                P1_y -= 24;
-            } else if (e.key === 'a'){
-                P1_y += 24;
+                
+                if (pID === 1 && P1_y > 0){
+                    P1_y -= 24;
+                    if (P1_y < 0){
+                        P1_y = 0;
+                    }
+                } else if (pID === 2 && P2_y > 0){
+                    P2_y -= 24;
+                    if (P2_y < 0){
+                        P2_y = 0;
+                    }
+                }
+            } else if (e.key === 'a' || e.key === 'ArrowDown'){
+                if (pID === 1 && (P1_y + h*.1) < h){
+                    P1_y += 24;
+                    if (P1_y + h*.1 > h){
+                        P1_y = h - h*.1;
+                    }
+                } else if (pID === 2 && (P2_y + h*.1) < h){
+                    P2_y += 24;
+                    if (P2_y + h*.1 > h){
+                        P2_y = h - h*.1;
+                    }
+                }
             }
-            socket.emit('msgToServer', {room: roomID ,pos: P1_y});
+            socket.emit('msgToServer', {room: roomID ,pos1: P1_y, pos2: P2_y});
         })
        
         document.addEventListener('keyup', (e) => {
