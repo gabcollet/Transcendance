@@ -14,7 +14,7 @@ const Login: FC<{ onChangeBg: (newClassName: string) => void }> = (props) => {
   const changeBGHandler = () => {
     props.onChangeBg("root-default");
   };
-
+  props.onChangeBg("root-login");
   return !isClicked ? (
     <div className="login-container">
       <button className="login-btn" onClick={login42Handler}>
@@ -23,8 +23,10 @@ const Login: FC<{ onChangeBg: (newClassName: string) => void }> = (props) => {
     </div>
   ) : (
     <div className="login-container">
-      <Link className="link" to="/Menu" onClick={changeBGHandler}>
-        <button className={login42}>Login with 42</button>
+      <Link className="link" to="/SignIn">
+        <button className={login42} onClick={changeBGHandler}>
+          Login with 42
+        </button>
       </Link>
     </div>
   );

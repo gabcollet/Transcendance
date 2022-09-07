@@ -15,7 +15,6 @@ const Profile = () => {
     );
 }
 
-
 const ProfileHeader = () => {
     return (
       <section className="profile-header-container">
@@ -129,10 +128,10 @@ const HistoryContent = () => {
             <img src={data.profile_image} alt={data.name} />
             <h4>{data.name}</h4>
           </div>
-          <h3>VS.</h3>
+          <h3>{match.my_points} - {match.foe_points}</h3>
           <div className="foe-id">
-            <img src={match.foe_profile_image} alt={data.name} />
-            <h4>{data.name}</h4>
+            <img src={match.foe_profile_image} alt={match.opponent_name} />
+            <h4>{match.opponent_name}</h4>
           </div>
         </div>
       </div>

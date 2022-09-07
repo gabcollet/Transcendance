@@ -1,13 +1,14 @@
 import "./App.css";
 import Menu from "./Pages/Menu";
 import Login from "./Pages/Login";
+import Profile from "./components/Profile/Profile"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Pong from './components/Pong/Pong';
-import Profile from './components/Profile/Profile';
-import { useState } from 'react';
+import Pong from "./components/Pong/Pong";
+import { useState } from "react";
+import SignIn from "./components/Login/Signin";
 
 const App = () => {
-  let [background, setBackground] = useState("root-login");
+  let [background, setBackground] = useState("root-default");
 
   const changeBG = (newClassName: string) => {
     setBackground(newClassName);
@@ -18,6 +19,7 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<Login onChangeBg={changeBG}></Login>} />
+          <Route path="/signin" element={<SignIn />}></Route>
           <Route path="/Menu" element={<Menu></Menu>} />
           <Route
             path="/Pong"

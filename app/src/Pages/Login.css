@@ -3,7 +3,6 @@
   width: 800px;
   height: 800px;
   align-items: center;
-  align-content: center;
   justify-content: center;
   background: var(--);
 }
@@ -15,10 +14,9 @@
 .login-btn {
   color: #f3efff;
   background-color: rgba(0, 0, 0, 0);
-  font-size: 30px;
-  border-radius: 50%;
+  font-size: 40px;
   width: 600px;
-  height: 100px;
+  height: 200px;
   cursor: pointer;
   border: none;
   align-content: center;
@@ -28,8 +26,9 @@
 
 .login-btn:hover {
   color: #fff;
-  text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
-    0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
+  text-shadow: 0 0 10px #e70055, 0 0 13px #e70055, 0 0 31px #e70055,
+    0 0 42px #b90044, 0 0 82px #b90044, 0 0 92px #b90044, 0 0 102px #b90044,
+    0 0 151px #b90044;
 }
 
 .login-icon {
@@ -41,19 +40,24 @@
   text-transform: uppercase;
   background-color: rgba(0, 0, 0, 0);
   border-radius: 0.5rem;
-  font-size: 30px;
+  font-size: 50px;
   border: none;
   width: 600px;
-  height: 100px;
+  height: 200px;
   transition: 1s;
 }
 
 .login-42-btn:hover {
-  text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
-    0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
+  text-shadow: 0 0 7px #4cfdc2, 0 0 10px #4cfdc2, 0 0 21px #4cfdc2,
+    0 0 42px #0fa, 0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
+  cursor: pointer;
 }
 
-a:link {
+.link {
+  text-decoration: none;
+}
+
+/* a:link {
   text-decoration: none;
 }
 
@@ -67,4 +71,4 @@ a:hover {
 
 a:active {
   text-decoration: none;
-}
+} */
