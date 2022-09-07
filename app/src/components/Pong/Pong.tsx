@@ -1,18 +1,16 @@
 import './Pong.css'
-import useCanvas from './List/useCanvas'
+import useCanvas, {roomID} from './List/useCanvas'
 
 const Pong = () => {
 
-    // const { context, ...moreConfig } = options;
-    const canvasRef = useCanvas(/* {context} */);
-    
+    const canvasRef = useCanvas();
 
     return (
         <div>
             <div className = "pong-wrap">
-                <canvas ref={canvasRef} /* {...moreConfig} *//>
+                <canvas ref={canvasRef}/>
             </div>
-            <p>{roomID}</p>
+            <p className = "pong-text">Room ID : {roomID}</p>
         </div>
     );
 };

@@ -3,28 +3,36 @@ import { board, Player, Ball } from  './assets'
 import resizeCanvas from './sizeCanvas'
 import io from 'socket.io-client'
 
+export let roomID: string;
+
+const socket = io("localhost:9006");
+
+export function joinRoom() {
+    return new Promise((resolve) => {
+        socket.emit('joinRoom');
+        socket.on('joinedRoom', async function (room){
+            console.log('Connected');
+            roomID = room;
+            resolve(roomID);
+            console.log(roomID);
+        });
+    });
+}
+
+/* socket.on('exception', function(data) {
+    console.log('event ', data);
+});
+
+socket.on('disconnect', function() {
+    console.log('Disconnected');
+}); */
 
 const useCanvas = () => {
     //------------------------- Backend //-------------------------
     let P1_y: number;
-    let roomID: string;
     
-    const socket = io("localhost:9006");
-
-    socket.emit('joinRoom');
-    socket.on('joinedRoom', room => {
-        console.log('Connected');
-        roomID = room;
-    });
-
-    /* socket.on('exception', function(data) {
-        console.log('event ', data);
-    });
-
-    socket.on('disconnect', function() {
-        console.log('Disconnected');
-    }); */
-
+    
+    
     const messageListener = (input: number) => {
         console.log('App input :', input);
         P1_y = input;
@@ -33,10 +41,11 @@ const useCanvas = () => {
     useEffect(() => {
         socket.on('msgToClient', messageListener);
     },[messageListener])
-
+    
     //-------------------------
     
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    
     
     useEffect(() => {
         const canvas : HTMLCanvasElement | null = canvasRef.current;
@@ -96,8 +105,6 @@ const useCanvas = () => {
             } else if (e.key === 'a'){
                 P1_y += 24;
             }
-            // console.log(roomID);
-            
             socket.emit('msgToServer', {room: roomID ,pos: P1_y});
         })
        
@@ -110,8 +117,9 @@ const useCanvas = () => {
             }
         })
         
-        resizeCanvas(canvas);
-        render()
+        // resizeCanvas(canvas);
+
+        render();
 
         return () => {
             window.cancelAnimationFrame(animationFrameId)

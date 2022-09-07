@@ -17,8 +17,8 @@ const board = (ctx : CanvasRenderingContext2D,
         ctx.fillText(scoreP1.toString(), w/2 - 150, h/6);
     }
     ctx.fillText(scoreP2.toString(), w/2 + 50, h/6);
-    ctx.font = "10px Times New Roman";
-    ctx.fillText(roomID, 10, h-10);
+    // ctx.font = "10px Times New Roman";
+    // ctx.fillText(roomID, 10, h-10);
 }
 
 class Player{

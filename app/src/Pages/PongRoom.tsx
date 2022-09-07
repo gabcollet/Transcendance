@@ -1,8 +1,11 @@
 import "./PongRoom.css";
 import { Link } from "react-router-dom";
+import { joinRoom } from "../components/Pong/List/useCanvas";
 
 const PongRoom = () => {
 
+  joinRoom();
+  
   return (
     <div className="pongRoom-wrap">
       <p className="text">Join a room to play</p>
