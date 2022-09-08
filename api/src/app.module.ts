@@ -8,11 +8,11 @@ import { ChatModule } from './chat/chat.module';
 import { UsersService } from './users/users.service';
 import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
-
+import { AuthService } from './auth/auth.service';
 
 @Module({
   imports: [AuthModule, PongModule, ChatModule, UsersModule],
-  controllers: [PongController, ChatController, UsersController],
-  providers: [PongService, UsersService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

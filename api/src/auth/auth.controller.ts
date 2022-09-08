@@ -6,17 +6,19 @@ import {
   Post,
   Res,
   UseGuards,
+  Query,
 } from '@nestjs/common';
-import Passport from 'passport-42';
-import { useParams } from 'react-router-dom';
-
+import { AuthorizationGuard } from './auth.guard';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
+  constructor(private readonly authService: AuthService) {}
   //* localhost:3030/auth/login
   @Get('login')
-  handleLogin(@Param('code') code: string) {
-    return { msg: code };
+  @UseGuards(AuthorizationGuard)
+  async login() {
+    return;
   }
 
   //* localhost:3030/auth/redirect
@@ -24,4 +26,6 @@ export class AuthController {
   handleRedirect() {
     return { msg: 'redirect' };
   }
+
+  // @Get('user')
 }
