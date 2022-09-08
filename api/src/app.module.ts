@@ -10,10 +10,9 @@ import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-
 @Module({
   imports: [AuthModule, PongModule, ChatModule, UsersModule, TypeOrmModule.forRoot({
-    type: 'postgresql',
+    type: 'postgres',
     host: 'localhost',
     port: 5432,
     username: 'admin',
@@ -25,4 +24,5 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   controllers: [PongController, ChatController, UsersController],
   providers: [PongService, UsersService],
 })
+
 export class AppModule {}
