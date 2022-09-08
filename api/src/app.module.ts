@@ -11,7 +11,16 @@ import { UsersModule } from './users/users.module';
 
 
 @Module({
-  imports: [AuthModule, PongModule, ChatModule, UsersModule],
+  imports: [AuthModule, PongModule, ChatModule, UsersModule, TypeOrmModule.forRoot({
+    type: 'postgresql',
+    host: 'localhost',
+    port: 5432,
+    username: 'admin',
+    password: 'pass',
+    database: 'test_db',
+    entities: [],
+    synchronize: true,
+  })],
   controllers: [PongController, ChatController, UsersController],
   providers: [PongService, UsersService],
 })
