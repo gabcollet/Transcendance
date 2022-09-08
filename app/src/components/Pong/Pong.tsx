@@ -1,5 +1,6 @@
 import './Pong.css'
-import useCanvas, { roomID, pID } from './List/useCanvas'
+import { roomID, pID } from '../../Pages/PongRoom'
+import useCanvas from './List/useCanvas';
 
 const Pong = () => {
 

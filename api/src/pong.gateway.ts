@@ -24,19 +24,37 @@ export class PongGateway implements OnGatewayInit/* , OnGatewayConnection, OnGat
   } */
 
   @SubscribeMessage('msgToServer')
-  handleMessage(client: Socket, payload: {room: string, pos1: number, pos2: number}) /* WsResponse<number> */ {
-    this.server.to(payload.room).emit('msgToClient', [payload.pos1, payload.pos2]);
-    // console.log(payload.pos);
-    
-    // this.server.emit('msgToClient', payload.pos);
-    
-    // this.server.emit('msgToClient', payload);
-    /* return {
-      event: 'msgToClient',
-      data: payload
-    }; */
+  handleMessage(client: Socket, 
+    payload: {
+      room: string, 
+      pos1: number, 
+      pos2: number,
+      ballx: number,
+      bally: number
+    }) /* WsResponse<number> */ {
+    this.server.to(payload.room).emit('msgToClient', 
+      [
+        payload.pos1, 
+        payload.pos2,
+        payload.ballx,
+        payload.bally
+      ]);
   }
-
+ 
+  /* @SubscribeMessage('ballposServer')
+  handleBall(client: Socket, 
+    payload: {
+      room: string, 
+      ballx: number,
+      bally: number
+    })  {
+    this.server.to(payload.room).emit('ballposClient', 
+      [
+        payload.ballx,
+        payload.bally
+      ]);
+  } */
+  
   roomiD: string = '';
   isWaiting = false;
   private createRoom(): string {
