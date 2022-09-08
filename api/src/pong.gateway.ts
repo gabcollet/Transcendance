@@ -29,19 +29,15 @@ export class PongGateway implements OnGatewayInit/* , OnGatewayConnection, OnGat
       room: string, 
       pos1: number, 
       pos2: number,
-      ballx: number,
-      bally: number
-    }) /* WsResponse<number> */ {
+    }) {
     this.server.to(payload.room).emit('msgToClient', 
       [
         payload.pos1, 
         payload.pos2,
-        payload.ballx,
-        payload.bally
       ]);
   }
  
-  /* @SubscribeMessage('ballposServer')
+  @SubscribeMessage('ballposServer')
   handleBall(client: Socket, 
     payload: {
       room: string, 
@@ -53,7 +49,7 @@ export class PongGateway implements OnGatewayInit/* , OnGatewayConnection, OnGat
         payload.ballx,
         payload.bally
       ]);
-  } */
+  }
   
   roomiD: string = '';
   isWaiting = false;

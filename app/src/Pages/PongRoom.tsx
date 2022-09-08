@@ -6,7 +6,7 @@ import io from 'socket.io-client'
 
 export let roomID: string;
 export let pID: number;
-export const socket = io("localhost:9006");
+export const socket = io("http://10.11.7.5:9006");
 
 const PongRoom = () => {
 
@@ -24,8 +24,6 @@ const PongRoom = () => {
           ptext.current.innerText = `Room ID : ${room}`;
           roomID = room;
         }
-        // console.log(room);
-        // console.log('Room:', ptext.current!.innerText);
     });
   })
 

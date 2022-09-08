@@ -25,17 +25,17 @@ const useCanvas = () => {
         socket.on('msgToClient', (input: number[]) => {
             P1_y.current = input[0];
             P2_y.current = input[1]; 
-            ballx.current = input[2];
-            bally.current = input[3];        
+            /* ballx.current = input[2];
+            bally.current = input[3];  */       
         });
     },[])
    
-    /* useEffect(() => {
+    useEffect(() => {
         socket.on('ballposClient', (input: number[]) => {
             ballx.current = input[0];
             bally.current = input[1];     
         });
-    },[]) */
+    },[])
     //-------------------------
     
     useEffect(() => {
@@ -66,10 +66,9 @@ const useCanvas = () => {
             p2.y = P2_y.current;
             p1.draw(ctx!, w, h, P1_y.current);
             p2.draw(ctx!, w, h, P2_y.current);
+            
             ball.x = ballx.current;
             ball.y = bally.current;
-            console.log(ball.x, ball.y);
-            
             ball.draw(ctx!);
             
             p1.move(h);
@@ -86,11 +85,12 @@ const useCanvas = () => {
                 ball.dy *= 1.2;
             }
 
-            
             if (ball.x < 0 || ball.x > w){
                 if (ball.x < 0) { p2.score++; }
                 else if (ball.x > w) { p1.score++; }
                 ball.retart(w, h);
+                ballx.current = ball.x;
+                bally.current = ball.y;
                 frameCount = 0;
             }
             
@@ -98,13 +98,13 @@ const useCanvas = () => {
                 room: roomID,
                 pos1: P1_y.current, 
                 pos2: P2_y.current,
+            });
+            
+            socket.emit('ballposServer', {
+                room: roomID,
                 ballx: ballx.current,
                 bally: bally.current,
             });
-           
-          /*   socket.emit('ballposServer', {
-                room: roomID,
-            }); */
             
             //requestAnimationFrame will call recursively the render method
             animationFrameId = window.requestAnimationFrame(render);
