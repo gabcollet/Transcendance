@@ -9,6 +9,7 @@ import { UsersService } from './users/users.service';
 import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './users/users.entity';
 
 @Module({
   imports: [AuthModule, PongModule, ChatModule, UsersModule, TypeOrmModule.forRoot({
@@ -18,8 +19,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     username: 'admin',
     password: 'pass',
     database: 'test_db',
-    entities: [],
-    synchronize: true,
+    entities: [User],
+    // synchronize: true,
   })],
   controllers: [PongController, ChatController, UsersController],
   providers: [PongService, UsersService],
