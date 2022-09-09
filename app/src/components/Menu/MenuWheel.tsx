@@ -25,7 +25,7 @@ const MenuWheel = (props: _MenuWheel) => {
   const [toggleIcon, setToggleicon] = useState(faBars);
 
   const openMenu: MouseEventHandler<HTMLDivElement> = () => {
-    if (opening == false) {
+    if (opening === false) {
       setOpening(true);
       setToggleicon(faX);
       setIconName("-t");

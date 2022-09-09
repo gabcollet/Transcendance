@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './profile.css';
 import data from './data_placeholder';
 
@@ -16,28 +16,40 @@ const Profile = () => {
 }
 
 const ProfileHeader = () => {
-    return (
-      <section className="profile-header-container">
-        <div className="profile-id-container">
-          <div className="id-container-info">
-            <img className="profile-image" src={data.profile_image} alt="" />
-            <p className="profile-name-text">{data.name}</p>
-            <p className="profile-status">status: {data.status}</p>
-          </div>
-          <div className="id-container-buttons">
-            <button>Add friend</button>
-            <button>Message</button>
-          </div>
+  const [profileImage, setProfileImage] = useState(process.env.PUBLIC_URL + 'img/default_picture.png');
+  const [profileName, setProfileName] = useState('anon');
+  
+  useEffect(() => {
+    fetch('http://localhost:3002/users/1')
+    .then(res => res.json())
+    .then(data => {
+      setProfileImage(process.env.PUBLIC_URL + 'img/' + data.picture);
+      setProfileName(data.name);
+    })
+  }, []);
+  
+  return (
+    <section className="profile-header-container">
+      <div className="profile-id-container">
+        <div className="id-container-info">
+          <img className="profile-image" src={profileImage} alt="" />
+          <p className="profile-name-text">{profileName}</p>
+          <p className="profile-status">status: {data.status}</p>
         </div>
-        <div className="primary-stats">
-          <h3>Wins: {data.victories}</h3>
-          <h3>Losses: {data.defeats}</h3>
+        <div className="id-container-buttons">
+          <button>Add friend</button>
+          <button>Message</button>
         </div>
-        <div className="secondary-stats">
-          <p>Latest Achievement:</p>
-        </div>
-      </section>
-    );
+      </div>
+      <div className="primary-stats">
+        <h3>Wins: {data.victories}</h3>
+        <h3>Losses: {data.defeats}</h3>
+      </div>
+      <div className="secondary-stats">
+        <p>Latest Achievement:</p>
+      </div>
+    </section>
+  );
 }
 
 const ProfileContent = () => {

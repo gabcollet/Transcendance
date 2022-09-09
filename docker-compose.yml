@@ -11,4 +11,4 @@ services:
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: pass
-      POSTGRES_DB: test_db
+      POSTGRES_DB: trans_db

@@ -12,8 +12,13 @@ export class UsersService {
         return this.usersRepository.find();
     }
 
-    create(name: string, picture: string, wins: number, losses: number) {
-        const user = this.usersRepository.create({ name, picture, wins, losses });
+    findById(id: number) {
+        console.log('This is id', id);
+        return this.usersRepository.findOneBy({id});
+    }
+
+    create(name: string, username: string, picture: string, wins: number, losses: number) {
+        const user = this.usersRepository.create({ name, username, picture, wins, losses });
 
         return this.usersRepository.save(user);
     }

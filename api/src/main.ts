@@ -12,6 +12,6 @@ async function bootstrap() {
     }),
   );
   app.enableCors(); //* Cross Origin Ressource Sharing. Enables our app to retrieve tokens from the OAuth2 server
-  await app.listen(3000);
+  await app.listen(3002);
 }
 bootstrap();
