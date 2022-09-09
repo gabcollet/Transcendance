@@ -16,8 +16,12 @@ export class UsersService {
         return this.usersRepository.findOneBy({id});
     }
 
-    create(name: string, username: string, picture: string, wins: number, losses: number) {
-        const user = this.usersRepository.create({ name, username, picture, wins, losses });
+    // getImage(id: number) {
+    //     return 
+    // }
+
+    create(name: string, username: string, picture: string, winssss: number, losses: number) {
+        const user = this.usersRepository.create({ name, username, picture, winssss, losses });
 
         return this.usersRepository.save(user);
     }

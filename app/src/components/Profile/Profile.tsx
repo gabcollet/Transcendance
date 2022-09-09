@@ -6,6 +6,22 @@ interface _Content {
     contentType: string;
 }
 
+// const ProfileImage = () => {
+//   const [profileImage, setProfileImage] = useState('anon');
+
+//   useEffect(() => {
+//     fetch('http://localhost:3030/users/img')
+//     .then(res => res.blob())
+//     .then(data => {
+//       setProfileImage(URL.createObjectURL(data));
+//     })
+//   }, []);
+
+//   return (
+//     <img className="profile-image" src={profileImage} alt="" />
+//   );
+// }
+
 const Profile = () => {
     return (
         <section className="profile-container">
@@ -16,24 +32,14 @@ const Profile = () => {
 }
 
 const ProfileHeader = () => {
-  const [profileImage, setProfileImage] = useState(process.env.PUBLIC_URL + 'img/default_picture.png');
   const [profileName, setProfileName] = useState('anon');
-  
-  useEffect(() => {
-    fetch('http://localhost:3002/users/1')
-    .then(res => res.json())
-    .then(data => {
-      setProfileImage(process.env.PUBLIC_URL + 'img/' + data.picture);
-      setProfileName(data.name);
-    })
-  }, []);
   
   return (
     <section className="profile-header-container">
       <div className="profile-id-container">
         <div className="id-container-info">
-          <img className="profile-image" src={profileImage} alt="" />
-          <p className="profile-name-text">{profileName}</p>
+          <img className="profile-image" src={data.profile_image} alt="" />
+          <p className="profile-name-text">{data.name}</p>
           <p className="profile-status">status: {data.status}</p>
         </div>
         <div className="id-container-buttons">

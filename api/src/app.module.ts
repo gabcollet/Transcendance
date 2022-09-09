@@ -26,7 +26,7 @@ import { User } from './users/users.entity';
       password: 'pass',
       database: 'trans_db',
       entities: [User],
-      // synchronize: true,
+      synchronize: true,
     }),
     ConfigModule.forRoot(),
   ],

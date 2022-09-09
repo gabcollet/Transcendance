@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User {
+
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -15,7 +16,7 @@ export class User {
     picture: string;
     
     @Column()
-    wins: number;
+    winssss: number;
 
     @Column()
     losses: number;

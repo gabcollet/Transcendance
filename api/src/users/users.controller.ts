@@ -15,6 +15,11 @@ export class UsersController {
         return this.usersService.findById(parseInt(id));
     }
 
+    // @Get('img/:id')
+    // getImage(@Param('id') id: string) {
+    //     return this.usersService.getImage(parseInt(id));
+    // }
+
     @Post()
     createUser(@Body() body: any) {
         return this.usersService.create(body.name, body.username, body.picture, body.wins, body.losses);
