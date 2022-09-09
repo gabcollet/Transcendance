@@ -23,9 +23,8 @@ export class AuthController {
 
   //* localhost:3030/auth/redirect
   @Get('redirect')
-  handleRedirect() {
-    return { msg: 'redirect' };
-  }
+  @UseGuards(AuthorizationGuard)
+  handleRedirect() {}
 
   // @Get('user')
 }

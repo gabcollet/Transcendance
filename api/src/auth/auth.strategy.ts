@@ -11,7 +11,7 @@ export class AuthStrategy extends PassportStrategy(Strategy, '42') {
         '3187aa6aec15b19df251d4424b7bc8f7fc761603b4bae21e049ce800e217a812',
       secretID:
         '94ecaff84914481f0bbd67e14b57bcbd65d8d8ea7f1f5918870e02c9ae4e04dc',
-      callbackURL: 'http://localhost:3000/Menu',
+      callbackURL: 'http://localhost:3030/auth/login',
       profileData: {
         id: '',
         username: '',
@@ -21,6 +21,10 @@ export class AuthStrategy extends PassportStrategy(Strategy, '42') {
   }
 
   async validateUser(accessToken, refreshToken, profile: Profile) {
+    console.log(accessToken);
+    console.log(refreshToken);
+    console.log(profile);
+
     // const user = this.userService.findCreateUser(profile);
     // return await user;
   }

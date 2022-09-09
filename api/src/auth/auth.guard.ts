@@ -10,7 +10,10 @@ export class AuthorizationGuard extends AuthGuard('42') {
     context: ExecutionContext,
     status?: any,
   ): TUser | null {
-    if (err || !user) return null;
+    if (err || !user) {
+      return null;
+    }
+    console.log(user);
     return user;
   }
 }
