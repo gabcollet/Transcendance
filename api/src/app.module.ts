@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { PongController } from './pong/pong.controller';
 import { PongService } from './pong/pong.service';
@@ -12,18 +13,24 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/users.entity';
 
 @Module({
-  imports: [AuthModule, PongModule, ChatModule, UsersModule, TypeOrmModule.forRoot({
-    type: 'postgres',
-    host: 'localhost',
-    port: 5432,
-    username: 'admin',
-    password: 'pass',
-    database: 'trans_db',
-    entities: [User],
-    // synchronize: true,
-  })],
+  imports: [
+    AuthModule,
+    PongModule,
+    ChatModule,
+    UsersModule,
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'admin',
+      password: 'pass',
+      database: 'trans_db',
+      entities: [User],
+      // synchronize: true,
+    }),
+    ConfigModule.forRoot(),
+  ],
   controllers: [PongController, ChatController, UsersController],
   providers: [PongService, UsersService],
 })
-
 export class AppModule {}

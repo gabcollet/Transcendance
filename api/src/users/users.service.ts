@@ -13,7 +13,6 @@ export class UsersService {
     }
 
     findById(id: number) {
-        console.log('This is id', id);
         return this.usersRepository.findOneBy({id});
     }
 

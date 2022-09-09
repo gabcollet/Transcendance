@@ -1,6 +1,6 @@
 import "./Login.css";
 import { FC, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const Login: FC<{ onChangeBg: (newClassName: string) => void }> = (props) => {
   const [isClicked, setIsClicked] = useState(false);
@@ -14,7 +14,9 @@ const Login: FC<{ onChangeBg: (newClassName: string) => void }> = (props) => {
   const changeBGHandler = () => {
     props.onChangeBg("root-default");
   };
+
   props.onChangeBg("root-login");
+
   return !isClicked ? (
     <div className="login-container">
       <button className="login-btn" onClick={login42Handler}>
@@ -23,7 +25,7 @@ const Login: FC<{ onChangeBg: (newClassName: string) => void }> = (props) => {
     </div>
   ) : (
     <div className="login-container">
-      <Link className="link" to="/SignIn">
+      <Link className="link" to="/api/auth">
         <button className={login42} onClick={changeBGHandler}>
           Login with 42
         </button>

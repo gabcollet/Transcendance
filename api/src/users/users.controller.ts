@@ -12,13 +12,11 @@ export class UsersController {
 
     @Get(':id')
     findOne(@Param('id') id: string) {
-        console.log("controller id:", id);
         return this.usersService.findById(parseInt(id));
     }
 
     @Post()
     createUser(@Body() body: any) {
-        console.log('this is body.id:', body.id);
         return this.usersService.create(body.name, body.username, body.picture, body.wins, body.losses);
     }
 }
