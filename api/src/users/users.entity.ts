@@ -2,21 +2,24 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    name: string;
+  @Column()
+  intraId: number;
 
-    @Column()
-    username: string;
-    
-    @Column()
-    picture: string;
-    
-    @Column()
-    wins: number;
+  @Column()
+  displayname: string;
 
-    @Column()
-    losses: number;
+  @Column()
+  username: string;
+
+  @Column()
+  picture: string;
+
+  @Column()
+  wins: number;
+
+  @Column()
+  losses: number;
 }
