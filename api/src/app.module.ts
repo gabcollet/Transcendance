@@ -8,11 +8,27 @@ import { ChatModule } from './chat/chat.module';
 import { UsersService } from './users/users.service';
 import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
-import { AuthService } from './auth/auth.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './users/users.entity';
 
 @Module({
-  imports: [AuthModule, PongModule, ChatModule, UsersModule],
-  controllers: [],
-  providers: [],
+  imports: [
+    AuthModule,
+    PongModule,
+    ChatModule,
+    UsersModule,
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'admin',
+      password: 'pass',
+      database: 'test_db',
+      entities: [User],
+      // synchronize: true,
+    }),
+  ],
+  controllers: [PongController, ChatController, UsersController],
+  providers: [PongService, UsersService],
 })
 export class AppModule {}

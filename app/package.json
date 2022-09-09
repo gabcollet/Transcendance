@@ -13,6 +13,7 @@
     "@types/node": "^16.11.49",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
+    "pg": "^8.8.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "react": "^18.2.0",

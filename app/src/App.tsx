@@ -1,6 +1,7 @@
 import "./App.css";
 import Menu from "./Pages/Menu";
 import Login from "./Pages/Login";
+import Profile from "./components/Profile/Profile"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Pong from "./components/Pong/Pong";
 import { useEffect, useState } from "react";
@@ -41,7 +42,9 @@ const App = () => {
           <Route
             path="/Profile"
             element={
-              <div style={{ color: "white", fontSize: "75px" }}>PROFILE</div>
+              <div style={{ color: "white", fontSize: "75px" }}>
+                <Profile />
+              </div>
             }
           />
           <Route
