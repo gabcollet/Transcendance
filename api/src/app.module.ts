@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { PongController } from './pong/pong.controller';
 import { PongService } from './pong/pong.service';
@@ -27,6 +28,7 @@ import { User } from './users/users.entity';
       entities: [User],
       // synchronize: true,
     }),
+    ConfigModule.forRoot(),
   ],
   controllers: [PongController, ChatController, UsersController],
   providers: [PongService, UsersService],

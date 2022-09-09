@@ -7,20 +7,16 @@ import { UsersService } from '../users/users.service';
 export class AuthStrategy extends PassportStrategy(Strategy, '42') {
   constructor(private userService: UsersService) {
     super({
-      clientID:
-        '3187aa6aec15b19df251d4424b7bc8f7fc761603b4bae21e049ce800e217a812',
-      secretID:
-        '94ecaff84914481f0bbd67e14b57bcbd65d8d8ea7f1f5918870e02c9ae4e04dc',
+      clientID: process.env.clientID,
+      clientSecret: process.env.clientSecret,
       callbackURL: 'http://localhost:3030/auth/login',
-      profileData: {
-        id: '',
-        username: '',
-        imageUrl: '',
-      },
+      scope: ['public'],
     });
   }
 
-  async validateUser(accessToken, refreshToken, profile: Profile) {
+  async validate(accessToken, refreshToken, profile: Profile) {
+    console.log(' ***** INSIDE VALIDATE *****');
+
     console.log(accessToken);
     console.log(refreshToken);
     console.log(profile);
