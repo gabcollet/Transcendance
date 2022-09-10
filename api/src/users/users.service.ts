@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './users.entity';
@@ -10,6 +10,8 @@ export class UsersService {
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
+
+  private logger = new Logger('User Service');
 
   findAll(): Promise<User[]> {
     return this.usersRepository.find();
@@ -41,18 +43,23 @@ export class UsersService {
 
   async findCreateUser(profile: Profile) {
     const { id, username, photos } = profile;
-    console.log('USERNAME: ' + username);
 
     const user = await this.usersRepository.findOne({
       where: { username: username },
     });
 
     if (!user) {
-      console.log('*** User Not Found... Adding User to Database***');
+      this.logger.log('*** User Not Found... Adding User to Database***');
       return this.create(id, username, username, photos[0]);
     }
 
-    console.log('Found user with id: ' + user.id);
-    return user;
+    if (user.intraId == id) {
+      this.logger.log('Found user: ' + username + ' with id: ' + user.id);
+      return user;
+    } else {
+      throw new UnauthorizedException(
+        'Resquesting Client Credentials Mismatch',
+      );
+    }
   }
 }

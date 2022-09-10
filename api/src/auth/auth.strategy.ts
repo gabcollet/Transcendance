@@ -23,25 +23,8 @@ export class AuthStrategy extends PassportStrategy(Strategy, '42') {
   }
 
   async validate(accessToken, refreshToken, profile: Profile) {
-    console.log(' ***** INSIDE VALIDATE *****');
-    // console.log(profile);
-    // console.log(accessToken);
-    // console.log(refreshToken);
-
-    // const { id, username, photos } = profile;
-
-    // const data = {
-    //   id: id,
-    //   username: username,
-    //   displayname: username,
-    //   picture: photos[0],
-    //   wins: 0,
-    //   losses: 0,
-    // };
-
-    // console.log('\n\nDATA IN VALIDATE\n\n' + data);
-
     const user = this.userService.findCreateUser(profile);
+
     return await user;
   }
 }
