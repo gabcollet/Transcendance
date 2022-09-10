@@ -7,12 +7,11 @@ import {
   faBinoculars,
   faBars,
   faX,
-  IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import Toggle from "./Toggle";
 import _Toggle from "./Toggle";
 import MenuButton from "./MenuButton";
-import React, { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useState } from "react";
 import { Link } from "react-router-dom";
 import "./MenuWheel.css";
 
