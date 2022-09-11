@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './users.entity';
 import { Profile } from 'passport-42';
-import { UserDto } from './dto/user.dto';
 
 @Injectable()
 export class UsersService {
@@ -49,7 +48,7 @@ export class UsersService {
     });
 
     if (!user) {
-      this.logger.log('*** User Not Found... Adding User to Database***');
+      this.logger.log('*** User Not Found... Adding New User to Database***');
       return this.create(id, username, username, photos[0]);
     }
 

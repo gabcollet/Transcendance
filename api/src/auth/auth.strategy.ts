@@ -13,12 +13,6 @@ export class AuthStrategy extends PassportStrategy(Strategy, '42') {
       clientSecret: process.env.clientSecret,
       callbackURL: 'http://localhost:3030/auth/redirect',
       scope: ['public'],
-      // profileFields: {
-      //   id: 'id',
-      //   username: 'login',
-      //   displayname: 'login',
-      //   picture: 'url',
-      // },
     });
   }
 
