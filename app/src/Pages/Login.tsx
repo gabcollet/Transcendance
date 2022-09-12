@@ -39,14 +39,6 @@ const Login: FC<{ onChangeBg: (newClassName: string) => void }> = (props) => {
     "&state=" +
     genRandStr(12);
 
-  // "https://api.intra.42.fr/oauth/authorize?client_id=" +
-  // "3187aa6aec15b19df251d4424b7bc8f7fc761603b4bae21e049ce800e217a812" +
-  // "&redirect_uri=" +
-  // "http%3A%2F%2Flocalhost%3A3030%2Fauth%2Fredirect" +
-  // "&response_type=code" +
-  // "&state=" +
-  // genRandStr(12);
-
   return !isClicked ? (
     <div className="login-container">
       <button className="login-btn" onClick={login42Handler}>
