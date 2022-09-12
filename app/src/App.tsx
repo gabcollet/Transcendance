@@ -1,17 +1,15 @@
 import "./App.css";
 import Menu from "./Pages/Menu";
 import Login from "./Pages/Login";
-import Profile from "./components/Profile/Profile"
+import Profile from "./components/Profile/Profile";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Pong from "./components/Pong/Pong";
-import { useEffect, useState } from "react";
-import { get } from "https";
-import Redirect from "./components/auth/Redirect";
+import { useState } from "react";
 import Authenticate from "./components/auth/Authenticate";
 
 const App = () => {
   let [background, setBackground] = useState("root-default");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const changeBG = (newClassName: string) => {
     setBackground(newClassName);
@@ -22,8 +20,7 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<Login onChangeBg={changeBG}></Login>} />
-          <Route path="/api/auth" element={<Redirect />}></Route>
-          <Route path="/api/authenticate" element={<Authenticate />}></Route>
+          <Route path="/api/auth" element={<Authenticate />}></Route>
           <Route path="/Menu" element={<Menu></Menu>} />
           <Route
             path="/Pong"

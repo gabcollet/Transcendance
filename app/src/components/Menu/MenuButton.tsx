@@ -29,7 +29,6 @@ const MenuButton = (props: _Button) => {
           icon={props.icon}
         ></FontAwesomeIcon>
       </a>
-      {/* {hover && <p className="text-box">Test</p>} */}
     </li>
   );
 };
