@@ -123,6 +123,15 @@ export class PongGateway implements OnGatewayInit/* , OnGatewayConnection, OnGat
     this.logger.log(`${client.id} joined room ${room}`);
     client.emit('joinedRoom', [room, this.isWaiting]);
   }
+  
+  @SubscribeMessage('playerReady')
+  handleReady(client: Socket, payload: {
+    room: string,
+    player: number,
+  }) {
+    console.log(payload.room);
+    this.server.to(payload.room).emit('playerRdy', payload.player);
+  }
 
   @SubscribeMessage('leaveRoom')
   handleLeaveRoom(client: Socket, room: string) {

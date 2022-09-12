@@ -2,6 +2,7 @@ import { useRef, useEffect } from 'react'
 import { board, Player, Ball } from  './assets'
 // import resizeCanvas from './sizeCanvas'
 import { roomID, socket, pID } from '../../../Pages/PongRoom';
+import { drawRectangle } from './draw';
 
 
 
@@ -24,15 +25,13 @@ const useCanvas = () => {
     const balldy = useRef<number>(0);
     const p1_score = useRef<number>(0);
     const p2_score = useRef<number>(0);
+    const ready = useRef<boolean>(false);
     
     useEffect(() => {
         socket.on('msgToClient', (input: number[]) => {
             P1_y.current = input[0];
             P2_y.current = input[1];      
         });
-    },[])
-   
-    useEffect(() => {
         socket.on('ballposClient', (input: number[]) => {
             ballx.current = input[0];
             bally.current = input[1];
@@ -51,6 +50,14 @@ const useCanvas = () => {
         
         const ctx : CanvasRenderingContext2D | null = canvasRef.current!.getContext('2d');
         let animationFrameId : number;
+        
+        socket.on('playerRdy', (input: number) => {
+            if (input === 2){
+                ready.current = true;
+            }
+            console.log(input);
+            
+        })
         
         //------------------------- Assets //-------------------------
         let p1 = new Player(w*0.02, P1_y.current, h*.1);
@@ -71,6 +78,11 @@ const useCanvas = () => {
             p1_h: p1.height, 
             p2_h: p2.height,
             room: roomID
+        });
+
+        socket.emit('playerReady', {
+            room: roomID,
+            player: pID,
         });
         //-------------------------
 
@@ -110,6 +122,61 @@ const useCanvas = () => {
             animationFrameId = window.requestAnimationFrame(render);
         }
 
+        const waitScreen = () => {
+            if (ctx){
+                board(ctx, w, h, p1_score.current, p2_score.current);
+                p1.draw(ctx, w, h, P1_y.current);
+                p2.draw(ctx, w, h, P2_y.current);
+                ctx.globalAlpha = 0.7;
+                drawRectangle(ctx, {x:0, y:0}, w, h, 'black');
+                ctx.globalAlpha = 1.0;
+                ctx.font = "60px Times New Roman";
+                ctx.fillStyle = 'white'
+                ctx.fillText("Waiting for another Player", w/10 , h/2 + 15);
+            }
+        }
+        
+        const animationScreen = async () => {
+            let text = "";
+            const renderScreen = () => { 
+                if (ctx){
+                    ctx!.clearRect(0,0,w,h);
+                    board(ctx, w, h, p1_score.current, p2_score.current);
+                    p1.draw(ctx, w, h, P1_y.current);
+                    p2.draw(ctx, w, h, P2_y.current);
+                    ctx.globalAlpha = 0.7;
+                    drawRectangle(ctx, {x:0, y:0}, w, h, 'black');
+                    ctx.globalAlpha = 1.0;
+                    ctx.font = "100px Times New Roman";
+                    ctx.fillStyle = 'white'
+                    ctx.fillText(text, w/2 - 20 , h/2 + 30);
+                }
+            }
+            renderScreen();
+            //ce code est affreux il doit y avoir une meilleur methode :'(
+            const myPromise = new Promise(function(resolve) {
+                text = "3";
+                renderScreen();
+                setTimeout(function(){
+                    resolve("");}, 1000);
+            })
+            const myPromise2 = new Promise(async function(resolve) {
+                await myPromise;
+                text = "2"
+                renderScreen();
+                setTimeout(function(){
+                    resolve("");}, 1000);
+            })
+            const myPromise3 = new Promise(async function(resolve) {
+                await myPromise2;
+                text = "1";
+                renderScreen();
+                setTimeout(function(){
+                    resolve("");}, 1000);
+            })
+            await myPromise3;
+        }
+
         document.addEventListener('keydown', (e) => {
             if (pID === 1){
                 p1.isMoving = true;
@@ -132,7 +199,15 @@ const useCanvas = () => {
         
         // resizeCanvas(canvas);
 
-        render();
+        if (ready.current){
+            const startGame = async () => {
+                animationScreen().then(render)
+            }
+            startGame();
+        }
+        else {
+            waitScreen();
+        }
 
         return () => {
             window.cancelAnimationFrame(animationFrameId)
