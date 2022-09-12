@@ -28,9 +28,10 @@ import { User } from './users/users.entity';
       entities: [User],
       synchronize: true,
     }),
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
   ],
-  controllers: [PongController, ChatController, UsersController],
-  providers: [PongService, UsersService],
+  providers: [],
 })
 export class AppModule {}
