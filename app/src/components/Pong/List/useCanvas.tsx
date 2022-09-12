@@ -55,7 +55,20 @@ const useCanvas = () => {
         } else {
             ball = new Ball(ballx.current, bally.current, w, 4);
         }
+        
+        socket.emit('ballInfoServer', {
+            x: ball.x, 
+            y: ball.y,
+            w: w, 
+            dx: ball.dx, 
+            p1_h: p1.height, 
+            p2_h: p2.height,
+            room: roomID
+        });
+        console.log("test");
+        
         //-------------------------
+
 
         const render = () => {
             frameCount++;
@@ -71,10 +84,14 @@ const useCanvas = () => {
             ball.y = bally.current;
             ball.draw(ctx!);
             
-            p1.move(h);
-            p2.move(h);
-            P1_y.current = p1.y;
-            P2_y.current = p2.y;
+            if (pID === 1){
+                p1.move(h);
+                P1_y.current = p1.y;
+            }
+            else if (pID === 2){
+                p2.move(h);
+                P2_y.current = p2.y;
+            }
 
             ball.update(w, h, p1, p2);
             ballx.current = ball.x;
