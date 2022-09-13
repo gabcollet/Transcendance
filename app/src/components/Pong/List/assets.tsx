@@ -1,4 +1,5 @@
 import { drawRectangle, drawLine } from './draw'
+import { socket, pID, roomID } from '../../../Pages/PongRoom';
 
 const board = (ctx : CanvasRenderingContext2D, 
             w: number, 
@@ -47,6 +48,11 @@ class Player{
                         && this.y + this.height < h){
                 this.y += 14;
             }
+            socket.emit('msgToServer', {
+                room: roomID,
+                pos: this.y, 
+                pID: pID
+            });
         }
     }
 }

@@ -14,6 +14,8 @@ export class Ball{
       this.p1_score = 0;
       this.p2_score = 0;
       this.frameCount = 0;
+      this.frameId = 1;
+      this.speed = dx;
     }
     x: number;
     y: number;
@@ -28,8 +30,11 @@ export class Ball{
     p1_score: number;
     p2_score: number;
     frameCount: number;
+    frameId: number;
+    speed: number;
   
     update = (p1_y: number, p2_y: number) => {
+      // this.frameId++;
       this.x += this.dx;
       this.y += this.dy;
       
@@ -53,12 +58,12 @@ export class Ball{
       }
     }
 
-    retart = () => {
+    restart = () => {
         let dir: boolean = false;
         if (this.dx > 0) { dir = true; }
         this.x = this.w/2;
         this.y = this.h/2;
-        this.dx = 4;
+        this.dx = this.speed;
         this.dy = 0;
         if (dir) { this.dx *= -1; }
     }

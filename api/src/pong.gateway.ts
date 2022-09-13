@@ -30,14 +30,14 @@ export class PongGateway implements OnGatewayInit/* , OnGatewayConnection, OnGat
   handleMessage(client: Socket, 
     payload: {
       room: string, 
-      pos1: number, 
-      pos2: number,
+      pos: number, 
+      pID: number,
     }) 
   {
     this.server.to(payload.room).emit('msgToClient', 
       [
-        payload.pos1, 
-        payload.pos2,
+        payload.pos, 
+        payload.pID,
       ]);
   }
 
@@ -76,32 +76,41 @@ export class PongGateway implements OnGatewayInit/* , OnGatewayConnection, OnGat
       room: string, 
       pos1: number,
       pos2: number,
+      // frameId: number
     })  
   {
     for (let i = 0; i < this.ball.length; i++){
-      if (this.ball[i] && this.ball[i].room == payload.room){
+      if (this.ball[i] && this.ball[i].room == payload.room /* && this.ball[i].frameId == payload.frameId */){
         const ball = this.ball[i];
         ball.frameCount++;
+        //Update ball position
         ball.update(payload.pos1, payload.pos2);
         if (ball.x < 0 || ball.x > ball.w){
+          //Update player score
           if (ball.x < 0) { ball.p2_score++; }
           else if (ball.x > ball.w) { ball.p1_score++; }
-          ball.retart();
+          ball.restart();
           ball.frameCount = 0;
+          this.server.to(payload.room).emit('scoreClient', 
+          [
+            ball.p1_score,
+            ball.p2_score,
+          ]);
         }
+        //Make the ball go fast!!
         if (ball.frameCount % 300 === 0){
           ball.dx *= 1.2;
           ball.dy *= 1.2;
         }
-        this.server.to(payload.room).emit('ballposClient', 
+        else {
+          this.server.to(payload.room).emit('ballposClient', 
           [
             ball.x,
             ball.y,
             ball.dx,
             ball.dy,
-            ball.p1_score,
-            ball.p2_score
           ]);
+        }
       }
     }
   }
@@ -129,7 +138,6 @@ export class PongGateway implements OnGatewayInit/* , OnGatewayConnection, OnGat
     room: string,
     player: number,
   }) {
-    console.log(payload.room);
     this.server.to(payload.room).emit('playerRdy', payload.player);
   }
 
@@ -137,6 +145,6 @@ export class PongGateway implements OnGatewayInit/* , OnGatewayConnection, OnGat
   handleLeaveRoom(client: Socket, room: string) {
     client.leave(room);
     client.emit('leaveRoom', room);
-    //remove the room 
+    //make a winner and remove the room 
   }
 }

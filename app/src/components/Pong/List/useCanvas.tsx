@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { board, Player, Ball } from  './assets'
 // import resizeCanvas from './sizeCanvas'
 import { roomID, socket, pID } from '../../../Pages/PongRoom';
@@ -15,33 +15,46 @@ const useCanvas = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const w = 800;
     const h = 600;
-
-    //------------------------- Backend //-------------------------
+    const ballSpeed = 2;
     const P1_y = useRef<number>((h/2) - (h*.06));
     const P2_y = useRef<number>((h/2) - (h*.06));
+
+    //------------------------- Backend //-------------------------
     const ballx = useRef<number>(w/2);
     const bally = useRef<number>(h/2);
     const balldx = useRef<number>(0);
     const balldy = useRef<number>(0);
     const p1_score = useRef<number>(0);
     const p2_score = useRef<number>(0);
-    const ready = useRef<boolean>(false);
+    const [ready, setReady] = useState<boolean>(false);
+    const [endGame, setEndGame] = useState<number>(0);
     
     useEffect(() => {
         socket.on('msgToClient', (input: number[]) => {
-            P1_y.current = input[0];
-            P2_y.current = input[1];      
-        });
-        socket.on('ballposClient', (input: number[]) => {
-            ballx.current = input[0];
-            bally.current = input[1];
-            balldx.current = input[2];
-            balldy.current = input[3];
-            p1_score.current = input[4];
-            p2_score.current = input[5];
+            if (input[1] == 1){
+                P1_y.current = input[0];
+            }
+            else {
+                P2_y.current = input[0];
+            }
         });
     },[])
     
+    socket.on('ballposClient', (input: number[]) => {
+        ballx.current = input[0];
+        bally.current = input[1];
+        balldx.current = input[2];
+        balldy.current = input[3];
+    });
+    socket.on('scoreClient', (input: number[]) => {
+        p1_score.current = input[0];
+        p2_score.current = input[1];
+    });
+    socket.on('playerRdy', (input: number) => {
+        if (input === 2){
+            setReady(true);
+        }
+    })
     //-------------------------
     
     useEffect(() => {
@@ -51,22 +64,14 @@ const useCanvas = () => {
         const ctx : CanvasRenderingContext2D | null = canvasRef.current!.getContext('2d');
         let animationFrameId : number;
         
-        socket.on('playerRdy', (input: number) => {
-            if (input === 2){
-                ready.current = true;
-            }
-            console.log(input);
-            
-        })
-        
         //------------------------- Assets //-------------------------
         let p1 = new Player(w*0.02, P1_y.current, h*.1);
         let p2 = new Player(w - (w*0.03), P2_y.current, h*.1);
         let ball : Ball;
         if (Math.random() < 0.5){
-            ball = new Ball(ballx.current, bally.current, w, -3);
+            ball = new Ball(ballx.current, bally.current, w, -ballSpeed);
         } else {
-            ball = new Ball(ballx.current, bally.current, w, 3);
+            ball = new Ball(ballx.current, bally.current, w, ballSpeed);
         }
 
         socket.emit('ballInfoServer', {
@@ -101,76 +106,72 @@ const useCanvas = () => {
             ball.dy = balldy.current;
             ball.draw(ctx!);
             
-            p1.move(h);
-            p2.move(h);
+            if (pID == 1){
+                p1.move(h);
+            }
+            else {
+                p2.move(h);
+            }
             P1_y.current = p1.y;
             P2_y.current = p2.y;
-
-            socket.emit('msgToServer', {
-                room: roomID,
-                pos1: P1_y.current, 
-                pos2: P2_y.current,
-            });
             
             socket.emit('ballposServer', {
                 room: roomID,
                 pos1: P1_y.current, 
                 pos2: P2_y.current,
+                // frameId: animationFrameId 
             });
+
+            //Finish the game
+            if (p1_score.current == 5 || p2_score.current == 5){
+                p1_score.current == 5 ? setEndGame(1): setEndGame(2);
+            }
             
             //requestAnimationFrame will call recursively the render method
-            animationFrameId = window.requestAnimationFrame(render);
+            animationFrameId = window.requestAnimationFrame(render);      
         }
-
-        const waitScreen = () => {
+        const renderScreen = (text: string, height: number, size: number) => { 
             if (ctx){
+                ctx!.clearRect(0,0,w,h);
                 board(ctx, w, h, p1_score.current, p2_score.current);
                 p1.draw(ctx, w, h, P1_y.current);
                 p2.draw(ctx, w, h, P2_y.current);
-                ctx.globalAlpha = 0.7;
+                ctx.globalAlpha = 0.8;
                 drawRectangle(ctx, {x:0, y:0}, w, h, 'black');
                 ctx.globalAlpha = 1.0;
-                ctx.font = "60px Times New Roman";
+                ctx.font = `${size}px Times New Roman`;
                 ctx.fillStyle = 'white'
-                ctx.fillText("Waiting for another Player", w/10 , h/2 + 15);
+                ctx.textAlign = "center";
+                ctx.fillText(text, w/2 , height);
+                ctx.textAlign = "left";
             }
         }
+
+        const waitScreen = () => {
+            renderScreen('Waiting for another player', h/2 + 10, 50);
+        }
         
+        const endScreen = (winner: number) => {
+            renderScreen(`WINNER PLAYER ${winner}!!!`, h/2 + 15, 60)
+        }
+
         const animationScreen = async () => {
-            let text = "";
-            const renderScreen = () => { 
-                if (ctx){
-                    ctx!.clearRect(0,0,w,h);
-                    board(ctx, w, h, p1_score.current, p2_score.current);
-                    p1.draw(ctx, w, h, P1_y.current);
-                    p2.draw(ctx, w, h, P2_y.current);
-                    ctx.globalAlpha = 0.7;
-                    drawRectangle(ctx, {x:0, y:0}, w, h, 'black');
-                    ctx.globalAlpha = 1.0;
-                    ctx.font = "100px Times New Roman";
-                    ctx.fillStyle = 'white'
-                    ctx.fillText(text, w/2 - 20 , h/2 + 30);
-                }
-            }
-            renderScreen();
+            renderScreen('', 0, 0);
             //ce code est affreux il doit y avoir une meilleur methode :'(
             const myPromise = new Promise(function(resolve) {
-                text = "3";
-                renderScreen();
+                renderScreen('3', h/2 + 30, 100);
                 setTimeout(function(){
                     resolve("");}, 1000);
             })
             const myPromise2 = new Promise(async function(resolve) {
                 await myPromise;
-                text = "2"
-                renderScreen();
+                renderScreen('2', h/2 + 30, 100);
                 setTimeout(function(){
                     resolve("");}, 1000);
             })
             const myPromise3 = new Promise(async function(resolve) {
                 await myPromise2;
-                text = "1";
-                renderScreen();
+                renderScreen('1', h/2 + 30, 100);
                 setTimeout(function(){
                     resolve("");}, 1000);
             })
@@ -199,11 +200,14 @@ const useCanvas = () => {
         
         // resizeCanvas(canvas);
 
-        if (ready.current){
+        if (ready && endGame == 0){
             const startGame = async () => {
                 animationScreen().then(render)
             }
             startGame();
+        }
+        else if (endGame == 1 || endGame == 2){
+            endScreen(endGame);
         }
         else {
             waitScreen();
@@ -212,7 +216,7 @@ const useCanvas = () => {
         return () => {
             window.cancelAnimationFrame(animationFrameId)
         }
-    }, [])
+    }, [ready, endGame])
 
     return canvasRef;
 }
