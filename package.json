@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "react-beforeunload": "^2.5.3"
+  }
+}

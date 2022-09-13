@@ -18,15 +18,15 @@ export class PongGateway implements OnGatewayInit/* , OnGatewayConnection, OnGat
     this.logger.log('Pong server initialized');
   }
   
-  /* handleConnection(client: Socket, ...args: any[]) {
+/*   handleConnection(client: Socket, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`);
-  }
+  } */
 
-  handleDisconnect(client: Socket) {
+/*   handleDisconnect(client: Socket) {
     this.logger.log(`Client disconnected: ${client.id}`);
   } */
 
-  @SubscribeMessage('msgToServer')
+  @SubscribeMessage('playerPosServer')
   handleMessage(client: Socket, 
     payload: {
       room: string, 
@@ -34,7 +34,7 @@ export class PongGateway implements OnGatewayInit/* , OnGatewayConnection, OnGat
       pID: number,
     }) 
   {
-    this.server.to(payload.room).emit('msgToClient', 
+    this.server.to(payload.room).emit('playerPosClient', 
       [
         payload.pos, 
         payload.pID,
@@ -70,17 +70,17 @@ export class PongGateway implements OnGatewayInit/* , OnGatewayConnection, OnGat
        payload.h));
   }
   
-  @SubscribeMessage('ballposServer')
+  @SubscribeMessage('ballPosServer')
   handleBall(client: Socket, 
     payload: {
       room: string, 
       pos1: number,
       pos2: number,
-      // frameId: number
+      frameId: number
     })  
   {
     for (let i = 0; i < this.ball.length; i++){
-      if (this.ball[i] && this.ball[i].room == payload.room /* && this.ball[i].frameId == payload.frameId */){
+      if (this.ball[i] && this.ball[i].room == payload.room && this.ball[i].frameId == payload.frameId){
         const ball = this.ball[i];
         ball.frameCount++;
         //Update ball position
@@ -103,7 +103,7 @@ export class PongGateway implements OnGatewayInit/* , OnGatewayConnection, OnGat
           ball.dy *= 1.2;
         }
         else {
-          this.server.to(payload.room).emit('ballposClient', 
+          this.server.to(payload.room).emit('ballPosClient', 
           [
             ball.x,
             ball.y,
@@ -134,16 +134,20 @@ export class PongGateway implements OnGatewayInit/* , OnGatewayConnection, OnGat
   }
   
   @SubscribeMessage('playerReady')
-  handleReady(client: Socket, payload: {
-    room: string,
-    player: number,
-  }) {
-    this.server.to(payload.room).emit('playerRdy', payload.player);
+  handleReady(client: Socket, room: string) 
+  {
+    for (let i = 0; i < this.ball.length; i++){
+      if (this.ball[i] && this.ball[i].room == room){
+        this.ball[i].ready++;
+        this.server.to(room).emit('playerRdy', this.ball[i].ready++);
+      }
+    }
   }
 
   @SubscribeMessage('leaveRoom')
   handleLeaveRoom(client: Socket, room: string) {
     client.leave(room);
+    this.logger.log(`${client.id} leaved room ${room}`);
     client.emit('leaveRoom', room);
     //make a winner and remove the room 
   }

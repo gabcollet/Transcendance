@@ -48,7 +48,7 @@ class Player{
                         && this.y + this.height < h){
                 this.y += 14;
             }
-            socket.emit('msgToServer', {
+            socket.emit('playerPosServer', {
                 room: roomID,
                 pos: this.y, 
                 pID: pID

@@ -15,7 +15,7 @@ const useCanvas = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const w = 800;
     const h = 600;
-    const ballSpeed = 2;
+    const ballSpeed = 4;
     const P1_y = useRef<number>((h/2) - (h*.06));
     const P2_y = useRef<number>((h/2) - (h*.06));
 
@@ -30,8 +30,8 @@ const useCanvas = () => {
     const [endGame, setEndGame] = useState<number>(0);
     
     useEffect(() => {
-        socket.on('msgToClient', (input: number[]) => {
-            if (input[1] == 1){
+        socket.on('playerPosClient', (input: number[]) => {
+            if (input[1] === 1){
                 P1_y.current = input[0];
             }
             else {
@@ -40,7 +40,7 @@ const useCanvas = () => {
         });
     },[])
     
-    socket.on('ballposClient', (input: number[]) => {
+    socket.on('ballPosClient', (input: number[]) => {
         ballx.current = input[0];
         bally.current = input[1];
         balldx.current = input[2];
@@ -51,10 +51,13 @@ const useCanvas = () => {
         p2_score.current = input[1];
     });
     socket.on('playerRdy', (input: number) => {
-        if (input === 2){
+        console.log(input);
+        
+        if (input === 3){
             setReady(true);
         }
     })
+
     //-------------------------
     
     useEffect(() => {
@@ -85,10 +88,7 @@ const useCanvas = () => {
             room: roomID
         });
 
-        socket.emit('playerReady', {
-            room: roomID,
-            player: pID,
-        });
+        socket.emit('playerReady', roomID);
         //-------------------------
 
         const render = () => {
@@ -106,7 +106,7 @@ const useCanvas = () => {
             ball.dy = balldy.current;
             ball.draw(ctx!);
             
-            if (pID == 1){
+            if (pID === 1){
                 p1.move(h);
             }
             else {
@@ -115,16 +115,16 @@ const useCanvas = () => {
             P1_y.current = p1.y;
             P2_y.current = p2.y;
             
-            socket.emit('ballposServer', {
+            socket.emit('ballPosServer', {
                 room: roomID,
                 pos1: P1_y.current, 
                 pos2: P2_y.current,
-                // frameId: animationFrameId 
+                frameId: animationFrameId 
             });
 
             //Finish the game
-            if (p1_score.current == 5 || p2_score.current == 5){
-                p1_score.current == 5 ? setEndGame(1): setEndGame(2);
+            if (p1_score.current === 5 || p2_score.current === 5){
+                p1_score.current === 5 ? setEndGame(1): setEndGame(2);
             }
             
             //requestAnimationFrame will call recursively the render method
@@ -157,25 +157,13 @@ const useCanvas = () => {
 
         const animationScreen = async () => {
             renderScreen('', 0, 0);
-            //ce code est affreux il doit y avoir une meilleur methode :'(
-            const myPromise = new Promise(function(resolve) {
-                renderScreen('3', h/2 + 30, 100);
-                setTimeout(function(){
-                    resolve("");}, 1000);
-            })
-            const myPromise2 = new Promise(async function(resolve) {
+            for (let i = 3; i > 0; i--){
+                const myPromise = new Promise(function(resolve) {
+                    renderScreen(i.toString(), h/2 + 30, 100);
+                    setTimeout(function(){resolve('');}, 1000)
+                });
                 await myPromise;
-                renderScreen('2', h/2 + 30, 100);
-                setTimeout(function(){
-                    resolve("");}, 1000);
-            })
-            const myPromise3 = new Promise(async function(resolve) {
-                await myPromise2;
-                renderScreen('1', h/2 + 30, 100);
-                setTimeout(function(){
-                    resolve("");}, 1000);
-            })
-            await myPromise3;
+            }   
         }
 
         document.addEventListener('keydown', (e) => {
@@ -200,13 +188,13 @@ const useCanvas = () => {
         
         // resizeCanvas(canvas);
 
-        if (ready && endGame == 0){
+        if (ready && endGame === 0){
             const startGame = async () => {
                 animationScreen().then(render)
             }
             startGame();
         }
-        else if (endGame == 1 || endGame == 2){
+        else if (endGame === 1 || endGame === 2){
             endScreen(endGame);
         }
         else {
