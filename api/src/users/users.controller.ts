@@ -22,9 +22,10 @@ export class UsersController {
   }
 
   @Get('profile')
-  // @UseGuards(AuthorizationGuard)
-  getProfile() {
-    console.log("IT WORKS");
+  @UseGuards(AuthorizationGuard)
+  getProfile(@Req() req: Request) {
+    console.log("BEFORE REQUEST");
+    // console.log(`REQ: ${req.user}`);
   }
 
   // @Get(':id')
