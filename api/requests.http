@@ -1,0 +1,18 @@
+GET http://localhost:3030/users
+
+### Create User
+POST http://localhost:3030/users
+Content-Type: application/json
+
+{
+    "intraId": 4,
+    "username": "testing_boi",
+    "displayname": "testingtoy",
+    "picture": "laube.jpg",
+    "wins": 4,
+    "losses": 6
+}
+
+
+### Get protected user profile
+GET http://localhost:3030/users/profile

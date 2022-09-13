@@ -5,7 +5,6 @@ import Profile from "./components/Profile/Profile";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Pong from "./components/Pong/Pong";
 import { useState } from "react";
-import Authenticate from "./components/auth/Authenticate";
 
 const App = () => {
   let [background, setBackground] = useState("root-default");
@@ -20,7 +19,6 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<Login onChangeBg={changeBG}></Login>} />
-          <Route path="/api/auth" element={<Authenticate />}></Route>
           <Route path="/Menu" element={<Menu></Menu>} />
           <Route
             path="/Pong"
