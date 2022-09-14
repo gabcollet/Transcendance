@@ -26,13 +26,11 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Req() req: Request) {
-    console.log("BEFORE REQUEST");
-    console.log(`PAYLOAD: ${JSON.stringify(req.user)}`);
     return req.user;
   }
 
   @Post()
-  async createUser(@Body() body) {
+  async createUser(@Body() body: UserDto) {
     console.log(body);
     return await this.usersService.create(
       body.intraId,
