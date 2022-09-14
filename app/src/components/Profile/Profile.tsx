@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import './profile.css';
 import data from './data_placeholder';
+import Cookies from 'js-cookie';
 
 interface _Content {
     contentType: string;
@@ -8,7 +9,14 @@ interface _Content {
 
 const ProfileImage = () => {
   useEffect(() => {
-    fetch('http://localhost:3030/users/profile');
+    // let cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)jwtToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    const cookieValue = Cookies.get('jwtToken');
+    fetch('http://localhost:3030/users/profile', {
+      credentials: "include",
+      headers: {
+        'Authorization': `bearer ${cookieValue}`
+      }
+    });
   });
 
   return (

@@ -16,3 +16,4 @@ Content-Type: application/json
 
 ### Get protected user profile
 GET http://localhost:3030/users/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhdWJlIiwic3ViIjoxLCJpYXQiOjE2NjMxMTY5NTB9.njS7PcgacMYpMz5GbFS_tP82NosRm_XIhzxqaXxYYIA
