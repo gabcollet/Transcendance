@@ -49,7 +49,7 @@ export class UsersService {
 
     if (!user) {
       this.logger.log('*** User Not Found... Adding New User to Database***');
-      return this.create(id, username, username, photos[0]);
+      return this.create(id, username, username, photos[0].value);
     }
 
     if (user.intraId == id) {
@@ -60,5 +60,30 @@ export class UsersService {
         'Resquesting Client Credentials Mismatch',
       );
     }
+  }
+
+  // Profile requests
+  async getUserImage(username: string) {
+    const user = await this.usersRepository.findOne({
+      where: { username: username }
+    });
+    return user ? user.picture : null;
+  }
+
+  async getDisplayName(username: string) {
+    const user = await this.usersRepository.findOne({
+      where: { username: username }
+    });
+    return user ? user.displayname : null;
+  }
+
+  async updateImg(username: any) {
+    await this.usersRepository.update({
+      username: username
+    },
+    {
+      picture: "http://localhost:3030/users/storedimg/gcollet.jpg"
+    });
+    return this.findAll();
   }
 }

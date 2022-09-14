@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import React from 'react';
 import './profile.css';
 import data from './data_placeholder';
 import Cookies from 'js-cookie';
@@ -7,20 +8,41 @@ interface _Content {
     contentType: string;
 }
 
-const ProfileImage = () => {
-  useEffect(() => {
-    // let cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)jwtToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-    const cookieValue = Cookies.get('jwtToken');
-    fetch('http://localhost:3030/users/profile', {
-      credentials: "include",
+const fetchValue = (key: string, propsValue: string, setCallBack: any) => {
+  async function fetchIt() {
+    await fetch('http://localhost:3030/users/' + propsValue + '/' + key, {
+      credentials: 'include', 
       headers: {
-        'Authorization': `bearer ${cookieValue}`
+        'Authorization': `bearer ${Cookies.get('jwtToken')}`,
       }
-    });
+    })
+    .then(res => res.text())
+    .then(data => setCallBack(data));
+  }
+  fetchIt();
+}
+
+const UserDisplayName = (props: any) => {
+  const [displayName, setDisplayName] = useState('');
+
+  useEffect(() => {
+    fetchValue('displayname', props.userName, setDisplayName);
   });
 
   return (
-    <img className="profile-image" src={data.profile_image} alt="" />
+      <p className="profile-name-text">{displayName}</p>
+  );
+}
+
+// Takes userName as a prop. This userName should match a 42 login.
+const UserImage = (props: any) => {
+  const [userImage, setUserImage] = useState('');
+
+  useEffect(() => {
+      fetchValue('img', props.userName, setUserImage);
+    });
+  return (
+    <img className="profile-image" src={userImage} alt="" />
   );
 }
 
@@ -40,9 +62,8 @@ const ProfileHeader = () => {
     <section className="profile-header-container">
       <div className="profile-id-container">
         <div className="id-container-info">
-          <ProfileImage />
-          {/* <img className="profile-image" src={data.profile_image} alt="" /> */}
-          <p className="profile-name-text">{data.name}</p>
+          <UserImage userName="laube" />
+          <UserDisplayName userName="laube" />
           <p className="profile-status">status: {data.status}</p>
         </div>
         <div className="id-container-buttons">
