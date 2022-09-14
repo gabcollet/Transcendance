@@ -36,9 +36,8 @@ export class AuthController {
       secret: process.env.JWT_SECRET_KEY,
     });
 
-    console.log("THIS IS THE ENV JWT_SECRET KEY:", process.env.JWT_SECRET_KEY);
-
-    res.cookie('jwtToken', jwtToken, { httpOnly: false });
+    res.cookie('jwtToken', jwtToken, { httpOnly: false }); //! httpOnly: true makes the cookie unaccessible from the Frontend.
+    res.cookie('logged', true, { httpOnly: false });
     this.logger.log(jwtToken);
 
     res.status(301).redirect('http://localhost:3000/Menu');
