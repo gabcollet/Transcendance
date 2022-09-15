@@ -4,13 +4,15 @@ import { board, Player, Ball } from  './assets'
 import { roomID, socket, pID } from '../../../Pages/PongRoom';
 import { drawRectangle } from './draw';
 
-
+export let inGame = false;
 
 /* socket.on('disconnect', function() {
     console.log('Disconnected');
 }); */
 
 const useCanvas = () => {
+    inGame = true;
+    // console.log(inGame);
     
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const w = 800;
@@ -18,17 +20,17 @@ const useCanvas = () => {
     const ballSpeed = 4;
     const P1_y = useRef<number>((h/2) - (h*.06));
     const P2_y = useRef<number>((h/2) - (h*.06));
-
-    //------------------------- Backend //-------------------------
     const ballx = useRef<number>(w/2);
     const bally = useRef<number>(h/2);
-    const balldx = useRef<number>(0);
+    const balldx = useRef<number>(ballSpeed);
     const balldy = useRef<number>(0);
     const p1_score = useRef<number>(0);
     const p2_score = useRef<number>(0);
     const [ready, setReady] = useState<boolean>(false);
     const [endGame, setEndGame] = useState<number>(0);
+    let frameID: number = 0;
     
+    //------------------------- Backend //-------------------------
     useEffect(() => {
         socket.on('playerPosClient', (input: number[]) => {
             if (input[1] === 1){
@@ -51,13 +53,20 @@ const useCanvas = () => {
         p2_score.current = input[1];
     });
     socket.on('playerRdy', (input: number) => {
-        console.log(input);
-        
-        if (input === 3){
+        if (input === 2){
             setReady(true);
         }
     })
-
+    socket.on('leavedRoom', (input: number) => {
+        setReady(false);
+        setEndGame(input === 1 ? 2 : 1);
+        frameID = 0;
+        if (inGame && pID === input){
+            inGame = false;
+            // console.log(inGame);
+        }
+    });
+    
     //-------------------------
     
     useEffect(() => {
@@ -70,30 +79,27 @@ const useCanvas = () => {
         //------------------------- Assets //-------------------------
         let p1 = new Player(w*0.02, P1_y.current, h*.1);
         let p2 = new Player(w - (w*0.03), P2_y.current, h*.1);
-        let ball : Ball;
-        if (Math.random() < 0.5){
-            ball = new Ball(ballx.current, bally.current, w, -ballSpeed);
-        } else {
-            ball = new Ball(ballx.current, bally.current, w, ballSpeed);
-        }
-
+        // let ball : Ball;
+        // if (Math.random() < 0.5){
+        const ball = new Ball(ballx.current, bally.current, w, ballSpeed);
+        // } else {
+        //     ball = new Ball(ballx.current, bally.current, w, ballSpeed);
+        // }
+        
         socket.emit('ballInfoServer', {
-            x: ball.x, 
-            y: ball.y,
             w: w,
             h: h, 
-            dx: ball.dx, 
             p1_h: p1.height, 
             p2_h: p2.height,
-            room: roomID
+            roomID: roomID
         });
-
+        
         socket.emit('playerReady', roomID);
         //-------------------------
-
+        
         const render = () => {
             ctx!.clearRect(0,0,w,h);
-
+            
             board(ctx!, w, h, p1_score.current, p2_score.current);
             p1.y = P1_y.current;
             p2.y = P2_y.current;
@@ -116,19 +122,20 @@ const useCanvas = () => {
             P2_y.current = p2.y;
             
             socket.emit('ballPosServer', {
-                room: roomID,
+                roomID: roomID,
                 pos1: P1_y.current, 
                 pos2: P2_y.current,
-                frameId: animationFrameId 
+                frameId: frameID 
             });
 
             //Finish the game
             if (p1_score.current === 5 || p2_score.current === 5){
-                p1_score.current === 5 ? setEndGame(1): setEndGame(2);
+                setEndGame(p1_score.current === 5 ? 1: 2)
             }
             
             //requestAnimationFrame will call recursively the render method
-            animationFrameId = window.requestAnimationFrame(render);      
+            animationFrameId = window.requestAnimationFrame(render);
+            frameID++;     
         }
         const renderScreen = (text: string, height: number, size: number) => { 
             if (ctx){
@@ -204,7 +211,7 @@ const useCanvas = () => {
         return () => {
             window.cancelAnimationFrame(animationFrameId)
         }
-    }, [ready, endGame])
+    }, [ready, endGame, frameID])
 
     return canvasRef;
 }
