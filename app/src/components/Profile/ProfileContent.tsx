@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import styles from './Profile.module.css';
+import styles from './ProfileContent.module.css';
 import data from './data_placeholder';
 
 interface _Content {

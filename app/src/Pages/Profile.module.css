@@ -1,0 +1,11 @@
+.profile-container {
+    border-style: solid;
+    border-radius: 30px;
+    width: 80vw;
+    min-width: 500px;
+    max-width: 1800px;
+    height: 80vh;
+    min-height: 500px;
+    display: grid;
+    grid-template-rows: 200px auto;
+}

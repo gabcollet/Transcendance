@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from './Profile.module.css';
+import styles from './ProfileHeader.module.css';
 import { UserDisplayName } from './UserDisplayName';
 import { UserImage } from './UserImage';
 import { UserLosses } from './UserLosses';
