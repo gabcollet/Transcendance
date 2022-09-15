@@ -1,22 +1,17 @@
 export class Ball{
-    constructor(x: number, y: number, w: number, dx: number, p1_h: number, p2_h: number, room: string, h:number){
-//!faudrait vraiment spliter ca en info de room et info de ball
+    constructor(x: number, y: number, dx: number, ballradius: number, p1_h: number, p2_h: number, h: number, w: number){
+
       this.x = x;
       this.y = y;
       this.dx = dx;
       this.dy = 0;
-      this.ballRadius = (w*.015)/2;
-      this.p1_height = p1_h;
-      this.p2_height = p2_h;
-      this.room = room;
+      this.ballRadius = ballradius;
+      this.speed = dx;
+      this.frameId = 1;
       this.w = w;
       this.h = h;
-      this.p1_score = 0;
-      this.p2_score = 0;
-      this.frameCount = 0;
-      this.frameId = 1;
-      this.speed = dx;
-      this.ready = 0;
+      this.p1_height = p1_h;
+      this.p2_height = p2_h;
     }
     x: number;
     y: number;
@@ -27,13 +22,8 @@ export class Ball{
     ballRadius: number;
     p1_height: number;
     p2_height: number;
-    room: string;
-    p1_score: number;
-    p2_score: number;
-    frameCount: number;
     frameId: number;
     speed: number;
-    ready: number;
   
     update = (p1_y: number, p2_y: number) => {
       this.frameId++;

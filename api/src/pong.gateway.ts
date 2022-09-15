@@ -1,15 +1,16 @@
 import { Logger } from '@nestjs/common';
 import { OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Ball } from './pong.ball'
+import { Room } from './pong.room';
+
 
 @WebSocketGateway(9006, {cors: '*'})
-export class PongGateway implements OnGatewayInit/* , OnGatewayConnection, OnGatewayDisconnec */{
-  
+export class PongGateway implements OnGatewayInit{
+
   private logger: Logger = new Logger('PongGateway');
   private roomiD: string = '';
   private isWaiting: boolean = false;
-  private ball: [Ball] = [null]; //ca devrait etre un array de room contenant une ball a la place
+  private rooms: [Room] = [null];
   
   //This is usefull to pass the payload to everyone
   @WebSocketServer() server: Server;
@@ -44,66 +45,65 @@ export class PongGateway implements OnGatewayInit/* , OnGatewayConnection, OnGat
   @SubscribeMessage('ballInfoServer')
   setBall(client: Socket, 
     payload: {
-      x: number, 
-      y: number,
       w: number,
       h: number, 
-      dx: number, 
       p1_h: number, 
       p2_h: number,
-      room: string
+      roomID: string
     }) 
   {
-    for (let i = 0; i < this.ball.length; i++){
-      if (this.ball[i] && this.ball[i].room == payload.room){
+    for (let i = 0; i < this.rooms.length; i++){
+      if (this.rooms[i] && this.rooms[i].roomID == payload.roomID){
         return;
       }
     }
-    this.ball.push(new Ball
-      (payload.x,
-       payload.y, 
-       payload.w, 
-       payload.dx, 
-       payload.p1_h, 
-       payload.p2_h, 
-       payload.room, 
-       payload.h));
+    this.rooms.push(new Room
+      (payload.w,
+        payload.h,
+        payload.p1_h,
+        payload.p2_h,
+        payload.roomID
+    ));
   }
   
   @SubscribeMessage('ballPosServer')
   handleBall(client: Socket, 
     payload: {
-      room: string, 
+      roomID: string, 
       pos1: number,
       pos2: number,
       frameId: number
     })  
   {
-    for (let i = 0; i < this.ball.length; i++){
-      if (this.ball[i] && this.ball[i].room == payload.room && this.ball[i].frameId == payload.frameId){
-        const ball = this.ball[i];
-        ball.frameCount++;
+    for (let i = 0; i < this.rooms.length; i++){
+      
+      // console.log(this.ball[i] && this.ball[i].frameId == payload.frameId);
+      
+      if (this.rooms[i] && this.rooms[i].roomID == payload.roomID && this.rooms[i].ball.frameId == payload.frameId){ 
+        const room = this.rooms[i];
+        const ball = room.ball;
+        room.frameCount++;
         //Update ball position
         ball.update(payload.pos1, payload.pos2);
         if (ball.x < 0 || ball.x > ball.w){
           //Update player score
-          if (ball.x < 0) { ball.p2_score++; }
-          else if (ball.x > ball.w) { ball.p1_score++; }
+          if (ball.x < 0) { room.p2_score++; }
+          else if (ball.x > ball.w) { room.p1_score++; }
           ball.restart();
-          ball.frameCount = 0;
-          this.server.to(payload.room).emit('scoreClient', 
+          room.frameCount = 0;
+          this.server.to(payload.roomID).emit('scoreClient', 
           [
-            ball.p1_score,
-            ball.p2_score,
+            room.p1_score,
+            room.p2_score,
           ]);
         }
         //Make the ball go fast!!
-        if (ball.frameCount % 300 === 0){
+        if (room.frameCount % 300 === 0){
           ball.dx *= 1.2;
           ball.dy *= 1.2;
         }
         else {
-          this.server.to(payload.room).emit('ballPosClient', 
+          this.server.to(payload.roomID).emit('ballPosClient', 
           [
             ball.x,
             ball.y,
@@ -136,19 +136,25 @@ export class PongGateway implements OnGatewayInit/* , OnGatewayConnection, OnGat
   @SubscribeMessage('playerReady')
   handleReady(client: Socket, room: string) 
   {
-    for (let i = 0; i < this.ball.length; i++){
-      if (this.ball[i] && this.ball[i].room == room){
-        this.ball[i].ready++;
-        this.server.to(room).emit('playerRdy', this.ball[i].ready++);
+    for (let i = 0; i < this.rooms.length; i++){
+      if (this.rooms[i] && this.rooms[i].roomID == room){
+        this.rooms[i].ready++;
+        this.server.to(room).emit('playerRdy', this.rooms[i].ready);
       }
     }
   }
 
   @SubscribeMessage('leaveRoom')
-  handleLeaveRoom(client: Socket, room: string) {
-    client.leave(room);
-    this.logger.log(`${client.id} leaved room ${room}`);
-    client.emit('leaveRoom', room);
-    //make a winner and remove the room 
+  handleLeaveRoom(client: Socket, payload: {room: string, pID: number}) {
+    this.logger.warn(`${client.id} leaved room ${payload.room}`);
+    for (let i = 0; i < this.rooms.length; i++){
+      if (this.rooms[i] && this.rooms[i].roomID == payload.room){
+        this.rooms[i].ready--;
+        this.server.to(payload.room).emit('leavedRoom', payload.pID);
+      }
+//!Removing the room from the array cause problems
+      // this.rooms.splice(i, 1);
+    }
+    client.leave(payload.room);
   }
 }
