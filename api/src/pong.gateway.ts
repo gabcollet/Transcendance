@@ -4,7 +4,7 @@ import { Server, Socket } from 'socket.io';
 import { Room } from './pong.room';
 
 
-@WebSocketGateway(9006, {cors: '*'})
+@WebSocketGateway(6006, {cors: '*'})
 export class PongGateway implements OnGatewayInit{
 
   private logger: Logger = new Logger('PongGateway');
