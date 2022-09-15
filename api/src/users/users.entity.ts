@@ -29,6 +29,9 @@ export class User {
   @Column('varchar', { default: 'https://images.unsplash.com/photo-1521985429101-21bed8b75e47?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' })
   picture: string;
 
+  @Column('varchar', { default: 'offline' })
+  status: string;
+
   @Column('numeric', { default: 0 })
   wins: number;
 

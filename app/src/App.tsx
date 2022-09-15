@@ -1,4 +1,5 @@
 import "./App.css";
+import "./index.css";
 import Menu from "./Pages/Menu";
 import Login from "./Pages/Login";
 import Profile from "./components/Profile/Profile";

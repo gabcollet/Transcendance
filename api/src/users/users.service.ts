@@ -77,6 +77,13 @@ export class UsersService {
     return user ? user.displayname : null;
   }
 
+  async getStatus(username: string) {
+    const user = await this.usersRepository.findOne({
+      where: { username: username }
+    });
+    return user ? user.status : null;
+  }
+
   async updateImg(username: any) {
     await this.usersRepository.update({
       username: username
