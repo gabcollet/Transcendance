@@ -1,4 +1,5 @@
-import "./Login.css";
+// import "./Login.css";
+import styles from "./Login.module.css";
 import { FC, useState } from "react";
 
 const Login: FC<{ onChangeBg: (newClassName: string) => void }> = (props) => {
@@ -40,13 +41,13 @@ const Login: FC<{ onChangeBg: (newClassName: string) => void }> = (props) => {
     genRandStr(12);
 
   return !isClicked ? (
-    <div className="login-container">
-      <button className="login-btn" onClick={login42Handler}>
+    <div className={styles["login-container"]}>
+      <button className={styles["login-btn"]} onClick={login42Handler}>
         Are you Ready to Transcend ?
       </button>
     </div>
   ) : (
-    <div className="login-container">
+    <div className={styles["login-container"]}>
       <a href={url}>Login with 42</a>
     </div>
   );
