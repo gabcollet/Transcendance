@@ -6,7 +6,7 @@ import io from 'socket.io-client'
 
 export let roomID: string;
 export let pID: number;
-export const socket = io("10.13.11.2:9006");
+export const socket = io("10.13.11.2:6006");
 
 const PongRoom = () => {
 
