@@ -84,12 +84,28 @@ export class UsersService {
     return user ? user.status : null;
   }
 
+  async getAllTimeWins(username: string) {
+    const user = await this.usersRepository.findOne({
+      where: {username: username }
+    });
+    return user ? user.wins : null;
+  }
+
+  async getAllTimeLosses(username: string) {
+    const user = await this.usersRepository.findOne({
+      where: {username: username }
+    });
+    return user ? user.losses : null;
+  }
+
   async updateImg(username: any) {
     await this.usersRepository.update({
       username: username
     },
     {
-      picture: "http://localhost:3030/users/storedimg/gcollet.jpg"
+      picture: "http://localhost:3030/users/storedimg/gcollet.jpg",
+      wins: 3,
+      losses: 2
     });
     return this.findAll();
   }

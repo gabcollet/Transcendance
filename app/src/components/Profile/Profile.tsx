@@ -4,60 +4,63 @@ import styles from './Profile.module.css';
 import data from './data_placeholder';
 import Cookies from 'js-cookie';
 
-console.log(styles);
-
 interface _Content {
     contentType: string;
 }
 
-const fetchValue = (key: string, propsValue: string, setCallBack: any) => {
-  async function fetchIt() {
-    await fetch('http://localhost:3030/users/' + propsValue + '/' + key, {
-      credentials: 'include', 
-      headers: {
-        'Authorization': `bearer ${Cookies.get('jwtToken')}`,
-      }
-    })
-    .then(res => res.text())
-    .then(data => setCallBack(data));
-  }
-  fetchIt();
-}
+// const fetchValue = (key: string, propsValue: string, setCallBack: any) => {
+//   async function fetchIt() {
+//     await fetch('http://localhost:3030/users/' + propsValue + '/' + key, {
+//       credentials: 'include', 
+//       headers: {
+//         'Authorization': `bearer ${Cookies.get('jwtToken')}`,
+//       }
+//     })
+//     .then(res => res.text())
+//     .then(data => setCallBack(data))
+//   }
+//   fetchIt();
+// }
 
-const UserStatus = (props: any) => {
-  const [status, setStatus] = useState('');
+// const UserStatus = (props: any) => {
+//   const [status, setStatus] = useState('');
+//   fetchValue('status', props.userName, setStatus);
+//   return (
+//       <p className={styles["profile-status"]}>Status: {status}</p>
+//   );
+// }
 
-  // useEffect(() => {
-    fetchValue('status', props.userName, setStatus);
-  // });
+// const UserDisplayName = (props: any) => {
+//   const [displayName, setDisplayName] = useState('');
+//   fetchValue('displayname', props.userName, setDisplayName);
+//   return (
+//       <p className={styles["profile-name-text"]}>{displayName}</p>
+//   );
+// }
 
-  return (
-      <p className={styles["profile-status"]}>Status: {status}</p>
-  );
-}
+// const UserImage = (props: any) => {
+//   const [userImage, setUserImage] = useState('');
+//   fetchValue('img', props.userName, setUserImage);
+//   return (
+//     <img className={styles["profile-image"]} src={userImage} alt="" />
+//   );
+// }
 
-const UserDisplayName = (props: any) => {
-  const [displayName, setDisplayName] = useState('');
+// const UserWins = (props: any) => {
+//   const [userWins, setUserWins] = useState('');
+//   fetchValue('wins', props.userName, setUserWins);
+//   return (
+//     <h3>Wins: {userWins}</h3>
+//   );
+// }
 
-  // useEffect(() => {
-    fetchValue('displayname', props.userName, setDisplayName);
-  // });
-
-  return (
-      <p className={styles["profile-name-text"]}>{displayName}</p>
-  );
-}
-
-const UserImage = (props: any) => {
-  const [userImage, setUserImage] = useState('');
-
-  // useEffect(() => {
-      fetchValue('img', props.userName, setUserImage);
-    // });
-  return (
-    <img className={styles["profile-image"]} src={userImage} alt="" />
-  );
-}
+// const UserLosses = (props: any) => {
+//   const [userLosses, setUserLosses] = useState('');
+//   fetchValue('losses', props.userName, setUserLosses);
+//   return (
+//     <h3>Losses: {userLosses}</h3>
+//   );
+// }
 
 const Profile = () => {
     return (
@@ -85,8 +88,8 @@ const ProfileHeader = () => {
         </div>
       </div>
       <div className={styles["primary-stats"]}>
-        <h3>Wins: {data.victories}</h3>
-        <h3>Losses: {data.defeats}</h3>
+        <UserWins userName="laube" />
+        <UserLosses userName="laube" />
       </div>
       <div className={styles["secondary-stats"]}>
         <p>Latest Achievement:</p>

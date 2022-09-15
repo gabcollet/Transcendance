@@ -46,18 +46,31 @@ export class UsersController {
     return this.usersService.getUserImage(params.name);
   }
   
-  // Get path of user's image from DB
+  // Get displayname of user
   @UseGuards(JwtAuthGuard)
   @Get(':name/displayname')
   getDisplayName(@Req() req: Request, @Param() params) {
     return this.usersService.getDisplayName(params.name);
   }
 
-  // Get path of user's image from DB
+  // Get online status of user
   @UseGuards(JwtAuthGuard)
   @Get(':name/status')
   getStatus(@Req() req: Request, @Param() params) {
     return this.usersService.getStatus(params.name);
+  }
+  
+  // Get all time wins of user
+  @UseGuards(JwtAuthGuard)
+  @Get(':name/wins')
+  getAllTimeWins(@Req() req: Request, @Param() params) {
+    return this.usersService.getAllTimeWins(params.name);
+  }
+  // Get all time losses of user
+  @UseGuards(JwtAuthGuard)
+  @Get(':name/losses')
+  getAllTimeLosses(@Req() req: Request, @Param() params) {
+    return this.usersService.getAllTimeLosses(params.name);
   }
 
   // Fetch user image from its directory and return it as a file
