@@ -1,10 +1,10 @@
 import './Pong.css'
-import { roomID, pID } from '../../Pages/PongRoom'
+import { useEffect } from 'react';
+import { roomID, pID, socket } from '../../Pages/PongRoom'
 import useCanvas from './List/useCanvas';
 
 const Pong = () => {
-
-    const canvasRef = useCanvas();
+    const canvasRef = useCanvas();  
 
     return (
         <div>

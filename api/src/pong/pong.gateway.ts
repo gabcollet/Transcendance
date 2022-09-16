@@ -1,15 +1,16 @@
 import { Logger } from '@nestjs/common';
-import { OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { Room } from './pong.room';
 
 
 @WebSocketGateway(6006, {cors: '*'})
-export class PongGateway implements OnGatewayInit{
+export class PongGateway implements OnGatewayInit, OnGatewayDisconnect{
 
   private logger: Logger = new Logger('PongGateway');
   private roomiD: string = '';
   private isWaiting: boolean = false;
+  private id: Map<string, string> = new Map<string, string>();
   private rooms: [Room] = [null];
   
   //This is usefull to pass the payload to everyone
@@ -23,9 +24,33 @@ export class PongGateway implements OnGatewayInit{
     this.logger.log(`Client connected: ${client.id}`);
   } */
 
-/*   handleDisconnect(client: Socket) {
-    this.logger.log(`Client disconnected: ${client.id}`);
-  } */
+  @SubscribeMessage('joinRoom')
+  handleJoinRoom(client: Socket) {
+    const room = this.createRoom();
+    client.join(room);
+    this.logger.log(`${client.id} joined room ${room}`);
+    this.id.set(client.id, room);
+    client.emit('joinedRoom', [room, this.isWaiting]);
+  }
+
+  handleDisconnect(client: Socket) {
+    const room = this.id.get(client.id);
+    this.logger.warn(`Client disconnected: ${room}`);
+    this.server.to(room).emit('leavedRoom');
+    client.leave(room);
+  }
+
+  @SubscribeMessage('leaveRoom')
+  handleLeaveRoom(client: Socket, payload: {room: string, pID: number}) {
+    this.logger.warn(`${client.id} leaved room ${payload.room}`);
+    for (let i = 0; i < this.rooms.length; i++){
+      if (this.rooms[i] && this.rooms[i].roomID == payload.room){
+        this.rooms[i].ready--;
+        this.server.to(payload.room).emit('leavedRoom2', payload.pID);
+      }
+    }
+    client.leave(payload.room);
+  }
 
   @SubscribeMessage('playerPosServer')
   handleMessage(client: Socket, 
@@ -124,14 +149,6 @@ export class PongGateway implements OnGatewayInit{
     this.isWaiting = !this.isWaiting;
     return this.roomiD;
   }
-
-  @SubscribeMessage('joinRoom')
-  handleJoinRoom(client: Socket) {
-    const room = this.createRoom();
-    client.join(room);    
-    this.logger.log(`${client.id} joined room ${room}`);
-    client.emit('joinedRoom', [room, this.isWaiting]);
-  }
   
   @SubscribeMessage('playerReady')
   handleReady(client: Socket, room: string) 
@@ -142,19 +159,5 @@ export class PongGateway implements OnGatewayInit{
         this.server.to(room).emit('playerRdy', this.rooms[i].ready);
       }
     }
-  }
-
-  @SubscribeMessage('leaveRoom')
-  handleLeaveRoom(client: Socket, payload: {room: string, pID: number}) {
-    this.logger.warn(`${client.id} leaved room ${payload.room}`);
-    for (let i = 0; i < this.rooms.length; i++){
-      if (this.rooms[i] && this.rooms[i].roomID == payload.room){
-        this.rooms[i].ready--;
-        this.server.to(payload.room).emit('leavedRoom', payload.pID);
-      }
-//!Removing the room from the array cause problems
-      // this.rooms.splice(i, 1);
-    }
-    client.leave(payload.room);
   }
 }

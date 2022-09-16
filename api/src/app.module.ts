@@ -1,10 +1,7 @@
 import { Module } from '@nestjs/common';
-import { PongGateway } from './pong.gateway';
+import { PongGateway } from './pong/pong.gateway';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { PongController } from './pong/pong.controller';
-import { PongService } from './pong/pong.service';
-import { PongModule } from './pong/pong.module';
 import { ChatController } from './chat/chat.controller';
 import { ChatModule } from './chat/chat.module';
 import { UsersService } from './users/users.service';
@@ -16,7 +13,6 @@ import { User } from './users/users.entity';
 @Module({
   imports: [
     AuthModule,
-    PongModule,
     ChatModule,
     UsersModule,
     TypeOrmModule.forRoot({
@@ -33,7 +29,7 @@ import { User } from './users/users.entity';
       isGlobal: true,
     }),
   ],
-  controllers: [PongController, ChatController, UsersController],
-  providers: [PongService, UsersService, PongGateway],
+  controllers: [ChatController, UsersController],
+  providers: [UsersService, PongGateway],
 })
 export class AppModule {}

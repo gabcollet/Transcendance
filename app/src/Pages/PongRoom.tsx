@@ -15,9 +15,7 @@ const PongRoom = () => {
   const location = useLocation();
     
   useEffect(() => {
-    // console.log("Location changed");
     if (inGame){
-      // console.log("Leaving room");
       socket.emit('leaveRoom', 
       {
         room: roomID,
@@ -40,12 +38,16 @@ const PongRoom = () => {
     });
   })
 
+  const setRdy = () => {
+    socket.emit("playerReady", roomID);
+  }
+
   return (
     <div className="pongRoom-wrap">
       <p ref={playertext} className = "text">loading...</p>
       <p className = "text2">Q or ↑ to go up <br/> A or ↓ to go down</p>
       <Link to="/Pong">
-        <button className="button-78">Ready!</button>
+        <button className="button-78" onClick={setRdy}>Ready!</button>
       </Link>
       <p ref={ptext} className="text2">loading...</p>
     </div>

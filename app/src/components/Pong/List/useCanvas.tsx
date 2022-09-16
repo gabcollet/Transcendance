@@ -6,13 +6,8 @@ import { drawRectangle } from "./draw";
 
 export let inGame = false;
 
-/* socket.on('disconnect', function() {
-    console.log('Disconnected');
-}); */
-
 const useCanvas = () => {
   inGame = true;
-  // console.log(inGame);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const w = 800;
@@ -56,35 +51,34 @@ const useCanvas = () => {
       setReady(true);
     }
   });
-  socket.on("leavedRoom", (input: number) => {
+  //This handle when a client quit or refresh the page
+  socket.on("leavedRoom", () => {
     setReady(false);
-    setEndGame(input === 1 ? 2 : 1);
+    setEndGame(pID);
+    frameID = 0;
+  });
+  //This handle when a client change location (aka go back one page)
+  socket.on("leavedRoom2", (input) => {
+    setReady(false);
+    setEndGame(pID);
     frameID = 0;
     if (inGame && pID === input) {
       inGame = false;
-      // console.log(inGame);
     }
   });
-
   //-------------------------
 
   useEffect(() => {
     canvasRef.current!.width = w;
     canvasRef.current!.height = h;
 
-    const ctx: CanvasRenderingContext2D | null =
-      canvasRef.current!.getContext("2d");
+    const ctx: CanvasRenderingContext2D | null = canvasRef.current!.getContext("2d");
     let animationFrameId: number;
 
     //------------------------- Assets //-------------------------
     let p1 = new Player(w * 0.02, P1_y.current, h * 0.1);
     let p2 = new Player(w - w * 0.03, P2_y.current, h * 0.1);
-    // let ball : Ball;
-    // if (Math.random() < 0.5){
     const ball = new Ball(ballx.current, bally.current, w, ballSpeed);
-    // } else {
-    //     ball = new Ball(ballx.current, bally.current, w, ballSpeed);
-    // }
 
     socket.emit("ballInfoServer", {
       w: w,
@@ -136,6 +130,7 @@ const useCanvas = () => {
       animationFrameId = window.requestAnimationFrame(render);
       frameID++;
     };
+    
     const renderScreen = (text: string, height: number, size: number) => {
       if (ctx) {
         ctx!.clearRect(0, 0, w, h);
@@ -164,6 +159,8 @@ const useCanvas = () => {
     const animationScreen = async () => {
       renderScreen("", 0, 0);
       for (let i = 3; i > 0; i--) {
+        console.log(ready);
+        
         const myPromise = new Promise(function (resolve) {
           renderScreen(i.toString(), h / 2 + 30, 100);
           setTimeout(function () {
