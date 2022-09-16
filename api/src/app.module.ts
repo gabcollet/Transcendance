@@ -33,6 +33,7 @@ import { User } from './users/users.entity';
       isGlobal: true,
     }),
   ],
-  providers: [],
+  controllers: [PongController, ChatController, UsersController],
+  providers: [PongService, UsersService, PongGateway],
 })
 export class AppModule {}
