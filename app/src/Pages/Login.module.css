@@ -57,25 +57,23 @@
   text-decoration: none;
 }
 
-a:link {
+.auth-link:link {
   color: #f3efff;
   text-transform: uppercase;
   background-color: rgba(0, 0, 0, 0);
   border-radius: 0.5rem;
   font-size: 50px;
   border: none;
-  /* width: 600px; */
-  /* height: 200px; */
   text-decoration: none;
   transition: 1s;
 }
 
-a:visited {
+.auth-link:visited {
   text-decoration: none;
 }
 
-a:hover,
-a:active {
+.auth-link:hover,
+.auth-link:active {
   text-shadow: 0 0 7px #4cfdc2, 0 0 10px #4cfdc2, 0 0 21px #4cfdc2,
     0 0 42px #0fa, 0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
   cursor: pointer;

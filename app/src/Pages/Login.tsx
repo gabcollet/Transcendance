@@ -48,7 +48,9 @@ const Login: FC<{ onChangeBg: (newClassName: string) => void }> = (props) => {
     </div>
   ) : (
     <div className={styles["login-container"]}>
-      <a href={url}>Login with 42</a>
+      <a className={styles["auth-link"]} href={url}>
+        Login with 42
+      </a>
     </div>
   );
 };
