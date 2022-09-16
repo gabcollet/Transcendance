@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { PongGateway } from './pong.gateway';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { PongController } from './pong/pong.controller';

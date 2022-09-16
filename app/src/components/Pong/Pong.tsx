@@ -1,12 +1,19 @@
-import useCanvas from './List/useCanvas'
+import './Pong.css'
+import { roomID, pID } from '../../Pages/PongRoom'
+import useCanvas from './List/useCanvas';
 
 const Pong = () => {
 
-    // const { context, ...moreConfig } = options;
-    const canvasRef = useCanvas(/* {context} */);
+    const canvasRef = useCanvas();
 
     return (
-        <canvas ref={canvasRef} /* {...moreConfig} *//>
+        <div>
+            <p className = "pong-text">Player {pID}</p>
+            <div className = "pong-wrap">
+                <canvas ref={canvasRef}/>
+            </div>
+            <p className = "pong-text">Room ID : {roomID}</p>
+        </div>
     );
 };
 
