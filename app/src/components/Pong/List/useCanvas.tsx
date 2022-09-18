@@ -1,10 +1,19 @@
 import { useRef, useEffect, useState } from "react";
 import { board, Player, Ball } from "./assets";
-// import resizeCanvas from './sizeCanvas'
-import { roomID, socket, pID } from "../../../Pages/PongRoom";
+import { roomID, socket, pID, pQuit } from "../../../Pages/PongRoom";
 import { drawRectangle } from "./draw";
 
 export let inGame = false;
+let frameID: number = 0;
+let winner: number = 0;
+
+/* 
+  Game Status :
+    waiting:   0
+    animation: 1
+    render:    2
+    endgame:   3
+ */
 
 const useCanvas = () => {
   inGame = true;
@@ -21,9 +30,7 @@ const useCanvas = () => {
   const balldy = useRef<number>(0);
   const p1_score = useRef<number>(0);
   const p2_score = useRef<number>(0);
-  const [ready, setReady] = useState<boolean>(false);
-  const [endGame, setEndGame] = useState<number>(0);
-  let frameID: number = 0;
+  const [gameStatus, setGameStatus] = useState<number>(0);
 
   //------------------------- Backend //-------------------------
   useEffect(() => {
@@ -35,44 +42,54 @@ const useCanvas = () => {
       }
     });
   }, []);
-
-  socket.on("ballPosClient", (input: number[]) => {
-    ballx.current = input[0];
-    bally.current = input[1];
-    balldx.current = input[2];
-    balldy.current = input[3];
-  });
-  socket.on("scoreClient", (input: number[]) => {
-    p1_score.current = input[0];
-    p2_score.current = input[1];
-  });
-  socket.on("playerRdy", (input: number) => {
-    if (input === 2) {
-      setReady(true);
-    }
-  });
+  useEffect(() => {
+    socket.on("ballPosClient", (input: number[]) => {
+      ballx.current = input[0];
+      bally.current = input[1];
+      balldx.current = input[2];
+      balldy.current = input[3];
+    });
+  }, []);
+  useEffect(() => {
+    socket.on("scoreClient", (input: number[]) => {
+      p1_score.current = input[0];
+      p2_score.current = input[1];
+    });
+  }, []);
+  useEffect(() => {
+    socket.on("playerRdy", (input: number) => {
+      if (input === 2) {
+        setGameStatus(1);
+      }
+    });
+  }, []);
   //This handle when a client quit or refresh the page
-  socket.on("leavedRoom", () => {
-    setReady(false);
-    setEndGame(pID);
-    frameID = 0;
-  });
+  useEffect(() => {
+    socket.on("leavedRoom", () => {
+      setGameStatus(3);
+      winner = pID;
+      frameID = 0;
+    });
+  }, []);
   //This handle when a client change location (aka go back one page)
-  socket.on("leavedRoom2", (input) => {
-    setReady(false);
-    setEndGame(pID);
-    frameID = 0;
-    if (inGame && pID === input) {
-      inGame = false;
-    }
-  });
+  useEffect(() => {
+    socket.on("leavedRoom2", (input) => {
+      setGameStatus(3);
+      winner = pID === 1 ? 1 : 2;
+      frameID = 0;
+      if (inGame && pID === input) {
+        inGame = false;
+      }
+    });
+  }, []);
   //-------------------------
 
   useEffect(() => {
     canvasRef.current!.width = w;
     canvasRef.current!.height = h;
 
-    const ctx: CanvasRenderingContext2D | null = canvasRef.current!.getContext("2d");
+    const ctx: CanvasRenderingContext2D | null =
+      canvasRef.current!.getContext("2d");
     let animationFrameId: number;
 
     //------------------------- Assets //-------------------------
@@ -93,7 +110,6 @@ const useCanvas = () => {
 
     const render = () => {
       ctx!.clearRect(0, 0, w, h);
-
       board(ctx!, w, h, p1_score.current, p2_score.current);
       p1.y = P1_y.current;
       p2.y = P2_y.current;
@@ -123,14 +139,15 @@ const useCanvas = () => {
 
       //Finish the game
       if (p1_score.current === 5 || p2_score.current === 5) {
-        setEndGame(p1_score.current === 5 ? 1 : 2);
+        winner = p1_score.current === 5 ? 1 : 2;
+        setGameStatus(3);
       }
 
       //requestAnimationFrame will call recursively the render method
       animationFrameId = window.requestAnimationFrame(render);
       frameID++;
     };
-    
+
     const renderScreen = (text: string, height: number, size: number) => {
       if (ctx) {
         ctx!.clearRect(0, 0, w, h);
@@ -159,8 +176,6 @@ const useCanvas = () => {
     const animationScreen = async () => {
       renderScreen("", 0, 0);
       for (let i = 3; i > 0; i--) {
-        console.log(ready);
-        
         const myPromise = new Promise(function (resolve) {
           renderScreen(i.toString(), h / 2 + 30, 100);
           setTimeout(function () {
@@ -169,6 +184,7 @@ const useCanvas = () => {
         });
         await myPromise;
       }
+      setGameStatus(2);
     };
 
     document.addEventListener("keydown", (e) => {
@@ -189,23 +205,30 @@ const useCanvas = () => {
       }
     });
 
-    // resizeCanvas(canvas);
-
-    if (ready && endGame === 0) {
-      const startGame = async () => {
-        animationScreen().then(render);
-      };
-      startGame();
-    } else if (endGame === 1 || endGame === 2) {
-      endScreen(endGame);
+    //Game Logic
+    if (pQuit) {
+      endScreen(pID);
     } else {
-      waitScreen();
+      switch (gameStatus) {
+        case 0:
+          waitScreen();
+          break;
+        case 1:
+          animationScreen();
+          break;
+        case 2:
+          render();
+          break;
+        case 3:
+          endScreen(winner);
+          break;
+      }
     }
 
     return () => {
       window.cancelAnimationFrame(animationFrameId);
     };
-  }, [ready, endGame, frameID]);
+  }, [gameStatus]);
 
   return canvasRef;
 };
