@@ -1,67 +1,71 @@
-import React, { MouseEventHandler, useState } from "react";
 import "./App.css";
+import "./index.css";
 import Menu from "./Pages/Menu";
 import Login from "./Pages/Login";
+import Profile from "./Pages/Profile";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import PongRoom from "./Pages/PongRoom";
 import Pong from "./components/Pong/Pong";
-import Chat from "./Pages/Chat";
-import { SocketContext, socket } from "./context/socket";
+import { useState } from "react";
+import ProtectedRoutes from "./components/ProtectedRoutes";
 
 const App = () => {
-  //   const [pageState, setPageState] = useState("menu");
-  //   const [loginState, setLoginState] = useState("off");
-  //   let loginEvent = () => {
-  //     if (loginState === "off") {
-  //       setLoginState("on");
-  //     } else setLoginState("off");
-  //   };
-  //   if (loginState === "off") {
-  //     return <Login loginEvent={loginEvent} />;
-  //   } else {
-  //     return <Menu></Menu>;
-  //   }
+  let [background, setBackground] = useState("root-default");
+  // const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const changeBG = (newClassName: string) => {
+    setBackground(newClassName);
+  };
+
   return (
-    // <SocketContext.Provider value={socket}>
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login></Login>} />
-        <Route path="/Menu" element={<Menu></Menu>} />
-        <Route
-          path="/Pong"
-          element={
-            <div style={{ fontSize: "0px", border: "2px solid white" }}>
-              <Pong />
-            </div>
-          }
-        />
-        <Route
-          path="/Spectate"
-          element={
-            <div style={{ color: "white", fontSize: "75px" }}>SPECTATE</div>
-          }
-        />
-        <Route
-          path="/Profile"
-          element={
-            <div style={{ color: "white", fontSize: "75px" }}>PROFILE</div>
-          }
-        />
-        <Route
-          path="/Leaderboard"
-          element={
-            <div style={{ color: "white", fontSize: "75px" }}>LEADERBOARD</div>
-          }
-        />
-        <Route
-          path="/Achievment"
-          element={
-            <div style={{ color: "white", fontSize: "75px" }}>ACHIEVMENT</div>
-          }
-        />
-        <Route path="/Chat" element={<Chat></Chat>} />
-      </Routes>
-    </Router>
-    // </SocketContext.Provider>
+    <div className={background}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login onChangeBg={changeBG}></Login>} />
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/Menu" element={<Menu />} />
+            <Route path="/PongRoom" element={<PongRoom />} />
+            <Route path="/Pong" element={<Pong />} />
+            <Route
+              path="/Spectate"
+              element={
+                <div style={{ color: "white", fontSize: "75px" }}>SPECTATE</div>
+              }
+            />
+            <Route
+              path="/Profile"
+              element={
+                <div style={{ color: "white", fontSize: "75px" }}>
+                  <Profile />
+                </div>
+              }
+            />
+            <Route
+              path="/Leaderboard"
+              element={
+                <div style={{ color: "white", fontSize: "75px" }}>
+                  LEADERBOARD
+                </div>
+              }
+            />
+            <Route
+              path="/Achievment"
+              element={
+                <div style={{ color: "white", fontSize: "75px" }}>
+                  ACHIEVMENT
+                </div>
+              }
+            />
+            <Route
+              path="/Chat"
+              element={
+                <div style={{ color: "white", fontSize: "75px" }}>CHAT</div>
+              }
+            />
+          </Route>
+        </Routes>
+      </Router>
+    </div>
   );
 };
 

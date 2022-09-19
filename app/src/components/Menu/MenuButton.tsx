@@ -1,12 +1,11 @@
 import "./MenuButton.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { MouseEventHandler, useState } from "react";
+import { useState } from "react";
 
 interface _Button {
   icon: any;
   className: string;
   iconClassName: string;
-  //   i: number;
 }
 
 const MenuButton = (props: _Button) => {
@@ -30,7 +29,6 @@ const MenuButton = (props: _Button) => {
           icon={props.icon}
         ></FontAwesomeIcon>
       </a>
-      {/* {hover && <p className="text-box">Test</p>} */}
     </li>
   );
 };

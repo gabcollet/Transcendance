@@ -7,12 +7,11 @@ import {
   faBinoculars,
   faBars,
   faX,
-  IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import Toggle from "./Toggle";
 import _Toggle from "./Toggle";
 import MenuButton from "./MenuButton";
-import React, { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useState } from "react";
 import { Link } from "react-router-dom";
 import "./MenuWheel.css";
 
@@ -25,7 +24,7 @@ const MenuWheel = (props: _MenuWheel) => {
   const [toggleIcon, setToggleicon] = useState(faBars);
 
   const openMenu: MouseEventHandler<HTMLDivElement> = () => {
-    if (opening == false) {
+    if (opening === false) {
       setOpening(true);
       setToggleicon(faX);
       setIconName("-t");
@@ -45,7 +44,7 @@ const MenuWheel = (props: _MenuWheel) => {
           onClick={openMenu}
           icon={toggleIcon}
         ></Toggle>
-        <Link className="link" to="/Pong">
+        <Link className="link" to="/PongRoom">
           <MenuButton
             className={"zero" + iconName}
             icon={faPlayCircle}

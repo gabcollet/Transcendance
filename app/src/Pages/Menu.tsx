@@ -1,9 +1,15 @@
 import "./Menu.css";
-import _Toggle from "../components/Menu/Toggle";
 import MenuWheel from "../components/Menu/MenuWheel";
+import Cookies from "js-cookie";
 
 const Menu = () => {
-  return <MenuWheel></MenuWheel>;
+  const isLogged = Cookies.get("logged");
+
+  return isLogged ? (
+    <MenuWheel></MenuWheel>
+  ) : (
+    <>{window.location.replace("http://localhost:3000/")}</>
+  );
 };
 
 export default Menu;

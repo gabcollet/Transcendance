@@ -1,0 +1,13 @@
+.pong-wrap {
+    font-size: 0px;
+    border: 2px solid white;
+}
+
+.pong-text {
+    color: azure;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: 800;
+}
