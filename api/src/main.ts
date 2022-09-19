@@ -2,6 +2,7 @@ const { Pool, Client } = require('pg');
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
 require('dotenv').config();
 
 async function bootstrap() {
@@ -11,6 +12,7 @@ async function bootstrap() {
       whitelist: true, //* Strips value in the body that are not present in the Entity model
     }),
   );
+  app.use(cookieParser());
   app.enableCors({
     origin: true,
     credentials: true,

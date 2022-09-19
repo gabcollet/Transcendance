@@ -2,14 +2,12 @@ import { Controller, Get, Logger, Req, Res, UseGuards } from '@nestjs/common';
 import { Response, Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { AuthorizationGuard } from './auth.guard';
-import { AuthService } from './auth.service';
+import { AuthGuard } from '@nestjs/passport';
+import { HttpService } from '@nestjs/axios';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private jwtService: JwtService,
-  ) {}
+  constructor(private request: HttpService, private jwtService: JwtService) {}
 
   private logger = new Logger('Auth Controller');
   //* localhost:3030/auth/login
@@ -20,7 +18,7 @@ export class AuthController {
   // }
 
   /**
-   * * the guard here automatically use the authorization code to generate a token and retur a user
+   * * the guard here automatically use the authorization code to generate a token and return a user
    * * which is stored in the @Res() req: Request
    */
   @Get('redirect')
@@ -31,11 +29,10 @@ export class AuthController {
   ) {
     const username = req.user['username'];
     const userID = req.user['id'];
-    const payload = { username: username, sub: userID };
+    const payload = { username: username, userID: userID };
     const jwtToken = await this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET_KEY,
     });
-
     res.cookie('jwtToken', jwtToken, { httpOnly: false }); //! httpOnly: true makes the cookie unaccessible from the Frontend.
     res.cookie('logged', true, { httpOnly: false });
     this.logger.log(jwtToken);
@@ -43,5 +40,28 @@ export class AuthController {
     res.status(301).redirect('http://localhost:3000/Menu');
   }
 
-  // @Get('user')
+  @Get('TwoFA')
+  // @UseGuards(AuthGuard('jwt'))
+  async TwoFA_QR_Code(@Req() req: Request) {
+    // console.log(req.cookies['jwtToken']);
+
+    const data = this.jwtService.decode(req.cookies['jwtToken']);
+    console.log(data);
+
+    console.log(
+      'https://www.authenticatorApi.com/pair.aspx?' +
+        `AppName=${process.env.TWO_FA_42}` +
+        `&AppInfo=${data['username']}` +
+        `&SecretCode=${data['userID']}`,
+    );
+
+    const response = this.request.get(
+      'https://www.authenticatorApi.com/pair.aspx?' +
+        `AppName=${process.env.TWO_FA_42}` +
+        `&AppInfo=${data['username']}` +
+        `&SecretCode=${data['userID']}`,
+    );
+
+    console.log(response.subscribe());
+  }
 }
