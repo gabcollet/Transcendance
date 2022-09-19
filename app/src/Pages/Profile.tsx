@@ -10,7 +10,8 @@ interface _Content {
     contentType: string;
 }
 
-const Profile = () => {
+const Profile = (props: any) => {
+    console.log(`Username: ${props.username}`);
     return (
         <section className={styles["profile-container"]}>
             <ProfileHeader />

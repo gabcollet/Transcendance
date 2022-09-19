@@ -16,6 +16,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Request, Response } from 'express';
 import { createReadStream } from 'fs';
 import { join } from 'path';
+import { User } from './users.entity';
 
 @Controller('users')
 export class UsersController {
@@ -38,6 +39,13 @@ export class UsersController {
       body.losses,
       );
     }
+
+  // Get Profile page of user
+  // @UseGuards(JwtAuthGuard)
+  // @Get(':name')
+  // getProfile(@Req() req: Request, @Param() params) {
+
+  // }
 
   // Get path of user's image from DB
   @UseGuards(JwtAuthGuard)
@@ -74,15 +82,30 @@ export class UsersController {
   }
 
   // Fetch user image from its directory and return it as a file
-  @Get('storedimg/:name')
+  @Get(':name/storedimg')
   getFile(@Param() params, @Res() res: Response) {
     const file = createReadStream(join(process.cwd(), 'img', params.name));
     file.pipe(res);
   }
+
+
+  /* TESTING ROUTES: TO BE DELETED IN PRODUCTION */
+
   // Update user for testing purposes
   @UseGuards(JwtAuthGuard)
-  @Post('profile/update')
+  @Post('test/update')
   updateImg(@Req() req: Request) {
     return this.usersService.updateImg(req.user);
+  }
+
+  @Post('test/createusers')
+  testCreateUsers() {
+    return this.usersService.testCreateUsers();
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Post('test/addfriends')
+  testAddFriends(@Req() req: Request) {
+    return this.usersService.testAddFriends(req.user);
   }
 }

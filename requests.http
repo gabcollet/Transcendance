@@ -17,6 +17,17 @@ Content-Type: application/json
 GET http://localhost:3030/users/profile/img
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhdWJlIiwic3ViIjoxLCJpYXQiOjE2NjMxMTY5NTB9.njS7PcgacMYpMz5GbFS_tP82NosRm_XIhzxqaXxYYIA
 
+###
+### TESTING PURPOSES
+###
+
 ### Update profile picture
-POST http://localhost:3030/users/profile/update
+POST http://localhost:3030/users/test/update
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhdWJlIiwic3ViIjoxLCJpYXQiOjE2NjMxMTY5NTB9.njS7PcgacMYpMz5GbFS_tP82NosRm_XIhzxqaXxYYIA
+
+### Create a few test users
+Post http://localhost:3030/users/test/createusers
+
+### Add test users as laube friends
+Post http://localhost:3030/users/test/addfriends
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhdWJlIiwic3ViIjo2LCJpYXQiOjE2NjMzNTI0ODV9.eIJbmTvAPkpYbsxBRSf-PBMGOAloP9kBhRSLQnlY3RM

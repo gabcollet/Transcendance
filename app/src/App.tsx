@@ -8,10 +8,14 @@ import PongRoom from "./Pages/PongRoom";
 import Pong from "./components/Pong/Pong";
 import { useState } from "react";
 import ProtectedRoutes from "./components/ProtectedRoutes";
+import { fetchValue } from "./components/Profile/FetchValue";
 
 const App = () => {
   let [background, setBackground] = useState("root-default");
+  const [profileUsername, setProfileUsername] = useState("");
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  fetchValue('profile/username', setProfileUsername);
 
   const changeBG = (newClassName: string) => {
     setBackground(newClassName);
@@ -36,7 +40,7 @@ const App = () => {
               path="/Profile"
               element={
                 <div style={{ color: "white", fontSize: "75px" }}>
-                  <Profile />
+                  <Profile username={profileUsername} />
                 </div>
               }
             />

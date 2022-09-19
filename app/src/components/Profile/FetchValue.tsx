@@ -1,8 +1,11 @@
 import Cookies from 'js-cookie';
 
-export const fetchValue = (key: string, propsValue: string, setCallBack: any) => {
+
+// route: The Nest route for the path
+// setCallBack: the React useState function that will change the element calling this 
+export const fetchValue = (route: string, setCallBack: any) => {
     async function fetchIt() {
-      await fetch('http://localhost:3030/users/' + propsValue + '/' + key, {
+      await fetch('http://localhost:3030/' + route, {
         credentials: 'include', 
         headers: {
           'Authorization': `bearer ${Cookies.get('jwtToken')}`,

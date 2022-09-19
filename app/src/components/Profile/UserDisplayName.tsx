@@ -8,7 +8,7 @@ import { fetchValue } from './FetchValue';
 */
 export const UserDisplayName = (props: any) => {
     const [displayName, setDisplayName] = useState('');
-    fetchValue('displayname', props.userName, setDisplayName);
+    fetchValue('users/' + props.username + '/displayname', setDisplayName);
     return (
         <p className={props.className}>{displayName}</p>
     );

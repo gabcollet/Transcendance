@@ -12,9 +12,9 @@ export const ProfileHeader = () => {
       <section className={styles["profile-header-container"]}>
         <div className={styles["profile-id-container"]}>
           <div className={styles["id-container-info"]}>
-            <UserImage userName="laube" className={styles["profile-image"]} />
-            <UserDisplayName userName="laube" className={styles["profile-name-text"]} />
-            <UserStatus userName="laube" className={styles["profile-status"]} />
+            <UserImage username="laube" className={styles["profile-image"]} />
+            <UserDisplayName username="laube" className={styles["profile-name-text"]} />
+            <UserStatus username="laube" className={styles["profile-status"]} />
           </div>
           <div className={styles["id-container-buttons"]}>
             <button>Add friend</button>
@@ -22,8 +22,8 @@ export const ProfileHeader = () => {
           </div>
         </div>
         <div className={styles["primary-stats"]}>
-          <UserWins userName="laube" />
-          <UserLosses userName="laube" />
+          <UserWins username="laube" />
+          <UserLosses username="laube" />
         </div>
         <div className={styles["secondary-stats"]}>
           <p>Latest Achievement:</p>

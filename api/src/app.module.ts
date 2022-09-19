@@ -12,6 +12,7 @@ import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/users.entity';
+import { Friendship } from './users/friendship.entity';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { User } from './users/users.entity';
       username: 'admin',
       password: 'pass',
       database: 'trans_db',
-      entities: [User],
+      entities: [User, Friendship],
       synchronize: true,
     }),
     ConfigModule.forRoot({
