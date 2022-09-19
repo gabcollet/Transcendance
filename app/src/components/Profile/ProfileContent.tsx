@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import styles from './ProfileContent.module.css';
 import data from './data_placeholder';
+import { FriendCard } from './FriendCard';
+import { fetchObject, fetchText } from './FetchValue';
 
 interface _Content {
     contentType: string;
@@ -58,24 +60,23 @@ const SpecificContent = (props: _Content) => {
     }
 }
 
+type Friendship = {
+  id: number,
+  sender: string,
+}
+
 const FriendsContent = () => {
-    const friendsElement = data.friends.map((friend) => {
+  // TO DO: Function that gets list of active friends from the backend
+  // TO DO: Function that gets list of pending friend request received from the backend
+    const [friends, setFriends] = useState([]);
+    console.log("CALLING REACT FRIEND CONTENT");
+    fetchObject('users/laube/friends', setFriends);
+
+    console.log(`This is newfriend: ${friends}`);
+
+    const friendsElement = friends.map((friend) => {
         return (
-          <div className={styles["friends-content-individual"]}>
-            <div className={styles["individual-id"]}>
-              <img src={friend.profile_image} alt={friend.name} />
-              <h4>{friend.name}</h4>
-              <p>status: {friend.status}</p>
-            </div>
-            <div className={styles["individual-buttons"]}>
-              <button>Add friend</button>
-              <button>Message</button>
-            </div>
-            <div className={styles["individual-stats"]}>
-              <h3>W: {friend.victories}</h3>
-              <h3>L: {friend.defeats}</h3>
-            </div>
-          </div>
+          <FriendCard username={friend} />
         );
     });
     return (

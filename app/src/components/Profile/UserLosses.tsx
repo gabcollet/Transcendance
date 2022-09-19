@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { fetchValue } from './FetchValue';
+import { fetchText } from './FetchValue';
 
 /*
 ** Must be passed the following props:
@@ -8,7 +8,7 @@ import { fetchValue } from './FetchValue';
 */
 export const UserLosses = (props: any) => {
     const [userLosses, setUserLosses] = useState('');
-    fetchValue('users/' + props.username + '/losses', setUserLosses);
+    fetchText('users/' + props.username + '/losses', setUserLosses);
     return (
       <h3 className={props.className}>L: {userLosses}</h3>
     );

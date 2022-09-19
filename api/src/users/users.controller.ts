@@ -88,6 +88,12 @@ export class UsersController {
     file.pipe(res);
   }
 
+  @Get(':name/friends')
+  getFriends(@Param() params) {
+    console.log('Controller before');
+    return this.usersService.getAcceptedFriends(params.name);
+  }
+
 
   /* TESTING ROUTES: TO BE DELETED IN PRODUCTION */
 
@@ -106,6 +112,6 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Post('test/addfriends')
   testAddFriends(@Req() req: Request) {
-    return this.usersService.testAddFriends(req.user);
+    return this.usersService.testAddFriends();
   }
 }

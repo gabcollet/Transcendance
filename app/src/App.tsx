@@ -6,16 +6,19 @@ import Profile from "./Pages/Profile";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PongRoom from "./Pages/PongRoom";
 import Pong from "./components/Pong/Pong";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProtectedRoutes from "./components/ProtectedRoutes";
-import { fetchValue } from "./components/Profile/FetchValue";
+import { fetchText } from "./components/Profile/FetchValue";
 
 const App = () => {
   let [background, setBackground] = useState("root-default");
-  const [profileUsername, setProfileUsername] = useState("");
+  const [profileUsername, setProfileUsername] = useState("test");
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  fetchValue('profile/username', setProfileUsername);
+  useEffect(() => {
+    console.log("In Userffect");
+    fetchText('profile/username', setProfileUsername);
+  }, []);
 
   const changeBG = (newClassName: string) => {
     setBackground(newClassName);

@@ -107,6 +107,51 @@ export class UsersService {
     return user ? user.losses : null;
   }
 
+  async getAcceptedFriends(username: string) {
+    const user = await this.usersRepository.findOne({
+      where: {username: username }
+    });
+    const friendshipList = await this.friendshipRepository.find({
+      where: {
+        sender: user
+      }
+    });
+    // console.log(`friendshipList: ${JSON.stringify(friendshipList)}`);
+    const fileteredFriendList = friendshipList.filter((friendship) => {
+      const result = this.getFriendshipStatus(friendship.sender, friendship.receiver);
+      if (result === FriendshipStatus.Accepted) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    });
+    console.log("before");
+    const mappedFriendList = friendshipList.map(friendship => {
+      const testUser: User = friendship.receiver;
+      console.log(`This is testUser ${testUser.username}`);
+    });
+    // console.log(`this is mappedFriendlist: ${mappedFriendList}`);
+    return mappedFriendList;
+  }
+  
+  getFriendshipStatus(user1: User, user2: User) {
+    let state: FriendshipStatus = 0;
+    if (this.friendshipRepository.findOneBy({
+      sender: user1,
+      receiver: user2
+    })) {
+      state += 1;
+    }
+    if (this.friendshipRepository.findOneBy({
+      sender: user2,
+      receiver: user1
+    })) {
+      state += 2;
+    }
+    return state;
+  }
+
 
   /* TESTING FUNCTIONS: TO BE DELETED IN PRODUCTION */
   
@@ -132,31 +177,25 @@ export class UsersService {
     ]);
   }
 
-  async testAddFriends(user: any) {
+  async testAddFriends() {
     const user1 = (await this.findByUsername('laube'));
     const user2 = (await this.findByUsername('test1'));
+    const user3 = (await this.findByUsername('test2'));
+    const user4 = (await this.findByUsername('test3'));
+    const user5 = (await this.findByUsername('test4'));
 
-    const friendship1 = this.friendshipRepository.create({
-      sender: user1,
-      receiver: user2
-    });
+    const friendship1 = this.friendshipRepository.create({ sender: user1, receiver: user2 });
+    const friendship2 = this.friendshipRepository.create({ sender: user2, receiver: user1 });
+    const friendship3 = this.friendshipRepository.create({ sender: user1, receiver: user3 });
+    const friendship4 = this.friendshipRepository.create({ sender: user3, receiver: user1 });
+    const friendship5 = this.friendshipRepository.create({ sender: user4, receiver: user1 });
+    const friendship6 = this.friendshipRepository.create({ sender: user1, receiver: user5 });
+
     await this.friendshipRepository.save(friendship1);
-  }
-
-  async getFriendshipStatus(user1: User, user2: User) {
-    let state: FriendshipStatus = 0;
-    if (await this.friendshipRepository.findOneBy({
-      sender: user1,
-      receiver: user2
-    })) {
-      state += 1;
-    }
-    if (await this.friendshipRepository.findOneBy({
-      sender: user2,
-      receiver: user1
-    })) {
-      state += 2;
-    }
-    return state;
+    await this.friendshipRepository.save(friendship2);
+    await this.friendshipRepository.save(friendship3);
+    await this.friendshipRepository.save(friendship4);
+    await this.friendshipRepository.save(friendship5);
+    await this.friendshipRepository.save(friendship6);
   }
 }
