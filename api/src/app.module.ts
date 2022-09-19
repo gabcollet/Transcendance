@@ -7,6 +7,7 @@ import { PongService } from './pong/pong.service';
 import { PongModule } from './pong/pong.module';
 import { ChatController } from './chat/chat.controller';
 import { ChatModule } from './chat/chat.module';
+import { ChatGateway } from './chat.gateway';
 import { UsersService } from './users/users.service';
 import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
@@ -34,6 +35,6 @@ import { User } from './users/users.entity';
     }),
   ],
   controllers: [PongController, ChatController, UsersController],
-  providers: [PongService, UsersService, PongGateway],
+  providers: [PongService, UsersService, PongGateway, ChatGateway],
 })
 export class AppModule {}

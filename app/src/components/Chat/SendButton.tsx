@@ -1,5 +1,7 @@
 import "./SendButton.css";
 import { SocketContext } from "../../context/socket";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMailReply } from "@fortawesome/free-solid-svg-icons";
 
 interface SendButton_ {
   inputRef: React.MutableRefObject<HTMLInputElement | null>;
@@ -15,8 +17,8 @@ const SendButton = (props: SendButton_) => {
     }
   };
   return (
-    <button className="send" onClick={(send) => sendMsg(props.inputRef)}>
-      Send
+    <button className="send-button" onClick={(send) => sendMsg(props.inputRef)}>
+      <FontAwesomeIcon className="send-icon" icon={faMailReply} />
     </button>
   );
 };

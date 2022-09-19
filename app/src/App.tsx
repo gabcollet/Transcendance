@@ -6,6 +6,7 @@ import Profile from "./Pages/Profile";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PongRoom from "./Pages/PongRoom";
 import Pong from "./components/Pong/Pong";
+import Chat from "./Pages/Chat";
 import { useState } from "react";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 
@@ -56,12 +57,7 @@ const App = () => {
                 </div>
               }
             />
-            <Route
-              path="/Chat"
-              element={
-                <div style={{ color: "white", fontSize: "75px" }}>CHAT</div>
-              }
-            />
+            <Route path="/Chat" element={<Chat></Chat>} />
           </Route>
         </Routes>
       </Router>
