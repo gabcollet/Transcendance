@@ -18,6 +18,7 @@ export class UserDto {
   displayname: string;
 
   @IsString()
+  @IsOptional()
   picture: string;
 
   @IsString()
