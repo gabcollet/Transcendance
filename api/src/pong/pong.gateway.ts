@@ -68,12 +68,6 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
     }
   }
 
-  @SubscribeMessage('leaveRoom2')
-  leaveRoom(client: Socket, room: string) {
-    client.leave(room);
-    this.logger.warn(`${client.id} leaved room ${room}`);
-  }
-
   @SubscribeMessage('playerPosServer')
   handleMessage(
     client: Socket,
