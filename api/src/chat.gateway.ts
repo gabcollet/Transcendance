@@ -6,7 +6,7 @@ import {
 } from '@nestjs/websockets';
 
 // Client send a message and server broadcast it
-@WebSocketGateway(6005, { cors: '*' })
+@WebSocketGateway(6005, { cors: '*:*' })
 export class ChatGateway {
   @WebSocketServer()
   server;
