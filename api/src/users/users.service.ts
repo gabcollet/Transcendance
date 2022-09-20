@@ -1,4 +1,9 @@
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './users.entity';
@@ -20,7 +25,7 @@ export class UsersService {
     return this.usersRepository.findOneBy({ id });
   }
   findByUsername(username: string) {
-    return this.usersRepository.findBy({ username });
+    return this.usersRepository.findOne({ where: { username: username } });
   }
 
   create(
@@ -70,13 +75,10 @@ export class UsersService {
   }
 
   async patchUser(attrs: Partial<User>, username: string) {
-    console.log('INSIDE patchUSER\n' + attrs);
-
     const user = await this.findByUsername(username);
 
-    if (!user) throw new Error('User not Found');
+    if (!user) throw new NotFoundException('User not Found');
     Object.assign(user, attrs);
-    console.log(user);
 
     return this.usersRepository.save(user);
   }

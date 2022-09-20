@@ -8,6 +8,7 @@ import PongRoom from "./Pages/PongRoom";
 import Pong from "./components/Pong/Pong";
 import { useState } from "react";
 import ProtectedRoutes from "./components/ProtectedRoutes";
+import TwoFAValidation from "./components/TwoFAValidation";
 
 const App = () => {
   let [background, setBackground] = useState("root-default");
@@ -23,6 +24,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Login onChangeBg={changeBG}></Login>} />
           <Route element={<ProtectedRoutes />}>
+            <Route path="/TwoFA" element={<TwoFAValidation />} />
             <Route path="/Menu" element={<Menu />} />
             <Route path="/PongRoom" element={<PongRoom />} />
             <Route path="/Pong" element={<Pong />} />
