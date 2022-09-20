@@ -12,14 +12,14 @@ datasource db {
 
 model User {
   id           Int    @id @default(autoincrement())
-  intraId      Int
-  displayname  String
-  username     String
-  picture      String
-  status       String
-  wins         Int
-  losses       Int
-  twoFAEnabled Int
+  intraId      Int?
+  displayname  String?
+  username     String?
+  picture      String?
+  status       String?
+  wins         Int?
+  losses       Int?
+  twoFAEnabled Int?    @default(0)
 
   @@map("users")
 }

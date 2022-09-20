@@ -12,6 +12,7 @@ import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/users.entity';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { User } from './users/users.entity';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    PrismaModule,
   ],
   controllers: [PongController, ChatController, UsersController],
   providers: [PongService, UsersService, PongGateway],
