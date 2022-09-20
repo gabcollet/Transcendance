@@ -11,7 +11,7 @@ export class AuthStrategy extends PassportStrategy(Strategy, '42') {
     super({
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.SECRET,
-      callbackURL: 'http://localhost:3030/auth/redirect',
+      callbackURL: 'http://localhost:3030/api/redirect',
       scope: ['public'],
     });
   }

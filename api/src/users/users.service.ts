@@ -19,14 +19,19 @@ export class UsersService {
   findById(id: number) {
     return this.usersRepository.findOneBy({ id });
   }
+  findByUsername(username: string) {
+    return this.usersRepository.findBy({ username });
+  }
 
   create(
     intraId: number,
     displayname: string,
     username: string,
     picture: string,
+    twoFAEnabled: boolean,
     wins?: number,
     losses?: number,
+    twoFASecret?: string,
   ) {
     const user = this.usersRepository.create({
       intraId,
@@ -35,6 +40,8 @@ export class UsersService {
       picture,
       wins: 0,
       losses: 0,
+      twoFAEnabled: false,
+      twoFASecret: '',
     });
 
     return this.usersRepository.save(user);
@@ -49,7 +56,7 @@ export class UsersService {
 
     if (!user) {
       this.logger.log('*** User Not Found... Adding New User to Database***');
-      return this.create(id, username, username, photos[0].value);
+      return this.create(id, username, username, photos[0].value, false, 0, 0);
     }
 
     if (user.intraId == id) {
@@ -62,51 +69,64 @@ export class UsersService {
     }
   }
 
+  async patchUser(attrs: Partial<User>, username: string) {
+    console.log('INSIDE patchUSER');
+
+    const user = await this.findByUsername(username);
+    console.log(user);
+
+    if (!user) throw new Error('User not Found');
+    Object.assign(user, attrs);
+    return this.usersRepository.save(user);
+  }
+
   // Profile requests
   async getUserImage(username: string) {
     const user = await this.usersRepository.findOne({
-      where: { username: username }
+      where: { username: username },
     });
     return user ? user.picture : null;
   }
 
   async getDisplayName(username: string) {
     const user = await this.usersRepository.findOne({
-      where: { username: username }
+      where: { username: username },
     });
     return user ? user.displayname : null;
   }
 
   async getStatus(username: string) {
     const user = await this.usersRepository.findOne({
-      where: { username: username }
+      where: { username: username },
     });
     return user ? user.status : null;
   }
 
   async getAllTimeWins(username: string) {
     const user = await this.usersRepository.findOne({
-      where: {username: username }
+      where: { username: username },
     });
     return user ? user.wins : null;
   }
 
   async getAllTimeLosses(username: string) {
     const user = await this.usersRepository.findOne({
-      where: {username: username }
+      where: { username: username },
     });
     return user ? user.losses : null;
   }
 
   async updateImg(username: any) {
-    await this.usersRepository.update({
-      username: username
-    },
-    {
-      picture: "http://localhost:3030/users/storedimg/gcollet.jpg",
-      wins: 3,
-      losses: 2
-    });
+    await this.usersRepository.update(
+      {
+        username: username,
+      },
+      {
+        picture: 'http://localhost:3030/users/storedimg/gcollet.jpg',
+        wins: 3,
+        losses: 2,
+      },
+    );
     return this.findAll();
   }
 }

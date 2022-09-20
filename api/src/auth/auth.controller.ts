@@ -3,10 +3,17 @@ import { Response, Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { AuthorizationGuard } from './auth.guard';
 import { HttpService } from '@nestjs/axios';
+import * as speakeasy from 'speakeasy';
+import * as qrcode from 'qrcode';
+import { UsersService } from '../users/users.service';
 
 @Controller('api')
 export class AuthController {
-  constructor(private request: HttpService, private jwtService: JwtService) {}
+  constructor(
+    private request: HttpService,
+    private jwtService: JwtService,
+    private userService: UsersService,
+  ) {}
 
   private logger = new Logger('Auth Controller');
   //* localhost:3030/auth/login
@@ -37,5 +44,26 @@ export class AuthController {
     this.logger.log(jwtToken);
 
     res.status(301).redirect('http://localhost:3000/Menu');
+  }
+
+  @Get('TwoFA')
+  // @UseGuards(AuthGuard('jwt'))
+  async TwoFA_QR_Code(@Req() req: Request) {
+    const jwtToken = this.jwtService.decode(req.cookies['jwtToken']);
+    const patchedUser = this.userService.patchUser(
+      { twoFAEnabled: true },
+      jwtToken['username'],
+    );
+    console.log(patchedUser);
+
+    const secret = speakeasy.generateSecret({
+      name: 'Transcendence',
+    });
+
+    qrcode.toDataURL(secret.otpauth_url, (err, img) => {
+      if (err) throw err;
+      console.log(img);
+    });
+    console.log(secret);
   }
 }

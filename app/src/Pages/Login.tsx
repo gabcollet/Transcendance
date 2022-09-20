@@ -4,11 +4,9 @@ import { FC, useState } from "react";
 
 const Login: FC<{ onChangeBg: (newClassName: string) => void }> = (props) => {
   const [isClicked, setIsClicked] = useState(false);
-  // const [login42, setLogin42] = useState("login-btn");
 
   const login42Handler = () => {
     setIsClicked(!isClicked);
-    // setLogin42("login-42-btn");
   };
 
   props.onChangeBg("root-login");
