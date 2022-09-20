@@ -75,7 +75,7 @@ const useCanvas = () => {
   useEffect(() => {
     socket.on("leavedRoom2", (input) => {
       setGameStatus(3);
-      winner = pID === 1 ? 1 : 2;
+      winner = pID;
       frameID = 0;
       if (inGame && pID === input) {
         inGame = false;
@@ -106,7 +106,7 @@ const useCanvas = () => {
     });
 
     socket.emit("playerReady", roomID);
-    //-------------------------
+    //-------------------------l7
 
     const render = () => {
       ctx!.clearRect(0, 0, w, h);

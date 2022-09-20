@@ -23,15 +23,33 @@ const PongRoom = () => {
     }
   }, [location]);
   
-  socket.on("leavedRoom", () => {
-    pQuit = true;
-  });
-  socket.on("leavedRoom2", () => {
-    pQuit = true;
-  });
+  //On closing window
+  useEffect(() => {
+    socket.on("leavedRoom", () => {
+      pQuit = true;
+      if (!inGame){
+        socket.emit("joinRoom");
+        // console.log('leavedroom');
+      }
+    });
+  }, []);
+
+  //On change path
+  useEffect(() => {
+    socket.on("leavedRoom2", (input) => {
+      // socket.emit('leaveRoom2', roomID);
+      pQuit = true;
+      if ((!inGame) && input !== pID){
+        socket.emit("joinRoom");
+        // console.log('leavedroom2');
+      }
+    });
+  }, []);
 
   useEffect(() => {
     socket.emit("joinRoom");
+    // console.log('joinroom');
+    
     socket.on("joinedRoom", function ([room, pid]) {
       if (playertext.current) {
         pID = pid ? 1 : 2;
