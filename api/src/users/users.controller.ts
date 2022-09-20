@@ -7,12 +7,12 @@ import {
   Res,
   Param,
   NotFoundException,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { UserDto } from './dto/user.dto';
 import { UsersService } from './users.service';
 import { AuthorizationGuard } from '../auth/auth.guard';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 import { Request, Response } from 'express';
 import { createReadStream } from 'fs';
 import { join } from 'path';
@@ -25,7 +25,7 @@ export class UsersController {
   getAll() {
     return this.usersService.findAll();
   }
-  
+
   @Post()
   async createUser(@Body() body) {
     console.log(body);
@@ -36,8 +36,8 @@ export class UsersController {
       body.picture,
       body.wins,
       body.losses,
-      );
-    }
+    );
+  }
 
   // Get path of user's image from DB
   @UseGuards(JwtAuthGuard)
@@ -45,7 +45,7 @@ export class UsersController {
   getUserImg(@Req() req: Request, @Param() params) {
     return this.usersService.getUserImage(params.name);
   }
-  
+
   // Get displayname of user
   @UseGuards(JwtAuthGuard)
   @Get(':name/displayname')
@@ -59,7 +59,7 @@ export class UsersController {
   getStatus(@Req() req: Request, @Param() params) {
     return this.usersService.getStatus(params.name);
   }
-  
+
   // Get all time wins of user
   @UseGuards(JwtAuthGuard)
   @Get(':name/wins')

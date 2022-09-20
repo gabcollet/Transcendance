@@ -2,10 +2,9 @@ import { Controller, Get, Logger, Req, Res, UseGuards } from '@nestjs/common';
 import { Response, Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { AuthorizationGuard } from './auth.guard';
-import { AuthGuard } from '@nestjs/passport';
 import { HttpService } from '@nestjs/axios';
 
-@Controller('auth')
+@Controller('api')
 export class AuthController {
   constructor(private request: HttpService, private jwtService: JwtService) {}
 
@@ -38,30 +37,5 @@ export class AuthController {
     this.logger.log(jwtToken);
 
     res.status(301).redirect('http://localhost:3000/Menu');
-  }
-
-  @Get('TwoFA')
-  // @UseGuards(AuthGuard('jwt'))
-  async TwoFA_QR_Code(@Req() req: Request) {
-    // console.log(req.cookies['jwtToken']);
-
-    const data = this.jwtService.decode(req.cookies['jwtToken']);
-    console.log(data);
-
-    console.log(
-      'https://www.authenticatorApi.com/pair.aspx?' +
-        `AppName=${process.env.TWO_FA_42}` +
-        `&AppInfo=${data['username']}` +
-        `&SecretCode=${data['userID']}`,
-    );
-
-    const response = this.request.get(
-      'https://www.authenticatorApi.com/pair.aspx?' +
-        `AppName=${process.env.TWO_FA_42}` +
-        `&AppInfo=${data['username']}` +
-        `&SecretCode=${data['userID']}`,
-    );
-
-    console.log(response.subscribe());
   }
 }

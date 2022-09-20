@@ -6,8 +6,9 @@ import { AuthStrategy } from './auth.strategy';
 import { UsersService } from '../users/users.service';
 import { UsersModule } from '../users/users.module';
 import { JwtModule, JwtService } from '@nestjs/jwt';
-import { JwtStrategy } from './jwt.strategy';
+import { JwtStrategy } from './jwt/jwt.strategy';
 import { HttpModule } from '@nestjs/axios';
+import { TwoFaModule } from './two-fa/two-fa.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { HttpModule } from '@nestjs/axios';
       signOptions: { expiresIn: '1d' },
     }),
     HttpModule,
+    TwoFaModule,
   ],
   providers: [AuthService, AuthStrategy, JwtStrategy, UsersService, JwtService],
   controllers: [AuthController],

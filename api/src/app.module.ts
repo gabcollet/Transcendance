@@ -12,6 +12,7 @@ import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/users.entity';
+import { TwoFaController } from './auth/two-fa/two-fa.controller';
 
 @Module({
   imports: [
@@ -34,5 +35,6 @@ import { User } from './users/users.entity';
     }),
   ],
   providers: [],
+  controllers: [TwoFaController],
 })
 export class AppModule {}
