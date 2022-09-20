@@ -7,7 +7,7 @@ import * as speakeasy from 'speakeasy';
 import * as qrcode from 'qrcode';
 import { UsersService } from '../users/users.service';
 
-@Controller('api')
+@Controller('auth')
 export class AuthController {
   constructor(
     private request: HttpService,
@@ -50,11 +50,10 @@ export class AuthController {
   // @UseGuards(AuthGuard('jwt'))
   async TwoFA_QR_Code(@Req() req: Request) {
     const jwtToken = this.jwtService.decode(req.cookies['jwtToken']);
-    const patchedUser = this.userService.patchUser(
+    await this.userService.patchUser(
       { twoFAEnabled: true },
       jwtToken['username'],
     );
-    console.log(patchedUser);
 
     const secret = speakeasy.generateSecret({
       name: 'Transcendence',

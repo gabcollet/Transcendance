@@ -70,13 +70,14 @@ export class UsersService {
   }
 
   async patchUser(attrs: Partial<User>, username: string) {
-    console.log('INSIDE patchUSER');
+    console.log('INSIDE patchUSER\n' + attrs);
 
     const user = await this.findByUsername(username);
-    console.log(user);
 
     if (!user) throw new Error('User not Found');
     Object.assign(user, attrs);
+    console.log(user);
+
     return this.usersRepository.save(user);
   }
 
