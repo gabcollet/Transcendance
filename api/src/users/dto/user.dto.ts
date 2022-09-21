@@ -6,6 +6,7 @@ export class UserDto {
   @IsNumber()
   id: number;
   
+  @IsOptional()
   @IsNumber()
   intraId: number;
 
@@ -13,16 +14,16 @@ export class UserDto {
   @IsString()
   username: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   displayname: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   picture: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   status: string;
 
   @IsNumber()

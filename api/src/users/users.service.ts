@@ -13,28 +13,59 @@ export class UsersService {
     private prisma: PrismaService
   ) {}
 
+  private logger = new Logger('User Service');
+
   getAllUsers() {
     return { msg: 'These are all the users' };
   }
 
-  async createUser(user: UserDto) {
-    console.log(user);
-    const newUser = await this.prisma.user.create({
+  async create(
+    intraId: number,
+    displayname: string,
+    username: string,
+    picture?: string,
+    wins?: number,
+    losses?: number,
+  ) {
+    const user = await this.prisma.user.create({
       data: {
-        id: user.id,
-        intraId: user.intraId,
-        username: user.username,
-        displayname: user.displayname,
-        picture: user.picture,
-        status: user.status,
-        wins: user.wins,
-        losses: user.losses
+      intraId,
+      displayname,
+      username,
+      picture,
+      wins: 0,
+      losses: 0,
       }
-    })
+    });
+
+    return user;
   }
 
-  findCreateUser(arg: any) {
-    return { msg: 'FindCreateUser placeholder' };
+  // async create(user: UserDto) {
+  //   console.log(user);
+  //   const newUser = await this.prisma.user.create({
+  //     data: {
+  //       intraId: user.intraId,
+  //       username: user.username,
+  //       displayname: user.displayname,
+  //       picture: user.picture,
+  //       wins: 0,
+  //       losses: 0
+  //     }
+  //   })
+  // }
+
+  async findCreateUser(profile: Profile) {
+    const { id, username, photos } = profile;
+
+    const user = await this.prisma.user.findUnique({
+      where: { username: username }
+    });
+
+    if (!user) {
+      this.logger.log('*** User Not Found... Adding New User to Database***');
+      return this.create(id, username, username, photos[0].value);
+    }
   }
 }
 

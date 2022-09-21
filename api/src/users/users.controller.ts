@@ -28,7 +28,11 @@ export class UsersController {
 
   @Post('createuser')
   async createUser(@Body() body: UserDto) {
-    return await this.usersService.createUser(body);
+    return await this.usersService.create(
+      456,
+      "LP",
+      "lauboiii"
+    );
   }
 }
 
