@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import styles from './ProfileContent.module.css';
 import data from './data_placeholder';
 import { FriendCard } from './FriendCard';
+import { fetchObject } from './FetchValue';
 
 interface _Content {
     contentType: string;
@@ -60,9 +61,11 @@ const SpecificContent = (props: _Content) => {
 }
 
 const FriendsContent = () => {
-    const friendsElement = data.friends.map((friend) => {
+  const [friends, setFriends] = useState("anon");
+  fetchObject("http://localhost:3030/
+    const friendsElement = friends.map((friend) => {
         return (
-          <FriendCard />
+          <FriendCard friendName/>
           // <div className={styles["friends-content-individual"]}>
           //   <div className={styles["individual-id"]}>
           //     <img src={friend.profile_image} alt={friend.name} />
