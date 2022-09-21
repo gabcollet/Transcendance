@@ -14,6 +14,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   private logger: Logger = new Logger('PongGateway');
   private roomiD: string = '';
   private isWaiting: boolean = false;
+  private madeBySpectator: boolean = false;
   private id: Map<Socket, string> = new Map<Socket, string>();
   private rooms: [Room] = [null];
 
@@ -28,19 +29,25 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
     this.logger.log(`Client connected: ${client.id}`);
   } */
 
-  private createRoom(): string {
+  private createRoom(spectator: boolean): string {
     const { v4: uuidv4 } = require('uuid');
-
-    if (!this.isWaiting) {
+    //If the spectator create the game
+    if (spectator){
+      this.roomiD = uuidv4();
+      this.madeBySpectator = true;
+      return this.roomiD;
+    // Else if it's a player who create it
+    } else if (!this.isWaiting && !this.madeBySpectator) {
       this.roomiD = uuidv4();
     }
+    this.madeBySpectator = false;
     this.isWaiting = !this.isWaiting;
     return this.roomiD;
   }
 
   @SubscribeMessage('joinRoom')
   handleJoinRoom(client: Socket) {
-    const room = this.createRoom();
+    const room = this.createRoom(false);
     client.join(room);
     if (this.id.has(client)) {
       const clientRoom = this.id.get(client);
@@ -57,11 +64,16 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('playerReady')
-  handleReady(client: Socket, room: string) {
+  handleReady(client: Socket, payload: {room: string; pID: number}) {
     for (let i = 0; i < this.rooms.length; i++) {
-      if (this.rooms[i] && this.rooms[i].roomID == room) {
+      if (this.rooms[i] && this.rooms[i].roomID == payload.room) {
+        if (payload.pID === 3){
+          client.emit('playerRdy', this.rooms[i].ready)
+          return;
+        }
+        
         this.rooms[i].ready++;
-        this.server.to(room).emit('playerRdy', this.rooms[i].ready);
+        this.server.to(payload.room).emit('playerRdy', this.rooms[i].ready);
       }
     }
   }
@@ -184,5 +196,20 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
         }
       }
     }
+  }
+ 
+  @SubscribeMessage('spectate')
+  handleSpectate(client: Socket) {
+    let room = this.roomiD;
+    if (!room){
+      //ou si la game est terminer
+      room = this.createRoom(true);
+    }
+    client.join(room);
+    this.logger.verbose(
+      `${client.id} joined room ${room} as Spectator`,
+    );
+    this.id.set(client, room);
+    client.emit('joinedRoom', [room, 2]);
   }
 }

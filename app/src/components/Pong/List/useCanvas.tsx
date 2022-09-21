@@ -18,14 +18,14 @@ let frameID: number = 0;
 
 const useCanvas = () => {
   inGame = true;
-  let winner: number = 0;
   const [room, setRoomID] = useState<string>("");
   const [pid, setpID] = useState<number>(0);
-
+  
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const w = 800;
   const h = 600;
   const ballSpeed = 4;
+  const isReady = useRef<boolean>(false);
   const P1_y = useRef<number>(h / 2 - h * 0.06);
   const P2_y = useRef<number>(h / 2 - h * 0.06);
   const ballx = useRef<number>(w / 2);
@@ -34,16 +34,22 @@ const useCanvas = () => {
   const balldy = useRef<number>(0);
   const p1_score = useRef<number>(0);
   const p2_score = useRef<number>(0);
+  const winner = useRef<number>(0);
   const [gameStatus, setGameStatus] = useState<number>(0);
 
   //------------------------- Backend //-------------------------
   useEffect(() => {
     socket.on("joinedRoom", ([room, pid]: [string, number]) => {
-      setpID(pid ? 1 : 2);
+      pid = Number(pid);
+      if (pid === 0 || pid === 1) {
+        setpID(pid ? 1 : 2);
+      } else if (pid === 2) {
+        setpID(3);
+      }
       setRoomID(room);
     });
   }, []);
-  
+
   useEffect(() => {
     socket.on("playerPosClient", (input: number[]) => {
       if (input[1] === 1) {
@@ -69,24 +75,32 @@ const useCanvas = () => {
   }, []);
   useEffect(() => {
     socket.on("playerRdy", (input: number) => {
+      input = Number(input);
+      
+      console.log(input);
+      
       if (input === 2) {
+        console.log("ici 2");
         setGameStatus(1);
+      } else {
+        console.log("ici autre");
+        setGameStatus(0);
       }
     });
   }, []);
   //This handle when a client quit or refresh the page
   useEffect(() => {
     socket.on("leavedRoom", () => {
-      setGameStatus(3);
-      winner = pID;
+      winner.current = pID;
       frameID = 0;
+      setGameStatus(3);
     });
   }, []);
   //This handle when a client change location (aka go back one page)
   useEffect(() => {
     socket.on("leavedRoom2", (input) => {
       frameID = 0;
-      winner = input;
+      winner.current = input;
       if (inGame && pID === input) {
         inGame = false;
       }
@@ -96,7 +110,7 @@ const useCanvas = () => {
   //-------------------------
 
   useEffect(() => {
-    if (!room || !pid){
+    if (!room || !pid) {
       //This could return a loading screen
       return;
     }
@@ -122,7 +136,13 @@ const useCanvas = () => {
       roomID: roomID,
     });
 
-    socket.emit("playerReady", roomID);
+    if (!isReady.current){
+      socket.emit("playerReady", {
+        room: roomID,
+        pID: pID
+      });
+    }
+    isReady.current = true;
     //-------------------------l7
 
     const render = () => {
@@ -156,7 +176,7 @@ const useCanvas = () => {
 
       //Finish the game
       if (p1_score.current === 5 || p2_score.current === 5) {
-        winner = p1_score.current === 5 ? 1 : 2;
+        winner.current = p1_score.current === 5 ? 1 : 2;
         setGameStatus(3);
       }
 
@@ -237,7 +257,7 @@ const useCanvas = () => {
           render();
           break;
         case 3:
-          endScreen(winner);
+          endScreen(winner.current);
           break;
       }
     }
