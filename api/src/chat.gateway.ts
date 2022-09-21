@@ -1,9 +1,11 @@
 import {
+  ConnectedSocket,
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
+import { Socket } from 'socket.io';
 
 // Client send a message and server broadcast it
 @WebSocketGateway(6005, { cors: '*:*' })
@@ -12,8 +14,8 @@ export class ChatGateway {
   server;
 
   @SubscribeMessage('message')
-  handleMessage(@MessageBody() message: string): void {
-    console.log(message);
-    this.server.emit('message', message);
+  handleMessage(client: Socket, payload: string): void {
+    console.log(payload);
+    this.server.emit('message', payload);
   }
 }
