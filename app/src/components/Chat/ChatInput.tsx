@@ -8,29 +8,19 @@ import { useEffect, useRef, useState } from "react";
 // https://stackoverflow.com/questions/47809282/submit-a-form-when-enter-is-pressed-in-a-textarea-in-react
 // FOR ENTER KEY PRESS
 
-interface ChatInput_ {}
-const ChatInput = () => {
-  const [socket, setSocket] = useState<Socket>();
-  useEffect(() => {
-    const newSocket = io("localhost:6005");
-    setSocket(newSocket);
-  }, []);
-  const [chatMessage, setChatMessage] = useState("");
-  const sendMsg = (message: string) => {
-    if (message != "") {
-      console.log(message);
-      socket?.emit("message", message);
-      setChatMessage("");
-    }
-  };
+interface ChatInput_ {
+  sendMsg: (message: string) => void;
+}
+const ChatInput = (props: ChatInput_) => {
+  const [value, setValue] = useState("");
   const handleKeyPress = (
     event: React.KeyboardEvent<HTMLTextAreaElement>,
     message: string
   ) => {
     if (event.key === "Enter") {
       event.preventDefault(); // prevent newline when pressing enter
-      sendMsg(message);
-      setChatMessage("");
+      props.sendMsg(message);
+      setValue("");
     }
   };
   return (
@@ -38,11 +28,11 @@ const ChatInput = () => {
       <textarea
         placeholder="Enter your message..."
         className="chat-message"
-        value={chatMessage}
-        onKeyPress={(event) => handleKeyPress(event, chatMessage)}
-        onChange={(event) => setChatMessage(event.target.value)}
+        value={value}
+        onKeyPress={(event) => handleKeyPress(event, value)}
+        onChange={(event) => setValue(event.target.value)}
       ></textarea>
-      <button className="send-button" onClick={(send) => sendMsg(chatMessage)}>
+      <button className="send-button" onClick={(send) => props.sendMsg(value)}>
         <FontAwesomeIcon className="send-icon" icon={faMailReply} />
       </button>
     </div>

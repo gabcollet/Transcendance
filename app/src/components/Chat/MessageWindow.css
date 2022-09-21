@@ -1,7 +1,8 @@
 .msg-window {
-  display: flex;
-  position: absolute;
+  /* display: flex;
+  position: absolute; */
   height: 93%;
   width: 100%;
-  color: aliceblue;
+  color: rgb(255, 255, 255);
+  font-size: 30px;
 }
