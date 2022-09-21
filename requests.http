@@ -20,3 +20,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imxhd
 ### Update profile picture
 POST http://localhost:3030/users/profile/update
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhdWJlIiwic3ViIjoxLCJpYXQiOjE2NjMxMTY5NTB9.njS7PcgacMYpMz5GbFS_tP82NosRm_XIhzxqaXxYYIA
+
+
+
+### NEW TESTS
+### Get all users
+GET http://localhost:3030/users
+
+### Create user
+POST http://localhost:3030/users/createuser
+Content-Type: application/json
+
+{
+    "intraId": 54345,
+    "username": "laubeboi",
+    "wins": 5,
+    "losses": 4
+}
