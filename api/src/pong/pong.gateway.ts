@@ -6,7 +6,6 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { setServers } from 'dns';
 import { Server, Socket } from 'socket.io';
 import { Room } from './pong.room';
 
@@ -29,6 +28,16 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
     this.logger.log(`Client connected: ${client.id}`);
   } */
 
+  private createRoom(): string {
+    const { v4: uuidv4 } = require('uuid');
+
+    if (!this.isWaiting) {
+      this.roomiD = uuidv4();
+    }
+    this.isWaiting = !this.isWaiting;
+    return this.roomiD;
+  }
+
   @SubscribeMessage('joinRoom')
   handleJoinRoom(client: Socket) {
     const room = this.createRoom();
@@ -36,7 +45,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
     if (this.id.has(client)) {
       const clientRoom = this.id.get(client);
       if (clientRoom == room) {
-        this.logger.warn(`${client.id} already in room ${room}`);
+        this.logger.error(`${client.id} already in room ${room}`);
         return;
       }
     }
@@ -47,24 +56,43 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
     client.emit('joinedRoom', [room, this.isWaiting]);
   }
 
+  @SubscribeMessage('playerReady')
+  handleReady(client: Socket, room: string) {
+    for (let i = 0; i < this.rooms.length; i++) {
+      if (this.rooms[i] && this.rooms[i].roomID == room) {
+        this.rooms[i].ready++;
+        this.server.to(room).emit('playerRdy', this.rooms[i].ready);
+      }
+    }
+  }
+
   handleDisconnect(client: Socket) {
     const room = this.id.get(client);
-    this.logger.warn(`${client.id} disconnected: ${room}`);
     this.server.to(room).emit('leavedRoom');
+    for (let [key, value] of this.id.entries()) {
+      if (value === room) {
+        key.leave(room);
+        this.logger.warn(`${key.id} leaved room ${room}`);
+        this.id.delete(key);
+      }
+    }
     if (this.roomiD === room && this.isWaiting) {
       this.isWaiting = false;
     }
-    client.leave(room);
   }
 
   @SubscribeMessage('leaveRoom')
   handleLeaveRoom(client: Socket, payload: { room: string; pID: number }) {
+    this.server.to(payload.room).emit('leavedRoom2', payload.pID);
     for (let [key, value] of this.id.entries()) {
       if (value === payload.room) {
-        key.emit('leavedRoom2', payload.pID);
         key.leave(payload.room);
         this.logger.warn(`${key.id} leaved room ${payload.room}`);
+        this.id.delete(key);
       }
+    }
+    if (this.roomiD === payload.room && this.isWaiting) {
+      this.isWaiting = false;
     }
   }
 
@@ -154,26 +182,6 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
             .to(payload.roomID)
             .emit('ballPosClient', [ball.x, ball.y, ball.dx, ball.dy]);
         }
-      }
-    }
-  }
-
-  private createRoom(): string {
-    const { v4: uuidv4 } = require('uuid');
-
-    if (!this.isWaiting) {
-      this.roomiD = uuidv4();
-    }
-    this.isWaiting = !this.isWaiting;
-    return this.roomiD;
-  }
-
-  @SubscribeMessage('playerReady')
-  handleReady(client: Socket, room: string) {
-    for (let i = 0; i < this.rooms.length; i++) {
-      if (this.rooms[i] && this.rooms[i].roomID == room) {
-        this.rooms[i].ready++;
-        this.server.to(room).emit('playerRdy', this.rooms[i].ready);
       }
     }
   }

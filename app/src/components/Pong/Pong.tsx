@@ -1,17 +1,49 @@
 import "./Pong.css";
-import { roomID, pID } from "../../Pages/PongRoom";
+import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { socket } from "../../Pages/PongRoom";
+import { pID, roomID } from "./List/useCanvas";
 import useCanvas from "./List/useCanvas";
 
 const Pong = () => {
   const canvasRef = useCanvas();
+  const ptext = useRef<null | HTMLParagraphElement>(null);
+  const playertext = useRef<null | HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    socket.on("joinedRoom", function ([room, pid]: [string, number]) {
+      if (playertext.current) { 
+        playertext.current.innerText = `Player ${pid? 1: 2}`;
+      }
+      if (ptext.current) {
+        ptext.current.innerText = `Room ID : ${room}`;
+      }
+    });
+  });
+
+  const quit = () => {
+    socket.emit("leaveRoom", {
+      room: roomID,
+      pID: pID,
+    });
+  }
 
   return (
     <div>
-      <p className="pong-text">Player {pID}</p>
+      <div className="row">
+        <div className="column">
+          <p ref={playertext} className="pong-text">Loading...</p>
+        </div>
+        <div className="column2">
+          <Link to="/PongRoom">
+            <button className="button-78" onClick={quit}>Quit</button>
+          </Link>
+        </div>
+      </div>
       <div className="pong-wrap">
         <canvas ref={canvasRef} />
       </div>
-      <p className="pong-text">Room ID : {roomID}</p>
+      <p ref={ptext} className="pong-text">Loading...</p>
     </div>
   );
 };

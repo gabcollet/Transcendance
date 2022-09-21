@@ -1,22 +1,26 @@
 import { useRef, useEffect, useState } from "react";
 import { board, Player, Ball } from "./assets";
-import { roomID, socket, pID, pQuit } from "../../../Pages/PongRoom";
+import { socket, pQuit } from "../../../Pages/PongRoom";
 import { drawRectangle } from "./draw";
 
 export let inGame = false;
+export let roomID: string;
+export let pID: number;
 let frameID: number = 0;
-let winner: number = 0;
 
 /* 
   Game Status :
-    waiting:   0
-    animation: 1
-    render:    2
-    endgame:   3
- */
+  waiting:   0
+  animation: 1
+  render:    2
+  endgame:   3
+  */
 
 const useCanvas = () => {
   inGame = true;
+  let winner: number = 0;
+  const [room, setRoomID] = useState<string>("");
+  const [pid, setpID] = useState<number>(0);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const w = 800;
@@ -33,6 +37,13 @@ const useCanvas = () => {
   const [gameStatus, setGameStatus] = useState<number>(0);
 
   //------------------------- Backend //-------------------------
+  useEffect(() => {
+    socket.on("joinedRoom", ([room, pid]: [string, number]) => {
+      setpID(pid ? 1 : 2);
+      setRoomID(room);
+    });
+  }, []);
+  
   useEffect(() => {
     socket.on("playerPosClient", (input: number[]) => {
       if (input[1] === 1) {
@@ -74,17 +85,23 @@ const useCanvas = () => {
   //This handle when a client change location (aka go back one page)
   useEffect(() => {
     socket.on("leavedRoom2", (input) => {
-      setGameStatus(3);
-      winner = pID;
       frameID = 0;
+      winner = input;
       if (inGame && pID === input) {
         inGame = false;
       }
+      setGameStatus(3);
     });
   }, []);
   //-------------------------
 
   useEffect(() => {
+    if (!room || !pid){
+      //This could return a loading screen
+      return;
+    }
+    roomID = room;
+    pID = pid;
     canvasRef.current!.width = w;
     canvasRef.current!.height = h;
 
@@ -228,7 +245,7 @@ const useCanvas = () => {
     return () => {
       window.cancelAnimationFrame(animationFrameId);
     };
-  }, [gameStatus]);
+  }, [gameStatus, room, pid]);
 
   return canvasRef;
 };
