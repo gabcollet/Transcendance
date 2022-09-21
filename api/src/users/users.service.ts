@@ -64,7 +64,7 @@ export class UsersService {
 
     if (!user) {
       this.logger.log('*** User Not Found... Adding New User to Database***');
-      return this.create(id, username, username, photos[0].value);
+      return this.create(parseInt(id), username, username, photos[0].value);
     }
   }
 }
