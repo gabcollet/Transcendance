@@ -36,11 +36,6 @@ export class UsersController {
   }
 }
 
-//   @Get()
-//   getAll() {
-//     return this.usersService.findAll();
-//   }
-
 //   @Post()
 //   async createUser(@Body() body) {
 //     console.log(body);

@@ -16,7 +16,7 @@ export class UsersService {
   private logger = new Logger('User Service');
 
   getAllUsers() {
-    return { msg: 'These are all the users' };
+    return this.prisma.user.findMany();
   }
 
   async create(
@@ -41,39 +41,37 @@ export class UsersService {
     return user;
   }
 
-  // async create(user: UserDto) {
-  //   console.log(user);
-  //   const newUser = await this.prisma.user.create({
-  //     data: {
-  //       intraId: user.intraId,
-  //       username: user.username,
-  //       displayname: user.displayname,
-  //       picture: user.picture,
-  //       wins: 0,
-  //       losses: 0
-  //     }
-  //   })
-  // }
-
   async findCreateUser(profile: Profile) {
     const { id, username, photos } = profile;
 
-    const user = await this.prisma.user.findUnique({
-      where: { username: username }
-    });
+    // const user = await this.prisma.user.findUnique({
+    //   where: { username: username }
+    // });
+    const user = await this.findByUsername(username);
 
     if (!user) {
       this.logger.log('*** User Not Found... Adding New User to Database***');
       return this.create(parseInt(id), username, username, photos[0].value);
     }
+
+    if (user.intraId == id) {
+      this.logger.log('Found user: ' + username + ' with id: ' + user.id);
+      return user;
+    } else {
+      throw new UnauthorizedException(
+        'Resquesting Client Credentials Mismatch',
+      );
+    }
   }
+
+  async findByUsername(username: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { username: username }
+    });
+    return user;
+  }
+
 }
-
-//   private logger = new Logger('User Service');
-
-//   findAll(): Promise<User[]> {
-//     return this.usersRepository.find();
-//   }
 
 //   findById(id: number) {
 //     return this.usersRepository.findOneBy({ id });

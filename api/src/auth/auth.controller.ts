@@ -29,7 +29,6 @@ export class AuthController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
-    console.log(req.user);
     const username = req.user['username'];
     const userID = req.user['id'];
     const payload = { username: username, sub: userID };
