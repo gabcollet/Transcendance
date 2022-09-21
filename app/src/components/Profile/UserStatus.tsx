@@ -8,7 +8,7 @@ import { fetchValue } from './FetchValue';
 */
 export const UserStatus = (props: any) => {
     const [status, setStatus] = useState('');
-    fetchValue('status', props.userName, setStatus);
+    fetchValue('status', props.username, setStatus);
     return (
         <p className={props.className}>Status: {status}</p>
     );

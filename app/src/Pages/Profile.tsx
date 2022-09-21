@@ -10,11 +10,14 @@ interface _Content {
     contentType: string;
 }
 
-const Profile = () => {
+const Profile = (props: any) => {
+
+    console.log(props.username);
+
     return (
         <section className={styles["profile-container"]}>
-            <ProfileHeader />
-            <ProfileBody />
+            <ProfileHeader username={props.username} />
+            <ProfileBody username={props.username} />
         </section>
     );
 }

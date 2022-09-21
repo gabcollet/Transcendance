@@ -6,8 +6,9 @@ import Profile from "./Pages/Profile";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PongRoom from "./Pages/PongRoom";
 import Pong from "./components/Pong/Pong";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProtectedRoutes from "./components/ProtectedRoutes";
+import Cookies from "js-cookie";
 
 const App = () => {
   let [background, setBackground] = useState("root-default");
@@ -16,6 +17,22 @@ const App = () => {
   const changeBG = (newClassName: string) => {
     setBackground(newClassName);
   };
+
+  const [username, setUsername] = useState("PlacHOLDER");
+
+  useEffect(() => {
+    async function getUsername() {
+      await fetch("http://localhost:3030/profile/username", {
+        credentials: "include",
+        headers: {
+          Authorization: `bearer ${Cookies.get("jwtToken")}`,
+        },
+      })
+        .then((res) => res.text())
+        .then((data) => setUsername(data));
+    }
+    getUsername();
+  }, []);
 
   return (
     <div className={background}>
@@ -36,7 +53,7 @@ const App = () => {
               path="/Profile"
               element={
                 <div style={{ color: "white", fontSize: "75px" }}>
-                  <Profile />
+                  <Profile username={username} />
                 </div>
               }
             />

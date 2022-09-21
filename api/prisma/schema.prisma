@@ -12,7 +12,7 @@ datasource db {
 
 model User {
   id           Int      @id @default(autoincrement())
-  intraId      Int?     
+  intraId      Int?
   displayname  String?  @default("anon")
   username     String   @unique
   picture      String?  @default("https://images.unsplash.com/photo-1521985429101-21bed8b75e47?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80")
@@ -20,6 +20,18 @@ model User {
   wins         Int?     @default(0)
   losses       Int?     @default(0)
   twoFAEnabled Boolean? @default(false)
+  friendship1 Friendship[]
+  // friends      String[]
 
   @@map("users")
+}
+
+model Friendship {
+  id    Int @id @default(autoincrement())
+  username1 User @relation(fields: [user1], references: [username])
+  user1 String
+  username2 User @relation(fields: [user2], references: [username])
+  user2 String
+
+  @@map("friendships")
 }

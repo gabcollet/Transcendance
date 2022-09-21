@@ -8,7 +8,7 @@ import { fetchValue } from './FetchValue';
 */
 export const UserImage = (props: any) => {
     const [userImage, setUserImage] = useState('');
-    fetchValue('img', props.userName, setUserImage);
+    fetchValue('img', props.username, setUserImage);
     return (
       <img className={props.className} src={userImage} alt="" />
     );

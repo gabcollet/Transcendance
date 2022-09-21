@@ -8,7 +8,7 @@ import { fetchValue } from './FetchValue';
 */
 export const UserLosses = (props: any) => {
     const [userLosses, setUserLosses] = useState('');
-    fetchValue('losses', props.userName, setUserLosses);
+    fetchValue('losses', props.username, setUserLosses);
     return (
       <h3 className={props.className}>L: {userLosses}</h3>
     );

@@ -13,6 +13,7 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/users.entity';
 import { PrismaModule } from './prisma/prisma.module';
+import { ProfileController } from './users/profile.controller';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { PrismaModule } from './prisma/prisma.module';
     }),
     PrismaModule,
   ],
-  controllers: [PongController, ChatController, UsersController],
+  controllers: [PongController, ChatController, UsersController, ProfileController],
   providers: [PongService, UsersService, PongGateway],
 })
 export class AppModule {}

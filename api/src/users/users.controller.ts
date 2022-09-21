@@ -53,6 +53,7 @@ export class UsersController {
   getAllTimeWins(@Req() req: Request, @Param() params) {
     return this.usersService.getAllTimeWins(params.name);
   }
+  
   // Get all time losses of user
   @UseGuards(JwtAuthGuard)
   @Get(':name/losses')

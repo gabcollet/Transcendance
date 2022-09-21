@@ -8,7 +8,7 @@ import { fetchValue } from './FetchValue';
 */
 export const UserWins = (props: any) => {
     const [userWins, setUserWins] = useState('');
-    fetchValue('wins', props.userName, setUserWins);
+    fetchValue('wins', props.username, setUserWins);
     return (
       <h3 className={props.className}>W: {userWins}</h3>
     );
