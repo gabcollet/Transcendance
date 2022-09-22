@@ -15,9 +15,10 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   private roomiD: string = '';
   private isWaiting: boolean = false;
   private madeBySpectator: boolean = false;
-  //Map de client: room
-  //Faudrait aussi une map de client, pID?
-  private id: Map<Socket, string> = new Map<Socket, string>();
+  //Map client: room
+  private m_room: Map<Socket, string> = new Map<Socket, string>();
+  //Map client: pid
+  private m_pid: Map<Socket, number> = new Map<Socket, number>();
   private rooms: [Room] = [null];
   private gameEnd: boolean = false;
 
@@ -27,10 +28,6 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   afterInit(server: Server) {
     this.logger.log('Pong server initialized');
   }
-
-  /*   handleConnection(client: Socket, ...args: any[]) {
-    this.logger.log(`Client connected: ${client.id}`);
-  } */
 
   private createRoom(spectator: boolean): string {
     const { v4: uuidv4 } = require('uuid');
@@ -53,8 +50,8 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   handleJoinRoom(client: Socket) {
     const room = this.createRoom(false);
     client.join(room);
-    if (this.id.has(client)) {
-      const clientRoom = this.id.get(client);
+    if (this.m_room.has(client)) {
+      const clientRoom = this.m_room.get(client);
       if (clientRoom == room) {
         this.logger.error(`${client.id} already in room ${room}`);
         return;
@@ -63,7 +60,8 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
     this.logger.log(
       `${client.id} joined room ${room} as P${this.isWaiting ? 1 : 2}`,
     );
-    this.id.set(client, room);
+    this.m_room.set(client, room);
+    this.m_pid.set(client, this.isWaiting ? 1 : 2);
     client.emit('joinedRoom', [room, this.isWaiting]);
   }
 
@@ -75,22 +73,32 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
           client.emit('playerRdy', this.rooms[i].ready);
           return;
         }
-
         this.rooms[i].ready++;
         this.server.to(payload.room).emit('playerRdy', this.rooms[i].ready);
       }
     }
   }
 
+  private leavingRoom(client: Socket, room: string) {
+    client.leave(room);
+    this.logger.warn(`${client.id} leaved room ${room}`);
+    this.m_room.delete(client);
+    this.m_pid.delete(client);
+  }
+
   //This handle when a client quit or refresh the page
   handleDisconnect(client: Socket) {
-    const room = this.id.get(client);
-    this.server.to(room).emit('leavedRoom');
-    for (let [key, value] of this.id.entries()) {
+    const room = this.m_room.get(client);
+    const pid = this.m_pid.get(client);
+
+    if (pid === 3) {
+      this.leavingRoom(client, room);
+      return;
+    }
+    this.server.to(room).emit('leavedRoom', pid);
+    for (let [key, value] of this.m_room.entries()) {
       if (value === room) {
-        key.leave(room);
-        this.logger.warn(`${key.id} leaved room ${room}`);
-        this.id.delete(key);
+        this.leavingRoom(key, room);
       }
     }
     if (this.roomiD === room && this.isWaiting) {
@@ -102,17 +110,13 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   handleLeaveRoom(client: Socket, payload: { room: string; pID: number }) {
     //if a spectator quit
     if (payload.pID === 3) {
-      client.leave(payload.room);
-      this.logger.warn(`${client.id} leaved room ${payload.room}`);
-      this.id.delete(client);
+      this.leavingRoom(client, payload.room);
       return;
     }
     this.server.to(payload.room).emit('leavedRoom2', payload.pID);
-    for (let [key, value] of this.id.entries()) {
+    for (let [key, value] of this.m_room.entries()) {
       if (value === payload.room) {
-        key.leave(payload.room);
-        this.logger.warn(`${key.id} leaved room ${payload.room}`);
-        this.id.delete(key);
+        this.leavingRoom(key, payload.room);
       }
     }
     if (this.roomiD === payload.room && this.isWaiting) {
@@ -172,8 +176,6 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
     },
   ) {
     for (let i = 0; i < this.rooms.length; i++) {
-      // console.log(this.ball[i] && this.ball[i].frameId == payload.frameId);
-
       if (
         this.rooms[i] &&
         this.rooms[i].roomID == payload.roomID &&
@@ -218,10 +220,11 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
     }
     client.join(room);
     this.logger.verbose(`${client.id} joined room ${room} as Spectator`);
-    this.id.set(client, room);
+    this.m_room.set(client, room);
+    this.m_pid.set(client, 3);
     client.emit('joinedRoom', [room, 2]);
   }
-  
+
   @SubscribeMessage('gameEnd')
   handleEndGame(client: Socket) {
     this.gameEnd = true;

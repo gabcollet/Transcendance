@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { board, Player, Ball } from "./assets";
-import { socket, pQuit } from "../../../Pages/PongRoom";
+import { socket } from "../../../Pages/PongRoom";
 import { drawRectangle } from "./draw";
 
 export let roomID: string;
@@ -74,22 +74,17 @@ const useCanvas = () => {
   useEffect(() => {
     socket.on("playerRdy", (input: number) => {
       input = Number(input);
-
-      // console.log(input);
-
       if (input === 2) {
-        // console.log("ici 2");
         setGameStatus(1);
       } else {
-        // console.log("ici autre");
         setGameStatus(0);
       }
     });
   }, []);
   //This handle when a client quit or refresh the page
   useEffect(() => {
-    socket.on("leavedRoom", () => {
-      winner.current = pID;
+    socket.on("leavedRoom", (input) => {
+      winner.current = input === 1 ? 2 : 1;
       frameID = 0;
       setGameStatus(3);
     });
@@ -97,8 +92,9 @@ const useCanvas = () => {
   //This handle when a client change location (aka go back one page)
   useEffect(() => {
     socket.on("leavedRoom2", (input) => {
+      console.log("leave2:", input);
       frameID = 0;
-      winner.current = input;
+      winner.current = input === 1 ? 2 : 1;
       setGameStatus(3);
     });
   }, []);
@@ -202,9 +198,6 @@ const useCanvas = () => {
     };
 
     const endScreen = (winner: number) => {
-/*       if (pID !== 3) {
-        socket.emit("gameEnd");
-      } */
       renderScreen(`WINNER PLAYER ${winner}!!!`, h / 2 + 15, 60);
     };
 
@@ -241,23 +234,19 @@ const useCanvas = () => {
     });
 
     //Game Logic
-    if (pQuit) {
-      endScreen(pID);
-    } else {
-      switch (gameStatus) {
-        case 0:
-          waitScreen();
-          break;
-        case 1:
-          animationScreen();
-          break;
-        case 2:
-          render();
-          break;
-        case 3:
-          endScreen(winner.current);
-          break;
-      }
+    switch (gameStatus) {
+      case 0:
+        waitScreen();
+        break;
+      case 1:
+        animationScreen();
+        break;
+      case 2:
+        render();
+        break;
+      case 3:
+        endScreen(winner.current);
+        break;
     }
 
     return () => {

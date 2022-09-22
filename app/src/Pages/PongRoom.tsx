@@ -4,8 +4,7 @@ import { useEffect } from "react";
 import { roomID, pID } from "../components/Pong/List/useCanvas";
 import io from "socket.io-client";
 
-export let pQuit: boolean = false;
-export const socket = io("localhost:6006");
+export const socket = io("10.13.6.4:6006");
 
 const PongRoom = () => {
   const location = useLocation();
@@ -19,9 +18,7 @@ const PongRoom = () => {
 
   //On closing window
   useEffect(() => {
-    socket.on("leavedRoom", () => {
-      pQuit = true;
-    });
+    socket.on("leavedRoom", () => {});
     if (pID !== 3) {
       socket.emit("gameEnd");
     }
@@ -29,9 +26,7 @@ const PongRoom = () => {
 
   //On change path
   useEffect(() => {
-    socket.on("leavedRoom2", (input) => {
-      pQuit = true;
-    });
+    socket.on("leavedRoom2", () => {});
     if (pID !== 3) {
       socket.emit("gameEnd");
     }
@@ -39,16 +34,17 @@ const PongRoom = () => {
 
   const setRdy = () => {
     socket.emit("joinRoom");
-    pQuit = false;
   };
 
   const spectate = () => {
     socket.emit("spectate");
-    pQuit = false;
   };
 
   return (
     <div className="pongRoom-wrap">
+      <Link to="/Menu">
+        <button className="button-78">←</button>
+      </Link>
       <p className="text2">
         Q or ↑ to go up <br /> A or ↓ to go down
       </p>
