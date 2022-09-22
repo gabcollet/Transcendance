@@ -1,6 +1,5 @@
 import "./PongRoom.css";
 import { Link, useLocation } from "react-router-dom";
-import { inGame } from "../components/Pong/List/useCanvas";
 import { useEffect } from "react";
 import { roomID, pID } from "../components/Pong/List/useCanvas";
 import io from "socket.io-client";
@@ -12,32 +11,30 @@ const PongRoom = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (inGame) {
-      socket.emit("leaveRoom", {
-        room: roomID,
-        pID: pID,
-      });
-    }
+    socket.emit("leaveRoom", {
+      room: roomID,
+      pID: pID,
+    });
   }, [location]);
 
   //On closing window
   useEffect(() => {
     socket.on("leavedRoom", () => {
       pQuit = true;
-      if (!inGame) {
-        socket.emit("joinRoom");
-      }
     });
+    if (pID !== 3) {
+      socket.emit("gameEnd");
+    }
   }, []);
 
   //On change path
   useEffect(() => {
     socket.on("leavedRoom2", (input) => {
       pQuit = true;
-      if (!inGame && input !== pID) {
-        socket.emit("joinRoom");
-      }
     });
+    if (pID !== 3) {
+      socket.emit("gameEnd");
+    }
   }, []);
 
   const setRdy = () => {
@@ -47,6 +44,7 @@ const PongRoom = () => {
 
   const spectate = () => {
     socket.emit("spectate");
+    pQuit = false;
   };
 
   return (

@@ -2,7 +2,6 @@ import "./Pong.css";
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { socket } from "../../Pages/PongRoom";
-import { pID, roomID } from "./List/useCanvas";
 import useCanvas from "./List/useCanvas";
 
 const Pong = () => {
@@ -24,13 +23,6 @@ const Pong = () => {
     });
   });
 
-  const quit = () => {
-    socket.emit("leaveRoom", {
-      room: roomID,
-      pID: pID,
-    });
-  };
-
   return (
     <div>
       <div className="row">
@@ -41,9 +33,7 @@ const Pong = () => {
         </div>
         <div className="column2">
           <Link to="/PongRoom">
-            <button className="button-78" onClick={quit}>
-              Quit
-            </button>
+            <button className="button-78">Quit</button>
           </Link>
         </div>
       </div>

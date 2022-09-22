@@ -3,7 +3,6 @@ import { board, Player, Ball } from "./assets";
 import { socket, pQuit } from "../../../Pages/PongRoom";
 import { drawRectangle } from "./draw";
 
-export let inGame = false;
 export let roomID: string;
 export let pID: number;
 let frameID: number = 0;
@@ -17,10 +16,9 @@ let frameID: number = 0;
   */
 
 const useCanvas = () => {
-  inGame = true;
   const [room, setRoomID] = useState<string>("");
   const [pid, setpID] = useState<number>(0);
-  
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const w = 800;
   const h = 600;
@@ -76,14 +74,14 @@ const useCanvas = () => {
   useEffect(() => {
     socket.on("playerRdy", (input: number) => {
       input = Number(input);
-      
-      console.log(input);
-      
+
+      // console.log(input);
+
       if (input === 2) {
-        console.log("ici 2");
+        // console.log("ici 2");
         setGameStatus(1);
       } else {
-        console.log("ici autre");
+        // console.log("ici autre");
         setGameStatus(0);
       }
     });
@@ -101,9 +99,6 @@ const useCanvas = () => {
     socket.on("leavedRoom2", (input) => {
       frameID = 0;
       winner.current = input;
-      if (inGame && pID === input) {
-        inGame = false;
-      }
       setGameStatus(3);
     });
   }, []);
@@ -136,10 +131,10 @@ const useCanvas = () => {
       roomID: roomID,
     });
 
-    if (!isReady.current){
+    if (!isReady.current) {
       socket.emit("playerReady", {
         room: roomID,
-        pID: pID
+        pID: pID,
       });
     }
     isReady.current = true;
@@ -207,6 +202,9 @@ const useCanvas = () => {
     };
 
     const endScreen = (winner: number) => {
+/*       if (pID !== 3) {
+        socket.emit("gameEnd");
+      } */
       renderScreen(`WINNER PLAYER ${winner}!!!`, h / 2 + 15, 60);
     };
 

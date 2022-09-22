@@ -15,8 +15,11 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   private roomiD: string = '';
   private isWaiting: boolean = false;
   private madeBySpectator: boolean = false;
+  //Map de client: room
+  //Faudrait aussi une map de client, pID?
   private id: Map<Socket, string> = new Map<Socket, string>();
   private rooms: [Room] = [null];
+  private gameEnd: boolean = false;
 
   //This is usefull to pass the payload to everyone
   @WebSocketServer() server: Server;
@@ -31,12 +34,13 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
 
   private createRoom(spectator: boolean): string {
     const { v4: uuidv4 } = require('uuid');
+    this.gameEnd = false;
     //If the spectator create the game
-    if (spectator){
+    if (spectator) {
       this.roomiD = uuidv4();
       this.madeBySpectator = true;
       return this.roomiD;
-    // Else if it's a player who create it
+      // Else if it's a player who create it
     } else if (!this.isWaiting && !this.madeBySpectator) {
       this.roomiD = uuidv4();
     }
@@ -64,20 +68,21 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('playerReady')
-  handleReady(client: Socket, payload: {room: string; pID: number}) {
+  handleReady(client: Socket, payload: { room: string; pID: number }) {
     for (let i = 0; i < this.rooms.length; i++) {
       if (this.rooms[i] && this.rooms[i].roomID == payload.room) {
-        if (payload.pID === 3){
-          client.emit('playerRdy', this.rooms[i].ready)
+        if (payload.pID === 3) {
+          client.emit('playerRdy', this.rooms[i].ready);
           return;
         }
-        
+
         this.rooms[i].ready++;
         this.server.to(payload.room).emit('playerRdy', this.rooms[i].ready);
       }
     }
   }
 
+  //This handle when a client quit or refresh the page
   handleDisconnect(client: Socket) {
     const room = this.id.get(client);
     this.server.to(room).emit('leavedRoom');
@@ -92,9 +97,16 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
       this.isWaiting = false;
     }
   }
-
+  //This handle when a client change location (aka go back one page)
   @SubscribeMessage('leaveRoom')
   handleLeaveRoom(client: Socket, payload: { room: string; pID: number }) {
+    //if a spectator quit
+    if (payload.pID === 3) {
+      client.leave(payload.room);
+      this.logger.warn(`${client.id} leaved room ${payload.room}`);
+      this.id.delete(client);
+      return;
+    }
     this.server.to(payload.room).emit('leavedRoom2', payload.pID);
     for (let [key, value] of this.id.entries()) {
       if (value === payload.room) {
@@ -197,19 +209,21 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
       }
     }
   }
- 
+
   @SubscribeMessage('spectate')
   handleSpectate(client: Socket) {
     let room = this.roomiD;
-    if (!room){
-      //ou si la game est terminer
+    if (!room || this.gameEnd) {
       room = this.createRoom(true);
     }
     client.join(room);
-    this.logger.verbose(
-      `${client.id} joined room ${room} as Spectator`,
-    );
+    this.logger.verbose(`${client.id} joined room ${room} as Spectator`);
     this.id.set(client, room);
     client.emit('joinedRoom', [room, 2]);
+  }
+  
+  @SubscribeMessage('gameEnd')
+  handleEndGame(client: Socket) {
+    this.gameEnd = true;
   }
 }
