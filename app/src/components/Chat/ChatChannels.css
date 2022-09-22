@@ -1,3 +1,11 @@
 .channels-wrapper {
+  display: flex;
   color: aliceblue;
+  overflow-y: auto;
+  flex-direction: column;
+  width: 100%;
+}
+
+.top-title {
+  align-self: center;
 }

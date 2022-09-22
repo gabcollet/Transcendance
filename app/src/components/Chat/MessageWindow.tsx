@@ -1,15 +1,16 @@
 import "./MessageWindow.css";
-
+import ChatBubble from "./ChatBubble";
 interface MessageWindow_ {
   messages: string[];
 }
 
 const MessageWindow = (props: MessageWindow_) => {
-  console.log(props.messages);
   return (
     <div className="msg-window">
       {props.messages.map((message, index) => (
-        <div key={index}>{message + "\n"}</div>
+        <div>
+          <ChatBubble key={index} message={message}></ChatBubble>
+        </div>
       ))}
     </div>
   );

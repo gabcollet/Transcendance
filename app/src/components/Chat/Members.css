@@ -1,6 +1,5 @@
-.list-wrapper {
+.members-wrapper {
   color: aliceblue;
   overflow-y: auto;
   height: 50%;
-  border-top: 10px solid black;
 }

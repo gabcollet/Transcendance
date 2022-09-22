@@ -2,7 +2,7 @@
   display: flex;
   position: absolute;
   width: 90%;
-  height: 90%;
+  height: 100%;
   bottom: 0;
   left: 0;
   background-color: #f2effc;
@@ -10,16 +10,6 @@
   font-weight: 400;
   border: none;
   padding-bottom: 15px;
-}
-
-.type-zone {
-  display: flex;
-  position: absolute;
-  width: 100%;
-  height: 8%;
-  align-items: center;
-  justify-content: center;
-  bottom: 0;
 }
 
 textarea {
@@ -33,7 +23,7 @@ textarea:focus {
 .send-button {
   display: flex;
   position: absolute;
-  height: 90%;
+  height: 100%;
   width: 10%;
   right: 0;
   bottom: 0;

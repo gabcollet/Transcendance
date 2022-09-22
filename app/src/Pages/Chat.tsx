@@ -1,13 +1,10 @@
 import "./Chat.css";
-import React, { useState, useEffect } from "react";
-import { socket } from "../context/socket";
-import { type } from "os";
-import { NavLink } from "react-router-dom";
+import { useState } from "react";
 import InputZone from "../components/Chat/InputZone";
 import MessageWindow from "../components/Chat/MessageWindow";
 import ChatChannels from "../components/Chat/ChatChannels";
 import ChatFriendsList from "../components/Chat/ChatFriendsList";
-import io, { Socket } from "socket.io-client";
+import Members from "../components/Chat/Members";
 
 const Chat = () => {
   const [messages, setMessages] = useState<string[]>([]);
@@ -21,6 +18,7 @@ const Chat = () => {
         <InputZone setMessages={setMessages} messages={messages}></InputZone>;
       </div>
       <div className="right">
+        <Members></Members>
         <ChatFriendsList></ChatFriendsList>
       </div>
     </div>

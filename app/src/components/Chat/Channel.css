@@ -1,0 +1,17 @@
+.hash-icon {
+  font-size: 35px;
+  display: flex;
+  align-self: center;
+  margin-left: 4px;
+}
+
+.channel-box {
+  display: flex;
+  min-width: 100%;
+  background-color: rgba(56, 56, 56, 0.505);
+  height: 100%;
+  border: 1px solid rgb(180, 180, 180);
+  border-radius: 10px;
+  margin-top: 5px;
+  cursor: pointer;
+}

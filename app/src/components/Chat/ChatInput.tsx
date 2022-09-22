@@ -1,12 +1,7 @@
 import "./ChatInput.css";
-import SendButton from "./SendButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMailReply } from "@fortawesome/free-solid-svg-icons";
-import io, { Socket } from "socket.io-client";
-import { useEffect, useRef, useState } from "react";
-
-// https://stackoverflow.com/questions/47809282/submit-a-form-when-enter-is-pressed-in-a-textarea-in-react
-// FOR ENTER KEY PRESS
+import { useState } from "react";
 
 interface ChatInput_ {
   sendMsg: (message: string) => void;
@@ -24,7 +19,7 @@ const ChatInput = (props: ChatInput_) => {
     }
   };
   return (
-    <div>
+    <div className="input-wrapper">
       <textarea
         placeholder="Enter your message..."
         className="chat-message"

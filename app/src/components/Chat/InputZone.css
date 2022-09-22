@@ -1,0 +1,10 @@
+.type-zone {
+  display: flex;
+  position: absolute;
+  width: 100%;
+  height: 8%;
+  align-items: center;
+  justify-content: center;
+  bottom: 0;
+  border-top: 10px solid black;
+}

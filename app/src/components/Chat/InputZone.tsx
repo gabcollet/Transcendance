@@ -1,6 +1,7 @@
 import ChatInput from "./ChatInput";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import io, { Socket } from "socket.io-client";
+import "./InputZone.css";
 
 interface InputZone_ {
   setMessages: React.Dispatch<React.SetStateAction<string[]>>;
@@ -20,8 +21,7 @@ const InputZone = (props: InputZone_) => {
     };
   }, [messageListener]);
   const sendMsg = (message: string) => {
-    if (message != "") {
-      console.log(message);
+    if (message !== "") {
       socket?.emit("message", message);
     }
   };
