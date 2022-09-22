@@ -14,7 +14,6 @@ import { HttpService } from '@nestjs/axios';
 import * as speakeasy from 'speakeasy';
 import * as qrcode from 'qrcode';
 import { UsersService } from '../users/users.service';
-import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -80,7 +79,7 @@ export class AuthController {
     console.log('SECRET\n' + secret);
 
     //* update user with generated 2FA Secret for validation
-    await this.userService.patchUser(
+    await this.prisma.patchUser(
       { twoFAEnabled: true, twoFASecret: secret },
       jwtToken['username'],
     );
