@@ -68,18 +68,17 @@ type Friendship = {
 const FriendsContent = (props: any) => {
   // TO DO: Function that gets list of active friends from the backend
   // TO DO: Function that gets list of pending friend request received from the backend
-    const [friends, setFriends] = useState(null);
+    const [friends, setFriends] = useState<any[]>([]);
     
     fetchObject('users/' + props.username + '/friends', setFriends);
 
+    const friendsElement = friends?.map((friendUsername: any) => {
+        return (
+          friendUsername &&
+          <FriendCard friendUsername={friendUsername} />
+        );
+    });
 
-    // const friendsElement = friends.map((friend) => {
-    //     return (
-    //       <FriendCard friendName={friend} />
-    //     );
-    // });
-
-    const friendsElement = null;
     return (
         <section className={styles["friends-content-container"]}>
             {friendsElement}

@@ -24,7 +24,6 @@ import {
     @UseGuards(JwtAuthGuard)
     @Get('username')
     getUsername(@Req() req: Request) {
-        console.log(req.user);
         return req.user;
     }
   }

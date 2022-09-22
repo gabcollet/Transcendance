@@ -25,7 +25,7 @@ export const fetchText = (route: string, setCallBack: any) => {
           'Authorization': `bearer ${Cookies.get('jwtToken')}`,
         }
       })
-      .then(res => res.blob())
+      .then(res => res.json())
       .then(data => setCallBack(data))
     }
     fetchIt();

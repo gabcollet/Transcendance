@@ -17,7 +17,6 @@ const App = () => {
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    console.log("In Userffect");
     fetchText('profile/username', setProfileUsername);
   }, []);
 

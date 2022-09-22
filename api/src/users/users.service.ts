@@ -69,6 +69,7 @@ export class UsersService {
   }
 
   async findByUsername(username: string) {
+    console.log(`findbyusername: ${username}`);
     const user = await this.prisma.user.findUnique({
       where: { username: username }
     });
@@ -137,17 +138,16 @@ export class UsersService {
     const preFilteredList = await Promise.all(promises);
     const filteredList = preFilteredList.filter((friendship) => {
       if (friendship.status === FriendshipStatus.Accepted) {
-        // console.log(`result: ${friendship.status} | FriendshipStatus: ${FriendshipStatus.Accepted}`);
-        // console.log(`True: ${friendship.sender} -> ${friendship.receiver}`);
             return true;
           }
           else {
-            // console.log(`False: ${friendship.value.sender} -> ${friendship.value.receiver}`);
             return false;
           }
     })
-    const mappedList = filteredList.map((friendship) => friendship.value.receiver)
-    console.log(mappedList);
+    const friendUsernameList = filteredList.map((friendship) => {
+      return friendship.value.receiver;
+    })
+    return friendUsernameList;
   }
   
   async getFriendshipStatus(user1: string, user2: string) {

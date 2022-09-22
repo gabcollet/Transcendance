@@ -1,31 +1,31 @@
 import { useState, useEffect } from 'react';
-import styles from './ProfileContent.module.css';
+import styles from './ProfileBody.module.css';
 import data from './data_placeholder';
 import { fetchObject } from './FetchValue';
 
 
 export const FriendCard = (props: any) => {
-  const [user, setUser] = useState(null);
+  const [friendUser, setFriendUser] = useState<any>({});
 
-  fetchObject('users/' + props.username, setUser);
+  fetchObject('users/' + props.friendUsername, setFriendUser);
 
     return (
       <div className={styles["friends-content-individual"]}>
         <div className={styles["individual-id"]}>
           <img
-            src={props.friendUsername.profile_image}
-            alt={props.friendUsername.name}
+            src={friendUser.picture}
+            alt={friendUser.username}
           />
-          <h4>{props.friendUsername.name}</h4>
-          <p>status: {props.friendUsername.status}</p>
+          <h4>{friendUser.username}</h4>
+          <p>status: {friendUser.status}</p>
         </div>
         <div className={styles["individual-buttons"]}>
           <button>Add friend</button>
           <button>Message</button>
         </div>
         <div className={styles["individual-stats"]}>
-          <h3>W: {props.friendUsername.victories}</h3>
-          <h3>L: {props.friendUsername.defeats}</h3>
+          <h3>W: {friendUser.wins}</h3>
+          <h3>L: {friendUser.losses}</h3>
         </div>
       </div>
     );
