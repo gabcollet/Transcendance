@@ -4,6 +4,11 @@
     "react-beforeunload": "^2.5.3"
   },
   "devDependencies": {
+<<<<<<< .merge_file_tjIqqU
     "@types/cookie-parser": "^1.4.3"
+=======
+    "@prisma/client": "^4.3.1",
+    "prisma": "^4.3.1"
+>>>>>>> .merge_file_TCELAg
   }
 }
