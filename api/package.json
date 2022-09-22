@@ -37,10 +37,16 @@
     "@nestjs/platform-socket.io": "^9.0.11",
     "@nestjs/typeorm": "^9.0.1",
     "@nestjs/websockets": "^9.0.11",
+<<<<<<< HEAD
     "@prisma/client": "^4.3.1",
+=======
+    "@types/cookie-parser": "^1.4.3",
+    "@types/qrcode": "^1.5.0",
+>>>>>>> fbf85c922ed436d7be67972c944a22f7abb0c73d
     "axios": "^0.27.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
     "logger": "^0.0.1",
@@ -49,7 +55,7 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pg": "^8.8.0",
-    "prisma": "^4.3.1",
+    "qrcode": "^1.5.1",
     "react-router-dom": "^6.3.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
@@ -68,6 +74,7 @@
     "@types/node": "^16.0.0",
     "@types/passport-jwt": "^3.0.6",
     "@types/passport-local": "^1.0.34",
+    "@types/speakeasy": "^2.0.7",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",

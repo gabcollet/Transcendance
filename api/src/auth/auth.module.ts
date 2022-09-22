@@ -6,7 +6,7 @@ import { AuthStrategy } from './auth.strategy';
 import { UsersService } from '../users/users.service';
 import { UsersModule } from '../users/users.module';
 import { JwtModule, JwtService } from '@nestjs/jwt';
-import { JwtStrategy } from './jwt.strategy';
+import { JwtStrategy } from './jwt/jwt.strategy';
 import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({

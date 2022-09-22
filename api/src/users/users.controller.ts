@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AuthorizationGuard } from '../auth/auth.guard';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 import { Request, Response } from 'express';
 import { createReadStream } from 'fs';
 import { join } from 'path';
@@ -33,14 +33,14 @@ export class UsersController {
     return this.usersService.getUserImage(params.name);
   }
 
-//   // Get displayname of user
+  // Get displayname of user
   @UseGuards(JwtAuthGuard)
   @Get(':name/displayname')
   getDisplayName(@Req() req: Request, @Param() params) {
     return this.usersService.getDisplayName(params.name);
   }
 
-//   // Get online status of user
+  // Get online status of user
   @UseGuards(JwtAuthGuard)
   @Get(':name/status')
   getStatus(@Req() req: Request, @Param() params) {

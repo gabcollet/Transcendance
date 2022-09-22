@@ -26,6 +26,7 @@ export class UsersService {
     picture?: string,
     wins?: number,
     losses?: number,
+    twoFASecret?: string,
   ) {
     const user = await this.prisma.user.create({
       data: {
