@@ -3,8 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PrismaModule } from '../prisma/prisma.module';
 import { ProfileController } from './profile.controller';
 import { UsersController } from './users.controller';
-import { User } from './users.entity';
-import { Friendship } from './friendship.entity';
 import { UsersService } from './users.service';
 
 @Module({

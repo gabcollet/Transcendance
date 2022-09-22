@@ -26,4 +26,16 @@ import {
     getUsername(@Req() req: Request) {
         return req.user;
     }
+
+    // TEST ROUTES
+    @Get('test/createusers')
+    testCreateUsers() {
+      return this.usersService.testCreateUsers();
+    }
+
+    @Get('test/createfriendships')
+    testCreateFriendships() {
+      return this.usersService.testCreateFriendships();
+    }
   }
+

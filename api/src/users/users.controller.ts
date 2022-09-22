@@ -26,13 +26,6 @@ export class UsersController {
     return this.usersService.getAllUsers();
   }
 
-  // Get Profile page of user
-  // @UseGuards(JwtAuthGuard)
-  // @Get(':name')
-  // getProfile(@Req() req: Request, @Param() params) {
-
-  // }
-
   // Get path of user's image from DB
   @UseGuards(JwtAuthGuard)
   @Get(':name/img')

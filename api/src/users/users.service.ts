@@ -1,7 +1,7 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { User } from '@prisma/client';
 // import { InjectRepository } from '@nestjs/typeorm';
 // import { Repository } from 'typeorm';
-import { User } from './users.entity';
 import { Profile } from 'passport-42';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserDto } from './dto';
@@ -26,7 +26,7 @@ export class UsersService {
     return this.prisma.user.findMany();
   }
 
-  async create(
+  async createUser(
     intraId: number,
     displayname: string,
     username: string,
@@ -34,6 +34,9 @@ export class UsersService {
     wins?: number,
     losses?: number,
   ) {
+    if (typeof picture == "undefined") {
+      picture = "https://images.unsplash.com/photo-1521985429101-21bed8b75e47?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
+    }
     const user = await this.prisma.user.create({
       data: {
       intraId,
@@ -48,6 +51,21 @@ export class UsersService {
     return user;
   }
 
+  async createFriendship(
+    sender: string,
+    receiver: string
+  ) {
+    const friendship = await this.prisma.friendship.create({
+      data: {
+        user1: {
+            username: sender,
+        },
+      },
+    });
+
+    return friendship;
+  }
+
   async findCreateUser(profile: Profile) {
     const { id, username, photos } = profile;
 
@@ -55,7 +73,7 @@ export class UsersService {
 
     if (!user) {
       this.logger.log('*** User Not Found... Adding New User to Database***');
-      return this.create(parseInt(id), username, username, photos[0].value);
+      return this.createUser(parseInt(id), username, username, photos[0].value);
     }
 
     if (user.intraId == id) {
@@ -76,8 +94,8 @@ export class UsersService {
     return user;
   }
 
-// PROFILE REQUESTS
 
+// PROFILE REQUESTS
   async getUserImage(username: string) {
     const user = await this.findByUsername(username);
     return user ? user.picture : null;
@@ -105,26 +123,6 @@ export class UsersService {
 
   async getAcceptedFriends(username: string) {
     const user = await this.findByUsername(username);
-    // const friendshipList = await this.friendshipRepository.find({
-    //   where: {
-    //     sender: user
-    //   }
-    // });
-
-   
-    // const fileteredFriendList = friendshipList.filter((friendship) => {
-    //   const result = this.getFriendshipStatus(friendship.sender, friendship.receiver);
-    //   if (result === FriendshipStatus.Accepted) {
-    //     return true;
-    //   }
-    //   else {
-    //     return false;
-    //   }
-    // });
-    // const mappedFriendList = friendshipList.map(friendship => {
-    //   const testUser: User = friendship.receiver;
-    // });
-    // return mappedFriendList;
 
     const friendshipList = await this.prisma.friendship.findMany({
       where: {
@@ -170,5 +168,23 @@ export class UsersService {
         state += 2;
     }
     return state;
+  }
+
+  // TEST FUNCTIONS
+  async testCreateUsers() {
+    this.createUser(9001, "anon1", "anon1");
+    this.createUser(9002, "anon2", "anon2");
+    this.createUser(9003, "anon3", "anon3");
+    this.createUser(9004, "anon4", "anon4");
+    this.createUser(9004, "anon5", "anon5");
+  }
+
+  async testCreateFriendships() {
+    this.createFriendship(await this.findByUsername("laube"), this.findByUsername("anon1"));
+    this.createFriendship("laube", "anon2");
+    this.createFriendship("anon1", "laube");
+    this.createFriendship("anon2", "laube");
+    this.createFriendship("anon3", "laube");
+    this.createFriendship("laube", "anon4");
   }
 }

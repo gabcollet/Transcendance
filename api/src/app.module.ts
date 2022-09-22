@@ -11,7 +11,6 @@ import { UsersService } from './users/users.service';
 import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './users/users.entity';
 import { PrismaModule } from './prisma/prisma.module';
 import { ProfileController } from './users/profile.controller';
 
@@ -21,16 +20,6 @@ import { ProfileController } from './users/profile.controller';
     PongModule,
     ChatModule,
     UsersModule,
-    // TypeOrmModule.forRoot({
-    //   type: 'postgres',
-    //   host: 'localhost',
-    //   port: 5432,
-    //   username: 'admin',
-    //   password: 'pass',
-    //   database: 'trans_db',
-    //   entities: [User],
-    //   synchronize: true,
-    // }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
