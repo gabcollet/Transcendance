@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Friendship } from './friendship.entity';
 
 const genRandStr = (length: number) => {
   const characters = '0123456789';
@@ -23,7 +24,7 @@ export class User {
   @Column('varchar', { default: genRandStr(6) })
   displayname: string;
 
-  @Column('varchar', { default: genRandStr(6) })
+  @Column('varchar', { default: genRandStr(6), unique: true })
   username: string;
 
   @Column('varchar', { default: 'https://images.unsplash.com/photo-1521985429101-21bed8b75e47?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80' })
@@ -40,4 +41,11 @@ export class User {
 
   @Column('boolean', { default: false })
   twoFAEnabled;
+
+  @OneToMany(() => Friendship, (friendship) => friendship.sender)
+  friendship1: Friendship[];
+
+  @OneToMany(() => Friendship, (friendship) => friendship.receiver)
+  friendship2: Friendship[];
+  
 }

@@ -26,6 +26,13 @@ export class UsersController {
     return this.usersService.getAllUsers();
   }
 
+  // Get Profile page of user
+  // @UseGuards(JwtAuthGuard)
+  // @Get(':name')
+  // getProfile(@Req() req: Request, @Param() params) {
+
+  // }
+
   // Get path of user's image from DB
   @UseGuards(JwtAuthGuard)
   @Get(':name/img')
@@ -59,5 +66,15 @@ export class UsersController {
   @Get(':name/losses')
   getAllTimeLosses(@Req() req: Request, @Param() params) {
     return this.usersService.getAllTimeLosses(params.name);
+  }
+
+  @Get(':name/friends')
+  getFriends(@Param() params) {
+    return this.usersService.getAcceptedFriends(params.name);
+  }
+
+  @Get(':name')
+  findByUsername(@Param() params) {
+    return this.usersService.findByUsername(params.name);
   }
 }

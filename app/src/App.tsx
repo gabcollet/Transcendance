@@ -6,19 +6,26 @@ import Profile from "./Pages/Profile";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PongRoom from "./Pages/PongRoom";
 import Pong from "./components/Pong/Pong";
-import { useEffect, useState } from "react";
-import ProtectedRoutes from "./components/ProtectedRoutes";
 import Cookies from "js-cookie";
+import { useState, useEffect } from "react";
+import ProtectedRoutes from "./components/ProtectedRoutes";
+import { fetchText } from "./components/Profile/FetchValue";
 
 const App = () => {
   let [background, setBackground] = useState("root-default");
+  const [profileUsername, setProfileUsername] = useState("test");
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    console.log("In Userffect");
+    fetchText('profile/username', setProfileUsername);
+  }, []);
 
   const changeBG = (newClassName: string) => {
     setBackground(newClassName);
   };
 
-  const [username, setUsername] = useState("PlacHOLDER");
+  const [username, setUsername] = useState("USER NOT LOADED");
 
   useEffect(() => {
     async function getUsername() {
