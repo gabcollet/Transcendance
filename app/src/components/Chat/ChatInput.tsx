@@ -2,10 +2,8 @@ import "./ChatInput.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMailReply } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import { ChatInput_ } from "../../interfaces";
 
-interface ChatInput_ {
-  sendMsg: (message: string) => void;
-}
 const ChatInput = (props: ChatInput_) => {
   const [value, setValue] = useState("");
   const handleKeyPress = (

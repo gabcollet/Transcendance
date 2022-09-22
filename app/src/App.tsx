@@ -11,7 +11,8 @@ import { useState } from "react";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 
 const App = () => {
-  let [background, setBackground] = useState("root-default");
+  const [background, setBackground] = useState("root-default");
+  const [menuOpening, setMenuOpening] = useState<boolean>(false);
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const changeBG = (newClassName: string) => {
@@ -24,7 +25,12 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Login onChangeBg={changeBG}></Login>} />
           <Route element={<ProtectedRoutes />}>
-            <Route path="/Menu" element={<Menu />} />
+            <Route
+              path="/Menu"
+              element={
+                <Menu opening={menuOpening} setOpening={setMenuOpening} />
+              }
+            />
             <Route path="/PongRoom" element={<PongRoom />} />
             <Route path="/Pong" element={<Pong />} />
             <Route

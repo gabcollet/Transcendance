@@ -2,11 +2,7 @@ import ChatInput from "./ChatInput";
 import { useEffect, useState } from "react";
 import io, { Socket } from "socket.io-client";
 import "./InputZone.css";
-
-interface InputZone_ {
-  setMessages: React.Dispatch<React.SetStateAction<string[]>>;
-  messages: string[];
-}
+import { InputZone_ } from "../../interfaces";
 
 const InputZone = (props: InputZone_) => {
   const [socket, setSocket] = useState<Socket>();

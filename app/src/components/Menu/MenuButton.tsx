@@ -1,14 +1,9 @@
 import "./MenuButton.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { MenuButton_ } from "../../interfaces";
 
-interface _Button {
-  icon: any;
-  className: string;
-  iconClassName: string;
-}
-
-const MenuButton = (props: _Button) => {
+const MenuButton = (props: MenuButton_) => {
   const [hover, setHover] = useState(false);
   const handleHover = () => {
     setHover(true);

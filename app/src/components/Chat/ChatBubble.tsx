@@ -1,8 +1,5 @@
 import "./ChatBubble.css";
-interface ChatBubble_ {
-  message: string;
-  key: number;
-}
+import { ChatBubble_ } from "../../interfaces";
 
 let i = 0;
 

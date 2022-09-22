@@ -11,26 +11,32 @@ import {
 import Toggle from "./Toggle";
 import _Toggle from "./Toggle";
 import MenuButton from "./MenuButton";
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./MenuWheel.css";
+import { MenuWheel_ } from "../../interfaces";
 
-interface _MenuWheel {}
-
-const MenuWheel = (props: _MenuWheel) => {
+const MenuWheel = (props: MenuWheel_) => {
   const [toggleName, setToggleName] = useState("toggle");
-  const [opening, setOpening] = useState(false);
   const [iconName, setIconName] = useState("");
   const [toggleIcon, setToggleicon] = useState(faBars);
 
+  useEffect(() => {
+    if (props.opening === true) {
+      setToggleicon(faX);
+      setIconName("-t");
+      setToggleName("toggle-open");
+    }
+  }, []);
+
   const openMenu: MouseEventHandler<HTMLDivElement> = () => {
-    if (opening === false) {
-      setOpening(true);
+    if (props.opening === false) {
+      props.setOpening(true);
       setToggleicon(faX);
       setIconName("-t");
       setToggleName("toggle-open");
     } else {
-      setOpening(false);
+      props.setOpening(false);
       setToggleicon(faBars);
       setIconName("");
       setToggleName("toggle");

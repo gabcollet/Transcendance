@@ -1,8 +1,6 @@
 import "./MessageWindow.css";
 import ChatBubble from "./ChatBubble";
-interface MessageWindow_ {
-  messages: string[];
-}
+import { MessageWindow_ } from "../../interfaces";
 
 const MessageWindow = (props: MessageWindow_) => {
   return (
