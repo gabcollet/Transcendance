@@ -17,7 +17,7 @@ enum FriendshipStatus {
 export class UsersService {
   constructor(
     // @InjectRepository(User) private usersRepository: Repository<User>,
-    private prisma: PrismaService
+    private prisma: PrismaService,
   ) {}
 
   private logger = new Logger('User Service');
@@ -34,32 +34,29 @@ export class UsersService {
     wins?: number,
     losses?: number,
   ) {
-    if (typeof picture == "undefined") {
-      picture = "https://images.unsplash.com/photo-1521985429101-21bed8b75e47?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
+    if (typeof picture == 'undefined') {
+      picture =
+        'https://images.unsplash.com/photo-1521985429101-21bed8b75e47?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80';
     }
     const user = await this.prisma.user.create({
       data: {
-      intraId,
-      displayname,
-      username,
-      picture,
-      wins: 0,
-      losses: 0,
-      }
+        intraId,
+        displayname,
+        username,
+        picture,
+        wins: 0,
+        losses: 0,
+      },
     });
 
     return user;
   }
 
-  async createFriendship(
-    sender: string,
-    receiver: string
-  ) {
+  async createFriendship(sender: string, receiver: string) {
     const friendship = await this.prisma.friendship.create({
       data: {
-        user1: {
-            username: sender,
-        },
+        sender: sender,
+        receiver: receiver,
       },
     });
 
@@ -89,13 +86,12 @@ export class UsersService {
   async findByUsername(username: string) {
     console.log(`findbyusername: ${username}`);
     const user = await this.prisma.user.findUnique({
-      where: { username: username }
+      where: { username: username },
     });
     return user;
   }
 
-
-// PROFILE REQUESTS
+  // PROFILE REQUESTS
   async getUserImage(username: string) {
     const user = await this.findByUsername(username);
     return user ? user.picture : null;
@@ -126,65 +122,71 @@ export class UsersService {
 
     const friendshipList = await this.prisma.friendship.findMany({
       where: {
-        sender: user.username
-      }
-    })
-    const promises = friendshipList.map(async(friendship) => ({
+        sender: user.username,
+      },
+    });
+    const promises = friendshipList.map(async (friendship) => ({
       value: friendship,
-      status: await this.getFriendshipStatus(friendship.sender, friendship.receiver)
-    }))
+      status: await this.getFriendshipStatus(
+        friendship.sender,
+        friendship.receiver,
+      ),
+    }));
     const preFilteredList = await Promise.all(promises);
     const filteredList = preFilteredList.filter((friendship) => {
       if (friendship.status === FriendshipStatus.Accepted) {
-            return true;
-          }
-          else {
-            return false;
-          }
-    })
+        return true;
+      } else {
+        return false;
+      }
+    });
     const friendUsernameList = filteredList.map((friendship) => {
       return friendship.value.receiver;
-    })
+    });
     return friendUsernameList;
   }
-  
+
   async getFriendshipStatus(user1: string, user2: string) {
     let state: FriendshipStatus = 0;
 
-    if (await this.prisma.friendship.findFirst({
-      where: {
-        sender: user1,
-        receiver: user2
-      }
-    })) {
-        state += 1;
+    if (
+      await this.prisma.friendship.findFirst({
+        where: {
+          sender: user1,
+          receiver: user2,
+        },
+      })
+    ) {
+      state += 1;
     }
-    if (await this.prisma.friendship.findFirst({
-      where: {
-        sender: user2,
-        receiver: user1
-      }
-    })) {
-        state += 2;
+    if (
+      await this.prisma.friendship.findFirst({
+        where: {
+          sender: user2,
+          receiver: user1,
+        },
+      })
+    ) {
+      state += 2;
     }
     return state;
   }
 
   // TEST FUNCTIONS
   async testCreateUsers() {
-    this.createUser(9001, "anon1", "anon1");
-    this.createUser(9002, "anon2", "anon2");
-    this.createUser(9003, "anon3", "anon3");
-    this.createUser(9004, "anon4", "anon4");
-    this.createUser(9004, "anon5", "anon5");
+    await this.createUser(9001, 'anon1', 'anon1');
+    await this.createUser(9002, 'anon2', 'anon2');
+    await this.createUser(9003, 'anon3', 'anon3');
+    await this.createUser(9004, 'anon4', 'anon4');
+    await this.createUser(9004, 'anon5', 'anon5');
   }
 
   async testCreateFriendships() {
-    this.createFriendship(await this.findByUsername("laube"), this.findByUsername("anon1"));
-    this.createFriendship("laube", "anon2");
-    this.createFriendship("anon1", "laube");
-    this.createFriendship("anon2", "laube");
-    this.createFriendship("anon3", "laube");
-    this.createFriendship("laube", "anon4");
+    await this.createFriendship('laube', 'anon1');
+    await this.createFriendship('laube', 'anon2');
+    await this.createFriendship('anon1', 'laube');
+    await this.createFriendship('anon2', 'laube');
+    await this.createFriendship('anon3', 'laube');
+    await this.createFriendship('laube', 'anon4');
   }
 }

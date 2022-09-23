@@ -21,8 +21,8 @@ model User {
   losses       Int?         @default(0)
   twoFAEnabled Boolean?     @default(false)
   twoFASecret  String?      @unique
-  friendship1  Friendship[] @relation("send")
-  friendship2  Friendship[] @relation("receive")
+  isSender     Friendship[] @relation("send")
+  isReceiver   Friendship[] @relation("receive")
 
   @@map("users")
 }
