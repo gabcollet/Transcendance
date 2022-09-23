@@ -1,4 +1,4 @@
-import "./MenuButton.css";
+import styles from "./MenuButton.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { MenuButton_ } from "../../interfaces";
@@ -16,11 +16,11 @@ const MenuButton = (props: MenuButton_) => {
     <li
       onMouseOver={handleHover}
       onMouseOut={handleOut}
-      className={props.className}
+      className={styles[props.className]}
     >
       <a href="#">
         <FontAwesomeIcon
-          className={props.iconClassName}
+          className={styles[props.iconClassName]}
           icon={props.icon}
         ></FontAwesomeIcon>
       </a>

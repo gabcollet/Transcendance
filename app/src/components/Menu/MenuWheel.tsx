@@ -13,7 +13,7 @@ import _Toggle from "./Toggle";
 import MenuButton from "./MenuButton";
 import { MouseEventHandler, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import "./MenuWheel.css";
+import styles from "./MenuWheel.module.css";
 import { MenuWheel_ } from "../../interfaces";
 
 const MenuWheel = (props: MenuWheel_) => {
@@ -43,49 +43,49 @@ const MenuWheel = (props: MenuWheel_) => {
     }
   };
   return (
-    <div className="menu-wrap">
-      <div className="menu-wheel">
+    <div className={styles["menu-wrap"]}>
+      <div className={styles["menu-wheel"]}>
         <Toggle
           className={toggleName}
           onClick={openMenu}
           icon={toggleIcon}
         ></Toggle>
-        <Link className="link" to="/PongRoom">
+        <Link className={styles["link"]} to="/PongRoom">
           <MenuButton
             className={"zero" + iconName}
             icon={faPlayCircle}
             iconClassName="play"
           ></MenuButton>
         </Link>
-        <Link className="link" to="/Spectate">
+        <Link className={styles["link"]} to="/Spectate">
           <MenuButton
             className={"one" + iconName}
             icon={faBinoculars}
             iconClassName="bino"
           ></MenuButton>
         </Link>
-        <Link className="link" to="/Profile">
+        <Link className={styles["link"]} to="/Profile">
           <MenuButton
             className={"two" + iconName}
             icon={faUser}
             iconClassName="user"
           ></MenuButton>
         </Link>
-        <Link className="link" to="/Leaderboard">
+        <Link className={styles["link"]} to="/Leaderboard">
           <MenuButton
             className={"three" + iconName}
             icon={faRankingStar}
             iconClassName="leader"
           ></MenuButton>
         </Link>
-        <Link className="link" to="/Achievment">
+        <Link className={styles["link"]} to="/Achievment">
           <MenuButton
             className={"four" + iconName}
             icon={faTrophy}
             iconClassName="achiev"
           ></MenuButton>
         </Link>
-        <Link className="link" to="/Chat">
+        <Link className={styles["link"]} to="/Chat">
           <MenuButton
             className={"five" + iconName}
             icon={faCommentDots}
