@@ -6,7 +6,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Room } from './pong.room';
+import { Room } from './pong/pong.room';
 
 @WebSocketGateway(6006, { cors: '*' })
 export class PongGateway implements OnGatewayInit {
