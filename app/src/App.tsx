@@ -2,7 +2,7 @@ import "./App.css";
 import "./index.css";
 import Menu from "./Pages/Menu";
 import Login from "./Pages/Login";
-import Profile from "./Pages/Profile";
+import Profile, { ProfileRoutes } from "./Pages/Profile";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PongRoom from "./Pages/PongRoom";
 import Pong from "./components/Pong/Pong";
@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import { fetchText } from "./components/Profile/FetchValue";
+import { SearchBar } from "./components/Profile/SearchBar";
 
 const App = () => {
   let [background, setBackground] = useState("root-default");
@@ -17,7 +18,7 @@ const App = () => {
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    fetchText('profile/username', setProfileUsername);
+    fetchText("profile/username", setProfileUsername);
   }, []);
 
   const changeBG = (newClassName: string) => {

@@ -26,6 +26,14 @@ export class UsersService {
     return this.prisma.user.findMany();
   }
 
+  getAllUsernames() {
+    return this.prisma.user.findMany({
+      select: {
+        username: true,
+      },
+    });
+  }
+
   // intraId: number,
   // displayname: string,
   // username: string,
@@ -93,22 +101,15 @@ export class UsersService {
         username: username,
       },
       data: {
-        id: user.id,
-        intraId: undefined,
-        displayname: user.displayname,
+        ...user,
         username: undefined,
-        picture: user.picture,
-        status: user.status,
-        wins: user.wins,
-        losses: user.losses,
-        twoFAEnabled: user.twoFAEnabled,
-        twoFASecret: user.twoFASecret,
+        id: undefined,
+        intraId: undefined,
       },
     });
   }
 
   async findByUsername(username: string) {
-    console.log(`findbyusername: ${username}`);
     const user = await this.prisma.user.findUnique({
       where: { username: username },
     });
@@ -249,6 +250,8 @@ export class UsersService {
   // REPLACE user WITH YOUR 42 USERNAME
   async testUpdateUser() {
     const user = 'laube';
-    this.updateUser({ status: 'online', username: 'SHOULDNOTCHANGE' }, user);
+    const status =
+      (await this.getStatus(user)) == 'offline' ? 'online' : 'offline';
+    this.updateUser({ status, wins: 4, username: 'SHOULD NOT BE THIS' }, user);
   }
 }

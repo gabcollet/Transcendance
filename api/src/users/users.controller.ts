@@ -21,9 +21,14 @@ import { UserDto } from './dto';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
+  // @Get()
+  // getAllUsers() {
+  //   return this.usersService.getAllUsers();
+  // }
+
   @Get()
-  getAllUsers() {
-    return this.usersService.getAllUsers();
+  getAllUsernames() {
+    return this.usersService.getAllUsernames();
   }
 
   // Get path of user's image from DB
@@ -33,14 +38,14 @@ export class UsersController {
     return this.usersService.getUserImage(params.name);
   }
 
-//   // Get displayname of user
+  //   // Get displayname of user
   @UseGuards(JwtAuthGuard)
   @Get(':name/displayname')
   getDisplayName(@Req() req: Request, @Param() params) {
     return this.usersService.getDisplayName(params.name);
   }
 
-//   // Get online status of user
+  //   // Get online status of user
   @UseGuards(JwtAuthGuard)
   @Get(':name/status')
   getStatus(@Req() req: Request, @Param() params) {
@@ -53,7 +58,7 @@ export class UsersController {
   getAllTimeWins(@Req() req: Request, @Param() params) {
     return this.usersService.getAllTimeWins(params.name);
   }
-  
+
   // Get all time losses of user
   @UseGuards(JwtAuthGuard)
   @Get(':name/losses')
