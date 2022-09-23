@@ -6,8 +6,8 @@ export class UserDto {
   id: number;
 
   @IsOptional()
-  @IsNumber()
-  intraId: number;
+  @IsString()
+  intraId: string;
 
   @IsNotEmpty()
   @IsString()

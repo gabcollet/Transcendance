@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
-import styles from './ProfileContent.module.css';
+import styles from './ProfileBody.module.css';
 import data from './data_placeholder';
+import { FriendCard } from './FriendCard';
+import { fetchObject, fetchText } from './FetchValue';
 
-interface _Content {
+interface Content {
     contentType: string;
 }
 
-export const ProfileBody = () => {
+export const ProfileBody = (props: any) => {
     const [contentType, setContentType] = useState('friends');
-    
+
     return (
       <section className={styles["profile-content-container"]}>
         <div className={styles["profile-selector-container"]}>
@@ -32,16 +34,16 @@ export const ProfileBody = () => {
           </button>
         </div>
         <div className={styles["specific-content"]}>
-          <SpecificContent contentType={contentType} />
+          <SpecificContent contentType={contentType} username={props.username} />
         </div>
       </section>
     );
 }
 
-const SpecificContent = (props: _Content) => {
+const SpecificContent = (props: any) => {
     if (props.contentType === "friends") {
         return (
-            <FriendsContent />
+            <FriendsContent username={props.username}/>
         );
     } else if (props.contentType === "history") {
         return (
@@ -58,26 +60,25 @@ const SpecificContent = (props: _Content) => {
     }
 }
 
-const FriendsContent = () => {
-    const friendsElement = data.friends.map((friend) => {
+type Friendship = {
+  id: number,
+  sender: string,
+}
+
+const FriendsContent = (props: any) => {
+  // TO DO: Function that gets list of active friends from the backend
+  // TO DO: Function that gets list of pending friend request received from the backend
+    const [friends, setFriends] = useState<any[]>([]);
+    
+    fetchObject('users/' + props.username + '/friends', setFriends);
+
+    const friendsElement = friends?.map((friendUsername: any) => {
         return (
-          <div className={styles["friends-content-individual"]}>
-            <div className={styles["individual-id"]}>
-              <img src={friend.profile_image} alt={friend.name} />
-              <h4>{friend.name}</h4>
-              <p>status: {friend.status}</p>
-            </div>
-            <div className={styles["individual-buttons"]}>
-              <button>Add friend</button>
-              <button>Message</button>
-            </div>
-            <div className={styles["individual-stats"]}>
-              <h3>W: {friend.victories}</h3>
-              <h3>L: {friend.defeats}</h3>
-            </div>
-          </div>
+          friendUsername &&
+          <FriendCard friendUsername={friendUsername} />
         );
     });
+
     return (
         <section className={styles["friends-content-container"]}>
             {friendsElement}

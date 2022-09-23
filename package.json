@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "react-beforeunload": "^2.5.3"
+  },
+  "devDependencies": {
+    "@prisma/client": "^4.3.1",
+    "prisma": "^4.3.1"
+  }
+}

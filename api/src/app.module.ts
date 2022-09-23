@@ -11,8 +11,9 @@ import { UsersService } from './users/users.service';
 import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './users/users.entity';
 import { PrismaModule } from './prisma/prisma.module';
+import { ProfileController } from './users/profile.controller';
+import { TestController } from './test/test.controller';
 
 @Module({
   imports: [
@@ -20,22 +21,18 @@ import { PrismaModule } from './prisma/prisma.module';
     PongModule,
     ChatModule,
     UsersModule,
-    // TypeOrmModule.forRoot({
-    //   type: 'postgres',
-    //   host: 'localhost',
-    //   port: 5432,
-    //   username: 'admin',
-    //   password: 'pass',
-    //   database: 'trans_db',
-    //   entities: [User],
-    //   synchronize: true,
-    // }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
     PrismaModule,
   ],
-  controllers: [PongController, ChatController, UsersController],
+  controllers: [
+    PongController,
+    ChatController,
+    UsersController,
+    ProfileController,
+    TestController,
+  ],
   providers: [PongService, UsersService, PongGateway],
 })
 export class AppModule {}

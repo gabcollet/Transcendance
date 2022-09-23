@@ -79,7 +79,7 @@ export class AuthController {
     console.log('SECRET\n' + secret);
 
     //* update user with generated 2FA Secret for validation
-    await this.prisma.patchUser(
+    await this.userService.updateUser(
       { twoFAEnabled: true, twoFASecret: secret },
       jwtToken['username'],
     );

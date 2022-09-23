@@ -33,14 +33,14 @@ export class UsersController {
     return this.usersService.getUserImage(params.name);
   }
 
-  // Get displayname of user
+  //   // Get displayname of user
   @UseGuards(JwtAuthGuard)
   @Get(':name/displayname')
   getDisplayName(@Req() req: Request, @Param() params) {
     return this.usersService.getDisplayName(params.name);
   }
 
-  // Get online status of user
+  //   // Get online status of user
   @UseGuards(JwtAuthGuard)
   @Get(':name/status')
   getStatus(@Req() req: Request, @Param() params) {
@@ -53,10 +53,21 @@ export class UsersController {
   getAllTimeWins(@Req() req: Request, @Param() params) {
     return this.usersService.getAllTimeWins(params.name);
   }
+
   // Get all time losses of user
   @UseGuards(JwtAuthGuard)
   @Get(':name/losses')
   getAllTimeLosses(@Req() req: Request, @Param() params) {
     return this.usersService.getAllTimeLosses(params.name);
+  }
+
+  @Get(':name/friends')
+  getFriends(@Param() params) {
+    return this.usersService.getAcceptedFriends(params.name);
+  }
+
+  @Get(':name')
+  findByUsername(@Param() params) {
+    return this.usersService.findByUsername(params.name);
   }
 }
