@@ -1,5 +1,5 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { Friendship, User } from '@prisma/client';
 // import { InjectRepository } from '@nestjs/typeorm';
 // import { Repository } from 'typeorm';
 import { Profile } from 'passport-42';
@@ -26,37 +26,36 @@ export class UsersService {
     return this.prisma.user.findMany();
   }
 
-  async createUser(
-    intraId: number,
-    displayname: string,
-    username: string,
-    picture?: string,
-    wins?: number,
-    losses?: number,
-  ) {
-    if (typeof picture == 'undefined') {
-      picture =
+  // intraId: number,
+  // displayname: string,
+  // username: string,
+  // picture?: string,
+  // wins?: number,
+  // losses?: number,
+  async createUser(user: Partial<User>) {
+    if (typeof user.picture == 'undefined') {
+      user.picture =
         'https://images.unsplash.com/photo-1521985429101-21bed8b75e47?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80';
     }
-    const user = await this.prisma.user.create({
+    const newUser = await this.prisma.user.create({
       data: {
-        intraId,
-        displayname,
-        username,
-        picture,
+        intraId: user.intraId,
+        displayname: user.displayname,
+        username: user.username,
+        picture: user.picture,
         wins: 0,
         losses: 0,
       },
     });
 
-    return user;
+    return newUser;
   }
 
-  async createFriendship(sender: string, receiver: string) {
-    const friendship = await this.prisma.friendship.create({
+  async createFriendship(friendship: Partial<Friendship>) {
+    const newFriendship = await this.prisma.friendship.create({
       data: {
-        sender: sender,
-        receiver: receiver,
+        sender: friendship.sender,
+        receiver: friendship.receiver,
       },
     });
 
@@ -70,7 +69,12 @@ export class UsersService {
 
     if (!user) {
       this.logger.log('*** User Not Found... Adding New User to Database***');
-      return this.createUser(parseInt(id), username, username, photos[0].value);
+      return this.createUser({
+        intraId: parseInt(id),
+        username: username,
+        displayname: username,
+        picture: photos[0].value,
+      });
     }
 
     if (user.intraId == id) {
@@ -81,6 +85,26 @@ export class UsersService {
         'Resquesting Client Credentials Mismatch',
       );
     }
+  }
+
+  async updateUser(user: Partial<User>, username: string) {
+    const updatedUser = await this.prisma.user.update({
+      where: {
+        username: username,
+      },
+      data: {
+        id: user.id,
+        intraId: user.intraId,
+        displayname: user.displayname,
+        username: user.username,
+        picture: user.picture,
+        status: user.status,
+        wins: user.wins,
+        losses: user.losses,
+        twoFAEnabled: user.twoFAEnabled,
+        twoFASecret: user.twoFASecret,
+      },
+    });
   }
 
   async findByUsername(username: string) {
@@ -172,21 +196,59 @@ export class UsersService {
     return state;
   }
 
-  // TEST FUNCTIONS
+  /*
+   ** TEST FUNCTIONS
+   */
+
+  // MUST NOT HAVE THESE USERS ALREADY IN THE DATABASE (NO DUPLICATES)
   async testCreateUsers() {
-    await this.createUser(9001, 'anon1', 'anon1');
-    await this.createUser(9002, 'anon2', 'anon2');
-    await this.createUser(9003, 'anon3', 'anon3');
-    await this.createUser(9004, 'anon4', 'anon4');
-    await this.createUser(9004, 'anon5', 'anon5');
+    await this.createUser({
+      id: 9001,
+      displayname: 'anon1',
+      username: 'anon1',
+    });
+    await this.createUser({
+      id: 9002,
+      displayname: 'anon2',
+      username: 'anon2',
+    });
+    await this.createUser({
+      id: 9003,
+      displayname: 'anon3',
+      username: 'anon3',
+    });
+    await this.createUser({
+      id: 9004,
+      displayname: 'anon4',
+      username: 'anon4',
+    });
+    await this.createUser({
+      id: 9005,
+      displayname: 'anon5',
+      username: 'anon5',
+    });
   }
 
+  // MUST HAVE ALL THE USERS BELOW ALREADY IN THE DATABASE
+  // REPLACE user WITH YOUR 42 USERNAME
   async testCreateFriendships() {
-    await this.createFriendship('laube', 'anon1');
-    await this.createFriendship('laube', 'anon2');
-    await this.createFriendship('anon1', 'laube');
-    await this.createFriendship('anon2', 'laube');
-    await this.createFriendship('anon3', 'laube');
-    await this.createFriendship('laube', 'anon4');
+    const user = 'laube';
+    await this.createFriendship({ sender: user, receiver: 'anon1' });
+    await this.createFriendship({ sender: user, receiver: 'anon2' });
+    await this.createFriendship({ sender: 'anon1', receiver: user });
+    await this.createFriendship({ sender: 'anon2', receiver: user });
+    await this.createFriendship({ sender: 'anon3', receiver: user });
+    await this.createFriendship({ sender: user, receiver: 'anon4' });
+  }
+
+  async testDeleteAll() {
+    await this.prisma.user.deleteMany({});
+    await this.prisma.friendship.deleteMany({});
+  }
+
+  // REPLACE user WITH YOUR 42 USERNAME
+  async testUpdateUser() {
+    const user = 'laube';
+    this.updateUser({ username: 'TESTING' }, user);
   }
 }

@@ -14,9 +14,13 @@ Content-Type: application/json
 }
 
 ### TEST CREATE 5 USERS
-GET http://localhost:3030/profile/test/createusers
-Content-Type: application/json
+GET http://localhost:3030/test/createusers
 
 ### TEST CREATE RELATIONSHIPS
-GET http://localhost:3030/profile/test/createfriendships
-Content-Type: application/json
+GET http://localhost:3030/test/createfriendships
+
+### TEST DELETE ALL
+GET http://localhost:3030/test/deleteall
+
+### TEST UPDATE USER
+GET http://localhost:3030/test/updateuser

@@ -12,7 +12,7 @@ datasource db {
 
 model User {
   id           Int          @id @default(autoincrement())
-  intraId      Int?         @unique @default(autoincrement())
+  intraId      String?      @unique @default(uuid())
   displayname  String?      @default("anon")
   username     String       @unique
   picture      String?      @default("https://images.unsplash.com/photo-1521985429101-21bed8b75e47?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80")
@@ -29,9 +29,9 @@ model User {
 
 model Friendship {
   id       Int    @id @default(autoincrement())
-  user1    User   @relation("send", fields: [sender], references: [username])
+  user1    User   @relation("send", fields: [sender], references: [username], onDelete: Cascade)
   sender   String
-  user2    User   @relation("receive", fields: [receiver], references: [username])
+  user2    User   @relation("receive", fields: [receiver], references: [username], onDelete: Cascade)
   receiver String
 
   @@map("friendships")
