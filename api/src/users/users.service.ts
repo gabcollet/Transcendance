@@ -1,7 +1,5 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { Friendship, User } from '@prisma/client';
-// import { InjectRepository } from '@nestjs/typeorm';
-// import { Repository } from 'typeorm';
 import { Profile } from 'passport-42';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserDto } from './dto';
@@ -93,16 +91,20 @@ export class UsersService {
         username: username,
       },
       data: {
-        id: user.id,
+        ...user,
+        id: undefined,
         intraId: undefined,
-        displayname: user.displayname,
         username: undefined,
-        picture: user.picture,
-        status: user.status,
-        wins: user.wins,
-        losses: user.losses,
-        twoFAEnabled: user.twoFAEnabled,
-        twoFASecret: user.twoFASecret,
+        // id: undefined,
+        // intraId: undefined,
+        // displayname: user.displayname,
+        // username: undefined,
+        // picture: user.picture,
+        // status: user.status,
+        // wins: user.wins,
+        // losses: user.losses,
+        // twoFAEnabled: user.twoFAEnabled,
+        // twoFASecret: user.twoFASecret,
       },
     });
   }

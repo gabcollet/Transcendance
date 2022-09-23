@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import { fetchText } from "./components/Profile/FetchValue";
+import TwoFAValidation from "./components/TwoFAValidation";
 
 const App = () => {
   let [background, setBackground] = useState("root-default");

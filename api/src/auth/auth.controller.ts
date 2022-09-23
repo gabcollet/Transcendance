@@ -10,7 +10,7 @@ import {
 import { Response, Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { AuthorizationGuard } from './auth.guard';
-import { HttpService } from '@nestjs/axios';
+// import { HttpService } from '@nestjs/axios';
 import * as speakeasy from 'speakeasy';
 import * as qrcode from 'qrcode';
 import { UsersService } from '../users/users.service';
@@ -18,7 +18,7 @@ import { UsersService } from '../users/users.service';
 @Controller('auth')
 export class AuthController {
   constructor(
-    private request: HttpService,
+    // private request: HttpService,
     private jwtService: JwtService,
     private userService: UsersService,
   ) {}
