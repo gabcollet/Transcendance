@@ -70,7 +70,7 @@ export class UsersService {
     if (!user) {
       this.logger.log('*** User Not Found... Adding New User to Database***');
       return this.createUser({
-        intraId: parseInt(id),
+        intraId: id,
         username: username,
         displayname: username,
         picture: photos[0].value,
@@ -94,9 +94,9 @@ export class UsersService {
       },
       data: {
         id: user.id,
-        intraId: user.intraId,
+        intraId: undefined,
         displayname: user.displayname,
-        username: user.username,
+        username: undefined,
         picture: user.picture,
         status: user.status,
         wins: user.wins,
@@ -249,6 +249,6 @@ export class UsersService {
   // REPLACE user WITH YOUR 42 USERNAME
   async testUpdateUser() {
     const user = 'laube';
-    this.updateUser({ username: 'TESTING' }, user);
+    this.updateUser({ status: 'online', username: 'SHOULDNOTCHANGE' }, user);
   }
 }
