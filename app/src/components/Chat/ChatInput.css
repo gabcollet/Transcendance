@@ -1,0 +1,42 @@
+.chat-message {
+  display: flex;
+  position: absolute;
+  width: 90%;
+  height: 100%;
+  bottom: 0;
+  left: 0;
+  background-color: #f2effc;
+  font-size: 15px;
+  font-weight: 400;
+  border: none;
+  padding-bottom: 15px;
+}
+
+textarea {
+  resize: none;
+}
+
+textarea:focus {
+  outline: none;
+}
+
+.send-button {
+  display: flex;
+  position: absolute;
+  height: 100%;
+  width: 10%;
+  right: 0;
+  bottom: 0;
+  cursor: pointer;
+  color: #ff005c;
+  background-color: #f2effc;
+  border: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.send-icon {
+  display: flex;
+  position: absolute;
+  height: 70%;
+}
