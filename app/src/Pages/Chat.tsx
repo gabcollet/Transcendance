@@ -1,4 +1,4 @@
-import "./Chat.css";
+import styles from "./Chat.module.css";
 import { useState } from "react";
 import InputZone from "../components/Chat/InputZone";
 import MessageWindow from "../components/Chat/MessageWindow";
@@ -26,18 +26,18 @@ const Chat = () => {
   const [publicChannels, setPublicChannels] = useState<number[]>([]);
 
   return (
-    <div className="chat-wrapper">
-      <div className="left">
+    <div className={styles["chat-wrapper"]}>
+      <div className={styles["left"]}>
         <ChatChannels
           userChannels={userChannels}
           setUserChannels={setUserChannels}
         ></ChatChannels>
       </div>
-      <div className="mid">
+      <div className={styles["mid"]}>
         <MessageWindow messages={messages} chatRoom={roomId}></MessageWindow>
         <InputZone setMessages={setMessages} messages={messages}></InputZone>;
       </div>
-      <div className="right">
+      <div className={styles["right"]}>
         <Members></Members>
         <ChatFriendsList></ChatFriendsList>
       </div>

@@ -1,4 +1,4 @@
-import "./ChatInput.css";
+import styles from "./ChatInput.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMailReply } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
@@ -17,16 +17,19 @@ const ChatInput = (props: ChatInput_) => {
     }
   };
   return (
-    <div className="input-wrapper">
+    <div className={styles["input-wrapper"]}>
       <textarea
         placeholder="Enter your message..."
-        className="chat-message"
+        className={styles["chat-message"]}
         value={value}
         onKeyPress={(event) => handleKeyPress(event, value)}
         onChange={(event) => setValue(event.target.value)}
       ></textarea>
-      <button className="send-button" onClick={(send) => props.sendMsg(value)}>
-        <FontAwesomeIcon className="send-icon" icon={faMailReply} />
+      <button
+        className={styles["send-button"]}
+        onClick={(send) => props.sendMsg(value)}
+      >
+        <FontAwesomeIcon className={styles["send-icon"]} icon={faMailReply} />
       </button>
     </div>
   );
