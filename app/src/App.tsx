@@ -32,13 +32,8 @@ const App = () => {
               }
             />
             <Route path="/PongRoom" element={<PongRoom />} />
-            <Route path="/Pong" element={<Pong />} />
-            <Route
-              path="/Spectate"
-              element={
-                <div style={{ color: "white", fontSize: "75px" }}>SPECTATE</div>
-              }
-            />
+            <Route path="/Pong" element={<Pong />} /> //Pong Game
+            <Route path="/Pong" element={<Pong />} /> //Pong Spectate
             <Route
               path="/Profile"
               element={

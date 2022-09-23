@@ -30,6 +30,7 @@ export interface MessageWindow_ {
 }
 
 export interface MenuButton_ {
+  onClick?: MouseEventHandler<HTMLLIElement>;
   icon: any;
   className: string;
   iconClassName: string;
