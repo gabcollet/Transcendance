@@ -16,6 +16,10 @@ const ChatInput = (props: ChatInput_) => {
       setValue("");
     }
   };
+  const handleClick = (message: string) => {
+    props.sendMsg(value);
+    setValue("");
+  };
   return (
     <div className={styles["input-wrapper"]}>
       <textarea
@@ -27,7 +31,7 @@ const ChatInput = (props: ChatInput_) => {
       ></textarea>
       <button
         className={styles["send-button"]}
-        onClick={(send) => props.sendMsg(value)}
+        onClick={(send) => handleClick(value)}
       >
         <FontAwesomeIcon className={styles["send-icon"]} icon={faMailReply} />
       </button>
