@@ -35,7 +35,12 @@ const Chat = () => {
       </div>
       <div className={styles["mid"]}>
         <MessageWindow messages={messages} chatRoom={roomId}></MessageWindow>
-        <InputZone setMessages={setMessages} messages={messages}></InputZone>;
+        <InputZone
+          setMessages={setMessages}
+          messages={messages}
+          chatRoom={roomId}
+        ></InputZone>
+        ;
       </div>
       <div className={styles["right"]}>
         <Members></Members>

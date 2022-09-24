@@ -14,8 +14,8 @@
   min-width: 100%;
   background-color: rgba(56, 56, 56, 0.505);
   height: 100%;
-  border: 1px solid rgb(180, 180, 180);
-  border-radius: 10px;
+  border: 1px solid rgba(102, 101, 101, 0.505);
+  border-radius: 8px;
   cursor: pointer;
 }
 
