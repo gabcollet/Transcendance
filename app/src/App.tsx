@@ -2,7 +2,7 @@ import "./App.css";
 import "./index.css";
 import Menu from "./Pages/Menu";
 import Login from "./Pages/Login";
-import Profile, { ProfileRoutes } from "./Pages/Profile";
+import Profile, { ProfileContent } from "./Pages/Profile";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PongRoom from "./Pages/PongRoom";
 import Pong from "./components/Pong/Pong";
@@ -67,7 +67,16 @@ const App = () => {
                     <Profile username={profileUsername} />
                   </div>
                 }
-              />
+              >
+                <Route
+                  path="search"
+                  element={<SearchBar username={profileUsername} />}
+                />
+                <Route
+                  path="user"
+                  element={<ProfileContent username={profileUsername} />}
+                />
+              </Route>
               <Route
                 path="/Leaderboard"
                 element={

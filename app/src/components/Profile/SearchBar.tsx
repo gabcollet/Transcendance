@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { fetchObject } from "./FetchValue";
+import { FriendCard } from "./FriendCard";
+import styles from "./SearchBar.module.css";
 
 export const UsersList = () => {
-  const [allUsernames, setAllUsernames] = useState<any>({});
+  const [allUsernames, setAllUsernames] = useState<any>([]);
 
   useEffect(() => {
     fetchObject("users", setAllUsernames);
   }, []);
 
-  const searchElements = allUsernames?.map((searchUsername: string) => {
-    return searchUsername && <SearchCard searchUsername={searchUsername} />;
+  const searchElements = allUsernames?.map((searchUsername: any) => {
+    return (
+      searchUsername && <FriendCard friendUsername={searchUsername.username} />
+    );
   });
 
   return <section className="searchList">{searchElements}</section>;
@@ -31,11 +35,10 @@ export const SearchCard = (props: any) => {
   );
 };
 
-export const SearchBar = () => {
+export const SearchBar = (props: any) => {
   return (
-    <div className="main">
-      <h1>React Search</h1>
-      <div className="search">
+    <div className={styles["search-container"]}>
+      <div className={styles["search-bar"]}>
         <TextField
           id="outlined-basic"
           variant="outlined"
@@ -43,7 +46,9 @@ export const SearchBar = () => {
           label="Search"
         />
       </div>
-      <UsersList />
+      <div className={styles["search-results"]}>
+        <UsersList />
+      </div>
     </div>
   );
 };

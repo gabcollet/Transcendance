@@ -22,16 +22,19 @@ export class UsersService {
 
   private logger = new Logger('User Service');
 
-  getAllUsers() {
-    return this.prisma.user.findMany();
+  async getAllUsers() {
+    return await this.prisma.user.findMany();
   }
 
-  getAllUsernames() {
-    return this.prisma.user.findMany({
+  async getAllUsernames() {
+    const userList = await this.prisma.user.findMany({
       select: {
         username: true,
       },
     });
+    console.log('This is userlist below');
+    console.log(userList);
+    return userList;
   }
 
   // intraId: number,
@@ -203,31 +206,15 @@ export class UsersService {
 
   // MUST NOT HAVE THESE USERS ALREADY IN THE DATABASE (NO DUPLICATES)
   async testCreateUsers() {
-    await this.createUser({
-      id: 9001,
-      displayname: 'anon1',
-      username: 'anon1',
-    });
-    await this.createUser({
-      id: 9002,
-      displayname: 'anon2',
-      username: 'anon2',
-    });
-    await this.createUser({
-      id: 9003,
-      displayname: 'anon3',
-      username: 'anon3',
-    });
-    await this.createUser({
-      id: 9004,
-      displayname: 'anon4',
-      username: 'anon4',
-    });
-    await this.createUser({
-      id: 9005,
-      displayname: 'anon5',
-      username: 'anon5',
-    });
+    var nums = Array.from(Array(10).keys());
+
+    for await (const n of nums) {
+      await this.createUser({
+        id: 1000 + (n + 1),
+        displayname: 'anon' + n,
+        username: 'anon' + n,
+      });
+    }
   }
 
   // MUST HAVE ALL THE USERS BELOW ALREADY IN THE DATABASE

@@ -41,9 +41,6 @@ export const ProfileBody = (props: any) => {
 };
 
 const SpecificContent = (props: any) => {
-  console.log("SpecificContent: props below:");
-  console.log(props);
-  console.log("SpecificContent: props above:");
   if (props.contentType === "friends") {
     // THIS GETS CALLED REPEATEDLY
     return <FriendsContent username={props.username} />;

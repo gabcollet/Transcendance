@@ -13,7 +13,7 @@ Content-Type: application/json
     "losses": 4
 }
 
-### TEST CREATE 5 USERS
+### TEST CREATE USERS
 GET http://localhost:3030/test/createusers
 
 ### TEST CREATE RELATIONSHIPS
