@@ -1,7 +1,7 @@
-import "./ChatFriendsList.css";
+import styles from "./ChatFriendsList.module.css";
 
 const ChatFriendsList = () => {
-  return <div className="list-wrapper">Friends List</div>;
+  return <div className={styles["list-wrapper"]}>Friends List</div>;
 };
 
 export default ChatFriendsList;

@@ -1,10 +1,10 @@
-import "./MessageWindow.css";
+import styles from "./MessageWindow.module.css";
 import ChatBubble from "./ChatBubble";
 import { MessageWindow_ } from "../../interfaces";
 
 const MessageWindow = (props: MessageWindow_) => {
   return (
-    <div className="msg-window">
+    <div className={styles["msg-window"]}>
       {props.messages.map((message, index) => (
         <div>
           <ChatBubble key={index} message={message}></ChatBubble>

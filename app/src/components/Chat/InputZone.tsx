@@ -1,7 +1,7 @@
 import ChatInput from "./ChatInput";
 import { useEffect, useState } from "react";
 import io, { Socket } from "socket.io-client";
-import "./InputZone.css";
+import styles from "./InputZone.module.css";
 import { InputZone_ } from "../../interfaces";
 
 const InputZone = (props: InputZone_) => {
@@ -28,7 +28,7 @@ const InputZone = (props: InputZone_) => {
   }, [setSocket]); //pas certain de comprendre pourquoi il doit dependre de setSocket
 
   return (
-    <div className="type-zone">
+    <div className={styles["type-zone"]}>
       <ChatInput sendMsg={sendMsg}></ChatInput>
     </div>
   );

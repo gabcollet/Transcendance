@@ -1,4 +1,4 @@
-import "./Channel.css";
+import styles from "./Channel.module.css";
 import {
   faHashtag,
   faCircleXmark,
@@ -12,23 +12,23 @@ const Channel = (props: Channel_) => {
   if (props.joined === true) {
     icon = (
       <FontAwesomeIcon
-        className="leave-icon"
+        className={styles["leave-icon"]}
         icon={faCircleXmark}
       ></FontAwesomeIcon>
     );
   } else {
     icon = (
       <FontAwesomeIcon
-        className="join-icon"
+        className={styles["join-icon"]}
         icon={faCirclePlus}
       ></FontAwesomeIcon>
     );
   }
   return (
-    <div className="channel-wrapper">
-      <div className="channel-box">
+    <div className={styles["channel-wrapper"]}>
+      <div className={styles["channel-box"]}>
         <FontAwesomeIcon
-          className="hash-icon"
+          className={styles["hash-icon"]}
           icon={faHashtag}
         ></FontAwesomeIcon>
         <p>TEST</p>

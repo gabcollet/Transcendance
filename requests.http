@@ -1,28 +1,3 @@
-GET http://localhost:3030/users
-
-### Create User
-POST http://localhost:3030/users
-Content-Type: application/json
-
-{
-    "intraId": 4,
-    "username": "testing_boi",
-    "displayname": "testingtoy",
-    "wins": 4,
-    "losses": 6
-}
-
-
-### Get protected user profile
-GET http://localhost:3030/users/profile/img
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhdWJlIiwic3ViIjoxLCJpYXQiOjE2NjMxMTY5NTB9.njS7PcgacMYpMz5GbFS_tP82NosRm_XIhzxqaXxYYIA
-
-### Update profile picture
-POST http://localhost:3030/users/profile/update
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhdWJlIiwic3ViIjoxLCJpYXQiOjE2NjMxMTY5NTB9.njS7PcgacMYpMz5GbFS_tP82NosRm_XIhzxqaXxYYIA
-
-
-
 ### NEW TESTS
 ### Get all users
 GET http://localhost:3030/users
@@ -37,3 +12,15 @@ Content-Type: application/json
     "wins": 5,
     "losses": 4
 }
+
+### TEST CREATE USERS
+GET http://localhost:3030/test/createusers
+
+### TEST CREATE RELATIONSHIPS
+GET http://localhost:3030/test/createfriendships
+
+### TEST DELETE ALL
+GET http://localhost:3030/test/deleteall
+
+### TEST UPDATE USER
+GET http://localhost:3030/test/updateuser
