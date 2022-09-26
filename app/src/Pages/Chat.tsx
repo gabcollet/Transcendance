@@ -26,12 +26,11 @@ const Chat = (props: Chat_) => {
   const [userChannels, setUserChannels] = useState<number[]>([]);
   const [publicChannels, setPublicChannels] = useState<number[]>([]);
 
-  axios.get("http://localhost:3030/chat/convo", {
-    params: {
-      username: props.userName,
-      roomId: 0,
-    },
-  });
+  let channels = axios
+    .get("http://localhost:3030/chat/channels")
+    .then((response) => {
+      console.log(response.data);
+    });
   return (
     <div className={styles["chat-wrapper"]}>
       <div className={styles["left"]}>
