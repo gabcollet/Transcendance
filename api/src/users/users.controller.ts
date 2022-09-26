@@ -8,6 +8,7 @@ import {
   Param,
   NotFoundException,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AuthorizationGuard } from '../auth/auth.guard';
@@ -27,8 +28,8 @@ export class UsersController {
   // }
 
   @Get()
-  getAllUsernames() {
-    return this.usersService.getAllUsernames();
+  getSearchedUsernames(@Query() query) {
+    return this.usersService.getSearchedUsernames(query.search);
   }
 
   // Get path of user's image from DB

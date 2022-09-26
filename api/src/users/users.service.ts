@@ -22,8 +22,23 @@ export class UsersService {
 
   private logger = new Logger('User Service');
 
-  async getAllUsers() {
-    return await this.prisma.user.findMany();
+  async getSearchedUsernames(search: string) {
+    console.log(search);
+    if (!search) {
+      return [];
+    }
+    const users = await this.prisma.user.findMany({
+      where: {
+        username: {
+          startsWith: search,
+        },
+      },
+    });
+    console.log('above users');
+    console.log(users);
+    console.log('below users');
+    console.log(search);
+    return users;
   }
 
   async getAllUsernames() {
@@ -37,12 +52,6 @@ export class UsersService {
     return userList;
   }
 
-  // intraId: number,
-  // displayname: string,
-  // username: string,
-  // picture?: string,
-  // wins?: number,
-  // losses?: number,
   async createUser(user: Partial<User>) {
     if (typeof user.picture == 'undefined') {
       user.picture =
@@ -69,7 +78,6 @@ export class UsersService {
         receiver: friendship.receiver,
       },
     });
-
     return friendship;
   }
 
@@ -206,11 +214,12 @@ export class UsersService {
 
   // MUST NOT HAVE THESE USERS ALREADY IN THE DATABASE (NO DUPLICATES)
   async testCreateUsers() {
-    var nums = Array.from(Array(10).keys());
+    const userNum = 500;
+    var nums = Array.from(Array(userNum).keys());
 
     for await (const n of nums) {
       await this.createUser({
-        id: 1000 + (n + 1),
+        id: n + 1,
         displayname: 'anon' + n,
         username: 'anon' + n,
       });

@@ -4,18 +4,28 @@ import { fetchObject } from "./FetchValue";
 import { FriendCard } from "./FriendCard";
 import styles from "./SearchBar.module.css";
 
-export const UsersList = () => {
-  const [allUsernames, setAllUsernames] = useState<any>([]);
+export const UsersList = (props: any) => {
+  const [searchUsers, setSearchUsers] = useState<any>([]);
 
   useEffect(() => {
-    fetchObject("users", setAllUsernames);
-  }, []);
+    console.log(`This is searchString ${props.searchString}`);
+    fetchObject(`users?search=${props.searchString}`, setSearchUsers);
+  }, [props.searchString]);
 
-  const searchElements = allUsernames?.map((searchUsername: any) => {
+  const searchElements = searchUsers?.map((searchUsername: any) => {
     return (
-      searchUsername && <FriendCard friendUsername={searchUsername.username} />
+      searchUsername && (
+        <FriendCard
+          friendUsername={searchUsername.username}
+          searchString={props.searchString}
+        />
+      )
     );
   });
+  console.log("This is searchUsers");
+  console.log(searchUsers);
+  console.log("This is searchElements");
+  console.log(searchElements);
 
   return <section className="searchList">{searchElements}</section>;
 };
@@ -36,6 +46,14 @@ export const SearchCard = (props: any) => {
 };
 
 export const SearchBar = (props: any) => {
+  const [searchString, setSearchString] = useState("");
+
+  const handleChange = (e: any) => {
+    if (e.key === "Enter") {
+      setSearchString(e.target.value);
+    }
+  };
+
   return (
     <div className={styles["search-container"]}>
       <div className={styles["search-bar"]}>
@@ -44,10 +62,11 @@ export const SearchBar = (props: any) => {
           variant="outlined"
           fullWidth
           label="Search"
+          onKeyPress={handleChange}
         />
       </div>
       <div className={styles["search-results"]}>
-        <UsersList />
+        <UsersList searchString={searchString} />
       </div>
     </div>
   );

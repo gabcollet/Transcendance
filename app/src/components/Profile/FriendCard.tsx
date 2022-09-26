@@ -8,7 +8,8 @@ export const FriendCard = (props: any) => {
 
   useEffect(() => {
     fetchObject("users/" + props.friendUsername, setFriendUser);
-  }, []);
+    console.log(`friendUsername: ${props.friendUsername}`);
+  }, [props.searchString, props.friendUsername]);
 
   return (
     <div className={styles["friends-content-individual"]}>
