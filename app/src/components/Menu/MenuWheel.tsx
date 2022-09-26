@@ -63,7 +63,7 @@ const MenuWheel = (props: MenuWheel_) => {
             iconClassName="play"
           ></MenuButton>
         </Link>
-        <Link className="link" to="/Pong">
+        <Link className={styles["link"]} to="/Pong">
           <MenuButton
             onClick={spectate}
             className={"one" + iconName}
