@@ -32,6 +32,7 @@ const useCanvas = () => {
   const balldy = useRef<number>(0);
   const p1_score = useRef<number>(0);
   const p2_score = useRef<number>(0);
+  const maxScore = 5;
   const winner = useRef<number>(0);
   const [gameStatus, setGameStatus] = useState<number>(0);
 
@@ -166,8 +167,8 @@ const useCanvas = () => {
       });
 
       //Finish the game
-      if (p1_score.current === 5 || p2_score.current === 5) {
-        winner.current = p1_score.current === 5 ? 1 : 2;
+      if (p1_score.current === maxScore || p2_score.current === maxScore) {
+        winner.current = p1_score.current === maxScore ? 1 : 2;
         setGameStatus(3);
       }
 

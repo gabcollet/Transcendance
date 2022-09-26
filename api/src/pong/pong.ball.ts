@@ -57,6 +57,6 @@ export class Ball{
         this.y = this.h/2;
         this.dx = this.speed;
         this.dy = 0;
-        if (dir) { this.dx *= -1; }
+        if (!dir) { this.dx *= -1; }
     }
   }

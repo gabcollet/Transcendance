@@ -58,7 +58,8 @@ const App = () => {
                 }
               />
               <Route path="/PongRoom" element={<PongRoom />} />
-              <Route path="/Pong" element={<Pong />} />
+              <Route path="/Pong" element={<Pong />} /> //Pong Game
+              <Route path="/Pong" element={<Pong />} /> //Pong Spectate
               <Route
                 path="/Spectate"
                 element={
