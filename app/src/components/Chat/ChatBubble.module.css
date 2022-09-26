@@ -13,7 +13,7 @@
   align-self: flex-start;
 }
 
-p {
+p.bubble-sent p.bubble-received {
   word-wrap: break-word;
   line-height: 24px;
   border-radius: 25px;
@@ -41,6 +41,7 @@ p {
   align-items: center;
   max-width: 100%;
 }
+
 .sent-by {
   font-size: 10px;
   align-self: flex-start;

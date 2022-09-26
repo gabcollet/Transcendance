@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, Profile } from 'passport-42';
 import { UserDto } from 'src/users/dto/user.dto';
-import { User } from 'src/users/users.entity';
 import { UsersService } from '../users/users.service';
 
 @Injectable()

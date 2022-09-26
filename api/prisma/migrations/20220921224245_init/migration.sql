@@ -13,5 +13,20 @@ CREATE TABLE "users" (
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "friendships" (
+    "id" SERIAL NOT NULL,
+    "sender" TEXT NOT NULL,
+    "receiver" TEXT NOT NULL,
+
+    CONSTRAINT "friendships_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_username_key" ON "users"("username");
+
+-- AddForeignKey
+ALTER TABLE "friendships" ADD CONSTRAINT "friendships_sender_fkey" FOREIGN KEY ("sender") REFERENCES "users"("username") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "friendships" ADD CONSTRAINT "friendships_receiver_fkey" FOREIGN KEY ("receiver") REFERENCES "users"("username") ON DELETE RESTRICT ON UPDATE CASCADE;

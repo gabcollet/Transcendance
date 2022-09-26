@@ -6,15 +6,15 @@ import { UserLosses } from './UserLosses';
 import { UserStatus } from './UserStatus';
 import { UserWins } from './UserWins';
 
-export const ProfileHeader = () => {
+export const ProfileHeader = (props: any) => {
     
     return (
       <section className={styles["profile-header-container"]}>
         <div className={styles["profile-id-container"]}>
           <div className={styles["id-container-info"]}>
-            <UserImage userName="laube" className={styles["profile-image"]} />
-            <UserDisplayName userName="laube" className={styles["profile-name-text"]} />
-            <UserStatus userName="laube" className={styles["profile-status"]} />
+            <UserImage username={props.username} className={styles["profile-image"]} />
+            <UserDisplayName username={props.username} className={styles["profile-name-text"]} />
+            <UserStatus username={props.username} className={styles["profile-status"]} />
           </div>
           <div className={styles["id-container-buttons"]}>
             <button>Add friend</button>
@@ -22,8 +22,8 @@ export const ProfileHeader = () => {
           </div>
         </div>
         <div className={styles["primary-stats"]}>
-          <UserWins userName="laube" />
-          <UserLosses userName="laube" />
+          <UserWins username={props.username} />
+          <UserLosses username={props.username} />
         </div>
         <div className={styles["secondary-stats"]}>
           <p>Latest Achievement:</p>
