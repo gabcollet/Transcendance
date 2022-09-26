@@ -24,7 +24,7 @@
 }
 
 .public-wrap {
-  border-top: 8px solid black;
+  border-top: 3px solid black;
   display: flex;
   color: aliceblue;
   overflow-y: auto;
