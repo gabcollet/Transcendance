@@ -15,6 +15,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   private roomiD: string = '';
   private isWaiting: boolean = false;
   private madeBySpectator: boolean = false;
+  private randomRoom: boolean = false;
   //Map client: room
   private m_room: Map<Socket, string> = new Map<Socket, string>();
   //Map client: pid
@@ -48,6 +49,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
 
   @SubscribeMessage('joinRoom')
   handleJoinRoom(client: Socket) {
+    this.randomRoom = false;
     const room = this.createRoom(false);
     client.join(room);
     if (this.m_room.has(client)) {
@@ -161,8 +163,10 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
         payload.p1_h,
         payload.p2_h,
         payload.roomID,
+        this.randomRoom,
       ),
     );
+    this.randomRoom = false;
   }
 
   @SubscribeMessage('ballPosServer')
@@ -199,15 +203,35 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
             .to(payload.roomID)
             .emit('scoreClient', [room.p1_score, room.p2_score]);
         }
+        //For random room
+        if (room.random && room.frameCount % 50 === 0) {
+          const rand = Math.random();
+          const rand2 = Math.random();
+          
+          if (Math.random() < 0.5) {
+            ball.dx *= rand;            //slowdown
+            ball.dy = rand2 * 10;       //go up 
+          } else {
+            ball.dx *= 1 + rand;        //faster
+            ball.dy = -(rand2 * 10);    //go down
+          }
+          if (Math.random() < 0.1) {
+            ball.dx *= -1;              //switch side
+          }
+          if (ball.dx < 1 && ball.dx > 0){ //if too slow go faster
+            ball.dx += 4;               
+          } else if (ball.dx > -1 && ball.dx < 0) {
+            ball.dx -= 4;
+          }
+        }
         //Make the ball go fast!!
-        if (room.frameCount % 300 === 0) {
+        else if (room.frameCount % 300 === 0) {
           ball.dx *= 1.2;
           ball.dy *= 1.2;
-        } else {
-          this.server
-            .to(payload.roomID)
-            .emit('ballPosClient', [ball.x, ball.y, ball.dx, ball.dy]);
         }
+        this.server
+          .to(payload.roomID)
+          .emit('ballPosClient', [ball.x, ball.y, ball.dx, ball.dy]);
       }
     }
   }
@@ -228,5 +252,25 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   @SubscribeMessage('gameEnd')
   handleEndGame(client: Socket) {
     this.gameEnd = true;
+  }
+
+  @SubscribeMessage('randomRoom')
+  handleRandom(client: Socket) {
+    this.randomRoom = true;
+    const room = this.createRoom(false);
+    client.join(room);
+    if (this.m_room.has(client)) {
+      const clientRoom = this.m_room.get(client);
+      if (clientRoom == room) {
+        this.logger.error(`${client.id} already in room ${room}`);
+        return;
+      }
+    }
+    this.logger.log(
+      `${client.id} joined room ${room} as P${this.isWaiting ? 1 : 2}`,
+    );
+    this.m_room.set(client, room);
+    this.m_pid.set(client, this.isWaiting ? 1 : 2);
+    client.emit('joinedRoom', [room, this.isWaiting]);
   }
 }

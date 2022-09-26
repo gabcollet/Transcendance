@@ -15,6 +15,7 @@ import { MouseEventHandler, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./MenuWheel.module.css";
 import { MenuWheel_ } from "../../interfaces";
+import { socket } from "../../Pages/PongRoom";
 
 const MenuWheel = (props: MenuWheel_) => {
   const [toggleName, setToggleName] = useState("toggle");
@@ -42,6 +43,11 @@ const MenuWheel = (props: MenuWheel_) => {
       setToggleName("toggle");
     }
   };
+
+  const spectate = () => {
+    socket.emit("spectate");
+  };
+
   return (
     <div className={styles["menu-wrap"]}>
       <div className={styles["menu-wheel"]}>
@@ -57,8 +63,9 @@ const MenuWheel = (props: MenuWheel_) => {
             iconClassName="play"
           ></MenuButton>
         </Link>
-        <Link className={styles["link"]} to="/Spectate">
+        <Link className="link" to="/Pong">
           <MenuButton
+            onClick={spectate}
             className={"one" + iconName}
             icon={faBinoculars}
             iconClassName="bino"

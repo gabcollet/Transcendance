@@ -42,6 +42,7 @@ p.bubble-received {
   align-items: center;
   max-width: 100%;
 }
+
 .sent-by {
   font-size: 10px;
   align-self: flex-start;
