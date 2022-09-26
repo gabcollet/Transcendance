@@ -63,7 +63,7 @@ const App = () => {
                 </div>
               }
             />
-            <Route path="/Chat" element={<Chat></Chat>} />
+            <Route path="/Chat" element={<Chat userName="mafortin"></Chat>} />
           </Route>
         </Routes>
       </Router>

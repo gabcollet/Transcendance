@@ -54,3 +54,7 @@ export interface MenuWheel_ {
 }
 
 export interface ChatFriend_ {}
+
+export interface Chat_ {
+  userName: string;
+}
