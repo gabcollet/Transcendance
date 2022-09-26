@@ -1,0 +1,27 @@
+.add-wrap {
+  display: flex;
+  padding-bottom: 10px;
+  background-color: rgba(56, 56, 56, 0.505);
+  border: 1px solid rgb(180, 180, 180);
+  border-radius: 10px;
+  padding-top: 10px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  z-index: 1;
+}
+
+.add-icon {
+  display: flex;
+  align-self: center;
+  margin-left: 10px;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.add-text {
+  display: flex;
+  cursor: pointer;
+  padding: 0;
+  padding-left: 10px;
+  padding-top: 5px;
+}

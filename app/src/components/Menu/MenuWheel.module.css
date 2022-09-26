@@ -1,0 +1,18 @@
+@import "../../index.css";
+
+.menu-wheel {
+  position: relative;
+  height: 800px;
+  width: 800px;
+  /* background: greenyellow; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
