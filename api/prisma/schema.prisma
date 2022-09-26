@@ -36,3 +36,25 @@ model Friendship {
 
   @@map("friendships")
 }
+
+// model Convo {
+// 	id		Int		@id
+// 	message	String
+// 	user	User[] @relation(fields: [name], references: [displayname], onDelete: Cascade)
+// 	name	String
+// 	@@map("convo")
+// }
+
+// model Blacklist {
+// 	user User[] @relation()
+// 	@@map("blacklist")
+// }
+
+// model ChatRoom {
+// 	id			Int  		@id @default(audtoincrement())
+// 	admin		String
+// 	name		String
+// 	convo		Convo[] 	@relation()
+// 	blacklist	Blacklist[] @relation()
+// 	@@map("chatroom")
+// }
