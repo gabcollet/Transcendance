@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { roomID, pID } from "../components/Pong/List/useCanvas";
 import io from "socket.io-client";
 
-export const socket = io("10.13.6.4:6006");
+export const socket = io("localhost:6006");
 
 const PongRoom = () => {
   const location = useLocation();

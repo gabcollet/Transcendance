@@ -1,0 +1,32 @@
+.chat-wrapper {
+  display: flex;
+  width: 90%;
+  height: 90%;
+  position: absolute;
+  border: 10px solid rgb(255, 255, 255);
+  background-color: rgba(43, 31, 55, 0.767);
+}
+
+.left {
+  display: flex;
+  border: 5px solid rgb(243, 173, 248);
+  width: 20%;
+  height: 100%;
+  position: relative;
+  left: 0%;
+}
+
+.mid {
+  display: flex;
+  border: 5px solid rgb(16, 237, 211);
+  width: 60%;
+  position: relative;
+  height: 100%;
+}
+
+.right {
+  width: 20%;
+  height: 100%;
+  position: relative;
+  border: 5px solid rgb(72, 0, 255);
+}

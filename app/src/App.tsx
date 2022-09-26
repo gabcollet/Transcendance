@@ -8,13 +8,15 @@ import PongRoom from "./Pages/PongRoom";
 import Pong from "./components/Pong/Pong";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
+import Chat from "./Pages/Chat";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import { fetchText } from "./components/Profile/FetchValue";
 import TwoFAValidation from "./components/TwoFAValidation";
 
 const App = () => {
-  let [background, setBackground] = useState("root-default");
   const [profileUsername, setProfileUsername] = useState("test");
+  const [background, setBackground] = useState("root-default");
+  const [menuOpening, setMenuOpening] = useState<boolean>(false);
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -48,7 +50,12 @@ const App = () => {
           <Route path="/" element={<Login onChangeBg={changeBG}></Login>} />
           <Route element={<ProtectedRoutes />}>
             <Route path="/TwoFA" element={<TwoFAValidation />} />
-            <Route path="/Menu" element={<Menu />} />
+            <Route
+              path="/Menu"
+              element={
+                <Menu opening={menuOpening} setOpening={setMenuOpening} />
+              }
+            />
             <Route path="/PongRoom" element={<PongRoom />} />
             <Route path="/Pong" element={<Pong />} />
             <Route
@@ -81,12 +88,7 @@ const App = () => {
                 </div>
               }
             />
-            <Route
-              path="/Chat"
-              element={
-                <div style={{ color: "white", fontSize: "75px" }}>CHAT</div>
-              }
-            />
+            <Route path="/Chat" element={<Chat></Chat>} />
           </Route>
         </Routes>
       </Router>

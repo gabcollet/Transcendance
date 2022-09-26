@@ -17,6 +17,8 @@ async function bootstrap() {
     origin: true,
     credentials: true,
   }); //* Cross Origin Ressource Sharing. Enables our app to retrieve tokens from the OAuth2 server
-  await app.listen(3030);
+  await app.listen(3030, () => {
+    console.log('API IS RUNNING');
+  });
 }
 bootstrap();
