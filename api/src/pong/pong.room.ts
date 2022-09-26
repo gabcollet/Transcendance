@@ -19,6 +19,8 @@ export class Room{
     roomID: string;
     p1_score: number;
     p2_score: number;
+    p1_name: string;
+    p2_name: string;
     frameCount: number;
     ready: number;
     ballSpeed: number;

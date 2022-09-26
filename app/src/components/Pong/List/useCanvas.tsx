@@ -15,7 +15,7 @@ let frameID: number = 0;
   endgame:   3
   */
 
-const useCanvas = () => {
+const useCanvas = (username: string) => {
   const [room, setRoomID] = useState<string>("");
   const [pid, setpID] = useState<number>(0);
 
@@ -93,7 +93,6 @@ const useCanvas = () => {
   //This handle when a client change location (aka go back one page)
   useEffect(() => {
     socket.on("leavedRoom2", (input) => {
-      console.log("leave2:", input);
       frameID = 0;
       winner.current = input === 1 ? 2 : 1;
       setGameStatus(3);
@@ -132,6 +131,7 @@ const useCanvas = () => {
       socket.emit("playerReady", {
         room: roomID,
         pID: pID,
+        username: username
       });
     }
     isReady.current = true;

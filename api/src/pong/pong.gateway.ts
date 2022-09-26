@@ -48,10 +48,11 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('joinRoom')
-  handleJoinRoom(client: Socket) {
+  handleJoinRoom(client: Socket, username: string) {
     this.randomRoom = false;
     const room = this.createRoom(false);
     client.join(room);
+    //Validation if client already in room
     if (this.m_room.has(client)) {
       const clientRoom = this.m_room.get(client);
       if (clientRoom == room) {
@@ -59,24 +60,38 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
         return;
       }
     }
-    this.logger.log(
-      `${client.id} joined room ${room} as P${this.isWaiting ? 1 : 2}`,
-    );
     this.m_room.set(client, room);
     this.m_pid.set(client, this.isWaiting ? 1 : 2);
+    this.logger.log(
+      `${username} joined room ${room} as P${this.isWaiting ? 1 : 2}`,
+    );
     client.emit('joinedRoom', [room, this.isWaiting]);
+    client.emit('roomInfo', [room, this.isWaiting, username, null]);
   }
 
   @SubscribeMessage('playerReady')
-  handleReady(client: Socket, payload: { room: string; pID: number }) {
+  handleReady(
+    client: Socket,
+    payload: {
+      room: string;
+      pID: number;
+      username: string;
+    },
+  ) {
     for (let i = 0; i < this.rooms.length; i++) {
       if (this.rooms[i] && this.rooms[i].roomID == payload.room) {
+        const room = this.rooms[i];
         if (payload.pID === 3) {
-          client.emit('playerRdy', this.rooms[i].ready);
+          client.emit('playerRdy', room.ready);
           return;
+        } else if (payload.pID === 1) {
+          room.p1_name = payload.username;
+        } else {
+          room.p2_name = payload.username;
         }
-        this.rooms[i].ready++;
-        this.server.to(payload.room).emit('playerRdy', this.rooms[i].ready);
+        room.ready++;
+        this.server.to(payload.room).emit('playerRdy', room.ready);
+        this.server.to(payload.room).emit('roomInfo', [room.roomID, this.isWaiting, room.p1_name, room.p2_name]);
       }
     }
   }
@@ -207,19 +222,20 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
         if (room.random && room.frameCount % 50 === 0) {
           const rand = Math.random();
           const rand2 = Math.random();
-          
+
           if (Math.random() < 0.5) {
-            ball.dx *= rand;            //slowdown
-            ball.dy = rand2 * 10;       //go up 
+            ball.dx *= rand; //slowdown
+            ball.dy = rand2 * 10; //go up
           } else {
-            ball.dx *= 1 + rand;        //faster
-            ball.dy = -(rand2 * 10);    //go down
+            ball.dx *= 1 + rand; //faster
+            ball.dy = -(rand2 * 10); //go down
           }
           if (Math.random() < 0.1) {
-            ball.dx *= -1;              //switch side
+            ball.dx *= -1; //switch side
           }
-          if (ball.dx < 1 && ball.dx > 0){ //if too slow go faster
-            ball.dx += 4;               
+          if (ball.dx < 1 && ball.dx > 0) {
+            //if too slow go faster
+            ball.dx += 4;
           } else if (ball.dx > -1 && ball.dx < 0) {
             ball.dx -= 4;
           }
@@ -237,16 +253,17 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('spectate')
-  handleSpectate(client: Socket) {
+  handleSpectate(client: Socket, username: string) {
     let room = this.roomiD;
     if (!room || this.gameEnd) {
       room = this.createRoom(true);
     }
     client.join(room);
-    this.logger.verbose(`${client.id} joined room ${room} as Spectator`);
+    this.logger.verbose(`${username} joined room ${room} as Spectator`);
     this.m_room.set(client, room);
     this.m_pid.set(client, 3);
     client.emit('joinedRoom', [room, 2]);
+    client.emit('roomInfo', [room, 2, username, null]);
   }
 
   @SubscribeMessage('gameEnd')
@@ -255,7 +272,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('randomRoom')
-  handleRandom(client: Socket) {
+  handleRandom(client: Socket, username: string) {
     this.randomRoom = true;
     const room = this.createRoom(false);
     client.join(room);
@@ -267,10 +284,11 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
       }
     }
     this.logger.log(
-      `${client.id} joined room ${room} as P${this.isWaiting ? 1 : 2}`,
+      `${username} joined room ${room} as P${this.isWaiting ? 1 : 2}`,
     );
     this.m_room.set(client, room);
     this.m_pid.set(client, this.isWaiting ? 1 : 2);
     client.emit('joinedRoom', [room, this.isWaiting]);
+    client.emit('roomInfo', [room, this.isWaiting, username, null]);
   }
 }

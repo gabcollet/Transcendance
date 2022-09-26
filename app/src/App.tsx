@@ -57,9 +57,8 @@ const App = () => {
                   <Menu opening={menuOpening} setOpening={setMenuOpening} />
                 }
               />
-              <Route path="/PongRoom" element={<PongRoom />} />
-              <Route path="/Pong" element={<Pong />} /> //Pong Game
-              <Route path="/Pong" element={<Pong />} /> //Pong Spectate
+              <Route path="/PongRoom" element={<PongRoom username={profileUsername} />} />
+              <Route path="/Pong" element={<Pong username={profileUsername} />}  />
               <Route
                 path="/Spectate"
                 element={

@@ -14,12 +14,17 @@
 
 .column {
     float: left;
-    margin-left: 33.33%;
     width: 33.33%;
   }
 .column2 {
     float: left;
-    text-align: right;
+    text-align: center;
+    width: 33.33%;
+    margin-bottom: 10px;
+}
+
+.column3 {
+    float: left;
     width: 33.33%;
     margin-bottom: 10px;
 }

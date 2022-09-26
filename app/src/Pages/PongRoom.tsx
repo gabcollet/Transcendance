@@ -6,7 +6,7 @@ import io from "socket.io-client";
 
 export const socket = io("localhost:6006");
 
-const PongRoom = () => {
+const PongRoom = (props: any) => {
   const location = useLocation();
 
   useEffect(() => {
@@ -33,15 +33,15 @@ const PongRoom = () => {
   }, []);
 
   const setRdy = () => {
-    socket.emit("joinRoom");
+    socket.emit("joinRoom", props.username);
   };
   
   const setRandomMode = () => {
-    socket.emit("randomRoom");
+    socket.emit("randomRoom", props.username);
   };
 
   const spectate = () => {
-    socket.emit("spectate");
+    socket.emit("spectate", props.username);
   };
 
   return (
