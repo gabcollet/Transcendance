@@ -1,0 +1,40 @@
+.hash-icon {
+  font-size: 35px;
+  display: flex;
+  align-self: center;
+  margin-left: 4px;
+}
+
+.channel-wrapper {
+  margin-top: 10px;
+  min-width: 100%;
+}
+.channel-box {
+  display: flex;
+  min-width: 100%;
+  background-color: rgba(56, 56, 56, 0.505);
+  height: 100%;
+  border: 1px solid rgb(180, 180, 180);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.leave-icon {
+  cursor: pointer;
+  display: flex;
+  font-size: 20px;
+  color: #ff005c;
+  align-self: center;
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+.join-icon {
+  cursor: pointer;
+  display: flex;
+  font-size: 20px;
+  color: #00c88c;
+  align-self: center;
+  margin-left: auto;
+  margin-right: 10px;
+}

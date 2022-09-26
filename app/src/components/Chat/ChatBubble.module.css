@@ -1,0 +1,50 @@
+.bubble-wrap {
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 20px;
+  font-weight: normal;
+  width: min-content;
+  width: max-content;
+  max-width: 90%;
+  margin-top: 25px;
+  flex-direction: column;
+  display: flex;
+  padding-left: 20px;
+  padding-right: 20px;
+  align-self: flex-start;
+}
+
+p.bubble-sent p.bubble-received {
+  word-wrap: break-word;
+  line-height: 24px;
+  border-radius: 25px;
+  font-size: 20px;
+  padding: 15px 27px;
+  max-width: 100%;
+  position: relative;
+}
+
+.bubble-sent {
+  background-color: rgb(157, 138, 223);
+  color: azure;
+  align-self: flex-start;
+}
+
+.bubble-received {
+  background-color: gainsboro;
+  color: black;
+  align-self: flex-start;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+}
+
+.sent-by {
+  font-size: 10px;
+  align-self: flex-start;
+  padding-left: 10px;
+  padding-top: 5px;
+}

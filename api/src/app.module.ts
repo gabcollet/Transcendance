@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
-import { PongGateway } from './pong.gateway';
+import { PongGateway } from './pong/pong.gateway';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { PongController } from './pong/pong.controller';
-import { PongService } from './pong/pong.service';
-import { PongModule } from './pong/pong.module';
 import { ChatController } from './chat/chat.controller';
 import { ChatModule } from './chat/chat.module';
+import { ChatGateway } from './chat.gateway';
 import { UsersService } from './users/users.service';
 import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
@@ -18,7 +16,6 @@ import { TestController } from './test/test.controller';
 @Module({
   imports: [
     AuthModule,
-    PongModule,
     ChatModule,
     UsersModule,
     ConfigModule.forRoot({
@@ -27,12 +24,11 @@ import { TestController } from './test/test.controller';
     PrismaModule,
   ],
   controllers: [
-    PongController,
     ChatController,
     UsersController,
     ProfileController,
     TestController,
   ],
-  providers: [PongService, UsersService, PongGateway],
+  providers: [UsersService, PongGateway, ChatGateway],
 })
 export class AppModule {}
