@@ -107,6 +107,15 @@ export class UsersService {
         // twoFASecret: user.twoFASecret,
       },
     });
+    return updatedUser;
+  }
+
+  async findById(id: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: id },
+    });
+
+    return user;
   }
 
   async findByUsername(username: string) {
