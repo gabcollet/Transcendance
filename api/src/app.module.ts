@@ -12,6 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PrismaModule } from './prisma/prisma.module';
 import { ProfileController } from './users/profile.controller';
 import { TestController } from './test/test.controller';
+import { TestingController } from './testing/testing.controller';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { TestController } from './test/test.controller';
     UsersController,
     ProfileController,
     TestController,
+    TestingController,
   ],
   providers: [UsersService, PongGateway, ChatGateway],
 })

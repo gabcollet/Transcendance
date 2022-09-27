@@ -8,12 +8,9 @@ import { ProfileBody } from "../components/Profile/ProfileBody";
 import { fetchObject } from "../components/Profile/FetchValue";
 import { Link, Outlet, Route, Routes } from "react-router-dom";
 import { SearchBar } from "../components/Profile/SearchBar";
+import { ProfileProps } from "../components/Profile/ProfileInterfaces";
 
-interface _Content {
-  contentType: string;
-}
-
-export const ProfileContent = (props: any) => {
+export const ProfileContent = (props: ProfileProps) => {
   return (
     <>
       {props.username !== "USER NOT LOADED" && (
@@ -26,7 +23,7 @@ export const ProfileContent = (props: any) => {
   );
 };
 
-const Profile = (props: any) => {
+const Profile = (props: ProfileProps) => {
   return (
     <>
       <Link className={styles["search-link"]} to="/Profile/user">

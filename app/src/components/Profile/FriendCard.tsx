@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import styles from "./ProfileBody.module.css";
 import data from "./data_placeholder";
 import { fetchObject } from "./FetchValue";
+import { FriendCardProps } from "./ProfileInterfaces";
 
-export const FriendCard = (props: any) => {
+export const FriendCard = (props: FriendCardProps) => {
   const [friendUser, setFriendUser] = useState<any>({});
 
   useEffect(() => {

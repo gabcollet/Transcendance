@@ -33,11 +33,10 @@ export class UsersService {
           startsWith: search,
         },
       },
+      select: {
+        username: true,
+      },
     });
-    console.log('above users');
-    console.log(users);
-    console.log('below users');
-    console.log(search);
     return users;
   }
 
@@ -217,7 +216,7 @@ export class UsersService {
     const userNum = 500;
     var nums = Array.from(Array(userNum).keys());
 
-    for await (const n of nums) {
+    for (const n of nums) {
       await this.createUser({
         id: n + 1,
         displayname: 'anon' + n,

@@ -3,12 +3,9 @@ import styles from "./ProfileBody.module.css";
 import data from "./data_placeholder";
 import { FriendCard } from "./FriendCard";
 import { fetchObject, fetchText } from "./FetchValue";
+import { ProfileProps, SpecificContentProps } from "./ProfileInterfaces";
 
-interface Content {
-  contentType: string;
-}
-
-export const ProfileBody = (props: any) => {
+export const ProfileBody = (props: ProfileProps) => {
   const [contentType, setContentType] = useState("friends");
 
   return (
@@ -40,7 +37,7 @@ export const ProfileBody = (props: any) => {
   );
 };
 
-const SpecificContent = (props: any) => {
+const SpecificContent = (props: SpecificContentProps) => {
   if (props.contentType === "friends") {
     // THIS GETS CALLED REPEATEDLY
     return <FriendsContent username={props.username} />;
@@ -53,21 +50,14 @@ const SpecificContent = (props: any) => {
   }
 };
 
-type Friendship = {
-  id: number;
-  sender: string;
-};
-
-const FriendsContent = (props: any) => {
-  // TO DO: Function that gets list of active friends from the backend
-  // TO DO: Function that gets list of pending friend request received from the backend
+const FriendsContent = (props: ProfileProps) => {
   const [friends, setFriends] = useState<any[]>([]);
 
   useEffect(() => {
     fetchObject("users/" + props.username + "/friends", setFriends);
   }, []);
 
-  const friendsElement = friends?.map((friendUsername: any) => {
+  const friendsElement = friends?.map((friendUsername: string) => {
     return friendUsername && <FriendCard friendUsername={friendUsername} />;
   });
 
