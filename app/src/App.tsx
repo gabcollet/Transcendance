@@ -60,14 +60,6 @@ const App = () => {
               <Route path="/PongRoom" element={<PongRoom username={profileUsername} />} />
               <Route path="/Pong" element={<Pong username={profileUsername} />}  />
               <Route
-                path="/Spectate"
-                element={
-                  <div style={{ color: "white", fontSize: "75px" }}>
-                    SPECTATE
-                  </div>
-                }
-              />
-              <Route
                 path="/Profile"
                 element={
                   <div style={{ color: "white", fontSize: "75px" }}>

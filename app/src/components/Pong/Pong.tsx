@@ -9,17 +9,23 @@ const Pong = (props: any) => {
   const ptext = useRef<null | HTMLParagraphElement>(null);
   const playertext1 = useRef<null | HTMLParagraphElement>(null);
   const playertext2 = useRef<null | HTMLParagraphElement>(null);
+  const isSpectator = useRef<boolean>(false);
+  
 
   useEffect(() => {
     socket.on("roomInfo", function ([room, pid, username1, username2]: [string, number, string, string]) {
       pid = Number(pid);
-      if (playertext1.current && (pid === 1 || pid === 0)) {
+      console.log(room);
+      if (pid === 3){
+        isSpectator.current = true;
+      }
+      if (!isSpectator.current && playertext1.current && playertext2.current && username1){
         playertext1.current.innerText = `${username1.toUpperCase()} \n Player 1`;
+        if (pid === 2 && username2) {
+          playertext2.current.innerText = `${username2.toUpperCase()} \n Player 2`;
+        }
       }
-      if (playertext2.current && (pid === 0)) {
-        playertext2.current.innerText = `${username2.toUpperCase()} \n Player 2`;
-      }
-      else if (playertext1.current && pid === 2) {
+      else if (playertext1.current) {
         playertext1.current.innerText = `Mode Spectator`;
       }
       if (ptext.current) {

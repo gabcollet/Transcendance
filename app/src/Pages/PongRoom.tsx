@@ -5,6 +5,7 @@ import { roomID, pID } from "../components/Pong/List/useCanvas";
 import io from "socket.io-client";
 
 export const socket = io("localhost:6006");
+export let pQuit : boolean = false;
 
 const PongRoom = (props: any) => {
   const location = useLocation();
@@ -16,32 +17,28 @@ const PongRoom = (props: any) => {
     });
   }, [location]);
 
-  //On closing window
   useEffect(() => {
-    socket.on("leavedRoom", () => {});
-    if (pID !== 3) {
-      socket.emit("gameEnd");
-    }
-  }, []);
-
-  //On change path
-  useEffect(() => {
-    socket.on("leavedRoom2", () => {});
-    if (pID !== 3) {
-      socket.emit("gameEnd");
-    }
+    socket.on("leavedRoom", () => {
+      if (pID !== 3) {
+        socket.emit("gameEnd");
+      }
+      pQuit = true;
+    });
   }, []);
 
   const setRdy = () => {
-    socket.emit("joinRoom", props.username);
+    socket.emit("joinRoom", [props.username, false]);
+    pQuit = false;
   };
   
   const setRandomMode = () => {
-    socket.emit("randomRoom", props.username);
+    socket.emit("joinRoom", [props.username, true]);
+    pQuit = false;
   };
 
   const spectate = () => {
     socket.emit("spectate", props.username);
+    pQuit = false;
   };
 
   return (
