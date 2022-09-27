@@ -11,7 +11,8 @@ import { useState, useEffect } from "react";
 import Chat from "./Pages/Chat";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import { fetchText } from "./components/Profile/FetchValue";
-import TwoFAValidation from "./components/TwoFAValidation";
+import TwoFAQRCode from "./components/TwoFAQRCode";
+import TwoFAVerify from "./Pages/TwoFAVerify";
 
 const App = () => {
   const [profileUsername, setProfileUsername] = useState("test");
@@ -49,7 +50,8 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Login onChangeBg={changeBG}></Login>} />
           <Route element={<ProtectedRoutes />}>
-            <Route path="/TwoFA" element={<TwoFAValidation />} />
+            <Route path="/TwoFA" element={<TwoFAQRCode />} />
+            <Route path="/TwoFA/verify" element={<TwoFAVerify />} />
             <Route
               path="/Menu"
               element={

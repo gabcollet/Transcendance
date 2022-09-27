@@ -10,11 +10,16 @@ import {
 } from '@nestjs/common';
 import { Response, Request } from 'express';
 import { AuthorizationGuard } from './auth.guard';
+import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
+import { log } from 'console';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private jwtService: JwtService,
+  ) {}
 
   private logger = new Logger('Auth Controller');
   //* localhost:3030/auth/login
@@ -52,21 +57,20 @@ export class AuthController {
   }
 
   @Get('TwoFA/pair')
-  async TwoFA_QR_Code(
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
-  ) {
-    const tokenString = req.cookies['jwtToken'];
-    console.log('INSIDE PAIR: ' + req.cookies['jwtToken']);
-    //* Generates a secret for the Authenticator App and updates the user in the DB with the secret
-    // const secret = await this.authService.genTwoFASecret(
-    //   req.cookies['jwtToken'],
-    // );
+  async TwoFA_QR_Code(@Req() req: Request) {
+    const jwtToken = this.jwtService.decode(req.cookies['jwtToken']);
 
+    const username = jwtToken['username'];
+    console.log('USERNAME: ' + username);
+
+    //* Generates a secret for the Authenticator App and updates the user in the DB with the secret
+    const secret = await this.authService.genTwoFASecret(username);
+
+    console.log(secret);
     // //* Generates a Google Authenticator compatible qrcode for the user to scan
-    // const img = await this.authService.genQRCode(secret.otpauth_url);
-    // console.log(img);
-    // return img;
+    const img = await this.authService.genQRCode(secret.otpauth_url);
+    console.log(img);
+    return img;
 
     // res.cookie('qrcode', img, { httpOnly: false });
     // res.status(301).redirect('http://localhost:3000/TwoFA/verify');

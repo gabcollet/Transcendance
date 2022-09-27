@@ -4,6 +4,7 @@ import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import * as speakeasy from 'speakeasy';
 import * as qrcode from 'qrcode';
+import { log } from 'console';
 
 @Injectable()
 export class AuthService {
@@ -29,7 +30,7 @@ export class AuthService {
     const jwtToken = this.jwtService.decode(token);
     let user = await this.userService.findById(jwtToken['userID']);
 
-    if ((user['twoFAEnabled'] = false))
+    if (user['twoFAEnabled'] === false)
       user = await this.userService.updateUser(
         { twoFAEnabled: true },
         jwtToken['username'],
@@ -42,20 +43,14 @@ export class AuthService {
     return user;
   }
 
-  async genTwoFASecret(token: string) {
-    //* Retrieve info from cookie
-    const jwtToken = this.jwtService.decode(token);
-
+  async genTwoFASecret(username: string) {
     //* Generate a secret for the 2FA authenticator
     const secret = speakeasy.generateSecret({
       name: 'Transcendence',
     });
 
     //* update user with generated 2FA Secret for validation
-    await this.userService.updateUser(
-      { twoFASecret: secret.base32 },
-      jwtToken['username'],
-    );
+    await this.userService.updateUser({ twoFASecret: secret.base32 }, username);
 
     return secret;
   }
