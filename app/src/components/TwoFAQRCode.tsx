@@ -9,6 +9,7 @@ const TwoFAQRCode = () => {
     axios
       .get("http://localhost:3030/auth/twoFA/pair", { withCredentials: true })
       .then((response) => {
+        console.log(response.data);
         setQrcode(response.data);
       });
   }, []);

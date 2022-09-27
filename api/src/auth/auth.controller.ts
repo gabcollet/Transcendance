@@ -48,7 +48,7 @@ export class AuthController {
 
     if (req.user['twoFAEnabled'] === false)
       res.status(301).redirect('http://localhost:3000/Menu');
-    else res.status(301).redirect('http://localhost:3000/TwoFA');
+    else res.status(301).redirect('http://localhost:3000/TwoFA/verify');
   }
 
   @Get('TwoFA/toggle')
@@ -61,19 +61,13 @@ export class AuthController {
     const jwtToken = this.jwtService.decode(req.cookies['jwtToken']);
 
     const username = jwtToken['username'];
-    console.log('USERNAME: ' + username);
 
     //* Generates a secret for the Authenticator App and updates the user in the DB with the secret
     const secret = await this.authService.genTwoFASecret(username);
 
-    console.log(secret);
     // //* Generates a Google Authenticator compatible qrcode for the user to scan
     const img = await this.authService.genQRCode(secret.otpauth_url);
-    console.log(img);
     return img;
-
-    // res.cookie('qrcode', img, { httpOnly: false });
-    // res.status(301).redirect('http://localhost:3000/TwoFA/verify');
   }
 
   @Post('TwoFA/verify')
@@ -81,9 +75,11 @@ export class AuthController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
+    const pin = req.body['pin'];
+    console.log('PIN: ' + pin);
     const verified = await this.authService.twoFAVerify(
       req.cookies['jwtToken'],
-      req.body['pin'],
+      pin,
     );
 
     return verified;

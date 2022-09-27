@@ -64,9 +64,11 @@ export class AuthService {
     const jwtToken = this.jwtService.decode(tokenString);
     const user = await this.userService.findById(jwtToken['userID']);
 
-    const { twoFASecret: secret } = user;
+    const secret = user['twoFASecret'];
+    console.log('SECRET: ' + secret);
     const verified = speakeasy.totp.verify({
       secret,
+      encoding: 'base32',
       token,
     });
 
