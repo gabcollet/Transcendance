@@ -67,11 +67,19 @@ export class UsersController {
     return this.usersService.getAllTimeLosses(params.name);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get(':name/friendstatus')
+  getFrienshipStatus(@Query() query, @Param() params) {
+    return this.usersService.getFriendshipStatus(params.name, query.username);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':name/friends')
   getFriends(@Param() params) {
     return this.usersService.getAcceptedFriends(params.name);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':name')
   findByUsername(@Param() params) {
     return this.usersService.findByUsername(params.name);

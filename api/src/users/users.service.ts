@@ -23,7 +23,6 @@ export class UsersService {
   private logger = new Logger('User Service');
 
   async getSearchedUsernames(search: string) {
-    console.log(search);
     if (!search) {
       return [];
     }
@@ -46,8 +45,6 @@ export class UsersService {
         username: true,
       },
     });
-    console.log('This is userlist below');
-    console.log(userList);
     return userList;
   }
 
@@ -181,7 +178,7 @@ export class UsersService {
     return friendUsernameList;
   }
 
-  async getFriendshipStatus(user1: string, user2: string) {
+  async getFriendshipStatus(user1: string, user2: string): Promise<number> {
     let state: FriendshipStatus = 0;
 
     if (
@@ -219,7 +216,7 @@ export class UsersService {
     for (const n of nums) {
       await this.createUser({
         id: n + 1,
-        displayname: 'anon' + n,
+        displayname: 'displayAnon' + n,
         username: 'anon' + n,
       });
     }
