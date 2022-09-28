@@ -80,7 +80,8 @@ const FriendButton = (props: FriendButtonProps) => {
     );
     setFriendStatus("0");
     if (props.onRemove) {
-      props.onRemove();
+      await props.onRemove();
+      console.log("post-onremove");
     }
   }
 

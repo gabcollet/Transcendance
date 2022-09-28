@@ -77,13 +77,23 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Get(':name/friendstatus')
   getFrienshipStatus(@Query() query, @Param() params) {
-    return this.usersService.getFriendshipStatus(params.name, query.username);
+    return this.usersService.getFriendshipStatus(
+      params.name,
+      query.username,
+      params.name,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':name/friends')
   getFriends(@Param() params) {
     return this.usersService.getAcceptedFriends(params.name);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':name/friendrequests')
+  getFriendRequests(@Param() params) {
+    return this.usersService.getFriendRequests(params.name);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -101,7 +111,8 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Post(':name/removefriend')
   removeFriend(@Query() query, @Param() params) {
-    return this.usersService.cancelRequest(params.name, query.username);
+    console.log('IN REMOVE FRIENDS');
+    return this.usersService.removeFriend(params.name, query.username);
   }
 
   @UseGuards(JwtAuthGuard)

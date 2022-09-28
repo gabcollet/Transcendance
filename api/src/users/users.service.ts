@@ -186,6 +186,7 @@ export class UsersService {
       status: await this.getFriendshipStatus(
         friendship.sender,
         friendship.receiver,
+        username,
       ),
     }));
     const preFilteredList = await Promise.all(promises);
@@ -202,7 +203,41 @@ export class UsersService {
     return friendUsernameList;
   }
 
-  async getFriendshipStatus(user1: string, user2: string): Promise<number> {
+  async getFriendRequests(username: string) {
+    const user = await this.findByUsername(username);
+
+    const friendshipList = await this.prisma.friendship.findMany({
+      where: {
+        receiver: user.username,
+      },
+    });
+    const promises = friendshipList.map(async (friendship) => ({
+      value: friendship,
+      status: await this.getFriendshipStatus(
+        friendship.sender,
+        friendship.receiver,
+        username,
+      ),
+    }));
+    const preFilteredList = await Promise.all(promises);
+    const filteredList = preFilteredList.filter((friendship) => {
+      if (friendship.status === FriendshipStatus.Received) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    const friendUsernameList = filteredList.map((friendship) => {
+      return friendship.value.sender;
+    });
+    return friendUsernameList;
+  }
+
+  async getFriendshipStatus(
+    user1: string,
+    user2: string,
+    username: string,
+  ): Promise<number> {
     let state: FriendshipStatus = 0;
 
     if (
@@ -213,7 +248,11 @@ export class UsersService {
         },
       })
     ) {
-      state += 1;
+      if (user1 === username) {
+        state += 1;
+      } else if (user2 === username) {
+        state += 2;
+      }
     }
     if (
       await this.prisma.friendship.findFirst({
@@ -223,9 +262,12 @@ export class UsersService {
         },
       })
     ) {
-      state += 2;
+      if (user1 === username) {
+        state += 2;
+      } else if (user2 === username) {
+        state += 1;
+      }
     }
-    console.log(state);
     return state;
   }
 
@@ -250,6 +292,7 @@ export class UsersService {
   }
 
   async removeFriend(username: string, friendName: string) {
+    console.log(`username ${username} | friendname: ${friendName}`);
     await this.cancelRequest(username, friendName);
     return await this.prisma.friendship.delete({
       where: {
@@ -295,19 +338,19 @@ export class UsersService {
     await this.createFriendship({ sender: 'anon1', receiver: user });
     await this.createFriendship({ sender: 'anon2', receiver: user });
     await this.createFriendship({ sender: 'anon305', receiver: user });
+    await this.createFriendship({ sender: 'anon306', receiver: user });
+    await this.createFriendship({ sender: 'anon307', receiver: user });
+    await this.createFriendship({ sender: 'anon308', receiver: user });
+    await this.createFriendship({ sender: 'anon309', receiver: user });
+    await this.createFriendship({ sender: 'anon310', receiver: user });
+    await this.createFriendship({ sender: 'anon311', receiver: user });
+    await this.createFriendship({ sender: 'anon312', receiver: user });
+    await this.createFriendship({ sender: 'anon314', receiver: user });
     await this.createFriendship({ sender: user, receiver: 'anon4' });
   }
 
   async testDeleteAll() {
     await this.prisma.user.deleteMany({});
     await this.prisma.friendship.deleteMany({});
-  }
-
-  // REPLACE user WITH YOUR 42 USERNAME
-  async testUpdateUser() {
-    const user = 'laube';
-    const status =
-      (await this.getStatus(user)) == 'offline' ? 'online' : 'offline';
-    this.updateUser({ status, username: 'SHOULD NOT BE THIS' }, user);
   }
 }

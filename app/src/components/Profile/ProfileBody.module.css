@@ -27,6 +27,14 @@
 }
 
 /* Friends Content */
+.friendrequests-header {
+    font-size: 3rem;
+}
+
+.friends-header {
+    font-size: 3rem;
+}
+
 .friends-content-individual {
     border-style: solid;
     border-color: gold;
@@ -34,7 +42,7 @@
     display: flex;
 }
 
-.friends-content-individual > * {
+.friends-content-individual>* {
     border-style: solid;
     border-color: cyan;
 }
@@ -43,9 +51,9 @@
     display: grid;
     grid-template-columns: 100px 200px;
     grid-template-rows: 1fr 1fr;
-    grid-template-areas: 
-    "image name"
-    "image status";
+    grid-template-areas:
+        "image name"
+        "image status";
 }
 
 .individual-id img {
@@ -96,7 +104,7 @@
     display: flex;
 }
 
-.match-content-individual > * {
+.match-content-individual>* {
     border-style: solid;
     border-color: cyan;
 }
@@ -129,6 +137,7 @@
     border-style: solid;
     border-color: green;
 }
+
 .foe-id {
     display: flex;
     flex-direction: column;

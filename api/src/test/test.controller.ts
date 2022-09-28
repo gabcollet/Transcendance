@@ -35,9 +35,4 @@ export class TestController {
   deleteAll() {
     return this.usersService.testDeleteAll();
   }
-
-  @Get('updateuser')
-  updateUser() {
-    return this.usersService.testUpdateUser();
-  }
 }

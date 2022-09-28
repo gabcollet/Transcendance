@@ -53,13 +53,22 @@ const SpecificContent = (props: SpecificContentProps) => {
 
 const FriendsContent = (props: ProfileProps) => {
   const [friends, setFriends] = useState<any[]>([]);
+  const [friendRequests, setFriendRequests] = useState<any[]>([]);
 
-  const callBackRemove = () => {
-    fetchObject("users/" + props.username + "/friends", setFriends);
-  };
+  async function callBackRemove() {
+    await fetchObject("users/" + props.username + "/friends", setFriends);
+    await fetchObject(
+      "users/" + props.username + "/friendrequests",
+      setFriendRequests
+    );
+  }
 
   useEffect(() => {
     fetchObject("users/" + props.username + "/friends", setFriends);
+    fetchObject(
+      "users/" + props.username + "/friendrequests",
+      setFriendRequests
+    );
   }, []);
 
   const friendsElement = friends?.map((friendUsername: string) => {
@@ -70,9 +79,29 @@ const FriendsContent = (props: ProfileProps) => {
     );
   });
 
+  const friendRequestsElement = friendRequests?.map(
+    (friendUsername: string) => {
+      return (
+        friendUsername && (
+          <FriendCard
+            onRemove={callBackRemove}
+            friendUsername={friendUsername}
+          />
+        )
+      );
+    }
+  );
+
   return (
     <section className={styles["friends-content-container"]}>
-      {friendsElement}
+      <div>
+        <h3 className={styles["friendrequests-header"]}>Friend Requests</h3>
+        {friendRequestsElement}
+      </div>
+      <div>
+        <h3 className={styles["friends-header"]}>Friends</h3>
+        {friendsElement}
+      </div>
     </section>
   );
 };
