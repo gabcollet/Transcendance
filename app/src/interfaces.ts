@@ -59,3 +59,7 @@ export interface ChatFriend_ {}
 export interface Chat_ {
   userName: string;
 }
+
+export interface AddPopup_ {
+  trigger: boolean;
+}

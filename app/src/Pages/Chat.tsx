@@ -30,14 +30,17 @@ const Chat = (props: Chat_) => {
 
   let channels = axios
     .get("http://localhost:3030/chat/channels", {
+      withCredentials: true,
       headers: {
-        withCredentials: true,
         Authorization: `bearer ${Cookies.get("jwtToken")}`,
       },
     })
     .then((response) => {
       console.log("/channels response");
       console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
     });
   return (
     <div className={styles["chat-wrapper"]}>

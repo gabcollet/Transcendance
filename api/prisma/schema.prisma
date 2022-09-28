@@ -37,6 +37,21 @@ model Friendship {
   @@map("friendships")
 }
 
+
+model Message {
+	id Int @id @default(autoincrement())
+	author String
+	message String
+	@@map("message")
+} 
+
+model Chatroom {
+ 	id			Int  		@id  @default(autoincrement())
+ 	admin		String
+ 	name		String
+	@@map("chatroom")
+}
+
 // model Convo {
 // 	id		Int		@id
 // 	message	String

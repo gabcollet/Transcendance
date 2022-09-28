@@ -12,6 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PrismaModule } from './prisma/prisma.module';
 import { ProfileController } from './users/profile.controller';
 import { TestController } from './test/test.controller';
+import { ChatDto } from './chat/chat.dto';
 
 @Module({
   imports: [
@@ -29,6 +30,6 @@ import { TestController } from './test/test.controller';
     ProfileController,
     TestController,
   ],
-  providers: [UsersService, PongGateway, ChatGateway],
+  providers: [UsersService, PongGateway, ChatGateway, ChatDto],
 })
 export class AppModule {}
