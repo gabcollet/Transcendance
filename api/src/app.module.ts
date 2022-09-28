@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { ChatController } from './chat/chat.controller';
 import { ChatModule } from './chat/chat.module';
-import { ChatGateway } from './chat.gateway';
+import { ChatGateway } from './chat/chat.gateway';
 import { UsersService } from './users/users.service';
 import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
