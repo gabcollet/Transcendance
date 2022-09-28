@@ -21,7 +21,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('joinRoom')
-  handleJoinRoom(client: Socket, [username, random]) {
+  async handleJoinRoom(client: Socket, [username, random]) {
     this.pongService.joinRoom(client, username, random);
   }
 
@@ -35,12 +35,12 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
 
   //This handle when a client quit or refresh the page
   handleDisconnect(client: Socket) {
-    this.pongService.playerDisconnect(client, this.server);
+    this.pongService.playerDisconnect(client, this.server, "offline");
   }
   //This handle when a client change location (aka go back one page)
   @SubscribeMessage('leaveRoom')
   handleLeaveRoom(client: Socket, payload: { room: string; pID: number }) {
-    this.pongService.playerDisconnect(client, this.server);
+    this.pongService.playerDisconnect(client, this.server, "online");
   }
 
   @SubscribeMessage('playerPosServer')

@@ -5,6 +5,7 @@ import { Room } from './pong.room';
 import { Server } from 'socket.io';
 import { Ball } from './pong.ball';
 import { PrismaService } from '../prisma/prisma.service';
+import { log } from 'console';
 
 @Injectable()
 export class PongService {
@@ -43,14 +44,14 @@ export class PongService {
   joining(client: Socket, room: string, username: string, pID: number) {
     client.join(room);
     //Check if username already in room
-    /* if (this.m_roomUser.has(room)) {
+    if (this.m_roomUser.has(room)) {
       const clientRoom = this.m_roomUser.get(room);
       if (clientRoom == username) {
         this.logger.error(`${username} already in room ${room}`);
         client.emit('roomInfo', ['You can\'t play against yourself 😢', null, null, null]);
         return;
       }
-    } */
+    }
     this.m_room.set(client, room);
     this.m_pid.set(client, pID);
     this.m_roomUser.set(room, username);
@@ -67,6 +68,7 @@ export class PongService {
     this.randomRoom = random;
     const room = this.createRoom(false);
     this.joining(client, room, username, this.isWaiting ? 1 : 2);
+    this.toggleGameStatus(client, "in game");
   }
 
   joinSpectator(client: Socket, username: string) {
@@ -75,6 +77,7 @@ export class PongService {
       room = this.createRoom(true);
     }
     this.joining(client, room, username, 3);
+    this.toggleGameStatus(client, "spectating");
   }
 
   playerReady(
@@ -109,15 +112,22 @@ export class PongService {
 
   leavingRoom(client: Socket, room: string) {
     client.leave(room);
-    this.logger.warn(`${client.id} leaved room ${room}`);
+    const username = this.m_roomUser.get(room);
+    const pid = this.m_pid.get(client);
+    if (pid === 1 || pid === 2){
+      this.logger.warn(`${username} leaved room ${room} as P${pid}`);
+    } else if (pid === 3) {
+      this.logger.warn(`${username} leaved room ${room} as Spectator`);
+    }
     this.m_room.delete(client);
     this.m_pid.delete(client);
     this.m_roomUser.delete(room);
   }
 
-  playerDisconnect(client: Socket, server: Server) {
+  playerDisconnect(client: Socket, server: Server, status: string) {
     const room = this.m_room.get(client);
     const pid = this.m_pid.get(client);
+    this.toggleGameStatus(client, status);
     if (pid === 3) {
       this.leavingRoom(client, room);
       return;
@@ -221,13 +231,6 @@ export class PongService {
           }
           ball.restart();
           room.frameCount = 0;
-          /* if (room.p1_score === room.maxScore) {
-            this.addWin(room.p1_name);
-            this.addLost(room.p2_name);
-          } else if (room.p2_score === room.maxScore) {
-            this.addWin(room.p2_name);
-            this.addLost(room.p1_name);
-          } */
           server
             .to(payload.roomID)
             .emit('scoreClient', [room.p1_score, room.p2_score]);
@@ -252,13 +255,15 @@ export class PongService {
   }
 
   addWinLost(client: Socket, winner: number, roomID: string) {
+    // this.logger.debug("in addWinLost")
     for (let i = 0; i < this.rooms.length; i++) {
       if (this.rooms[i] && this.rooms[i].roomID == roomID) {
+        this.logger.debug("found room")
         const room = this.rooms[i];
         if (winner === 1) {
           this.addWin(room.p1_name);
           this.addLost(room.p2_name);
-        } else if (room.p2_score === room.maxScore) {
+        } else if (winner === 2) {
           this.addWin(room.p2_name);
           this.addLost(room.p1_name);
         }
@@ -298,5 +303,21 @@ export class PongService {
       }
     })
     this.logger.verbose(`${username} now have ${user.losses + 1} losses. Sorry...`)
+  }
+
+  async toggleGameStatus(client: Socket, status: string) {
+    const roomID = this.m_room.get(client);
+    const username = this.m_roomUser.get(roomID);
+    if (username) {
+      await this.prisma.user.update({
+        where: {
+          username: username
+        },
+        data: {
+          status: status
+        }
+      })
+    }
+    this.logger.verbose(`${username} is now ${status}.`)
   }
 }
