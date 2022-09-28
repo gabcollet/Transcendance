@@ -27,11 +27,11 @@ const Channel = (props: Channel_) => {
   return (
     <div className={styles["channel-wrapper"]}>
       <div className={styles["channel-box"]}>
-        <FontAwesomeIcon
+        {/* <FontAwesomeIcon
           className={styles["hash-icon"]}
           icon={faHashtag}
-        ></FontAwesomeIcon>
-        <p>TEST</p>
+        ></FontAwesomeIcon> */}
+        <p>{props.title}</p>
         {icon}
       </div>
     </div>

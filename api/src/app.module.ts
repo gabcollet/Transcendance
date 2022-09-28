@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { ChatController } from './chat/chat.controller';
 import { ChatModule } from './chat/chat.module';
-import { ChatGateway } from './chat.gateway';
+import { ChatGateway } from './chat/chat.gateway';
 import { UsersService } from './users/users.service';
 import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
@@ -12,6 +12,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ProfileController } from './users/profile.controller';
 import { TestController } from './test/test.controller';
 import { PongService } from './pong/pong.service';
+import { TestingController } from './testing/testing.controller';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { PongService } from './pong/pong.service';
     UsersController,
     ProfileController,
     TestController,
+    TestingController,
   ],
   providers: [UsersService, PongGateway, ChatGateway, PongService],
 })

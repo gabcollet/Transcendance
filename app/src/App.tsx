@@ -12,8 +12,10 @@ import Chat from "./Pages/Chat";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import { fetchText } from "./components/Profile/FetchValue";
 import { SearchBar } from "./components/Profile/SearchBar";
+import TwoFAQRCode from "./components/TwoFAQRCode";
+import TwoFAVerify from "./Pages/TwoFAVerify";
 
-export const UserContext = React.createContext("");
+export const ProfileContext = React.createContext("");
 
 const App = () => {
   let [background, setBackground] = useState("root-default");
@@ -45,11 +47,13 @@ const App = () => {
   }, []);
 
   return (
-    <UserContext.Provider value={profileUsername}>
+    <ProfileContext.Provider value={profileUsername}>
       <div className={background}>
         <Router>
           <Routes>
             <Route path="/" element={<Login onChangeBg={changeBG}></Login>} />
+            <Route path="/TwoFA" element={<TwoFAQRCode />} />
+            <Route path="/TwoFA/verify" element={<TwoFAVerify />} />
             <Route element={<ProtectedRoutes />}>
               <Route
                 path="/Menu"
@@ -92,12 +96,15 @@ const App = () => {
                   </div>
                 }
               />
-              <Route path="/Chat" element={<Chat></Chat>} />
+              <Route
+                path="/Chat"
+                element={<Chat userName={profileUsername}></Chat>}
+              />
             </Route>
           </Routes>
         </Router>
       </div>
-    </UserContext.Provider>
+    </ProfileContext.Provider>
   );
 };
 

@@ -13,7 +13,8 @@
   align-self: flex-start;
 }
 
-p.bubble-sent p.bubble-received {
+p.bubble-sent,
+p.bubble-received {
   word-wrap: break-word;
   line-height: 24px;
   border-radius: 25px;
