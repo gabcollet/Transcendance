@@ -20,6 +20,7 @@ export const UsersList = (props: UsersListProps) => {
         <FriendCard
           friendUsername={searchUsername.username}
           searchString={props.searchString}
+          onRemove={() => {}}
         />
       )
     );

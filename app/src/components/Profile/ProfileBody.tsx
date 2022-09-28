@@ -4,6 +4,7 @@ import data from "./data_placeholder";
 import { FriendCard } from "./FriendCard";
 import { fetchObject, fetchText } from "./FetchValue";
 import { ProfileProps, SpecificContentProps } from "./ProfileInterfaces";
+import { AchievementCard } from "./AchievementCard";
 
 export const ProfileBody = (props: ProfileProps) => {
   const [contentType, setContentType] = useState("friends");
@@ -44,7 +45,7 @@ const SpecificContent = (props: SpecificContentProps) => {
   } else if (props.contentType === "history") {
     return <HistoryContent />;
   } else if (props.contentType === "achievements") {
-    return <AchievementsContent />;
+    return <AchievementsContent username={props.username} />;
   } else {
     return <h2>Nothing? WTF!?</h2>;
   }
@@ -53,12 +54,20 @@ const SpecificContent = (props: SpecificContentProps) => {
 const FriendsContent = (props: ProfileProps) => {
   const [friends, setFriends] = useState<any[]>([]);
 
+  const callBackRemove = () => {
+    fetchObject("users/" + props.username + "/friends", setFriends);
+  };
+
   useEffect(() => {
     fetchObject("users/" + props.username + "/friends", setFriends);
   }, []);
 
   const friendsElement = friends?.map((friendUsername: string) => {
-    return friendUsername && <FriendCard friendUsername={friendUsername} />;
+    return (
+      friendUsername && (
+        <FriendCard onRemove={callBackRemove} friendUsername={friendUsername} />
+      )
+    );
   });
 
   return (
@@ -95,10 +104,23 @@ const HistoryContent = () => {
   );
 };
 
-const AchievementsContent = () => {
+const AchievementsContent = (props: any) => {
+  const [achievements, setAchievements] = useState(Object);
+
+  useEffect(() => {
+    fetchObject("users/" + props.username + "/achievements", setAchievements);
+  }, []);
+
+  let achievementElement: any = [];
+  for (let key in achievements) {
+    achievementElement.push(
+      <AchievementCard name={key} achieved={achievements.key} />
+    );
+  }
+
   return (
     <section className={styles["achievements-content-container"]}>
-      <p>These are the achievements.</p>
+      {achievementElement}
     </section>
   );
 };

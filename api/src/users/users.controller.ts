@@ -55,6 +55,13 @@ export class UsersController {
 
   // Get all time wins of user
   @UseGuards(JwtAuthGuard)
+  @Get(':name/stats')
+  getUserStats(@Req() req: Request, @Param() params) {
+    return this.usersService.getUserStats(params.name);
+  }
+
+  // Get all time wins of user
+  @UseGuards(JwtAuthGuard)
   @Get(':name/wins')
   getAllTimeWins(@Req() req: Request, @Param() params) {
     return this.usersService.getAllTimeWins(params.name);
@@ -77,6 +84,30 @@ export class UsersController {
   @Get(':name/friends')
   getFriends(@Param() params) {
     return this.usersService.getAcceptedFriends(params.name);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post(':name/addfriend')
+  addFriend(@Query() query, @Param() params) {
+    return this.usersService.addFriend(params.name, query.username);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post(':name/cancelrequest')
+  cancelRequest(@Query() query, @Param() params) {
+    return this.usersService.cancelRequest(params.name, query.username);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post(':name/removefriend')
+  removeFriend(@Query() query, @Param() params) {
+    return this.usersService.cancelRequest(params.name, query.username);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':name/achievements')
+  getAchievements(@Param() params) {
+    return this.usersService.getAchievements(params.name);
   }
 
   @UseGuards(JwtAuthGuard)
