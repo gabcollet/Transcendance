@@ -12,6 +12,8 @@ import Chat from "./Pages/Chat";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import { fetchText } from "./components/Profile/FetchValue";
 import { SearchBar } from "./components/Profile/SearchBar";
+import TwoFAQRCode from "./components/TwoFAQRCode";
+import TwoFAVerify from "./Pages/TwoFAVerify";
 
 export const ProfileContext = React.createContext("");
 
@@ -50,6 +52,8 @@ const App = () => {
         <Router>
           <Routes>
             <Route path="/" element={<Login onChangeBg={changeBG}></Login>} />
+            <Route path="/TwoFA" element={<TwoFAQRCode />} />
+            <Route path="/TwoFA/verify" element={<TwoFAVerify />} />
             <Route element={<ProtectedRoutes />}>
               <Route
                 path="/Menu"

@@ -30,4 +30,6 @@ export class UserDto {
 
   @IsNumber()
   losses: number;
+  twoFAEnabled: boolean;
+  twoFASecret: string;
 }
