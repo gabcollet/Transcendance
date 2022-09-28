@@ -11,7 +11,6 @@ import { UsersModule } from './users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ProfileController } from './users/profile.controller';
 import { TestController } from './test/test.controller';
-import { PongController } from './pong/pong.controller';
 import { PongService } from './pong/pong.service';
 
 @Module({
@@ -29,7 +28,6 @@ import { PongService } from './pong/pong.service';
     UsersController,
     ProfileController,
     TestController,
-    PongController,
   ],
   providers: [UsersService, PongGateway, ChatGateway, PongService],
 })

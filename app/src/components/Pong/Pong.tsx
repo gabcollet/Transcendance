@@ -15,7 +15,6 @@ const Pong = (props: any) => {
   useEffect(() => {
     socket.on("roomInfo", function ([room, pid, username1, username2]: [string, number, string, string]) {
       pid = Number(pid);
-      console.log(room);
       if (pid === 3){
         isSpectator.current = true;
       }

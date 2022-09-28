@@ -8,11 +8,11 @@ export let pID: number;
 let frameID: number = 0;
 
 /* 
-  Game Status :
-  waiting:   0
-  animation: 1
-  render:    2
-  endgame:   3
+    Game Status :
+    waiting:   0
+    animation: 1
+    render:    2
+    endgame:   3
   */
 
 const useCanvas = (username: string) => {
@@ -112,6 +112,7 @@ const useCanvas = (username: string) => {
             p1_h: p1.height,
             p2_h: p2.height,
             roomID: roomID,
+            maxScore: maxScore
         });
 
         if (!isReady.current) {
@@ -190,6 +191,9 @@ const useCanvas = (username: string) => {
 
         const endScreen = (winner: number) => {
             renderScreen(`WINNER PLAYER ${winner}!!!`, h / 2 + 15, 60);
+            if (pID === winner){
+                socket.emit('winner', [winner, roomID]);
+            }
         };
 
         const animationScreen = async () => {

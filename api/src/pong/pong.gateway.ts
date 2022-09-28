@@ -64,6 +64,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
       p1_h: number;
       p2_h: number;
       roomID: string;
+      maxScore: number;
     },
   ) {
     this.pongService.setInfoRoom(payload);
@@ -90,5 +91,10 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   @SubscribeMessage('gameEnd')
   handleEndGame(client: Socket) {
     this.pongService.endGame();
+  }
+
+  @SubscribeMessage('winner')
+  handleWinner(client: Socket, [winner, roomID]) {
+    this.pongService.addWinLost(client, winner, roomID);
   }
 }

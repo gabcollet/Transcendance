@@ -4,6 +4,7 @@ import { Logger } from '@nestjs/common';
 import { Room } from './pong.room';
 import { Server } from 'socket.io';
 import { Ball } from './pong.ball';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class PongService {
@@ -17,6 +18,10 @@ export class PongService {
   private m_pid: Map<Socket, number> = new Map<Socket, number>();
   private m_roomUser: Map<string, string> = new Map<string, string>();
   private rooms: [Room] = [null];
+
+  constructor(
+    private prisma: PrismaService,
+  ) {}
 
   createRoom(spectator: boolean): string {
     const { v4: uuidv4 } = require('uuid');
@@ -134,6 +139,7 @@ export class PongService {
     p1_h: number;
     p2_h: number;
     roomID: string;
+    maxScore: number;
   }) {
     for (let i = 0; i < this.rooms.length; i++) {
       if (this.rooms[i] && this.rooms[i].roomID == payload.roomID) {
@@ -148,6 +154,7 @@ export class PongService {
         payload.p2_h,
         payload.roomID,
         this.randomRoom,
+        payload.maxScore
       ),
     );
     this.randomRoom = false;
@@ -214,6 +221,13 @@ export class PongService {
           }
           ball.restart();
           room.frameCount = 0;
+          /* if (room.p1_score === room.maxScore) {
+            this.addWin(room.p1_name);
+            this.addLost(room.p2_name);
+          } else if (room.p2_score === room.maxScore) {
+            this.addWin(room.p2_name);
+            this.addLost(room.p1_name);
+          } */
           server
             .to(payload.roomID)
             .emit('scoreClient', [room.p1_score, room.p2_score]);
@@ -235,5 +249,54 @@ export class PongService {
 
   endGame() {
     this.gameEnd = true;
+  }
+
+  addWinLost(client: Socket, winner: number, roomID: string) {
+    for (let i = 0; i < this.rooms.length; i++) {
+      if (this.rooms[i] && this.rooms[i].roomID == roomID) {
+        const room = this.rooms[i];
+        if (winner === 1) {
+          this.addWin(room.p1_name);
+          this.addLost(room.p2_name);
+        } else if (room.p2_score === room.maxScore) {
+          this.addWin(room.p2_name);
+          this.addLost(room.p1_name);
+        }
+      }
+    }
+  }
+
+  async addWin(username: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        username: username
+      }
+    })
+    await this.prisma.user.update({
+      where: {
+        username: username
+      },
+      data: {
+        wins: user.wins + 1
+      }
+    })
+    this.logger.verbose(`${username} now have ${user.wins + 1} wins. GG!`)
+  }
+  
+  async addLost(username: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        username: username
+      }
+    })
+    await this.prisma.user.update({
+      where: {
+        username: username
+      },
+      data: {
+        losses: user.losses + 1
+      }
+    })
+    this.logger.verbose(`${username} now have ${user.losses + 1} losses. Sorry...`)
   }
 }
