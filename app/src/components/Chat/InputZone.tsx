@@ -6,6 +6,11 @@ import { InputZone_ } from "../../interfaces";
 
 const InputZone = (props: InputZone_) => {
   const [socket, setSocket] = useState<Socket>();
+  let send = {
+    user: "",
+    msg: "",
+    id: 0,
+  };
 
   const messageListener = (message: string) => {
     props.setMessages([...props.messages, message]);
@@ -18,7 +23,9 @@ const InputZone = (props: InputZone_) => {
   }, [messageListener]);
   const sendMsg = (message: string) => {
     if (message !== "") {
-      socket?.emit("message", message);
+      send.msg = message;
+      send.id = props.chatRoom;
+      socket?.emit("message", send);
     }
   };
   useEffect(() => {
