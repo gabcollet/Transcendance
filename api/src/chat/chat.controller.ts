@@ -33,7 +33,7 @@ export class ChatController {
     return convo;
   }
 
-  //   @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('channels')
   getChannels(@Req() req: Request) {
     let channels = {

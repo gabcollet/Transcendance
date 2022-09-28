@@ -7,6 +7,8 @@ import ChatFriendsList from "../components/Chat/ChatFriendsList";
 import { Chat_ } from "../interfaces";
 import Members from "../components/Chat/Members";
 import axios from "axios";
+import Cookies from "js-cookie";
+
 // interface Convo_ {
 //   message: string;
 //   author: string;
@@ -27,8 +29,14 @@ const Chat = (props: Chat_) => {
   const [publicChannels, setPublicChannels] = useState<number[]>([]);
 
   let channels = axios
-    .get("http://localhost:3030/chat/channels")
+    .get("http://localhost:3030/chat/channels", {
+      headers: {
+        withCredentials: true,
+        Authorization: `bearer ${Cookies.get("jwtToken")}`,
+      },
+    })
     .then((response) => {
+      console.log("/channels response");
       console.log(response.data);
     });
   return (
