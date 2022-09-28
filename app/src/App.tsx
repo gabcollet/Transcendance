@@ -13,7 +13,7 @@ import ProtectedRoutes from "./components/ProtectedRoutes";
 import { fetchText } from "./components/Profile/FetchValue";
 import { SearchBar } from "./components/Profile/SearchBar";
 
-export const UserContext = React.createContext("");
+export const ProfileContext = React.createContext("");
 
 const App = () => {
   let [background, setBackground] = useState("root-default");
@@ -45,7 +45,7 @@ const App = () => {
   }, []);
 
   return (
-    <UserContext.Provider value={profileUsername}>
+    <ProfileContext.Provider value={profileUsername}>
       <div className={background}>
         <Router>
           <Routes>
@@ -109,7 +109,7 @@ const App = () => {
           </Routes>
         </Router>
       </div>
-    </UserContext.Provider>
+    </ProfileContext.Provider>
   );
 };
 

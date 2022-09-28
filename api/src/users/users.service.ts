@@ -23,7 +23,6 @@ export class UsersService {
   private logger = new Logger('User Service');
 
   async getSearchedUsernames(search: string) {
-    console.log(search);
     if (!search) {
       return [];
     }
@@ -33,11 +32,10 @@ export class UsersService {
           startsWith: search,
         },
       },
+      select: {
+        username: true,
+      },
     });
-    console.log('above users');
-    console.log(users);
-    console.log('below users');
-    console.log(search);
     return users;
   }
 
@@ -47,8 +45,6 @@ export class UsersService {
         username: true,
       },
     });
-    console.log('This is userlist below');
-    console.log(userList);
     return userList;
   }
 
@@ -63,8 +59,18 @@ export class UsersService {
         displayname: user.displayname,
         username: user.username,
         picture: user.picture,
-        wins: 0,
-        losses: 0,
+      },
+    });
+
+    await this.prisma.stats.create({
+      data: {
+        username: user.username,
+      },
+    });
+
+    await this.prisma.achievements.create({
+      data: {
+        username: user.username,
       },
     });
 
@@ -127,6 +133,13 @@ export class UsersService {
     return user;
   }
 
+  async getUserStats(username: string) {
+    const stats = await this.prisma.stats.findUnique({
+      where: { username: username },
+    });
+    return stats;
+  }
+
   // PROFILE REQUESTS
   async getUserImage(username: string) {
     const user = await this.findByUsername(username);
@@ -144,13 +157,13 @@ export class UsersService {
   }
 
   async getAllTimeWins(username: string) {
-    const user = await this.findByUsername(username);
-    return user ? user.wins : null;
+    const userStats = await this.getUserStats(username);
+    return userStats.wins;
   }
 
   async getAllTimeLosses(username: string) {
-    const user = await this.findByUsername(username);
-    return user ? user.losses : null;
+    const userStats = await this.getUserStats(username);
+    return userStats.losses;
   }
 
   async getAcceptedFriends(username: string) {
@@ -182,7 +195,7 @@ export class UsersService {
     return friendUsernameList;
   }
 
-  async getFriendshipStatus(user1: string, user2: string) {
+  async getFriendshipStatus(user1: string, user2: string): Promise<number> {
     let state: FriendshipStatus = 0;
 
     if (
@@ -205,7 +218,47 @@ export class UsersService {
     ) {
       state += 2;
     }
+    console.log(state);
     return state;
+  }
+
+  async addFriend(username: string, friendName: string) {
+    return this.prisma.friendship.create({
+      data: {
+        sender: username,
+        receiver: friendName,
+      },
+    });
+  }
+
+  async cancelRequest(username: string, friendName: string) {
+    return await this.prisma.friendship.delete({
+      where: {
+        sender_receiver: {
+          sender: username,
+          receiver: friendName,
+        },
+      },
+    });
+  }
+
+  async removeFriend(username: string, friendName: string) {
+    await this.cancelRequest(username, friendName);
+    return await this.prisma.friendship.delete({
+      where: {
+        sender_receiver: {
+          sender: friendName,
+          receiver: username,
+        },
+      },
+    });
+  }
+
+  async getAchievements(username: string) {
+    const achievements = await this.prisma.achievements.findUnique({
+      where: { username: username },
+    });
+    return achievements;
   }
 
   /*
@@ -217,10 +270,10 @@ export class UsersService {
     const userNum = 500;
     var nums = Array.from(Array(userNum).keys());
 
-    for await (const n of nums) {
+    for (const n of nums) {
       await this.createUser({
         id: n + 1,
-        displayname: 'anon' + n,
+        displayname: 'displayAnon' + n,
         username: 'anon' + n,
       });
     }
@@ -234,7 +287,7 @@ export class UsersService {
     await this.createFriendship({ sender: user, receiver: 'anon2' });
     await this.createFriendship({ sender: 'anon1', receiver: user });
     await this.createFriendship({ sender: 'anon2', receiver: user });
-    await this.createFriendship({ sender: 'anon3', receiver: user });
+    await this.createFriendship({ sender: 'anon305', receiver: user });
     await this.createFriendship({ sender: user, receiver: 'anon4' });
   }
 
@@ -248,6 +301,6 @@ export class UsersService {
     const user = 'laube';
     const status =
       (await this.getStatus(user)) == 'offline' ? 'online' : 'offline';
-    this.updateUser({ status, wins: 4, username: 'SHOULD NOT BE THIS' }, user);
+    this.updateUser({ status, username: 'SHOULD NOT BE THIS' }, user);
   }
 }

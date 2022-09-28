@@ -3,8 +3,9 @@ import TextField from "@mui/material/TextField";
 import { fetchObject } from "./FetchValue";
 import { FriendCard } from "./FriendCard";
 import styles from "./SearchBar.module.css";
+import { ProfileProps, UsersListProps } from "./ProfileInterfaces";
 
-export const UsersList = (props: any) => {
+export const UsersList = (props: UsersListProps) => {
   const [searchUsers, setSearchUsers] = useState<any>([]);
 
   useEffect(() => {
@@ -12,45 +13,29 @@ export const UsersList = (props: any) => {
     fetchObject(`users?search=${props.searchString}`, setSearchUsers);
   }, [props.searchString]);
 
-  const searchElements = searchUsers?.map((searchUsername: any) => {
+  const searchElements = searchUsers?.map((searchUsername: ProfileProps) => {
+    console.log(searchUsername);
     return (
       searchUsername && (
         <FriendCard
           friendUsername={searchUsername.username}
           searchString={props.searchString}
+          onRemove={() => {}}
         />
       )
     );
   });
-  console.log("This is searchUsers");
-  console.log(searchUsers);
-  console.log("This is searchElements");
-  console.log(searchElements);
 
   return <section className="searchList">{searchElements}</section>;
 };
 
-export const SearchCard = (props: any) => {
-  const [searchUser, setSearchUser] = useState<any>({});
-
-  useEffect(() => {
-    fetchObject("users/" + props.searchUsername, setSearchUser);
-  }, []);
-
-  return (
-    <div className="searchCard">
-      <img src={searchUser.picture} alt={searchUser.username} />
-      <h4>{searchUser.username}</h4>
-    </div>
-  );
-};
-
-export const SearchBar = (props: any) => {
+export const SearchBar = (props: ProfileProps) => {
   const [searchString, setSearchString] = useState("");
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      setSearchString(e.target.value);
+      const searchButton = e.target as HTMLButtonElement;
+      setSearchString(searchButton.value);
     }
   };
 
