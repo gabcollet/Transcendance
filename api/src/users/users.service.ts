@@ -20,16 +20,36 @@ export class UsersService {
 
   private logger = new Logger('User Service');
 
-  getAllUsers() {
-    return this.prisma.user.findMany();
+  async getSearchedUsernames(search: string) {
+    console.log(search);
+    if (!search) {
+      return [];
+    }
+    const users = await this.prisma.user.findMany({
+      where: {
+        username: {
+          startsWith: search,
+        },
+      },
+    });
+    console.log('above users');
+    console.log(users);
+    console.log('below users');
+    console.log(search);
+    return users;
   }
 
-  // intraId: number,
-  // displayname: string,
-  // username: string,
-  // picture?: string,
-  // wins?: number,
-  // losses?: number,
+  async getAllUsernames() {
+    const userList = await this.prisma.user.findMany({
+      select: {
+        username: true,
+      },
+    });
+    console.log('This is userlist below');
+    console.log(userList);
+    return userList;
+  }
+
   async createUser(user: Partial<User>) {
     if (typeof user.picture == 'undefined') {
       user.picture =
@@ -56,7 +76,6 @@ export class UsersService {
         receiver: friendship.receiver,
       },
     });
-
     return friendship;
   }
 
@@ -92,19 +111,9 @@ export class UsersService {
       },
       data: {
         ...user,
+        username: undefined,
         id: undefined,
         intraId: undefined,
-        username: undefined,
-        // id: undefined,
-        // intraId: undefined,
-        // displayname: user.displayname,
-        // username: undefined,
-        // picture: user.picture,
-        // status: user.status,
-        // wins: user.wins,
-        // losses: user.losses,
-        // twoFAEnabled: user.twoFAEnabled,
-        // twoFASecret: user.twoFASecret,
       },
     });
     return updatedUser;
@@ -119,7 +128,6 @@ export class UsersService {
   }
 
   async findByUsername(username: string) {
-    console.log(`findbyusername: ${username}`);
     const user = await this.prisma.user.findUnique({
       where: { username: username },
     });
@@ -213,31 +221,16 @@ export class UsersService {
 
   // MUST NOT HAVE THESE USERS ALREADY IN THE DATABASE (NO DUPLICATES)
   async testCreateUsers() {
-    await this.createUser({
-      id: 9001,
-      displayname: 'anon1',
-      username: 'anon1',
-    });
-    await this.createUser({
-      id: 9002,
-      displayname: 'anon2',
-      username: 'anon2',
-    });
-    await this.createUser({
-      id: 9003,
-      displayname: 'anon3',
-      username: 'anon3',
-    });
-    await this.createUser({
-      id: 9004,
-      displayname: 'anon4',
-      username: 'anon4',
-    });
-    await this.createUser({
-      id: 9005,
-      displayname: 'anon5',
-      username: 'anon5',
-    });
+    const userNum = 500;
+    var nums = Array.from(Array(userNum).keys());
+
+    for await (const n of nums) {
+      await this.createUser({
+        id: n + 1,
+        displayname: 'anon' + n,
+        username: 'anon' + n,
+      });
+    }
   }
 
   // MUST HAVE ALL THE USERS BELOW ALREADY IN THE DATABASE
@@ -260,6 +253,8 @@ export class UsersService {
   // REPLACE user WITH YOUR 42 USERNAME
   async testUpdateUser() {
     const user = 'laube';
-    this.updateUser({ status: 'online', username: 'SHOULDNOTCHANGE' }, user);
+    const status =
+      (await this.getStatus(user)) == 'offline' ? 'online' : 'offline';
+    this.updateUser({ status, wins: 4, username: 'SHOULD NOT BE THIS' }, user);
   }
 }

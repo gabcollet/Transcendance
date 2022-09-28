@@ -14,9 +14,15 @@
   min-width: 100%;
   background-color: rgba(56, 56, 56, 0.505);
   height: 100%;
-  border: 1px solid rgb(180, 180, 180);
-  border-radius: 10px;
+  border: 1px solid rgba(102, 101, 101, 0.505);
+  border-radius: 8px;
   cursor: pointer;
+  word-wrap: break-word;
+  line-height: 24px;
+  font-size: 20px;
+  padding: 15px 27px;
+  max-width: 100%;
+  position: relative;
 }
 
 .leave-icon {
@@ -26,7 +32,7 @@
   color: #ff005c;
   align-self: center;
   margin-left: auto;
-  margin-right: 10px;
+  margin-right: 3px;
 }
 
 .join-icon {
@@ -36,5 +42,5 @@
   color: #00c88c;
   align-self: center;
   margin-left: auto;
-  margin-right: 10px;
+  margin-right: 3px;
 }

@@ -35,6 +35,10 @@ const PongRoom = () => {
   const setRdy = () => {
     socket.emit("joinRoom");
   };
+  
+  const setRandomMode = () => {
+    socket.emit("randomRoom");
+  };
 
   const spectate = () => {
     socket.emit("spectate");
@@ -50,7 +54,10 @@ const PongRoom = () => {
       </p>
       <Link to="/Pong">
         <button className="button-78" onClick={setRdy}>
-          Start Game
+          Start Normal Game
+        </button> <br/>
+        <button className="button-78" onClick={setRandomMode}>
+          Start Random Game
         </button>
       </Link>
       <p className="text2">OR</p>
