@@ -23,6 +23,7 @@ export interface ChatInput_ {
 export interface InputZone_ {
   setMessages: React.Dispatch<React.SetStateAction<string[]>>;
   messages: string[];
+  chatRoom: number;
 }
 
 export interface MessageWindow_ {
@@ -31,6 +32,7 @@ export interface MessageWindow_ {
 }
 
 export interface MenuButton_ {
+  onClick?: MouseEventHandler<HTMLLIElement>;
   icon: any;
   className: string;
   iconClassName: string;
@@ -50,4 +52,10 @@ export interface Menu_ {
 export interface MenuWheel_ {
   opening: boolean;
   setOpening: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface ChatFriend_ {}
+
+export interface Chat_ {
+  userName: string;
 }

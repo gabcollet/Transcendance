@@ -1,0 +1,14 @@
+.search-container {
+    display: flex;
+    height: 100%;
+    min-height: 80vh;
+    flex-direction: column;
+}
+
+.search-bar {
+    display: flex;
+}
+
+.search-results {
+    overflow-y: auto;
+}

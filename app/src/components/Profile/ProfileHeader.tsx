@@ -1,33 +1,42 @@
-import { useState } from 'react';
-import styles from './ProfileHeader.module.css';
-import { UserDisplayName } from './UserDisplayName';
-import { UserImage } from './UserImage';
-import { UserLosses } from './UserLosses';
-import { UserStatus } from './UserStatus';
-import { UserWins } from './UserWins';
+import { useState } from "react";
+import styles from "./ProfileHeader.module.css";
+import { ProfileProps } from "./ProfileInterfaces";
+import { UserDisplayName } from "./UserDisplayName";
+import { UserImage } from "./UserImage";
+import { UserLosses } from "./UserLosses";
+import { UserStatus } from "./UserStatus";
+import { UserWins } from "./UserWins";
 
-export const ProfileHeader = () => {
-    
-    return (
-      <section className={styles["profile-header-container"]}>
-        <div className={styles["profile-id-container"]}>
-          <div className={styles["id-container-info"]}>
-            <UserImage userName="laube" className={styles["profile-image"]} />
-            <UserDisplayName userName="laube" className={styles["profile-name-text"]} />
-            <UserStatus userName="laube" className={styles["profile-status"]} />
-          </div>
-          <div className={styles["id-container-buttons"]}>
-            <button>Add friend</button>
-            <button>Message</button>
-          </div>
+export const ProfileHeader = (props: ProfileProps) => {
+  return (
+    <section className={styles["profile-header-container"]}>
+      <div className={styles["profile-id-container"]}>
+        <div className={styles["id-container-info"]}>
+          <UserImage
+            username={props.username}
+            className={styles["profile-image"]}
+          />
+          <UserDisplayName
+            username={props.username}
+            className={styles["profile-name-text"]}
+          />
+          <UserStatus
+            username={props.username}
+            className={styles["profile-status"]}
+          />
         </div>
-        <div className={styles["primary-stats"]}>
-          <UserWins userName="laube" />
-          <UserLosses userName="laube" />
+        <div className={styles["id-container-buttons"]}>
+          <button>Add friend</button>
+          <button>Message</button>
         </div>
-        <div className={styles["secondary-stats"]}>
-          <p>Latest Achievement:</p>
-        </div>
-      </section>
-    );
-  }
+      </div>
+      <div className={styles["primary-stats"]}>
+        <UserWins username={props.username} />
+        <UserLosses username={props.username} />
+      </div>
+      <div className={styles["secondary-stats"]}>
+        <p>Latest Achievement:</p>
+      </div>
+    </section>
+  );
+};
