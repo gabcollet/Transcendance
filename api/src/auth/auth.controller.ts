@@ -12,7 +12,7 @@ import { Response, Request } from 'express';
 import { AuthorizationGuard } from './auth.guard';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
-import { log } from 'console';
+import { JwtAuthGuard } from './jwt/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -55,15 +55,16 @@ export class AuthController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('TwoFA/toggle')
   async TwoFA_Activate(@Req() req: Request) {
     return this.authService.toggleTwoFA(req.cookies['jwtToken']);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('TwoFA/pair')
   async TwoFA_QR_Code(@Req() req: Request) {
     const jwtToken = this.jwtService.decode(req.cookies['jwtToken']);
-
     const username = jwtToken['username'];
 
     //* Generates a secret for the Authenticator App and updates the user in the DB with the secret
@@ -74,6 +75,7 @@ export class AuthController {
     return img;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('TwoFA/verify')
   async verify2FA(
     @Req() req: Request,

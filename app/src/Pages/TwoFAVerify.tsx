@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { FormEventHandler, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import Cookies from "js-cookie";
 import { Navigate } from "react-router-dom";
 
 interface UserInput {
@@ -17,7 +18,12 @@ const TwoFAVerify = () => {
       .post(
         "http://localhost:3030/auth/TwoFA/verify",
         { pin: pin },
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `bearer ${Cookies.get("jwtToken")}`,
+          },
+        }
       )
       .then((res) => {
         console.log(res.data);

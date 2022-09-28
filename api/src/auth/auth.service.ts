@@ -45,8 +45,10 @@ export class AuthService {
 
   async genTwoFASecret(username: string) {
     //* Generate a secret for the 2FA authenticator
+
+    const name = `Transcendence (${username})`;
     const secret = speakeasy.generateSecret({
-      name: 'Transcendence',
+      name: name,
     });
 
     //* update user with generated 2FA Secret for validation
