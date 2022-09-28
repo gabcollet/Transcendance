@@ -48,7 +48,11 @@ export class AuthController {
 
     if (req.user['twoFAEnabled'] === false)
       res.status(301).redirect('http://localhost:3000/Menu');
-    else res.status(301).redirect('http://localhost:3000/TwoFA/verify');
+    else {
+      req.user['twoFASecret']
+        ? res.status(301).redirect('http://localhost:3000/TwoFA/verify')
+        : res.status(301).redirect('http://localhost:3000/TwoFA');
+    }
   }
 
   @Get('TwoFA/toggle')
