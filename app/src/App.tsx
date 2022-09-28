@@ -101,7 +101,10 @@ const App = () => {
                   </div>
                 }
               />
-              <Route path="/Chat" element={<Chat></Chat>} />
+              <Route
+                path="/Chat"
+                element={<Chat userName={profileUsername}></Chat>}
+              />
             </Route>
           </Routes>
         </Router>

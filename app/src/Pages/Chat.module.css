@@ -3,13 +3,14 @@
   width: 90%;
   height: 90%;
   position: absolute;
-  border: 10px solid rgb(255, 255, 255);
+  border: 3px solid rgb(0, 0, 0);
+  border-radius: 15px;
   background-color: rgba(43, 31, 55, 0.767);
 }
 
 .left {
   display: flex;
-  border: 5px solid rgb(243, 173, 248);
+  /* border: 5px solid rgb(243, 173, 248); */
   width: 20%;
   height: 100%;
   position: relative;
@@ -18,7 +19,8 @@
 
 .mid {
   display: flex;
-  border: 5px solid rgb(16, 237, 211);
+  border-left: 3px solid rgb(0, 0, 0);
+  border-right: 3px solid rgb(0, 0, 0);
   width: 60%;
   position: relative;
   height: 100%;
@@ -28,5 +30,5 @@
   width: 20%;
   height: 100%;
   position: relative;
-  border: 5px solid rgb(72, 0, 255);
+  /* border: 5px solid rgb(72, 0, 255); */
 }
