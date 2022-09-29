@@ -195,6 +195,10 @@ const useCanvas = (username: string) => {
                 socket.emit('winner', [winner, roomID]);
             }
         };
+        
+        const leftScreen = (pid: number) => {
+            renderScreen(`PLAYER ${pid} LEFT THE GAME`, h / 2 + 15, 60);
+        };
 
         const animationScreen = async () => {
             renderScreen("", 0, 0);
@@ -230,7 +234,7 @@ const useCanvas = (username: string) => {
 
         //Game Logic
         if (pQuit) {
-            endScreen(winner.current);
+            leftScreen(pID === 1 ? 2 : 1);
         } else {
             switch (gameStatus) {
                 case 0:

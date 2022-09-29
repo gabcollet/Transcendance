@@ -5,7 +5,7 @@ import { Room } from './pong.room';
 import { Server } from 'socket.io';
 import { Ball } from './pong.ball';
 import { PrismaService } from '../prisma/prisma.service';
-import { log } from 'console';
+import { use } from 'passport';
 
 @Injectable()
 export class PongService {
@@ -255,10 +255,8 @@ export class PongService {
   }
 
   addWinLost(client: Socket, winner: number, roomID: string) {
-    // this.logger.debug("in addWinLost")
     for (let i = 0; i < this.rooms.length; i++) {
       if (this.rooms[i] && this.rooms[i].roomID == roomID) {
-        this.logger.debug("found room")
         const room = this.rooms[i];
         if (winner === 1) {
           this.addWin(room.p1_name);
@@ -272,37 +270,41 @@ export class PongService {
   }
 
   async addWin(username: string) {
-    const user = await this.prisma.user.findUnique({
+    const userStats = await this.prisma.stats.findUnique({
       where: {
         username: username
       }
     })
-    await this.prisma.user.update({
+    await this.prisma.stats.update({
       where: {
         username: username
       },
       data: {
-        wins: user.wins + 1
+        wins: userStats.wins + 1,
+        winningStreak: userStats.winningStreak + 1,
+        losingStreak: 0
       }
     })
-    this.logger.verbose(`${username} now have ${user.wins + 1} wins. GG!`)
+    this.logger.verbose(`${username} now have ${userStats.wins + 1} wins. GG!`)
   }
   
   async addLost(username: string) {
-    const user = await this.prisma.user.findUnique({
+    const userStats = await this.prisma.stats.findUnique({
       where: {
         username: username
       }
     })
-    await this.prisma.user.update({
+    await this.prisma.stats.update({
       where: {
         username: username
       },
       data: {
-        losses: user.losses + 1
+        losses: userStats.losses + 1,
+        losingStreak: userStats.losingStreak + 1,
+        winningStreak: 0
       }
     })
-    this.logger.verbose(`${username} now have ${user.losses + 1} losses. Sorry...`)
+    this.logger.verbose(`${username} now have ${userStats.losses + 1} losses. Sorry...`)
   }
 
   async toggleGameStatus(client: Socket, status: string) {
@@ -317,7 +319,7 @@ export class PongService {
           status: status
         }
       })
+      this.logger.verbose(`${username} is now ${status}.`)
     }
-    this.logger.verbose(`${username} is now ${status}.`)
   }
 }
