@@ -1,4 +1,4 @@
-import { ExecutionContext, Injectable } from '@nestjs/common';
+import { ExecutionContext, Injectable, Logger } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
@@ -14,7 +14,10 @@ export class AuthorizationGuard extends AuthGuard('42') {
       console.log(err);
       return null;
     }
-    console.log('*** Success ***\n');
+
+    // Logger.log('*** SUCCESS ***\n' + user);
+    // console.log(user);
+
     return user;
   }
 }

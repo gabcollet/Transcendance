@@ -8,10 +8,11 @@ import { ChatGateway } from './chat/chat.gateway';
 import { UsersService } from './users/users.service';
 import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { PrismaModule } from './prisma/prisma.module';
 import { ProfileController } from './users/profile.controller';
 import { TestController } from './test/test.controller';
+import { PongService } from './pong/pong.service';
+import { TestingController } from './testing/testing.controller';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { TestController } from './test/test.controller';
     UsersController,
     ProfileController,
     TestController,
+    TestingController,
   ],
-  providers: [UsersService, PongGateway, ChatGateway],
+  providers: [UsersService, PongGateway, ChatGateway, PongService],
 })
 export class AppModule {}
