@@ -62,4 +62,5 @@ export interface Chat_ {
 
 export interface AddPopup_ {
   trigger: boolean;
+  setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
 }

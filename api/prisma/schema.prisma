@@ -41,7 +41,10 @@ model Friendship {
 model Message {
 	id Int @id @default(autoincrement())
 	author String
-	message String
+	authorUID String
+	messageText String
+	room Chatroom @relation(fields: [roomId], references: [id])
+	roomId Int
 	@@map("message")
 } 
 
@@ -49,27 +52,10 @@ model Chatroom {
  	id			Int  		@id  @default(autoincrement())
  	admin		String
  	name		String
+	protected	Boolean
+	password    String
+	visibility 	Boolean
+	messages	Message[] @relation()
 	@@map("chatroom")
 }
 
-// model Convo {
-// 	id		Int		@id
-// 	message	String
-// 	user	User[] @relation(fields: [name], references: [displayname], onDelete: Cascade)
-// 	name	String
-// 	@@map("convo")
-// }
-
-// model Blacklist {
-// 	user User[] @relation()
-// 	@@map("blacklist")
-// }
-
-// model ChatRoom {
-// 	id			Int  		@id @default(audtoincrement())
-// 	admin		String
-// 	name		String
-// 	convo		Convo[] 	@relation()
-// 	blacklist	Blacklist[] @relation()
-// 	@@map("chatroom")
-// }

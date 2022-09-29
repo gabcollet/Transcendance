@@ -43,13 +43,24 @@ export class ChatController {
 
   @UseGuards(JwtAuthGuard)
   @Post('create-channels')
-  async createChannels(@Body() body: ChatDto) {
-    // const channel = await this.prisma.message.create({ data: body });
-    let password: string = body.password;
-    // if (password.length < 6 && password !== '') {
-    //   throw new BadRequestException('password too short');
-    // }
-    this.logger.debug('Channel created');
-    this.logger.debug(body);
+  async createChannels(@Req() request: Request, @Body() body: ChatDto) {
+    let password = '';
+    let admin = JSON.stringify(request.user);
+
+    if (body.protected === false) {
+      password = '';
+    } else {
+      password = body.password;
+    }
+    const channel = await this.prisma.chatroom.create({
+      data: {
+        name: body.name,
+        admin: admin,
+        protected: body.protected,
+        password: password,
+        visibility: body.checked,
+      },
+    });
+    this.logger.log('Channel created');
   }
 }

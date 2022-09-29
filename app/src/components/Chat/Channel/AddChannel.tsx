@@ -17,7 +17,7 @@ const AddChannel = () => {
         New Channel
       </p>
       <FontAwesomeIcon className={styles["add-icon"]} icon={faCirclePlus} />
-      <AddPopup trigger={pop}></AddPopup>
+      <AddPopup trigger={pop} setTrigger={setPop}></AddPopup>
     </div>
   );
 };

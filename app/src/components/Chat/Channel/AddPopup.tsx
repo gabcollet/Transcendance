@@ -1,57 +1,90 @@
 import styles from "./AddPopup.module.css";
-import { AddPopup_ } from "../../interfaces";
+import { AddPopup_ } from "../../../interfaces";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 
 const AddPopup = (props: AddPopup_) => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [checked, setChecked] = useState(false);
-  let emptyname = <></>;
-  let wrongPassword = <></>;
+  const [errorMsg, setErrorMsg] = useState(<></>);
   let response: any;
+
+  const handleExit = () => {
+    setName("");
+    setPassword("");
+    setChecked(false);
+    setErrorMsg(<></>);
+    props.setTrigger(false);
+  };
   const handleCreate = () => {
     if (name !== "") {
-      if (password !== "") {
+      if (password === "") {
         response = {
           name: name,
-          password: password,
           checked: checked,
+          protected: false,
         };
       } else {
         response = {
           name: name,
+          password: password,
           checked: checked,
-          password: "jasihdfkljasdfhaskldjfhaklsdfhj",
+          protected: true,
         };
       }
       let channels = axios
-        .post(
-          "http://localhost:3030/chat/create-channels",
-          { response },
-          {
-            withCredentials: true,
-            headers: {
-              Authorization: `bearer ${Cookies.get("jwtToken")}`,
-            },
-          }
-        )
+        .post("http://localhost:3030/chat/create-channels", response, {
+          withCredentials: true,
+          headers: {
+            Authorization: `bearer ${Cookies.get("jwtToken")}`,
+          },
+        })
         .then((response) => {
           console.log("Channel Created");
+          props.setTrigger(false);
+          setName("");
+          setPassword("");
+          setChecked(false);
+          setErrorMsg(<></>);
         })
         .catch((error) => {
-          console.log(error.response.data.message);
+          if (error.response.status === 500) {
+            setErrorMsg(
+              <div>
+                <li key="1" className={styles["msg-list"]}>
+                  <p className={styles["error-msg"]}>Server Error</p>
+                </li>
+              </div>
+            );
+          } else {
+            const listMessage = error.response.data.message.map(
+              (message: string) => (
+                <li key="1" className={styles["msg-list"]}>
+                  <p className={styles["error-msg"]}>{message}</p>
+                </li>
+              )
+            );
+            setErrorMsg(<div>{listMessage}</div>);
+          }
         });
     }
   };
   return props.trigger ? (
     <div className={styles["addpop-wrap"]}>
       <div className={styles["addpop-in"]}>
+        <FontAwesomeIcon
+          className={styles["exit"]}
+          icon={faCircleXmark}
+          onClick={handleExit}
+        ></FontAwesomeIcon>
         <div className={styles["title"]}>Create Channel</div>
+        <div className={styles["error-wrap"]}>{errorMsg}</div>
         <div className={styles["user-input"]}>
           <p>Channel Name:</p>
-          {emptyname}
           <input
             value={name}
             onChange={(event) => {
@@ -62,7 +95,6 @@ const AddPopup = (props: AddPopup_) => {
         </div>
         <div className={styles["user-input"]}>
           <p>Channel Password:</p>
-          {wrongPassword}
           <input
             value={password}
             type="password"

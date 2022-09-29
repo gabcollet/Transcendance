@@ -1,6 +1,6 @@
 import styles from "./MessageWindow.module.css";
 import ChatBubble from "./ChatBubble";
-import { MessageWindow_ } from "../../interfaces";
+import { MessageWindow_ } from "../../../interfaces";
 import axios from "axios";
 
 const MessageWindow = (props: MessageWindow_) => {
@@ -14,7 +14,6 @@ const MessageWindow = (props: MessageWindow_) => {
     })
     .then((response) => {
       convo = response.data;
-      console.log(convo);
     });
   return (
     <div className={styles["msg-window"]}>

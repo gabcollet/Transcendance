@@ -5,7 +5,7 @@ import {
   faCirclePlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Channel_ } from "../../interfaces";
+import { Channel_ } from "../../../interfaces";
 
 const Channel = (props: Channel_) => {
   let icon = <></>;
