@@ -24,6 +24,7 @@ model User {
   isWinner     History[]  @relation("winner")
   isLoser      History[]  @relation("loser")
   stats        Stats?
+  socketID     String?      @default("no ID")
   Achievements Achievements?
 
   @@map("users")

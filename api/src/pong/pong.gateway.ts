@@ -15,9 +15,14 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   private logger: Logger = new Logger('PongGateway');
 
   @WebSocketServer() server: Server;
-
+  
   afterInit(server: Server) {
     this.logger.log('Pong gateway initialized');
+  }
+  
+  @SubscribeMessage('online')
+  handleOnline(client: Socket, profileUsername: string){
+    this.pongService.toggleOnline(client, profileUsername);
   }
 
   @SubscribeMessage('joinRoom')
