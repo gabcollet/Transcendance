@@ -304,6 +304,19 @@ export class UsersService {
     });
   }
 
+  async updateDisplayName(username: string, displayName: string) {
+    return this.prisma.user.update({
+      where: {
+        username: username,
+      },
+      data: {
+        displayname: displayName,
+      },
+    });
+  }
+
+  async updateProfilePicture(username: string) {}
+
   async getAchievements(username: string) {
     const achievements = await this.prisma.achievements.findUnique({
       where: { username: username },

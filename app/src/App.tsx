@@ -14,6 +14,7 @@ import { fetchText } from "./components/Profile/FetchValue";
 import { SearchBar } from "./components/Profile/SearchBar";
 import TwoFAQRCode from "./components/TwoFAQRCode";
 import TwoFAVerify from "./Pages/TwoFAVerify";
+import { ProfileConfig } from "./components/Profile/ProfileConfig";
 
 export const ProfileContext = React.createContext("");
 
@@ -87,6 +88,10 @@ const App = () => {
                 <Route
                   path="user"
                   element={<ProfileContent username={profileUsername} />}
+                />
+                <Route
+                  path="config"
+                  element={<ProfileConfig username={profileUsername} />}
                 />
               </Route>
               <Route

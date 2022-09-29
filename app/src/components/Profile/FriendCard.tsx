@@ -43,6 +43,9 @@ const FriendButton = (props: FriendButtonProps) => {
     if (friendStatus === "0") {
       setFriendStatus("1");
     } else if (friendStatus === "2") {
+      if (props.onRemove) {
+        props.onRemove();
+      }
       setFriendStatus("3");
     }
   }

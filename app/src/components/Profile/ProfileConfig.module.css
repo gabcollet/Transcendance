@@ -1,0 +1,23 @@
+.config-header {
+    font-size: 3rem;
+}
+
+.config-subheader {
+    font-size: 2rem;
+}
+
+.config-displayname {
+    border-style: solid;
+    border-color: blue;
+}
+
+.config-picture {
+    border-style: solid;
+    border-color: red;
+}
+
+.config-twofa {
+    border-style: solid;
+    border-color: gold;
+
+}

@@ -9,6 +9,8 @@ import {
   NotFoundException,
   UseGuards,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AuthorizationGuard } from '../auth/auth.guard';
@@ -17,6 +19,7 @@ import { Request, Response } from 'express';
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import { UserDto } from './dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('users')
 export class UsersController {
@@ -113,6 +116,22 @@ export class UsersController {
   removeFriend(@Query() query, @Param() params) {
     console.log('IN REMOVE FRIENDS');
     return this.usersService.removeFriend(params.name, query.username);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post(':name/config/displayname')
+  updateDisplayName(@Query() query, @Param() params) {
+    return this.usersService.updateDisplayName(params.name, query.displayname);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post(':name/config/picture')
+  updateProfilePicture(
+    @UploadedFile() file: Express.Multer.File,
+    @Param() params,
+  ) {
+    console.log(file);
+    return this.usersService.updateProfilePicture(params.name);
   }
 
   @UseGuards(JwtAuthGuard)
