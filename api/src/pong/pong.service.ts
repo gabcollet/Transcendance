@@ -5,7 +5,6 @@ import { Room } from './pong.room';
 import { Server } from 'socket.io';
 import { Ball } from './pong.ball';
 import { PrismaService } from '../prisma/prisma.service';
-import { use } from 'passport';
 
 @Injectable()
 export class PongService {
@@ -18,6 +17,7 @@ export class PongService {
   private m_room: Map<Socket, string> = new Map<Socket, string>();
   private m_pid: Map<Socket, number> = new Map<Socket, number>();
   private m_roomUser: Map<string, string> = new Map<string, string>();
+  private m_user: Map<Socket, string> = new Map<Socket, string>();
   private rooms: [Room] = [null];
 
   constructor(
@@ -55,6 +55,7 @@ export class PongService {
     this.m_room.set(client, room);
     this.m_pid.set(client, pID);
     this.m_roomUser.set(room, username);
+    this.m_user.set(client, username);
     if (pID !== 3) {
       this.logger.log(`${username} joined room ${room} as P${pID}`);
     } else {
@@ -112,7 +113,7 @@ export class PongService {
 
   leavingRoom(client: Socket, room: string) {
     client.leave(room);
-    const username = this.m_roomUser.get(room);
+    const username = this.m_user.get(client);
     const pid = this.m_pid.get(client);
     if (pid === 1 || pid === 2){
       this.logger.warn(`${username} leaved room ${room} as P${pid}`);
@@ -122,6 +123,7 @@ export class PongService {
     this.m_room.delete(client);
     this.m_pid.delete(client);
     this.m_roomUser.delete(room);
+    this.m_user.delete(client);
   }
 
   playerDisconnect(client: Socket, server: Server, status: string) {
@@ -132,12 +134,13 @@ export class PongService {
       this.leavingRoom(client, room);
       return;
     }
+    this.leavingRoom(client, room);
     server.to(room).emit('leavedRoom', pid);
-    for (let [key, value] of this.m_room.entries()) {
+    /* for (let [key, value] of this.m_room.entries()) {
       if (value === room) {
         this.leavingRoom(key, room);
       }
-    }
+    } */
     if (this.roomiD === room && this.isWaiting) {
       this.isWaiting = false;
     }
@@ -256,7 +259,7 @@ export class PongService {
 
   addWinLost(client: Socket, winner: number, roomID: string) {
     for (let i = 0; i < this.rooms.length; i++) {
-      if (this.rooms[i] && this.rooms[i].roomID == roomID) {
+      if (this.rooms[i] && this.rooms[i].roomID == roomID && !this.rooms[i].winGiven) {
         const room = this.rooms[i];
         if (winner === 1) {
           this.addWin(room.p1_name);
@@ -267,6 +270,7 @@ export class PongService {
           this.addLost(room.p1_name);
           this.addHistory(room.p2_name, room.p1_name, room.p2_score, room.p1_score);
         }
+        room.winGiven = true;
       }
     }
   }
@@ -310,8 +314,7 @@ export class PongService {
   }
 
   async toggleGameStatus(client: Socket, status: string) {
-    const roomID = this.m_room.get(client);
-    const username = this.m_roomUser.get(roomID);
+    const username = this.m_user.get(client);
     if (username) {
       await this.prisma.user.update({
         where: {

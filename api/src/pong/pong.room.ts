@@ -18,6 +18,7 @@ export class Room {
     this.ballSpeed = 6;
     this.random = random;
     this.maxScore = maxScore;
+    this.winGiven = false;
     if (Math.random() < 0.5) {
       this.ball = new Ball(
         w / 2,
@@ -53,4 +54,5 @@ export class Room {
   ball: Ball;
   random: boolean;
   maxScore: number;
+  winGiven: boolean;
 }
