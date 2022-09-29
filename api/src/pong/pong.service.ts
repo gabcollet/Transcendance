@@ -261,9 +261,11 @@ export class PongService {
         if (winner === 1) {
           this.addWin(room.p1_name);
           this.addLost(room.p2_name);
+          this.addHistory(room.p1_name, room.p2_name, room.p1_score, room.p2_score);
         } else if (winner === 2) {
           this.addWin(room.p2_name);
           this.addLost(room.p1_name);
+          this.addHistory(room.p2_name, room.p1_name, room.p2_score, room.p1_score);
         }
       }
     }
@@ -321,5 +323,16 @@ export class PongService {
       })
       this.logger.verbose(`${username} is now ${status}.`)
     }
+  }
+
+  async addHistory(user1: string, user2: string, score1: number, score2: number, ) {
+    const matchHistory = await this.prisma.history.create({
+      data: {
+        winner: user1,
+        score1: score1,
+        loser: user2,
+        score2: score2
+      }
+    })
   }
 }

@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
-import { board, Player, Ball } from "./assets";
-import { socket, pQuit } from "../../../Pages/PongRoom";
-import { drawRectangle } from "./draw";
+import { board, Player, Ball } from "../Pong/List/assets";
+import { socket, pQuit } from "../../Pages/PongRoom";
+import { drawRectangle } from "../Pong/List/draw";
 
 export let roomID: string;
 export let pID: number;

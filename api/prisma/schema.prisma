@@ -21,6 +21,8 @@ model User {
   twoFASecret  String?       @unique
   isSender     Friendship[]  @relation("send")
   isReceiver   Friendship[]  @relation("receive")
+  isWinner     History[]  @relation("winner")
+  isLoser      History[]  @relation("loser")
   stats        Stats?
   Achievements Achievements?
 
@@ -50,6 +52,17 @@ model Stats {
   username      String @unique
 
   @@map("stats")
+}
+
+model History {
+  id       Int    @id @default(autoincrement())
+  user1    User   @relation("winner", fields: [winner], references: [username])
+  winner   String
+  score1   Int    @default(0)
+  user2    User   @relation("loser", fields: [loser], references: [username])
+  loser    String
+  score2   Int    @default(0)
+  @@map("history")
 }
 
 model Friendship {
