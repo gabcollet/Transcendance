@@ -2,11 +2,12 @@ import Cookies from "js-cookie";
 import { useContext, useState } from "react";
 import { ProfileContext } from "../../App";
 import styles from "./ProfileConfig.module.css";
+import axios from "axios";
 
 export const ProfileConfig = (props: any) => {
   const profileName = useContext(ProfileContext);
   const [newDisplayName, setNewDisplayName] = useState("");
-  const [newProfilePicture, setNewProfilePicture] = useState();
+  const [newProfilePicture, setNewProfilePicture] = useState(Object);
 
   const handleDisplayNameChange = (event: any) => {
     setNewDisplayName(event.target.value);
@@ -14,20 +15,18 @@ export const ProfileConfig = (props: any) => {
 
   const handleFileChange = async (event: any) => {
     setNewProfilePicture(event.target.files[0]);
-    console.log("this is event.target.value");
-    console.log(newProfilePicture);
 
-    const resp = await fetch(
-      "http://localhost:3030/users/" + profileName + "/config/picture",
-      {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          Authorization: `bearer ${Cookies.get("jwtToken")}`,
-        },
-        body: newProfilePicture,
-      }
-    );
+    // const resp = await fetch(
+    //   "http://localhost:3030/users/" + profileName + "/config/picture",
+    //   {
+    //     method: "POST",
+    //     credentials: "include",
+    //     headers: {
+    //       Authorization: `bearer ${Cookies.get("jwtToken")}`,
+    //     },
+    //     body: newProfilePicture,
+    //   }
+    // );
   };
 
   const handleClick = async (event: any) => {
@@ -43,6 +42,21 @@ export const ProfileConfig = (props: any) => {
           Authorization: `bearer ${Cookies.get("jwtToken")}`,
         },
       }
+    );
+  };
+
+  const onFileUpload = async (event: any) => {
+    const formData = new FormData();
+
+    formData.append(
+      "myFile",
+      newProfilePicture || "",
+      newProfilePicture?.name || ""
+    );
+
+    axios.post(
+      "http://locahost:3030/users/" + profileName + "/config/picture",
+      formData
     );
   };
 
@@ -65,6 +79,7 @@ export const ProfileConfig = (props: any) => {
           Change Profile Picture
         </h3>
         <input type="file" onChange={handleFileChange} />
+        <button onClick={onFileUpload}>Upload File</button>
       </div>
       <div className={styles["config-twofa"]}>
         <h3

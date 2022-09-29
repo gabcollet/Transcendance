@@ -74,7 +74,11 @@ const FriendsContent = (props: ProfileProps) => {
   const friendsElement = friends?.map((friendUsername: string) => {
     return (
       friendUsername && (
-        <FriendCard onRemove={callBackRemove} friendUsername={friendUsername} />
+        <FriendCard
+          key={friendUsername}
+          onRemove={callBackRemove}
+          friendUsername={friendUsername}
+        />
       )
     );
   });
@@ -84,6 +88,7 @@ const FriendsContent = (props: ProfileProps) => {
       return (
         friendUsername && (
           <FriendCard
+            key={friendUsername}
             onRemove={callBackRemove}
             friendUsername={friendUsername}
           />

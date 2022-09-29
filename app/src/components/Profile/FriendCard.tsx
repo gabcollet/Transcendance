@@ -13,18 +13,26 @@ import Cookies from "js-cookie";
 
 const FriendButton = (props: FriendButtonProps) => {
   const profileName = useContext(ProfileContext);
-  const [friendStatus, setFriendStatus] = useState("0");
+  const [friendStatus, setFriendStatus] = useState("1");
 
   useEffect(() => {
-    fetchText(
-      "users/" +
-        profileName +
-        "/friendstatus" +
-        "?username=" +
-        props.friendUsername,
-      setFriendStatus
-    );
-  }, [profileName, props.friendUsername]);
+    console.log("before fetch");
+    const fetchData = async () => {
+      await fetchText(
+        "users/" +
+          profileName +
+          "/friendstatus" +
+          "?username=" +
+          props.friendUsername,
+        setFriendStatus
+      );
+      console.log("just in-after fetch");
+    };
+    fetchData();
+    console.log("friendUsername below");
+    console.log(props.friendUsername);
+    console.log(`status in useEffect: ${friendStatus}`);
+  }, [props.friendUsername]);
 
   async function addFriend() {
     const resp = await fetch(
@@ -84,7 +92,6 @@ const FriendButton = (props: FriendButtonProps) => {
     setFriendStatus("0");
     if (props.onRemove) {
       await props.onRemove();
-      console.log("post-onremove");
     }
   }
 
@@ -120,7 +127,6 @@ export const FriendCard = (props: FriendCardProps) => {
           onRemove={props.onRemove}
           friendUsername={friendUser.username}
         />
-        {/* <button>Add friend</button> */}
         <button>Message</button>
       </div>
       <div className={styles["individual-stats"]}>
