@@ -2,7 +2,7 @@ import "./Pong.css";
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { socket } from "../../Pages/PongRoom";
-import useCanvas from "./List/useCanvas";
+import useCanvas from "../Menu/useCanvas";
 
 const Pong = (props: any) => {
   const canvasRef = useCanvas(props.username);

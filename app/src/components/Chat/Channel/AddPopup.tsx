@@ -36,7 +36,7 @@ const AddPopup = (props: AddPopup_) => {
           protected: true,
         };
       }
-      let channels = axios
+      axios
         .post("http://localhost:3030/chat/create-channels", response, {
           withCredentials: true,
           headers: {

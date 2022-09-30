@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
-import { board, Player, Ball } from "./assets";
-import { socket, pQuit } from "../../../Pages/PongRoom";
-import { drawRectangle } from "./draw";
+import { board, Player, Ball } from "../Pong/List/assets";
+import { socket, pQuit } from "../../Pages/PongRoom";
+import { drawRectangle } from "../Pong/List/draw";
 
 export let roomID: string;
 export let pID: number;
@@ -196,9 +196,9 @@ const useCanvas = (username: string) => {
             }
         };
         
-        const leftScreen = (pid: number) => {
+       /*  const leftScreen = (pid: number) => {
             renderScreen(`PLAYER ${pid} LEFT THE GAME`, h / 2 + 15, 60);
-        };
+        }; */
 
         const animationScreen = async () => {
             renderScreen("", 0, 0);
@@ -234,7 +234,7 @@ const useCanvas = (username: string) => {
 
         //Game Logic
         if (pQuit) {
-            leftScreen(pID === 1 ? 2 : 1);
+            endScreen(winner.current);
         } else {
             switch (gameStatus) {
                 case 0:

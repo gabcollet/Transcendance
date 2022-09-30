@@ -18,11 +18,11 @@ export class PongService {
   private m_room: Map<Socket, string> = new Map<Socket, string>();
   private m_pid: Map<Socket, number> = new Map<Socket, number>();
   private m_roomUser: Map<string, string> = new Map<string, string>();
+  //! J'aurais techniquement plus besoin de m_user avec la DB
+  private m_user: Map<Socket, string> = new Map<Socket, string>();
   private rooms: [Room] = [null];
 
-  constructor(
-    private prisma: PrismaService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   createRoom(spectator: boolean): string {
     const { v4: uuidv4 } = require('uuid');
@@ -48,13 +48,19 @@ export class PongService {
       const clientRoom = this.m_roomUser.get(room);
       if (clientRoom == username) {
         this.logger.error(`${username} already in room ${room}`);
-        client.emit('roomInfo', ['You can\'t play against yourself 😢', null, null, null]);
+        client.emit('roomInfo', [
+          "You can't play against yourself 😢",
+          null,
+          null,
+          null,
+        ]);
         return;
       }
     }
     this.m_room.set(client, room);
     this.m_pid.set(client, pID);
     this.m_roomUser.set(room, username);
+    this.m_user.set(client, username);
     if (pID !== 3) {
       this.logger.log(`${username} joined room ${room} as P${pID}`);
     } else {
@@ -68,7 +74,7 @@ export class PongService {
     this.randomRoom = random;
     const room = this.createRoom(false);
     this.joining(client, room, username, this.isWaiting ? 1 : 2);
-    this.toggleGameStatus(client, "in game");
+    this.toggleGameStatus(client, 'in game');
   }
 
   joinSpectator(client: Socket, username: string) {
@@ -77,7 +83,7 @@ export class PongService {
       room = this.createRoom(true);
     }
     this.joining(client, room, username, 3);
-    this.toggleGameStatus(client, "spectating");
+    this.toggleGameStatus(client, 'spectating');
   }
 
   playerReady(
@@ -112,9 +118,9 @@ export class PongService {
 
   leavingRoom(client: Socket, room: string) {
     client.leave(room);
-    const username = this.m_roomUser.get(room);
+    const username = this.m_user.get(client);
     const pid = this.m_pid.get(client);
-    if (pid === 1 || pid === 2){
+    if (pid === 1 || pid === 2) {
       this.logger.warn(`${username} leaved room ${room} as P${pid}`);
     } else if (pid === 3) {
       this.logger.warn(`${username} leaved room ${room} as Spectator`);
@@ -122,6 +128,7 @@ export class PongService {
     this.m_room.delete(client);
     this.m_pid.delete(client);
     this.m_roomUser.delete(room);
+    this.m_user.delete(client);
   }
 
   playerDisconnect(client: Socket, server: Server, status: string) {
@@ -132,12 +139,13 @@ export class PongService {
       this.leavingRoom(client, room);
       return;
     }
+    this.leavingRoom(client, room);
     server.to(room).emit('leavedRoom', pid);
-    for (let [key, value] of this.m_room.entries()) {
+    /* for (let [key, value] of this.m_room.entries()) {
       if (value === room) {
         this.leavingRoom(key, room);
       }
-    }
+    } */
     if (this.roomiD === room && this.isWaiting) {
       this.isWaiting = false;
     }
@@ -164,7 +172,7 @@ export class PongService {
         payload.p2_h,
         payload.roomID,
         this.randomRoom,
-        payload.maxScore
+        payload.maxScore,
       ),
     );
     this.randomRoom = false;
@@ -220,7 +228,7 @@ export class PongService {
       ) {
         const room = this.rooms[i];
         const ball = room.ball;
-        
+
         room.frameCount++;
         ball.update(payload.pos1, payload.pos2);
         if (ball.x < 0 || ball.x > ball.w) {
@@ -256,15 +264,32 @@ export class PongService {
 
   addWinLost(client: Socket, winner: number, roomID: string) {
     for (let i = 0; i < this.rooms.length; i++) {
-      if (this.rooms[i] && this.rooms[i].roomID == roomID) {
+      if (
+        this.rooms[i] &&
+        this.rooms[i].roomID == roomID &&
+        !this.rooms[i].winGiven
+      ) {
         const room = this.rooms[i];
         if (winner === 1) {
           this.addWin(room.p1_name);
           this.addLost(room.p2_name);
+          this.addHistory(
+            room.p1_name,
+            room.p2_name,
+            room.p1_score,
+            room.p2_score,
+          );
         } else if (winner === 2) {
           this.addWin(room.p2_name);
           this.addLost(room.p1_name);
+          this.addHistory(
+            room.p2_name,
+            room.p1_name,
+            room.p2_score,
+            room.p1_score,
+          );
         }
+        room.winGiven = true;
       }
     }
   }
@@ -272,54 +297,96 @@ export class PongService {
   async addWin(username: string) {
     const userStats = await this.prisma.stats.findUnique({
       where: {
-        username: username
-      }
-    })
+        username: username,
+      },
+    });
     await this.prisma.stats.update({
       where: {
-        username: username
+        username: username,
       },
       data: {
         wins: userStats.wins + 1,
         winningStreak: userStats.winningStreak + 1,
-        losingStreak: 0
-      }
-    })
-    this.logger.verbose(`${username} now have ${userStats.wins + 1} wins. GG!`)
+        losingStreak: 0,
+      },
+    });
+    this.logger.verbose(`${username} now have ${userStats.wins + 1} wins. GG!`);
   }
-  
+
   async addLost(username: string) {
     const userStats = await this.prisma.stats.findUnique({
       where: {
-        username: username
-      }
-    })
+        username: username,
+      },
+    });
     await this.prisma.stats.update({
       where: {
-        username: username
+        username: username,
       },
       data: {
         losses: userStats.losses + 1,
         losingStreak: userStats.losingStreak + 1,
-        winningStreak: 0
-      }
-    })
-    this.logger.verbose(`${username} now have ${userStats.losses + 1} losses. Sorry...`)
+        winningStreak: 0,
+      },
+    });
+    this.logger.verbose(
+      `${username} now have ${userStats.losses + 1} losses. Sorry...`,
+    );
   }
 
   async toggleGameStatus(client: Socket, status: string) {
-    const roomID = this.m_room.get(client);
-    const username = this.m_roomUser.get(roomID);
+    const user = await this.prisma.user.findFirst({
+      where: {
+        socketID: client.id,
+      },
+    });
+    const username = user ? user.username : null;
     if (username) {
       await this.prisma.user.update({
         where: {
-          username: username
+          username: username,
         },
         data: {
-          status: status
-        }
-      })
-      this.logger.verbose(`${username} is now ${status}.`)
+          status: status,
+        },
+      });
+      this.logger.verbose(`${username} is now ${status}.`);
     }
+  }
+
+  async toggleOnline(client: Socket, username: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        username: username,
+      },
+    });
+    if (user.status !== 'online') {
+      await this.prisma.user.update({
+        where: {
+          username: username,
+        },
+        data: {
+          status: 'online',
+          socketID: client.id.toString()
+        },
+      });
+      this.logger.verbose(`${username} is now online.`);
+    }
+  }
+
+  async addHistory(
+    user1: string,
+    user2: string,
+    score1: number,
+    score2: number,
+  ) {
+    await this.prisma.history.create({
+      data: {
+        winner: user1,
+        score1: score1,
+        loser: user2,
+        score2: score2,
+      },
+    });
   }
 }

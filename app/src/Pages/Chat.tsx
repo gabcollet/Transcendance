@@ -6,8 +6,6 @@ import ChatChannels from "../components/Chat/Channel/ChatChannels";
 import ChatFriendsList from "../components/Chat/Users/ChatFriendsList";
 import { Chat_ } from "../interfaces";
 import Members from "../components/Chat/Users/Members";
-import axios from "axios";
-import Cookies from "js-cookie";
 
 // interface Convo_ {
 //   message: string;
@@ -26,7 +24,7 @@ const Chat = (props: Chat_) => {
   const [messages, setMessages] = useState<string[]>([]);
   const [roomId, setRoomId] = useState<number>(0);
   const [userChannels, setUserChannels] = useState<number[]>([]);
-  const [publicChannels, setPublicChannels] = useState<number[]>([]);
+  //   const [publicChannels, setPublicChannels] = useState<number[]>([]);
 
   //   let channels = axios
   //     .get("http://localhost:3030/chat/channels", {
@@ -37,6 +35,9 @@ const Chat = (props: Chat_) => {
   //     })
   //     .then((response) => {})
   //     .catch((error) => {});
+  if (roomId !== 0) {
+    setRoomId(1);
+  }
   return (
     <div className={styles["chat-wrapper"]}>
       <div className={styles["left"]}>

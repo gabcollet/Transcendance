@@ -32,7 +32,7 @@ const InputZone = (props: InputZone_) => {
     const newSocket = io("localhost:6005");
     setSocket(newSocket);
     console.log("Chat socket set");
-  }, [setSocket]); //pas certain de comprendre pourquoi il doit dependre de setSocket
+  }, [setSocket]);
 
   return (
     <div className={styles["type-zone"]}>

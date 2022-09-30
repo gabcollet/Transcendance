@@ -21,9 +21,11 @@ model User {
     twoFASecret  String?       @unique
     isSender     Friendship[]  @relation("send")
     isReceiver   Friendship[]  @relation("receive")
+    isWinner     History[]     @relation("winner")
+    isLoser      History[]     @relation("loser")
     stats        Stats?
+    socketID     String?       @default("no ID")
     Achievements Achievements?
-    admin        Chatroom?     @relation("admin")
 
     @@map("users")
 }
@@ -53,6 +55,18 @@ model Stats {
     @@map("stats")
 }
 
+model History {
+    id     Int    @id @default(autoincrement())
+    user1  User   @relation("winner", fields: [winner], references: [username])
+    winner String
+    score1 Int    @default(0)
+    user2  User   @relation("loser", fields: [loser], references: [username])
+    loser  String
+    score2 Int    @default(0)
+
+    @@map("history")
+}
+
 model Friendship {
     id       Int    @id @default(autoincrement())
     user1    User   @relation("send", fields: [sender], references: [username], onDelete: Cascade)
@@ -71,18 +85,16 @@ model Message {
     messageText String
     room        Chatroom @relation(fields: [roomId], references: [id])
     roomId      Int
-    sendAt      DateTime
 
     @@map("message")
 }
 
 model Chatroom {
     id         Int       @id @default(autoincrement())
-    admin      User      @relation("admin", fields: [adminName], references: [username])
-    adminName  String    @unique
+    admin      String
     name       String
     protected  Boolean
-    password   String?
+    password   String
     visibility Boolean
     messages   Message[] @relation()
 

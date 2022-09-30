@@ -14,6 +14,7 @@ import { fetchText } from "./components/Profile/FetchValue";
 import { SearchBar } from "./components/Profile/SearchBar";
 import TwoFAQRCode from "./components/TwoFAQRCode";
 import TwoFAVerify from "./Pages/TwoFAVerify";
+import { socket } from "./Pages/PongRoom";
 
 export const ProfileContext = React.createContext("");
 
@@ -23,15 +24,15 @@ const App = () => {
   const [profileUsername, setProfileUsername] = useState("USER NOT LOADED");
   // const [profileUsername, setProfileUsername] = useState("test");
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
-
+  
   useEffect(() => {
     fetchText("profile/username", setProfileUsername);
   }, []);
-
+  
   const changeBG = (newClassName: string) => {
     setBackground(newClassName);
   };
-
+  
   useEffect(() => {
     async function getUsername() {
       await fetch("http://localhost:3030/profile/username", {
@@ -40,11 +41,17 @@ const App = () => {
           Authorization: `bearer ${Cookies.get("jwtToken")}`,
         },
       })
-        .then((res) => res.text())
-        .then((data) => setProfileUsername(data));
+      .then((res) => res.text())
+      .then((data) => setProfileUsername(data))
     }
     getUsername();
   }, []);
+
+  useEffect(() => {
+    if (profileUsername !== "USER NOT LOADED"){
+      socket.emit('online', profileUsername);
+    }
+  }, [profileUsername]);
 
   return (
     <ProfileContext.Provider value={profileUsername}>

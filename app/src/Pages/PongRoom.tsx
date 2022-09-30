@@ -1,7 +1,7 @@
 import "./PongRoom.css";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { roomID, pID } from "../components/Pong/List/useCanvas";
+import { roomID, pID } from "../components/Menu/useCanvas";
 import io from "socket.io-client";
 
 export const socket = io("localhost:6006");

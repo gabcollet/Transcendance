@@ -10,7 +10,6 @@ const AddChannel = () => {
     let state = pop === true ? false : true;
     setPop(state);
   };
-  const createChannel = () => {};
   return (
     <div onClick={addChanel} className={styles["add-wrap"]}>
       <p className={styles["add-text"]}>New Channel</p>

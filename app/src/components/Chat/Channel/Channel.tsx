@@ -1,9 +1,5 @@
 import styles from "./Channel.module.css";
-import {
-  faHashtag,
-  faCircleXmark,
-  faCirclePlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCircleXmark, faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Channel_ } from "../../../interfaces";
 
