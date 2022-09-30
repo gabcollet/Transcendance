@@ -11,6 +11,7 @@ import { UsersModule } from './users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ProfileController } from './users/profile.controller';
 import { TestController } from './test/test.controller';
+import { ChatDto } from './chat/chat.dto';
 import { PongService } from './pong/pong.service';
 import { TestingController } from './testing/testing.controller';
 
@@ -31,6 +32,6 @@ import { TestingController } from './testing/testing.controller';
     TestController,
     TestingController,
   ],
-  providers: [UsersService, PongGateway, ChatGateway, PongService],
+  providers: [UsersService, PongGateway, ChatGateway, PongService, ChatDto],
 })
 export class AppModule {}

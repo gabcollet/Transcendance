@@ -1,6 +1,21 @@
 @import "../../index.css";
 
-li {
+a {
+  color: #f3efff;
+}
+
+.zero,
+.one,
+.two,
+.three,
+.four,
+.five,
+.zero-t,
+.one-t,
+.two-t,
+.three-t,
+.four-t,
+.five-t {
   position: absolute;
   list-style: none;
   color: #f3efff;
@@ -19,13 +34,6 @@ li {
   left: 0;
 
   box-shadow: 0 3px 4px rgba(0, 0, 0, 0.15);
-}
-
-.button-wrapper {
-}
-
-a {
-  color: #f3efff;
 }
 
 a:visited {
