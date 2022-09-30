@@ -2,88 +2,89 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  intraId      String?       @unique @default(uuid())
-  displayname  String?       @default("anon")
-  username     String        @unique
-  picture      String?       @default("https://images.unsplash.com/photo-1521985429101-21bed8b75e47?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80")
-  status       String?       @default("offline")
-  twoFAEnabled Boolean?      @default(false)
-  twoFASecret  String?       @unique
-  isSender     Friendship[]  @relation("send")
-  isReceiver   Friendship[]  @relation("receive")
-  stats        Stats?
-  Achievements Achievements?
-	admin		Chatroom?	@relation("admin")
-  @@map("users")
+    id           Int           @id @default(autoincrement())
+    intraId      String?       @unique @default(uuid())
+    displayname  String?       @default("anon")
+    username     String        @unique
+    picture      String?       @default("https://images.unsplash.com/photo-1521985429101-21bed8b75e47?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80")
+    status       String?       @default("offline")
+    twoFAEnabled Boolean?      @default(false)
+    twoFASecret  String?       @unique
+    isSender     Friendship[]  @relation("send")
+    isReceiver   Friendship[]  @relation("receive")
+    stats        Stats?
+    Achievements Achievements?
+    admin        Chatroom?     @relation("admin")
+
+    @@map("users")
 }
 
 model Achievements {
-  id            Int     @id @default(autoincrement())
-  firstWin      Boolean @default(false)
-  first5Wins    Boolean @default(false)
-  first10Wins   Boolean @default(false)
-  streak5Wins   Boolean @default(false)
-  streak5Losses Boolean @default(false)
-  user          User    @relation(fields: [username], references: [username])
-  username      String  @unique
+    id            Int     @id @default(autoincrement())
+    firstWin      Boolean @default(false)
+    first5Wins    Boolean @default(false)
+    first10Wins   Boolean @default(false)
+    streak5Wins   Boolean @default(false)
+    streak5Losses Boolean @default(false)
+    user          User    @relation(fields: [username], references: [username])
+    username      String  @unique
 
-  @@map("achievements")
+    @@map("achievements")
 }
 
 model Stats {
-  id            Int    @id @default(autoincrement())
-  wins          Int?   @default(0)
-  losses        Int?   @default(0)
-  winningStreak Int?   @default(0)
-  losingStreak  Int?   @default(0)
-  user          User   @relation(fields: [username], references: [username])
-  username      String @unique
+    id            Int    @id @default(autoincrement())
+    wins          Int?   @default(0)
+    losses        Int?   @default(0)
+    winningStreak Int?   @default(0)
+    losingStreak  Int?   @default(0)
+    user          User   @relation(fields: [username], references: [username])
+    username      String @unique
 
-  @@map("stats")
+    @@map("stats")
 }
 
 model Friendship {
-  id       Int    @id @default(autoincrement())
-  user1    User   @relation("send", fields: [sender], references: [username], onDelete: Cascade)
-  sender   String
-  user2    User   @relation("receive", fields: [receiver], references: [username], onDelete: Cascade)
-  receiver String
+    id       Int    @id @default(autoincrement())
+    user1    User   @relation("send", fields: [sender], references: [username], onDelete: Cascade)
+    sender   String
+    user2    User   @relation("receive", fields: [receiver], references: [username], onDelete: Cascade)
+    receiver String
 
-  @@unique([sender, receiver])
-  @@map("friendships")
+    @@unique([sender, receiver])
+    @@map("friendships")
 }
-
 
 model Message {
-	id				Int @id @default(autoincrement())
-	author			String
-	authorUID		String
-	messageText		String
-	room			Chatroom @relation(fields: [roomId], references: [id])
-	roomId			Int
-	sendAt			DateTime
-	@@map("message")
-} 
+    id          Int      @id @default(autoincrement())
+    author      String
+    authorUID   String
+    messageText String
+    room        Chatroom @relation(fields: [roomId], references: [id])
+    roomId      Int
+    sendAt      DateTime
 
-model Chatroom {
- 	id			Int  		@id  @default(autoincrement())
- 	admin		User		@relation("admin", fields: [adminName], references: [username])
-	adminName	String		@unique
- 	name		String
-	protected	Boolean
-	password    String?
-	visibility 	Boolean
-	messages	Message[]	 @relation()
-	@@map("chatroom")
+    @@map("message")
 }
 
+model Chatroom {
+    id         Int       @id @default(autoincrement())
+    admin      User      @relation("admin", fields: [adminName], references: [username])
+    adminName  String    @unique
+    name       String
+    protected  Boolean
+    password   String?
+    visibility Boolean
+    messages   Message[] @relation()
+
+    @@map("chatroom")
+}
