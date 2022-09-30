@@ -26,14 +26,14 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('joinRoom')
-  async handleJoinRoom(client: Socket, [username, random]) {
-    this.pongService.joinRoom(client, username, random);
+  async handleJoinRoom(client: Socket, random: boolean) {
+    this.pongService.joinRoom(client, random);
   }
 
   @SubscribeMessage('playerReady')
   handleReady(
     client: Socket,
-    payload: { room: string; pID: number; username: string },
+    payload: { room: string; pID: number},
   ) {
     this.pongService.playerReady(client, payload, this.server);
   }
@@ -44,7 +44,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   }
   //This handle when a client change location (aka go back one page)
   @SubscribeMessage('leaveRoom')
-  handleLeaveRoom(client: Socket, payload: { room: string; pID: number }) {
+  handleLeaveRoom(client: Socket) {
     this.pongService.playerDisconnect(client, this.server, "online");
   }
 
@@ -89,8 +89,8 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('spectate')
-  handleSpectate(client: Socket, username: string) {
-    this.pongService.joinSpectator(client, username);
+  handleSpectate(client: Socket) {
+    this.pongService.joinSpectator(client);
   }
 
   @SubscribeMessage('gameEnd')
