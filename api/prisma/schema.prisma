@@ -27,6 +27,15 @@ model User {
     socketID     String?       @default("no ID")
     Achievements Achievements?
 
+    Chatrooms Chatroom[]
+    isAdmin   Chatroom[] @relation("admin")
+    blacklist Chatroom[] @relation("blacklist")
+
+    Message Message[]
+
+    mutedBy   User[] @relation("mute")
+    mutedList User[] @relation("mute")
+
     @@map("users")
 }
 
@@ -79,24 +88,38 @@ model Friendship {
 }
 
 model Message {
-    id          Int      @id @default(autoincrement())
-    author      String
-    authorUID   String
+    id Int @id @default(autoincrement())
+
+    author   User @relation(fields: [authorID], references: [id])
+    authorID Int
+
+    room   Chatroom @relation(fields: [roomId], references: [id])
+    roomId Int
+
     messageText String
-    room        Chatroom @relation(fields: [roomId], references: [id])
-    roomId      Int
+    sentAt      DateTime
 
     @@map("message")
 }
 
 model Chatroom {
-    id         Int       @id @default(autoincrement())
-    admin      String
-    name       String
-    protected  Boolean
-    password   String
-    visibility Boolean
-    messages   Message[] @relation()
+    id          Int    @id @default(autoincrement())
+    channelName String
+
+    members User[]
+
+    admin   User[] @relation("admin")
+    adminID Int
+
+    blackList User[] @relation("blacklist")
+
+    protected Boolean
+    password  String?
+
+    private Boolean
+    isDM    Boolean
+
+    messages Message[] @relation()
 
     @@map("chatroom")
 }
