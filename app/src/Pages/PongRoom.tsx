@@ -1,20 +1,17 @@
 import "./PongRoom.css";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { roomID, pID } from "../components/Menu/useCanvas";
+import { pID } from "../components/Menu/useCanvas";
 import io from "socket.io-client";
 
 export const socket = io("localhost:6006");
 export let pQuit : boolean = false;
 
-const PongRoom = (props: any) => {
+const PongRoom = () => {
   const location = useLocation();
 
   useEffect(() => {
-    socket.emit("leaveRoom", {
-      room: roomID,
-      pID: pID,
-    });
+    socket.emit("leaveRoom");
   }, [location]);
 
   useEffect(() => {
@@ -27,17 +24,17 @@ const PongRoom = (props: any) => {
   }, []);
 
   const setRdy = () => {
-    socket.emit("joinRoom", [props.username, false]);
+    socket.emit("joinRoom", false);
     pQuit = false;
   };
   
   const setRandomMode = () => {
-    socket.emit("joinRoom", [props.username, true]);
+    socket.emit("joinRoom", true);
     pQuit = false;
   };
 
   const spectate = () => {
-    socket.emit("spectate", props.username);
+    socket.emit("spectate");
     pQuit = false;
   };
 

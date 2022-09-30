@@ -15,7 +15,7 @@ let frameID: number = 0;
     endgame:   3
   */
 
-const useCanvas = (username: string) => {
+const useCanvas = () => {
     const [room, setRoomID] = useState<string>("");
     const [pid, setpID] = useState<number>(0);
 
@@ -119,7 +119,6 @@ const useCanvas = (username: string) => {
             socket.emit("playerReady", {
                 room: roomID,
                 pID: pID,
-                username: username,
             });
         }
         isReady.current = true;
