@@ -97,7 +97,7 @@ model Message {
     roomId Int
 
     messageText String
-    sentAt      DateTime
+    sentAt      DateTime @default(now())
 
     @@map("message")
 }
@@ -108,8 +108,7 @@ model Chatroom {
 
     members User[]
 
-    admin   User[] @relation("admin")
-    adminID Int
+    admin User[] @relation("admin")
 
     blackList User[] @relation("blacklist")
 
