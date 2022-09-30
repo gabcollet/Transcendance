@@ -10,7 +10,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { request } from 'http';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { UsersService } from '../users/users.service';
 import { Request, Response } from 'express';
 import { PrismaService } from '../prisma/prisma.service';

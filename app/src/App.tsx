@@ -12,8 +12,10 @@ import Chat from "./Pages/Chat";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import { fetchText } from "./components/Profile/FetchValue";
 import { SearchBar } from "./components/Profile/SearchBar";
+import TwoFAQRCode from "./components/TwoFAQRCode";
+import TwoFAVerify from "./Pages/TwoFAVerify";
 
-export const UserContext = React.createContext("");
+export const ProfileContext = React.createContext("");
 
 const App = () => {
   let [background, setBackground] = useState("root-default");
@@ -45,11 +47,13 @@ const App = () => {
   }, []);
 
   return (
-    <UserContext.Provider value={profileUsername}>
+    <ProfileContext.Provider value={profileUsername}>
       <div className={background}>
         <Router>
           <Routes>
             <Route path="/" element={<Login onChangeBg={changeBG}></Login>} />
+            <Route path="/TwoFA" element={<TwoFAQRCode />} />
+            <Route path="/TwoFA/verify" element={<TwoFAVerify />} />
             <Route element={<ProtectedRoutes />}>
               <Route
                 path="/Menu"
@@ -57,17 +61,8 @@ const App = () => {
                   <Menu opening={menuOpening} setOpening={setMenuOpening} />
                 }
               />
-              <Route path="/PongRoom" element={<PongRoom />} />
-              <Route path="/Pong" element={<Pong />} /> //Pong Game
-              <Route path="/Pong" element={<Pong />} /> //Pong Spectate
-              <Route
-                path="/Spectate"
-                element={
-                  <div style={{ color: "white", fontSize: "75px" }}>
-                    SPECTATE
-                  </div>
-                }
-              />
+              <Route path="/PongRoom" element={<PongRoom username={profileUsername} />} />
+              <Route path="/Pong" element={<Pong username={profileUsername} />}  />
               <Route
                 path="/Profile"
                 element={
@@ -109,7 +104,7 @@ const App = () => {
           </Routes>
         </Router>
       </div>
-    </UserContext.Provider>
+    </ProfileContext.Provider>
   );
 };
 

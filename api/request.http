@@ -1,0 +1,10 @@
+GET http://localhost:3030/api/TwoFAAuth
+
+###
+POST http://localhost:3030/auth/twoFA/verify
+Content-Type: application/json
+
+{
+    "jwtToken": "afdsfasdfasdfasdf",
+    "pin": "123565"
+}
