@@ -23,7 +23,7 @@ model User {
   isReceiver   Friendship[]  @relation("receive")
   stats        Stats?
   Achievements Achievements?
-
+	admin		Chatroom?	@relation("admin")
   @@map("users")
 }
 
@@ -65,23 +65,25 @@ model Friendship {
 
 
 model Message {
-	id Int @id @default(autoincrement())
-	author String
-	authorUID String
-	messageText String
-	room Chatroom @relation(fields: [roomId], references: [id])
-	roomId Int
+	id				Int @id @default(autoincrement())
+	author			String
+	authorUID		String
+	messageText		String
+	room			Chatroom @relation(fields: [roomId], references: [id])
+	roomId			Int
+	sendAt			DateTime
 	@@map("message")
 } 
 
 model Chatroom {
  	id			Int  		@id  @default(autoincrement())
- 	admin		String
+ 	admin		User		@relation("admin", fields: [adminName], references: [username])
+	adminName	String		@unique
  	name		String
 	protected	Boolean
-	password    String
+	password    String?
 	visibility 	Boolean
-	messages	Message[] @relation()
+	messages	Message[]	 @relation()
 	@@map("chatroom")
 }
 
