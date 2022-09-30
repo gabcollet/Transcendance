@@ -1,40 +1,34 @@
 import styles from "./Chat.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import InputZone from "../components/Chat/Messages/InputZone";
 import MessageWindow from "../components/Chat/Messages/MessageWindow";
 import ChatChannels from "../components/Chat/Channel/ChatChannels";
 import ChatFriendsList from "../components/Chat/Users/ChatFriendsList";
 import { Chat_ } from "../interfaces";
 import Members from "../components/Chat/Users/Members";
-
-// interface Convo_ {
-//   message: string;
-//   author: string;
-// }
-
-// interface Profile_ {}
-// interface ChatRoom_ {
-//   title: string;
-//   convo: Convo_;
-//   id: number;
-//   members: Profile_;
-// }
+import { Message_ } from "../interfaces";
+import Cookies from "js-cookie";
+import axios, { AxiosResponse } from "axios";
+import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 
 const Chat = (props: Chat_) => {
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<Message_[]>([]);
   const [roomId, setRoomId] = useState<number>(0);
-  const [userChannels, setUserChannels] = useState<number[]>([]);
+  const [channels, setChannels] = useState<AxiosResponse<any, any>>();
   //   const [publicChannels, setPublicChannels] = useState<number[]>([]);
 
-  //   let channels = axios
-  //     .get("http://localhost:3030/chat/channels", {
-  //       withCredentials: true,
-  //       headers: {
-  //         Authorization: `bearer ${Cookies.get("jwtToken")}`,
-  //       },
-  //     })
-  //     .then((response) => {})
-  //     .catch((error) => {});
+  useEffect(() => {
+    axios
+      .get("http://localhost:3030/chat/get-channels", {
+        withCredentials: true,
+        headers: {
+          Authorization: `bearer ${Cookies.get("jwtToken")}`,
+        },
+      })
+      .then((res) => {
+        setChannels(res.data);
+      });
+  }, []);
   if (roomId !== 0) {
     setRoomId(1);
   }
@@ -42,8 +36,8 @@ const Chat = (props: Chat_) => {
     <div className={styles["chat-wrapper"]}>
       <div className={styles["left"]}>
         <ChatChannels
-          userChannels={userChannels}
-          setUserChannels={setUserChannels}
+          userChannels={channels}
+          setUserChannels={setChannels}
         ></ChatChannels>
       </div>
       <div className={styles["mid"]}>

@@ -16,7 +16,7 @@ const MessageWindow = (props: MessageWindow_) => {
     <div className={styles["msg-window"]}>
       {props.messages.map((message, index) => (
         <div>
-          <ChatBubble key={index} message={message}></ChatBubble>
+          <ChatBubble message={message.msg}></ChatBubble>
         </div>
       ))}
     </div>

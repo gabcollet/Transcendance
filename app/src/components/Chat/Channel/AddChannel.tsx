@@ -11,9 +11,15 @@ const AddChannel = () => {
     setPop(state);
   };
   return (
-    <div onClick={addChanel} className={styles["add-wrap"]}>
-      <p className={styles["add-text"]}>New Channel</p>
-      <FontAwesomeIcon className={styles["add-icon"]} icon={faCirclePlus} />
+    <div className={styles["add-wrap"]}>
+      <p onClick={addChanel} className={styles["add-text"]}>
+        New Channel
+      </p>
+      <FontAwesomeIcon
+        onClick={addChanel}
+        className={styles["add-icon"]}
+        icon={faCirclePlus}
+      />
       <AddPopup trigger={pop} setTrigger={setPop}></AddPopup>
     </div>
   );

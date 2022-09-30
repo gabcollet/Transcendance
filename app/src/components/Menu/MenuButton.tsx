@@ -4,7 +4,7 @@ import { MenuButton_ } from "../../interfaces";
 
 const MenuButton = (props: MenuButton_) => {
   return (
-    <li onClick={props.onClick} className={styles[props.className]}>
+    <li key="" onClick={props.onClick} className={styles[props.className]}>
       <p className={styles["small-button"]}>
         <FontAwesomeIcon
           className={styles[props.iconClassName]}

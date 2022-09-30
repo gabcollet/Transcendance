@@ -1,14 +1,13 @@
 import { MouseEventHandler } from "react";
 import React from "react";
-
+import { AxiosResponse } from "axios";
 export interface ChatChannels_ {
-  userChannels: number[];
-  setUserChannels: React.Dispatch<React.SetStateAction<number[]>>;
+  userChannels: any;
+  setUserChannels: any;
 }
 
 export interface ChatBubble_ {
   message: string;
-  key: number;
 }
 
 export interface Channel_ {
@@ -16,19 +15,16 @@ export interface Channel_ {
   joined: boolean;
 }
 
+export interface ChannelDB_ {
+  channelName: string;
+  id: number;
+  isDM: boolean;
+  password: string; // to remove
+  private: boolean;
+  protected: boolean;
+}
 export interface ChatInput_ {
   sendMsg: (message: string) => void;
-}
-
-export interface InputZone_ {
-  setMessages: React.Dispatch<React.SetStateAction<string[]>>;
-  messages: string[];
-  chatRoom: number;
-}
-
-export interface MessageWindow_ {
-  messages: string[];
-  chatRoom: number;
 }
 
 export interface MenuButton_ {
@@ -63,4 +59,21 @@ export interface Chat_ {
 export interface AddPopup_ {
   trigger: boolean;
   setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface Message_ {
+  author: string;
+  msg: string;
+  chatRoom: number;
+}
+
+export interface InputZone_ {
+  setMessages: React.Dispatch<React.SetStateAction<Message_[]>>;
+  messages: Message_[];
+  chatRoom: number;
+}
+
+export interface MessageWindow_ {
+  messages: Message_[];
+  chatRoom: number;
 }
