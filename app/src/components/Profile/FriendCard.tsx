@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
-import styles from "./ProfileBody.module.css";
+import ProfileBodyStyle from "./ProfileBody.module.css";
+import FriendCardStyle from "./FriendCard.module.css";
 import data from "./data_placeholder";
 import { fetchObject, fetchText } from "./FetchValue";
 import {
@@ -15,9 +16,23 @@ const FriendButton = (props: FriendButtonProps) => {
   const profileName = useContext(ProfileContext);
   const [friendStatus, setFriendStatus] = useState("1");
 
+  // useEffect(() => {}, [friendStatus]);
+
+  // useEffect(() => {
+  //   console.log("props.friendUsername below");
+  //   console.log(props.friendUsername);
+  //   fetchText(
+  //     "users/" +
+  //       profileName +
+  //       "/friendstatus" +
+  //       "?username=" +
+  //       props.friendUsername,
+  //     setFriendStatus
+  //   ).then(console.log(`state: ${friendStatus}`);
+  // }, [props.friendUsername]);
+
   useEffect(() => {
-    console.log("before fetch");
-    const fetchData = async () => {
+    async function fetchAsync() {
       await fetchText(
         "users/" +
           profileName +
@@ -26,13 +41,10 @@ const FriendButton = (props: FriendButtonProps) => {
           props.friendUsername,
         setFriendStatus
       );
-      console.log("just in-after fetch");
-    };
-    fetchData();
-    console.log("friendUsername below");
-    console.log(props.friendUsername);
-    console.log(`status in useEffect: ${friendStatus}`);
-  }, [props.friendUsername]);
+      console.log(`friendStatus: ${friendStatus}`);
+    }
+    fetchAsync();
+  }, [props.friendUsername, friendStatus]);
 
   async function addFriend() {
     const resp = await fetch(
@@ -96,13 +108,41 @@ const FriendButton = (props: FriendButtonProps) => {
   }
 
   if (friendStatus === "0") {
-    return <button onClick={addFriend}>Add friend</button>;
+    return (
+      <button
+        className={`${FriendCardStyle["friend-button"]} ${FriendCardStyle["button-65"]}`}
+        onClick={addFriend}
+      >
+        Add friend
+      </button>
+    );
   } else if (friendStatus === "1") {
-    return <button onClick={cancelRequest}>Cancel friend request</button>;
+    return (
+      <button
+        className={`${FriendCardStyle["friend-button"]} ${FriendCardStyle["button-65"]}`}
+        onClick={cancelRequest}
+      >
+        Cancel friend request
+      </button>
+    );
   } else if (friendStatus === "2") {
-    return <button onClick={addFriend}>Accept friend request</button>;
+    return (
+      <button
+        className={`${FriendCardStyle["friend-button"]} ${FriendCardStyle["button-65"]}`}
+        onClick={addFriend}
+      >
+        Accept <br></br>friend request
+      </button>
+    );
   } else {
-    return <button onClick={removeFriend}>Remove friend</button>;
+    return (
+      <button
+        className={`${FriendCardStyle["friend-button"]} ${FriendCardStyle["button-65"]}`}
+        onClick={removeFriend}
+      >
+        Remove friend
+      </button>
+    );
   }
 };
 
@@ -115,21 +155,29 @@ export const FriendCard = (props: FriendCardProps) => {
     fetchObject("users/" + props.friendUsername + "/stats", setUserStats);
   }, [props.searchString, props.friendUsername]);
 
+  console.log("friendUser below");
+  console.log(friendUser);
   return (
-    <div className={styles["friends-content-individual"]}>
-      <div className={styles["individual-id"]}>
+    <div className={ProfileBodyStyle["friends-content-individual"]}>
+      <div className={ProfileBodyStyle["individual-id"]}>
         <img src={friendUser.picture} alt={friendUser.username} />
-        <h4>{friendUser.displayname}</h4>
+        <h4 className={FriendCardStyle["friend-name"]}>
+          {friendUser.displayname}
+        </h4>
         <p>status: {friendUser.status}</p>
       </div>
-      <div className={styles["individual-buttons"]}>
+      <div className={ProfileBodyStyle["individual-buttons"]}>
         <FriendButton
           onRemove={props.onRemove}
           friendUsername={friendUser.username}
         />
-        <button>Message</button>
+        <button
+          className={`${FriendCardStyle["friend-button"]} ${FriendCardStyle["button-65"]}`}
+        >
+          Message
+        </button>
       </div>
-      <div className={styles["individual-stats"]}>
+      <div className={ProfileBodyStyle["individual-stats"]}>
         <h3>W: {userStats.wins}</h3>
         <h3>L: {userStats.losses}</h3>
       </div>

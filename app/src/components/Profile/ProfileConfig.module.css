@@ -8,16 +8,13 @@
 
 .config-displayname {
     border-style: solid;
-    border-color: blue;
 }
 
 .config-picture {
     border-style: solid;
-    border-color: red;
 }
 
 .config-twofa {
     border-style: solid;
-    border-color: gold;
 
 }

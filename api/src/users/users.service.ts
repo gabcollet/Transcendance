@@ -6,9 +6,9 @@ import { UserDto } from './dto';
 
 enum FriendshipStatus {
   None = 0,
-  Requested,
-  Received,
-  Accepted,
+  Requested = 1,
+  Received = 2,
+  Accepted = 3,
 }
 
 @Injectable()
