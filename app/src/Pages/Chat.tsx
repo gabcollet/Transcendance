@@ -10,7 +10,7 @@ import { Message_ } from "../interfaces";
 import Cookies from "js-cookie";
 import axios, { AxiosResponse } from "axios";
 import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
-
+import { getChannels } from "../components/Chat/ChatUtils";
 const Chat = (props: Chat_) => {
   const [messages, setMessages] = useState<Message_[]>([]);
   const [roomId, setRoomId] = useState<number>(0);
@@ -18,16 +18,7 @@ const Chat = (props: Chat_) => {
   //   const [publicChannels, setPublicChannels] = useState<number[]>([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3030/chat/get-channels", {
-        withCredentials: true,
-        headers: {
-          Authorization: `bearer ${Cookies.get("jwtToken")}`,
-        },
-      })
-      .then((res) => {
-        setChannels(res.data);
-      });
+    getChannels(setChannels);
   }, []);
   if (roomId !== 0) {
     setRoomId(1);

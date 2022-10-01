@@ -27,11 +27,11 @@ model User {
     socketID     String?       @default("no ID")
     Achievements Achievements?
 
-    Chatrooms Chatroom[]
     isAdmin   Chatroom[] @relation("admin")
     blacklist Chatroom[] @relation("blacklist")
 
-    Message Message[]
+    Message   Message[]
+    chatrooms UserChatroom[]
 
     mutedBy   User[] @relation("mute")
     mutedList User[] @relation("mute")
@@ -102,11 +102,20 @@ model Message {
     @@map("message")
 }
 
-model Chatroom {
-    id          Int    @id @default(autoincrement())
-    channelName String
+model UserChatroom {
+    id         Int      @id @unique @default(autoincrement())
+    chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
+    chatroomId Int
 
-    members User[]
+    user   User @relation(fields: [userId], references: [id])
+    userId Int
+
+    @@map("userchatroom")
+}
+
+model Chatroom {
+    id          Int    @id @unique @default(autoincrement())
+    channelName String
 
     admin User[] @relation("admin")
 
@@ -119,6 +128,8 @@ model Chatroom {
     isDM    Boolean
 
     messages Message[] @relation()
+
+    users UserChatroom[]
 
     @@map("chatroom")
 }

@@ -8,6 +8,7 @@ import {
   Body,
   Post,
   BadRequestException,
+  RawBodyRequest,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { UsersService } from '../users/users.service';
@@ -44,7 +45,7 @@ export class ChatController {
   getChannels(@Req() req: Request) {}
 
   @UseGuards(JwtAuthGuard)
-  @Post('create-channels')
+  @Post('create-channel')
   async createChannelsReq(@Req() request: Request, @Body() body: ChatDto) {
     let channel = await this.chatService.createChannel(body, request);
     return channel;
@@ -55,5 +56,20 @@ export class ChatController {
   async getChannelsReq(@Req() request: Request) {
     let channels = await this.chatService.getChannels(request);
     return channels;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('join-channel')
+  async joinChannelReq(@Req() request: Request) {
+    let username = request.user.toString();
+    let channel = request.body.id;
+    let confirmation = await this.chatService.joinChannel(username, channel);
+    return confirmation;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('delete-channel')
+  async removeChannelReq(@Req() request: Request) {
+    const confirmation = await this.chatService.removeChannel(request);
   }
 }

@@ -2,7 +2,7 @@ import styles from "./Channel.module.css";
 import { faCircleXmark, faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Channel_ } from "../../../interfaces";
-
+import { getChannels, removeChannel } from "../ChatUtils";
 const Channel = (props: Channel_) => {
   let icon = <></>;
   if (props.joined === true) {
@@ -10,6 +10,9 @@ const Channel = (props: Channel_) => {
       <FontAwesomeIcon
         className={styles["leave-icon"]}
         icon={faCircleXmark}
+        onClick={() => {
+          removeChannel(props.id, props.setUserChannels);
+        }}
       ></FontAwesomeIcon>
     );
   } else {

@@ -12,16 +12,20 @@ export interface ChatBubble_ {
 
 export interface Channel_ {
   title: string;
+  id: number;
   joined: boolean;
+  setUserChannels: any;
 }
 
 export interface ChannelDB_ {
-  channelName: string;
-  id: number;
-  isDM: boolean;
-  password: string; // to remove
-  private: boolean;
-  protected: boolean;
+  chatroom: {
+    channelName: string;
+    id: number;
+    isDM: boolean;
+    password: string; // to remove
+    private: boolean;
+    protected: boolean;
+  };
 }
 export interface ChatInput_ {
   sendMsg: (message: string) => void;
@@ -59,6 +63,8 @@ export interface Chat_ {
 export interface AddPopup_ {
   trigger: boolean;
   setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+  userChannels: any;
+  setUserChannels: any;
 }
 
 export interface Message_ {
