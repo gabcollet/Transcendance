@@ -40,7 +40,7 @@ export class ChatService {
         isDM: false,
       },
     });
-    let join = this.joinChannel(request.user.toString(), channel.id);
+    let join = await this.joinChannel(request.user.toString(), channel.id);
     return channel;
   }
 
@@ -61,7 +61,7 @@ export class ChatService {
         userId: user.id,
       },
     });
-    this.logger.debug(username + 'joined the channel');
+    this.logger.log(username + ' joined the channel ' + room.channelName);
     return connected;
   }
 
@@ -107,4 +107,6 @@ export class ChatService {
     });
     return relation;
   }
+
+  //   async getPublic();
 }

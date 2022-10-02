@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 export async function getChannels(setChannels: any) {
-  axios
+  await axios
     .get("http://localhost:3030/chat/get-channels", {
       withCredentials: true,
       headers: {
@@ -10,7 +10,9 @@ export async function getChannels(setChannels: any) {
       },
     })
     .then((res) => {
+      console.log(res.data);
       setChannels(res.data);
+      console.log("Channels list generated");
     })
     .catch((error) => {
       console.log(error);

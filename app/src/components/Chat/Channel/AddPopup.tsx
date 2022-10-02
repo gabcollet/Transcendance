@@ -51,6 +51,7 @@ const AddPopup = (props: AddPopup_) => {
           setPassword("");
           setChecked(false);
           setErrorMsg(<></>);
+          console.log("Getting channels...");
           getChannels(props.setUserChannels);
         })
         .catch((error) => {
@@ -68,7 +69,7 @@ const AddPopup = (props: AddPopup_) => {
           } else {
             const listMessage = error.response.data.message.map(
               (message: string) => (
-                <li key="1" className={styles["msg-list"]}>
+                <li key="2" className={styles["msg-list"]}>
                   <p className={styles["error-msg"]}>{message}</p>
                 </li>
               )

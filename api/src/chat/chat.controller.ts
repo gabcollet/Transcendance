@@ -71,5 +71,12 @@ export class ChatController {
   @Post('delete-channel')
   async removeChannelReq(@Req() request: Request) {
     const confirmation = await this.chatService.removeChannel(request);
+    return confirmation;
   }
+
+  //   @UseGuards(JwtAuthGuard)
+  //   @Get('public-channels')
+  //   async getPublicReq(@Req() request: Request) {
+  //     const confirmation = await this.chatService.getPublic(request);
+  //   }
 }
