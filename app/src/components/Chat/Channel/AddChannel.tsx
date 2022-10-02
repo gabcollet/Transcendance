@@ -26,6 +26,7 @@ const AddChannel = (props: ChatChannels_) => {
         setTrigger={setPop}
         userChannels={props.userChannels}
         setUserChannels={props.setUserChannels}
+        setPublic={props.setPublic}
       ></AddPopup>
     </div>
   );

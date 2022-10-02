@@ -74,9 +74,10 @@ export class ChatController {
     return confirmation;
   }
 
-  //   @UseGuards(JwtAuthGuard)
-  //   @Get('public-channels')
-  //   async getPublicReq(@Req() request: Request) {
-  //     const confirmation = await this.chatService.getPublic(request);
-  //   }
+  @UseGuards(JwtAuthGuard)
+  @Get('public-channels')
+  async getPublicReq(@Req() request: Request) {
+    const confirmation = await this.chatService.getPublic(request);
+    return confirmation;
+  }
 }

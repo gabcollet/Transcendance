@@ -52,7 +52,7 @@ const AddPopup = (props: AddPopup_) => {
           setChecked(false);
           setErrorMsg(<></>);
           console.log("Getting channels...");
-          getChannels(props.setUserChannels);
+          getChannels(props.setUserChannels, props.setPublic);
         })
         .catch((error) => {
           if (

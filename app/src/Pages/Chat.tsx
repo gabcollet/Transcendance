@@ -15,10 +15,11 @@ const Chat = (props: Chat_) => {
   const [messages, setMessages] = useState<Message_[]>([]);
   const [roomId, setRoomId] = useState<number>(0);
   const [channels, setChannels] = useState<AxiosResponse<any, any>>();
-  //   const [publicChannels, setPublicChannels] = useState<number[]>([]);
+  const [publicChannels, setPublicChannels] =
+    useState<AxiosResponse<any, any>>();
 
   useEffect(() => {
-    getChannels(setChannels);
+    getChannels(setChannels, setPublicChannels);
   }, []);
   if (roomId !== 0) {
     setRoomId(1);
@@ -29,6 +30,8 @@ const Chat = (props: Chat_) => {
         <ChatChannels
           userChannels={channels}
           setUserChannels={setChannels}
+          setPublic={setPublicChannels}
+          publicChannels={publicChannels}
         ></ChatChannels>
       </div>
       <div className={styles["mid"]}>

@@ -4,6 +4,8 @@ import { AxiosResponse } from "axios";
 export interface ChatChannels_ {
   userChannels: any;
   setUserChannels: any;
+  setPublic: any;
+  publicChannels: any;
 }
 
 export interface ChatBubble_ {
@@ -15,6 +17,7 @@ export interface Channel_ {
   id: number;
   joined: boolean;
   setUserChannels: any;
+  setPublic: any;
 }
 
 export interface ChannelDB_ {
@@ -65,6 +68,7 @@ export interface AddPopup_ {
   setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
   userChannels: any;
   setUserChannels: any;
+  setPublic: any;
 }
 
 export interface Message_ {
