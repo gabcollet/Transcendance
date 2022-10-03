@@ -9,6 +9,9 @@ import { FetchedComponentProps } from "./ProfileInterfaces";
  */
 export const UserImage = (props: FetchedComponentProps) => {
   const [userImage, setUserImage] = useState("");
+  if (props.username === "") {
+    return <img className={props.className} src={''} alt="" />;
+  }
   fetchText("users/" + props.username + "/img", setUserImage);
   return <img className={props.className} src={userImage} alt="" />;
 };

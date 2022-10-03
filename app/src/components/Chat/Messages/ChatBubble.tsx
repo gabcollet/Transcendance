@@ -1,5 +1,5 @@
 import styles from "./ChatBubble.module.css";
-import { ChatBubble_ } from "../../interfaces";
+import { ChatBubble_ } from "../../../interfaces";
 
 let i = 0;
 

@@ -14,14 +14,19 @@
 
 .column {
     float: left;
-    margin-left: 33.33%;
-    width: 33.33%;
+    width: 16.66%;
   }
+
 .column2 {
     float: left;
-    text-align: right;
+    text-align: center;
     width: 33.33%;
-    margin-bottom: 10px;
+}
+
+.column3 {
+    float: right;
+    text-align: right;
+    width: 16.66%;
 }
   
   /* Clear floats after the columns */

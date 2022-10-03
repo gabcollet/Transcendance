@@ -10,7 +10,7 @@ const MenuButton = (props: MenuButton_) => {
   };
   const handleOut = () => {
     setHover(false);
-  }
+  };
   return (
     <li
       onClick={props.onClick}
@@ -26,6 +26,6 @@ const MenuButton = (props: MenuButton_) => {
       </a>
     </li>
   );
-}
+};
 
 export default MenuButton;

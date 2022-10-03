@@ -1,47 +1,41 @@
 import "./PongRoom.css";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { roomID, pID } from "../components/Pong/List/useCanvas";
+import { pID } from "../components/Menu/useCanvas";
 import io from "socket.io-client";
 
 export const socket = io("localhost:6006");
+export let pQuit : boolean = false;
 
 const PongRoom = () => {
   const location = useLocation();
 
   useEffect(() => {
-    socket.emit("leaveRoom", {
-      room: roomID,
-      pID: pID,
-    });
+    socket.emit("leaveRoom");
   }, [location]);
 
-  //On closing window
   useEffect(() => {
-    socket.on("leavedRoom", () => {});
-    if (pID !== 3) {
-      socket.emit("gameEnd");
-    }
-  }, []);
-
-  //On change path
-  useEffect(() => {
-    socket.on("leavedRoom2", () => {});
-    if (pID !== 3) {
-      socket.emit("gameEnd");
-    }
+    socket.on("leavedRoom", () => {
+      if (pID !== 3) {
+        socket.emit("gameEnd");
+      }
+      pQuit = true;
+    });
   }, []);
 
   const setRdy = () => {
-    socket.emit("joinRoom");
+    socket.emit("joinRoom", false);
+    pQuit = false;
   };
   
   const setRandomMode = () => {
-    socket.emit("randomRoom");
+    socket.emit("joinRoom", true);
+    pQuit = false;
   };
 
   const spectate = () => {
     socket.emit("spectate");
+    pQuit = false;
   };
 
   return (

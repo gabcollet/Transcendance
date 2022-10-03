@@ -1,3 +1,5 @@
+import { RefObject } from "react";
+
 // Props types
 export interface FriendCardProps {
   onRemove?: Function;

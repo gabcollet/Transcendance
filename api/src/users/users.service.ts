@@ -1,7 +1,5 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { Friendship, User } from '@prisma/client';
-// import { InjectRepository } from '@nestjs/typeorm';
-// import { Repository } from 'typeorm';
 import { Profile } from 'passport-42';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserDto } from './dto';
@@ -124,6 +122,15 @@ export class UsersService {
         intraId: undefined,
       },
     });
+    return updatedUser;
+  }
+
+  async findById(id: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: id },
+    });
+
+    return user;
   }
 
   async findByUsername(username: string) {
