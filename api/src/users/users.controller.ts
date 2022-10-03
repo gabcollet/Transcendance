@@ -21,10 +21,14 @@ import { extname, join } from 'path';
 import { UserDto } from './dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { PongService } from 'src/pong/pong.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private pongService: PongService,
+  ) {}
 
   // @Get()
   // getAllUsers() {
@@ -32,62 +36,62 @@ export class UsersController {
   // }
 
   @Get()
-  getSearchedUsernames(@Query() query) {
-    return this.usersService.getSearchedUsernames(query.search);
+  async getSearchedUsernames(@Query() query) {
+    return await this.usersService.getSearchedUsernames(query.search);
   }
 
   // @UseGuards(JwtAuthGuard)
   @Get(':name/serverimg')
   async getServerImg(@Param() params, @Query() query, @Res() res) {
-    res.sendFile(query.img, { root: 'img' });
+    await res.sendFile(query.img, { root: 'img' });
   }
 
   // Get path of user's image from DB
   @UseGuards(JwtAuthGuard)
   @Get(':name/img')
-  getUserImg(@Req() req: Request, @Param() params) {
-    return this.usersService.getUserImage(params.name);
+  async getUserImg(@Req() req: Request, @Param() params) {
+    return await this.usersService.getUserImage(params.name);
   }
 
   //   // Get displayname of user
   @UseGuards(JwtAuthGuard)
   @Get(':name/displayname')
-  getDisplayName(@Req() req: Request, @Param() params) {
-    return this.usersService.getDisplayName(params.name);
+  async getDisplayName(@Req() req: Request, @Param() params) {
+    return await this.usersService.getDisplayName(params.name);
   }
 
   //   // Get online status of user
   @UseGuards(JwtAuthGuard)
   @Get(':name/status')
-  getStatus(@Req() req: Request, @Param() params) {
-    return this.usersService.getStatus(params.name);
+  async getStatus(@Req() req: Request, @Param() params) {
+    return await this.usersService.getStatus(params.name);
   }
 
   // Get all time wins of user
   @UseGuards(JwtAuthGuard)
   @Get(':name/stats')
-  getUserStats(@Req() req: Request, @Param() params) {
-    return this.usersService.getUserStats(params.name);
+  async getUserStats(@Req() req: Request, @Param() params) {
+    return await this.usersService.getUserStats(params.name);
   }
 
   // Get all time wins of user
   @UseGuards(JwtAuthGuard)
   @Get(':name/wins')
-  getAllTimeWins(@Req() req: Request, @Param() params) {
-    return this.usersService.getAllTimeWins(params.name);
+  async getAllTimeWins(@Req() req: Request, @Param() params) {
+    return await this.usersService.getAllTimeWins(params.name);
   }
 
   // Get all time losses of user
   @UseGuards(JwtAuthGuard)
   @Get(':name/losses')
-  getAllTimeLosses(@Req() req: Request, @Param() params) {
-    return this.usersService.getAllTimeLosses(params.name);
+  async getAllTimeLosses(@Req() req: Request, @Param() params) {
+    return await this.usersService.getAllTimeLosses(params.name);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':name/friendstatus')
-  getFrienshipStatus(@Query() query, @Param() params) {
-    return this.usersService.getFriendshipStatus(
+  async getFrienshipStatus(@Query() query, @Param() params) {
+    return await this.usersService.getFriendshipStatus(
       params.name,
       query.username,
       params.name,
@@ -96,39 +100,41 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':name/friends')
-  getFriends(@Param() params) {
-    return this.usersService.getAcceptedFriends(params.name);
+  async getFriends(@Param() params) {
+    return await this.usersService.getAcceptedFriends(params.name);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':name/friendrequests')
-  getFriendRequests(@Param() params) {
-    return this.usersService.getFriendRequests(params.name);
+  async getFriendRequests(@Param() params) {
+    return await this.usersService.getFriendRequests(params.name);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post(':name/addfriend')
-  addFriend(@Query() query, @Param() params) {
-    return this.usersService.addFriend(params.name, query.username);
+  async addFriend(@Query() query, @Param() params) {
+    return await this.usersService.addFriend(params.name, query.username);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post(':name/cancelrequest')
-  cancelRequest(@Query() query, @Param() params) {
-    return this.usersService.cancelRequest(params.name, query.username);
+  async cancelRequest(@Query() query, @Param() params) {
+    return await this.usersService.cancelRequest(params.name, query.username);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post(':name/removefriend')
-  removeFriend(@Query() query, @Param() params) {
-    console.log('IN REMOVE FRIENDS');
-    return this.usersService.removeFriend(params.name, query.username);
+  async removeFriend(@Query() query, @Param() params) {
+    return await this.usersService.removeFriend(params.name, query.username);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post(':name/config/displayname')
-  updateDisplayName(@Query() query, @Param() params) {
-    return this.usersService.updateDisplayName(params.name, query.displayname);
+  async updateDisplayName(@Query() query, @Param() params) {
+    return await this.usersService.updateDisplayName(
+      params.name,
+      query.displayname,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
@@ -147,11 +153,11 @@ export class UsersController {
       }),
     }),
   )
-  updateProfilePicture(
+  async updateProfilePicture(
     @Param() params,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.usersService.updateProfilePicture(
+    return await this.usersService.updateProfilePicture(
       params.name,
       'http://localhost:3030/users/' +
         params.name +
@@ -160,15 +166,21 @@ export class UsersController {
     );
   }
 
+  // @UseGuards(JwtAuthGuard)
+  @Get(':name/history')
+  async getHistory(@Param() params) {
+    return await this.usersService.getHistory(params.name);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get(':name/achievements')
-  getAchievements(@Param() params) {
-    return this.usersService.getAchievements(params.name);
+  async getAchievements(@Param() params) {
+    return await this.usersService.getAchievements(params.name);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':name')
-  findByUsername(@Param() params) {
-    return this.usersService.findByUsername(params.name);
+  async findByUsername(@Param() params) {
+    return await this.usersService.findByUsername(params.name);
   }
 }

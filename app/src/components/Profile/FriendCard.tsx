@@ -140,8 +140,6 @@ export const FriendCard = (props: FriendCardProps) => {
     fetchObject("users/" + props.friendUsername + "/stats", setUserStats);
   }, [props.searchString, props.friendUsername]);
 
-  console.log("friendUser below");
-  console.log(friendUser);
   return (
     <div className={ProfileBodyStyle["friends-content-individual"]}>
       <div className={ProfileBodyStyle["individual-id"]}>

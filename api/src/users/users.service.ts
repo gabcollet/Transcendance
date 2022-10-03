@@ -329,6 +329,23 @@ export class UsersService {
     }
   }
 
+  async getHistory(username: string) {
+    console.log(`In getHistory from users.service. username: ${username}`);
+    const matchList = await this.prisma.history.findMany({
+      where: {
+        OR: [
+          {
+            winner: username,
+          },
+          {
+            loser: username,
+          },
+        ],
+      },
+    });
+    return matchList;
+  }
+
   async getAchievements(username: string) {
     const achievements = await this.prisma.achievements.findUnique({
       where: { username: username },

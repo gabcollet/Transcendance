@@ -5,6 +5,7 @@ import { FriendCard } from "./FriendCard";
 import { fetchObject, fetchText } from "./FetchValue";
 import { ProfileProps, SpecificContentProps } from "./ProfileInterfaces";
 import { AchievementCard } from "./AchievementCard";
+import { MatchCard } from "./MatchCard";
 
 export const ProfileBody = (props: ProfileProps) => {
   const [contentType, setContentType] = useState("friends");
@@ -43,7 +44,7 @@ const SpecificContent = (props: SpecificContentProps) => {
     // THIS GETS CALLED REPEATEDLY
     return <FriendsContent username={props.username} />;
   } else if (props.contentType === "history") {
-    return <HistoryContent />;
+    return <HistoryContent username={props.username} />;
   } else if (props.contentType === "achievements") {
     return <AchievementsContent username={props.username} />;
   } else {
@@ -111,26 +112,33 @@ const FriendsContent = (props: ProfileProps) => {
   );
 };
 
-const HistoryContent = () => {
-  const matchesElement = data.matches.map((match) => {
-    return (
-      <div className={styles["match-content-individual"]}>
-        <div className={styles["match-id"]}>
-          <div className={styles["me-id"]}>
-            <img src={data.profile_image} alt={data.name} />
-            <h4>{data.name}</h4>
-          </div>
-          <h3>
-            {match.my_points} - {match.foe_points}
-          </h3>
-          <div className={styles["foe-id"]}>
-            <img src={match.foe_profile_image} alt={match.opponent_name} />
-            <h4>{match.opponent_name}</h4>
-          </div>
-        </div>
-      </div>
-    );
-  });
+const HistoryContent = (props: ProfileProps) => {
+  const [matchHistory, setMatchHistory] = useState(Object);
+  const [hasFetched, setHasFetched] = useState(0);
+
+  useEffect(() => {
+    const asyncFetch = async () => {
+      await fetchObject(
+        "users/" + props.username + "/history",
+        setMatchHistory
+      );
+      setHasFetched(1);
+      console.log("useEffect: matchHistory:");
+      console.log(matchHistory);
+    };
+    asyncFetch();
+  }, []);
+
+  let matchesElement = null;
+  console.log(matchHistory);
+  console.log(props.username);
+  if (hasFetched) {
+    console.log("IN MATCH HISTORY MAP");
+    console.log(matchHistory);
+    matchesElement = matchHistory?.map((match: History) => {
+      return <MatchCard match={match} />;
+    });
+  }
   return (
     <section className={styles["history-content-container"]}>
       {matchesElement}

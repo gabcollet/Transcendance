@@ -16,10 +16,14 @@ import { Request, Response } from 'express';
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import { UserDto } from '../users/dto';
+import { PongService } from 'src/pong/pong.service';
 
 @Controller('test')
 export class TestController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private pongService: PongService,
+  ) {}
 
   @Get('createusers')
   CreateUsers() {
@@ -34,5 +38,14 @@ export class TestController {
   @Get('deleteall')
   deleteAll() {
     return this.usersService.testDeleteAll();
+  }
+
+  @Get('creatematches')
+  createMatches() {
+    this.pongService.addHistory('laube', 'anon3', 3, 2);
+    this.pongService.addHistory('anon3', 'laube', 3, 2);
+    this.pongService.addHistory('laube', 'anon30', 5, 2);
+    this.pongService.addHistory('laube', 'anon31', 3, 9);
+    this.pongService.addHistory('laube', 'anon3', 3, 2);
   }
 }
