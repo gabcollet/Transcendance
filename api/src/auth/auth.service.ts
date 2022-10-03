@@ -16,7 +16,7 @@ export class AuthService {
   generateJwtToken(req: Request) {
     const username = req.user['username'];
     const userID = req.user['id'];
-    console.log('userID: ' + userID);
+    // console.log('userID: ' + userID);
 
     const payload = { username: username, userID: userID };
     const jwtToken = this.jwtService.sign(payload, {
@@ -45,8 +45,10 @@ export class AuthService {
 
   async genTwoFASecret(username: string) {
     //* Generate a secret for the 2FA authenticator
+
+    const name = `Transcendence (${username})`;
     const secret = speakeasy.generateSecret({
-      name: 'Transcendence',
+      name: name,
     });
 
     //* update user with generated 2FA Secret for validation
@@ -65,7 +67,7 @@ export class AuthService {
     const user = await this.userService.findById(jwtToken['userID']);
 
     const secret = user['twoFASecret'];
-    console.log('SECRET: ' + secret);
+    // console.log('SECRET: ' + secret);
     const verified = speakeasy.totp.verify({
       secret,
       encoding: 'base32',

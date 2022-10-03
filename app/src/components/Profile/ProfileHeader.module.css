@@ -41,6 +41,16 @@
     margin-bottom: 1rem;
 }
 
+.profile-image2 {
+    border-radius: 50%;
+    border-style: solid;
+    border-color: transparent;
+    width: 100px;
+    min-height: 100px;
+    margin: auto;
+    margin-bottom: 1rem;
+}
+
 .profile-name-text {
     margin: auto;
     font-size: 1.25rem;

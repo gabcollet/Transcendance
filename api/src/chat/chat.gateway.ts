@@ -14,7 +14,8 @@ export class ChatGateway {
   server;
 
   @SubscribeMessage('message')
-  handleMessage(client: Socket, payload: string): void {
+  handleMessage(client: Socket, payload: any): void {
+    //to change with type
     console.log(payload);
     this.server.emit('message', payload);
   }

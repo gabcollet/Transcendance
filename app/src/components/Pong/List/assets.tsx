@@ -1,6 +1,6 @@
 import { drawRectangle, drawLine } from "./draw";
 import { socket } from "../../../Pages/PongRoom";
-import { roomID, pID } from "./useCanvas";
+import { roomID, pID } from "../../Menu/useCanvas";
 
 const board = (
   ctx: CanvasRenderingContext2D,

@@ -2,7 +2,7 @@ import styles from "./ChatInput.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMailReply } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { ChatInput_ } from "../../interfaces";
+import { ChatInput_ } from "../../../interfaces";
 
 const ChatInput = (props: ChatInput_) => {
   const [value, setValue] = useState("");
@@ -17,6 +17,7 @@ const ChatInput = (props: ChatInput_) => {
     }
   };
   const handleClick = (message: string) => {
+    console.log("On click ?");
     props.sendMsg(value);
     setValue("");
   };

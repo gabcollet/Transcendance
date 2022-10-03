@@ -151,8 +151,6 @@ export class UsersController {
     @Param() params,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    console.log('file below');
-    console.log(file);
     return this.usersService.updateProfilePicture(
       params.name,
       'http://localhost:3030/users/' +

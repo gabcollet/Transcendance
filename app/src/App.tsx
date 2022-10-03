@@ -15,6 +15,7 @@ import { SearchBar } from "./components/Profile/SearchBar";
 import TwoFAQRCode from "./components/TwoFAQRCode";
 import TwoFAVerify from "./Pages/TwoFAVerify";
 import { ProfileConfig } from "./components/Profile/ProfileConfig";
+import { socket } from "./Pages/PongRoom";
 
 export const ProfileContext = React.createContext("");
 
@@ -47,6 +48,12 @@ const App = () => {
     getUsername();
   }, []);
 
+  useEffect(() => {
+    if (profileUsername !== "USER NOT LOADED") {
+      socket.emit("online", profileUsername);
+    }
+  }, [profileUsername]);
+
   return (
     <ProfileContext.Provider value={profileUsername}>
       <div className={background}>
@@ -63,16 +70,7 @@ const App = () => {
                 }
               />
               <Route path="/PongRoom" element={<PongRoom />} />
-              <Route path="/Pong" element={<Pong />} /> //Pong Game
-              <Route path="/Pong" element={<Pong />} /> //Pong Spectate
-              <Route
-                path="/Spectate"
-                element={
-                  <div style={{ color: "white", fontSize: "75px" }}>
-                    SPECTATE
-                  </div>
-                }
-              />
+              <Route path="/Pong" element={<Pong />} />
               <Route
                 path="/Profile"
                 element={
