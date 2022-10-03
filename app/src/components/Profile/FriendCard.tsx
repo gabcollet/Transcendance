@@ -16,21 +16,6 @@ const FriendButton = (props: FriendButtonProps) => {
   const profileName = useContext(ProfileContext);
   const [friendStatus, setFriendStatus] = useState("1");
 
-  // useEffect(() => {}, [friendStatus]);
-
-  // useEffect(() => {
-  //   console.log("props.friendUsername below");
-  //   console.log(props.friendUsername);
-  //   fetchText(
-  //     "users/" +
-  //       profileName +
-  //       "/friendstatus" +
-  //       "?username=" +
-  //       props.friendUsername,
-  //     setFriendStatus
-  //   ).then(console.log(`state: ${friendStatus}`);
-  // }, [props.friendUsername]);
-
   useEffect(() => {
     async function fetchAsync() {
       await fetchText(

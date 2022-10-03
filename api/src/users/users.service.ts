@@ -3,6 +3,7 @@ import { Friendship, User } from '@prisma/client';
 import { Profile } from 'passport-42';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserDto } from './dto';
+import * as fs from 'fs';
 
 enum FriendshipStatus {
   None = 0,
@@ -111,7 +112,6 @@ export class UsersService {
   }
 
   async updateUser(user: Partial<User>, username: string) {
-    console.log(`THIS IS USERNAME ${username}`);
     const updatedUser = await this.prisma.user.update({
       where: {
         username: username,
@@ -293,7 +293,7 @@ export class UsersService {
   }
 
   async removeFriend(username: string, friendName: string) {
-    console.log(`username ${username} | friendname: ${friendName}`);
+    // console.log(`username ${username} | friendname: ${friendName}`);
     await this.cancelRequest(username, friendName);
     return await this.prisma.friendship.delete({
       where: {
@@ -317,8 +317,16 @@ export class UsersService {
   }
 
   async updateProfilePicture(username: string, picturePath: string) {
-    console.log(username);
+    const prevPicFullPath = await this.getUserImage(username);
     await this.updateUser({ picture: picturePath }, username);
+    const prevPic = prevPicFullPath.split('/serverimg?img=')[1];
+    if (prevPic) {
+      fs.unlink('./img/' + prevPic, function (err) {
+        if (err) {
+          console.error(err);
+        }
+      });
+    }
   }
 
   async getAchievements(username: string) {
