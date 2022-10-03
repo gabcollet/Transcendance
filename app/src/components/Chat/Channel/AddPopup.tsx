@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import { getChannels } from "../ChatUtils";
 
 const AddPopup = (props: AddPopup_) => {
   const [name, setName] = useState("");
@@ -36,8 +37,8 @@ const AddPopup = (props: AddPopup_) => {
           protected: true,
         };
       }
-      let channels = axios
-        .post("http://localhost:3030/chat/create-channels", response, {
+      axios
+        .post("http://localhost:3030/chat/create-channel", response, {
           withCredentials: true,
           headers: {
             Authorization: `bearer ${Cookies.get("jwtToken")}`,
@@ -50,9 +51,14 @@ const AddPopup = (props: AddPopup_) => {
           setPassword("");
           setChecked(false);
           setErrorMsg(<></>);
+          console.log("Getting channels...");
+          getChannels(props.setUserChannels, props.setPublic);
         })
         .catch((error) => {
-          if (error.response.status === 500) {
+          if (
+            error.response.status === 500 ||
+            typeof error.response.data.message == "string"
+          ) {
             setErrorMsg(
               <div>
                 <li key="1" className={styles["msg-list"]}>
@@ -63,7 +69,7 @@ const AddPopup = (props: AddPopup_) => {
           } else {
             const listMessage = error.response.data.message.map(
               (message: string) => (
-                <li key="1" className={styles["msg-list"]}>
+                <li key="2" className={styles["msg-list"]}>
                   <p className={styles["error-msg"]}>{message}</p>
                 </li>
               )

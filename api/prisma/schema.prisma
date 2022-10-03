@@ -2,100 +2,134 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  intraId      String?       @unique @default(uuid())
-  displayname  String?       @default("anon")
-  username     String        @unique
-  picture      String?       @default("https://images.unsplash.com/photo-1521985429101-21bed8b75e47?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80")
-  status       String?       @default("offline")
-  twoFAEnabled Boolean?      @default(false)
-  twoFASecret  String?       @unique
-  isSender     Friendship[]  @relation("send")
-  isReceiver   Friendship[]  @relation("receive")
-  isWinner     History[]  @relation("winner")
-  isLoser      History[]  @relation("loser")
-  stats        Stats?
-  socketID     String?      @default("no ID")
-  Achievements Achievements?
+    id           Int           @id @default(autoincrement())
+    intraId      String?       @unique @default(uuid())
+    displayname  String?       @default("anon")
+    username     String        @unique
+    picture      String?       @default("https://images.unsplash.com/photo-1521985429101-21bed8b75e47?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80")
+    status       String?       @default("offline")
+    twoFAEnabled Boolean?      @default(false)
+    twoFASecret  String?       @unique
+    isSender     Friendship[]  @relation("send")
+    isReceiver   Friendship[]  @relation("receive")
+    isWinner     History[]     @relation("winner")
+    isLoser      History[]     @relation("loser")
+    stats        Stats?
+    socketID     String?       @default("no ID")
+    Achievements Achievements?
 
-  @@map("users")
+    isAdmin   Chatroom[] @relation("admin")
+    blacklist Chatroom[] @relation("blacklist")
+
+    Message   Message[]
+    chatrooms UserChatroom[]
+
+    mutedBy   User[] @relation("mute")
+    mutedList User[] @relation("mute")
+
+    @@map("users")
 }
 
 model Achievements {
-  id            Int     @id @default(autoincrement())
-  firstWin      Boolean @default(false)
-  first5Wins    Boolean @default(false)
-  first10Wins   Boolean @default(false)
-  streak5Wins   Boolean @default(false)
-  streak5Losses Boolean @default(false)
-  user          User    @relation(fields: [username], references: [username])
-  username      String  @unique
+    id            Int     @id @default(autoincrement())
+    firstWin      Boolean @default(false)
+    first5Wins    Boolean @default(false)
+    first10Wins   Boolean @default(false)
+    streak5Wins   Boolean @default(false)
+    streak5Losses Boolean @default(false)
+    user          User    @relation(fields: [username], references: [username])
+    username      String  @unique
 
-  @@map("achievements")
+    @@map("achievements")
 }
 
 model Stats {
-  id            Int    @id @default(autoincrement())
-  wins          Int?   @default(0)
-  losses        Int?   @default(0)
-  winningStreak Int?   @default(0)
-  losingStreak  Int?   @default(0)
-  user          User   @relation(fields: [username], references: [username])
-  username      String @unique
+    id            Int    @id @default(autoincrement())
+    wins          Int?   @default(0)
+    losses        Int?   @default(0)
+    winningStreak Int?   @default(0)
+    losingStreak  Int?   @default(0)
+    user          User   @relation(fields: [username], references: [username])
+    username      String @unique
 
-  @@map("stats")
+    @@map("stats")
 }
 
 model History {
-  id       Int    @id @default(autoincrement())
-  user1    User   @relation("winner", fields: [winner], references: [username])
-  winner   String
-  score1   Int    @default(0)
-  user2    User   @relation("loser", fields: [loser], references: [username])
-  loser    String
-  score2   Int    @default(0)
-  @@map("history")
+    id     Int    @id @default(autoincrement())
+    user1  User   @relation("winner", fields: [winner], references: [username])
+    winner String
+    score1 Int    @default(0)
+    user2  User   @relation("loser", fields: [loser], references: [username])
+    loser  String
+    score2 Int    @default(0)
+
+    @@map("history")
 }
 
 model Friendship {
-  id       Int    @id @default(autoincrement())
-  user1    User   @relation("send", fields: [sender], references: [username], onDelete: Cascade)
-  sender   String
-  user2    User   @relation("receive", fields: [receiver], references: [username], onDelete: Cascade)
-  receiver String
+    id       Int    @id @default(autoincrement())
+    user1    User   @relation("send", fields: [sender], references: [username], onDelete: Cascade)
+    sender   String
+    user2    User   @relation("receive", fields: [receiver], references: [username], onDelete: Cascade)
+    receiver String
 
-  @@unique([sender, receiver])
-  @@map("friendships")
+    @@unique([sender, receiver])
+    @@map("friendships")
 }
-
 
 model Message {
-	id Int @id @default(autoincrement())
-	author String
-	authorUID String
-	messageText String
-	room Chatroom @relation(fields: [roomId], references: [id])
-	roomId Int
-	@@map("message")
-} 
+    id Int @id @default(autoincrement())
 
-model Chatroom {
- 	id			Int  		@id  @default(autoincrement())
- 	admin		String
- 	name		String
-	protected	Boolean
-	password    String
-	visibility 	Boolean
-	messages	Message[] @relation()
-	@@map("chatroom")
+    author   User @relation(fields: [authorID], references: [id])
+    authorID Int
+
+    room   Chatroom @relation(fields: [roomId], references: [id])
+    roomId Int
+
+    messageText String
+    sentAt      DateTime @default(now())
+
+    @@map("message")
 }
 
+model UserChatroom {
+    id         Int      @id @unique @default(autoincrement())
+    chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
+    chatroomId Int
+
+    user   User @relation(fields: [userId], references: [id])
+    userId Int
+
+    @@map("userchatroom")
+}
+
+model Chatroom {
+    id          Int    @id @unique @default(autoincrement())
+    channelName String
+
+    admin User[] @relation("admin")
+
+    blackList User[] @relation("blacklist")
+
+    protected Boolean
+    password  String?
+
+    private Boolean
+    isDM    Boolean
+
+    messages Message[] @relation()
+
+    users UserChatroom[]
+
+    @@map("chatroom")
+}

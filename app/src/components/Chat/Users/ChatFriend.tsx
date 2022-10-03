@@ -1,7 +1,7 @@
 import styles from "./ChatFriend.module.css";
 
 const ChatFriend = () => {
-  return <div></div>;
+  return <div className={styles[""]}></div>;
 };
 
 export default ChatFriend;

@@ -36,12 +36,7 @@ a {
   box-shadow: 0 3px 4px rgba(0, 0, 0, 0.15);
 }
 
-a:visited {
-  color: #f3efff;
-  /* color: #ff005c; */
-}
-
-a:hover {
+.small-button:hover {
   color: #5b00a5;
 }
 

@@ -3,16 +3,17 @@ import { useEffect, useState } from "react";
 import io, { Socket } from "socket.io-client";
 import styles from "./InputZone.module.css";
 import { InputZone_ } from "../../../interfaces";
+import { Message_ } from "../../../interfaces";
 
 const InputZone = (props: InputZone_) => {
   const [socket, setSocket] = useState<Socket>();
-  let send = {
-    user: "",
+  let send: Message_ = {
     msg: "",
-    id: 0,
+    author: "",
+    chatRoom: 1,
   };
 
-  const messageListener = (message: string) => {
+  const messageListener = (message: Message_) => {
     props.setMessages([...props.messages, message]);
   };
   useEffect(() => {
@@ -24,7 +25,7 @@ const InputZone = (props: InputZone_) => {
   const sendMsg = (message: string) => {
     if (message !== "") {
       send.msg = message;
-      send.id = props.chatRoom;
+      send.chatRoom = props.chatRoom;
       socket?.emit("message", send);
     }
   };
@@ -32,7 +33,7 @@ const InputZone = (props: InputZone_) => {
     const newSocket = io("localhost:6005");
     setSocket(newSocket);
     console.log("Chat socket set");
-  }, [setSocket]); //pas certain de comprendre pourquoi il doit dependre de setSocket
+  }, [setSocket]);
 
   return (
     <div className={styles["type-zone"]}>

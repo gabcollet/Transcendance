@@ -17,6 +17,7 @@ const ChatInput = (props: ChatInput_) => {
     }
   };
   const handleClick = (message: string) => {
+    console.log("On click ?");
     props.sendMsg(value);
     setValue("");
   };
