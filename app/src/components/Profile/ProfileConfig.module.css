@@ -1,0 +1,20 @@
+.config-header {
+    font-size: 3rem;
+}
+
+.config-subheader {
+    font-size: 2rem;
+}
+
+.config-displayname {
+    border-style: solid;
+}
+
+.config-picture {
+    border-style: solid;
+}
+
+.config-twofa {
+    border-style: solid;
+
+}

@@ -36,6 +36,11 @@ const Profile = (props: ProfileProps) => {
           Search
         </button>
       </Link>
+      <Link className={styles["search-link"]} to="/Profile/config">
+        <button className={styles["profile-buttons"]} type="button">
+          Config
+        </button>
+      </Link>
 
       <section className={styles["profile-container"]}>
         <Outlet />

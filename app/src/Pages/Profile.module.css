@@ -8,6 +8,7 @@
     min-height: 500px;
     display: grid;
     grid-template-rows: 200px auto;
+    grid-template-columns: 100%;
 }
 
 .profile-buttons {}
