@@ -180,6 +180,7 @@
     text-align: center;
 }
 
+/*
 @media (max-width: 480px) {
     .friends-content-individual {
         border-style: solid;
@@ -192,13 +193,11 @@
     }
 
     .friends-content-individual>* {
-        /* height: 100%; */
         overflow: visible;
         align-items: unset;
     }
 
     .individual-buttons {
-        /* padding: 10px; */
         display: flex;
         flex-direction: column;
         gap: 5px;
@@ -210,3 +209,4 @@
     .friends-content-individual,
     .friends-content-individual * {}
 }
+*/

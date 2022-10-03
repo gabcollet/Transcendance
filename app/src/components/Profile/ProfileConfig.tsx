@@ -13,28 +13,12 @@ export const ProfileConfig = (props: any) => {
     setNewDisplayName(event.target.value);
   };
 
-  const handleFileChange = async (event: any) => {
-    setNewProfilePicture(event.target.files[0]);
-
-    // const resp = await fetch(
-    //   "http://localhost:3030/users/" + profileName + "/config/picture",
-    //   {
-    //     method: "POST",
-    //     credentials: "include",
-    //     headers: {
-    //       Authorization: `bearer ${Cookies.get("jwtToken")}`,
-    //     },
-    //     body: newProfilePicture,
-    //   }
-    // );
-  };
-
-  const handleClick = async (event: any) => {
+  const handleNameButtonClick = async (event: any) => {
     const resp = await fetch(
       "http://localhost:3030/users/" +
-        profileName +
-        "/config/displayname?displayname=" +
-        newDisplayName,
+      profileName +
+      "/config/displayname?displayname=" +
+      newDisplayName,
       {
         method: "POST",
         credentials: "include",
@@ -45,18 +29,40 @@ export const ProfileConfig = (props: any) => {
     );
   };
 
-  const onFileUpload = async (event: any) => {
+  const handleFileSelected = async (event: any) => {
+    setNewProfilePicture(event.target.files[0]);
+    // const formData = new FormData();
+    // formData.append("file", newProfilePicture);
+
+//    await fetch(
+//      "http://localhost:3030/users/" + profileName + "/config/picture",
+//      {
+//        method: "POST",
+//        credentials: "include",
+//        headers: {
+//          Authorization: `bearer ${Cookies.get("jwtToken")}`,
+//          //"Content-Type": "multipart/form-data"
+//        },
+//        body: formData,
+//      }
+//    );
+  };
+
+  const handleFileUpload = async (event: any) => {
     const formData = new FormData();
+    formData.append("file", newProfilePicture);
 
-    formData.append(
-      "myFile",
-      newProfilePicture || "",
-      newProfilePicture?.name || ""
-    );
-
-    axios.post(
-      "http://locahost:3030/users/" + profileName + "/config/picture",
-      formData
+    await fetch(
+      "http://localhost:3030/users/" + profileName + "/config/picture",
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          Authorization: `bearer ${Cookies.get("jwtToken")}`,
+          //"Content-Type": "multipart/form-data"
+        },
+        body: formData,
+      }
     );
   };
 
@@ -69,7 +75,7 @@ export const ProfileConfig = (props: any) => {
         >
           Change Display Name
         </h3>
-        <button onClick={handleClick}>Change Display Name</button>
+        <button onClick={handleNameButtonClick}>Change Display Name</button>
         <input type="text" onChange={handleDisplayNameChange} />
       </div>
       <div className={styles["config-picture"]}>
@@ -78,8 +84,8 @@ export const ProfileConfig = (props: any) => {
         >
           Change Profile Picture
         </h3>
-        <input type="file" onChange={handleFileChange} />
-        <button onClick={onFileUpload}>Upload File</button>
+        <input type="file" onChange={handleFileSelected} />
+        <button onClick={handleFileUpload}>Upload File</button>
       </div>
       <div className={styles["config-twofa"]}>
         <h3

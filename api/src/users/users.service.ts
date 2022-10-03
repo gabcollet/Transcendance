@@ -268,7 +268,6 @@ export class UsersService {
         state += 1;
       }
     }
-    console.log(`state: ${state} | user1: ${user1} | user2: ${user2}`);
     return state;
   }
 
