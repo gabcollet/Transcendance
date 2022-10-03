@@ -111,6 +111,7 @@ export class UsersService {
   }
 
   async updateUser(user: Partial<User>, username: string) {
+    console.log(`THIS IS USERNAME ${username}`);
     const updatedUser = await this.prisma.user.update({
       where: {
         username: username,
@@ -315,7 +316,10 @@ export class UsersService {
     });
   }
 
-  async updateProfilePicture(username: string) {}
+  async updateProfilePicture(username: string, picturePath: string) {
+    console.log(username);
+    await this.updateUser({ picture: picturePath }, username);
+  }
 
   async getAchievements(username: string) {
     const achievements = await this.prisma.achievements.findUnique({

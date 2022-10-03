@@ -36,6 +36,12 @@ export class UsersController {
     return this.usersService.getSearchedUsernames(query.search);
   }
 
+  // @UseGuards(JwtAuthGuard)
+  @Get(':name/serverimg')
+  async getServerImg(@Param() params, @Query() query, @Res() res) {
+    res.sendFile(query.img, { root: 'img' });
+  }
+
   // Get path of user's image from DB
   @UseGuards(JwtAuthGuard)
   @Get(':name/img')
@@ -147,7 +153,13 @@ export class UsersController {
   ) {
     console.log('file below');
     console.log(file);
-    return this.usersService.updateProfilePicture(params.name);
+    return this.usersService.updateProfilePicture(
+      params.name,
+      'http://localhost:3030/users/' +
+        params.name +
+        '/serverimg?img=' +
+        file.filename,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
