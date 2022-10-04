@@ -12,14 +12,27 @@ import { connected } from 'process';
 export class ChatService {
   constructor(private prisma: PrismaService) {}
   logger: Logger = new Logger('ChatController');
+  async getUser(username: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        username: username,
+      },
+    });
+    return user;
+  }
+  async getChannel(id: number) {
+    const room = await this.prisma.chatroom.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    return room;
+  }
+
   async createChannel(body: ChatDto, request: Request) {
     let password = '';
 
-    const user = await this.prisma.user.findUnique({
-      where: {
-        username: request.user.toString(),
-      },
-    });
+    const user = await this.getUser(request.user.toString());
     if (body.protected === false) {
       password = '';
     } else {
@@ -45,16 +58,8 @@ export class ChatService {
   }
 
   async joinChannel(username: string, channelID: number) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        username: username,
-      },
-    });
-    const room = await this.prisma.chatroom.findUnique({
-      where: {
-        id: channelID,
-      },
-    });
+    const user = await this.getUser(username);
+    const room = await this.getChannel(channelID);
     const connected = await this.prisma.userChatroom.create({
       data: {
         chatroomId: channelID,
@@ -66,11 +71,7 @@ export class ChatService {
   }
 
   async getChannels(req: Request) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        username: req.user.toString(),
-      },
-    });
+    const user = await this.getUser(req.user.toString());
     const channels = await this.prisma.userChatroom.findMany({
       where: {
         user: {
@@ -86,11 +87,7 @@ export class ChatService {
 
   //https://www.prisma.io/docs/concepts/components/prisma-client/relation-queries#disconnect-a-related-record
   async removeChannel(req: Request) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        username: req.user.toString(),
-      },
-    });
+    const user = await this.getUser(req.user.toString());
     const relation = await this.prisma.userChatroom.deleteMany({
       where: {
         AND: [
@@ -108,11 +105,7 @@ export class ChatService {
     return relation;
   }
   async getPublic(req: Request) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        username: req.user.toString(),
-      },
-    });
+    const user = await this.getUser(req.user.toString());
     const channels = await this.prisma.chatroom.findMany({
       where: {
         private: false,
@@ -129,20 +122,10 @@ export class ChatService {
     });
     return channels;
   }
-  async joinRoom(id: number, username: string, room: number) {
-    const user = { id, username, room };
-  }
+
   async addMessage(id: number, username: string, message: string) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        username: username,
-      },
-    });
-    const room = await this.prisma.chatroom.findUnique({
-      where: {
-        id: id,
-      },
-    });
+    const user = await this.getUser(username);
+    const room = await this.getChannel(id);
     const convo = await this.prisma.message.create({
       data: {
         roomId: room.id,
@@ -150,5 +133,9 @@ export class ChatService {
         messageText: message,
       },
     });
+  }
+  async getMessages(id: number, username: string) {
+    const user = await this.getUser(username);
+    const room = await this.getChannel(id);
   }
 }
