@@ -33,7 +33,6 @@ export async function getChannels(setChannels: any, setPublic: any) {
       console.log(error);
     });
 }
-
 export async function removeChannel(
   channelID: number,
   setUserChannels: any,
