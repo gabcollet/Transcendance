@@ -14,6 +14,7 @@ import { TestController } from './test/test.controller';
 import { ChatDto } from './chat/chat.dto';
 import { PongService } from './pong/pong.service';
 import { TestingController } from './testing/testing.controller';
+import { AchievementService } from './pong/achievement.service';
 
 @Module({
   imports: [
@@ -32,6 +33,6 @@ import { TestingController } from './testing/testing.controller';
     TestController,
     TestingController,
   ],
-  providers: [UsersService, PongGateway, ChatGateway, PongService, ChatDto],
+  providers: [UsersService, PongGateway, ChatGateway, PongService, ChatDto, AchievementService],
 })
 export class AppModule {}
