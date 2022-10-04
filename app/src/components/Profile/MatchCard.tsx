@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import MatchCardStyle from "./MatchCard.module.css";
 import { fetchObject, fetchText } from "./FetchValue";
 import { ProfileContext } from "../../App";
+import { UserImage } from "./UserImage";
 
 export const MatchCard = (props: any) => {
   const profileName = useContext(ProfileContext);
@@ -24,10 +25,14 @@ export const MatchCard = (props: any) => {
   return (
     <div className={MatchCardStyle["match-container"]}>
       <div className={MatchCardStyle["winner-container"]}>
-        <img
+        {/* <img
           className={`${MatchCardStyle["winner-picture"]} ${MatchCardStyle["match-picture"]}`}
           src={winnerUser.picture}
           alt={winnerUser.username}
+        /> */}
+        <UserImage
+          username={winnerUser.username}
+          className={`${MatchCardStyle["winner-picture"]} ${MatchCardStyle["match-picture"]}`}
         />
         <h4
           className={`${MatchCardStyle["winner-name"]} ${MatchCardStyle["match-name"]}`}
@@ -42,10 +47,14 @@ export const MatchCard = (props: any) => {
         </h3>
       </div>
       <div className={MatchCardStyle["loser-container"]}>
-        <img
+        {/* <img
           className={`${MatchCardStyle["loser-picture"]} ${MatchCardStyle["match-picture"]}`}
           src={loserUser.picture}
           alt={loserUser.username}
+        /> */}
+        <UserImage
+          username={loserUser.username}
+          className={`${MatchCardStyle["winner-picture"]} ${MatchCardStyle["match-picture"]}`}
         />
         <h4
           className={`${MatchCardStyle["loser-name"]} ${MatchCardStyle["match-name"]}`}

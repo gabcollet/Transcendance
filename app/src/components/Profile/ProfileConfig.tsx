@@ -16,9 +16,9 @@ export const ProfileConfig = (props: any) => {
   const handleNameButtonClick = async (event: any) => {
     const resp = await fetch(
       "http://localhost:3030/users/" +
-      profileName +
-      "/config/displayname?displayname=" +
-      newDisplayName,
+        profileName +
+        "/config/displayname?displayname=" +
+        newDisplayName,
       {
         method: "POST",
         credentials: "include",
@@ -34,18 +34,18 @@ export const ProfileConfig = (props: any) => {
     // const formData = new FormData();
     // formData.append("file", newProfilePicture);
 
-//    await fetch(
-//      "http://localhost:3030/users/" + profileName + "/config/picture",
-//      {
-//        method: "POST",
-//        credentials: "include",
-//        headers: {
-//          Authorization: `bearer ${Cookies.get("jwtToken")}`,
-//          //"Content-Type": "multipart/form-data"
-//        },
-//        body: formData,
-//      }
-//    );
+    //    await fetch(
+    //      "http://localhost:3030/users/" + profileName + "/config/picture",
+    //      {
+    //        method: "POST",
+    //        credentials: "include",
+    //        headers: {
+    //          Authorization: `bearer ${Cookies.get("jwtToken")}`,
+    //          //"Content-Type": "multipart/form-data"
+    //        },
+    //        body: formData,
+    //      }
+    //    );
   };
 
   const handleFileUpload = async (event: any) => {
@@ -67,7 +67,7 @@ export const ProfileConfig = (props: any) => {
   };
 
   return (
-    <section>
+    <section className={styles["config-container"]}>
       <h2 className={styles["config-header"]}>User Configuration</h2>
       <div className={styles["config-displayname"]}>
         <h3

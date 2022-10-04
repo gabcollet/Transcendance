@@ -127,7 +127,7 @@ const HistoryContent = (props: ProfileProps) => {
       console.log(matchHistory);
     };
     asyncFetch();
-  }, []);
+  }, [props.username]);
 
   let matchesElement = null;
   console.log(matchHistory);
@@ -151,7 +151,7 @@ const AchievementsContent = (props: any) => {
 
   useEffect(() => {
     fetchObject("users/" + props.username + "/achievements", setAchievements);
-  }, []);
+  }, [props.username]);
 
   let achievementElement: any = [];
   for (let key in achievements) {
