@@ -2,21 +2,24 @@ import styles from "./ChatChannels.module.css";
 import Channel from "./Channel";
 import AddChannel from "./AddChannel";
 import { ChatChannels_, ChannelDB_ } from "../../../interfaces";
-import { useEffect } from "react";
 
 const ChatChannels = (props: ChatChannels_) => {
   let list: JSX.Element;
   let publicList: JSX.Element;
-  console.log(props.publicChannels);
   if (typeof props.userChannels == "object") {
     list = props.userChannels.map((object: ChannelDB_, index: number) => {
       return (
         <Channel
           title={object.chatroom.channelName}
           id={object.chatroom.id}
+          key={index}
           joined={true}
           setUserChannels={props.setUserChannels}
           setPublic={props.setPublic}
+          setRoomID={props.setRoomID}
+          currentID={props.currentID}
+          setSocket={props.setSocket}
+          socket={props.socket}
         ></Channel>
       );
     });
@@ -32,6 +35,11 @@ const ChatChannels = (props: ChatChannels_) => {
           joined={false}
           setUserChannels={props.setUserChannels}
           setPublic={props.setPublic}
+          setRoomID={props.setRoomID}
+          currentID={props.currentID}
+          setSocket={props.setSocket}
+          socket={props.socket}
+          key={index}
         ></Channel>
       );
     });
@@ -47,6 +55,10 @@ const ChatChannels = (props: ChatChannels_) => {
           setUserChannels={props.setUserChannels}
           setPublic={props.setPublic}
           publicChannels={null}
+          setRoomID={props.setRoomID}
+          currentID={props.currentID}
+          setSocket={props.setSocket}
+          socket={props.socket}
         ></AddChannel>
         {list}
       </div>

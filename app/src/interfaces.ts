@@ -1,11 +1,16 @@
 import { MouseEventHandler } from "react";
 import React from "react";
-import { AxiosResponse } from "axios";
+import { Socket, io } from "socket.io-client";
+
 export interface ChatChannels_ {
   userChannels: any;
   setUserChannels: any;
   setPublic: any;
   publicChannels: any;
+  setRoomID: React.Dispatch<React.SetStateAction<number>>;
+  currentID: number;
+  socket: Socket<any, any> | undefined;
+  setSocket: React.Dispatch<React.SetStateAction<Socket<any, any> | undefined>>;
 }
 
 export interface ChatBubble_ {
@@ -18,6 +23,10 @@ export interface Channel_ {
   joined: boolean;
   setUserChannels: any;
   setPublic: any;
+  setRoomID: React.Dispatch<React.SetStateAction<number>>;
+  currentID: number;
+  socket: Socket<any, any> | undefined;
+  setSocket: React.Dispatch<React.SetStateAction<Socket<any, any> | undefined>>;
 }
 
 export interface ChannelDB_ {
@@ -61,6 +70,7 @@ export interface ChatFriend_ {}
 
 export interface Chat_ {
   userName: string;
+  id: number;
 }
 
 export interface AddPopup_ {
@@ -81,6 +91,8 @@ export interface InputZone_ {
   setMessages: React.Dispatch<React.SetStateAction<Message_[]>>;
   messages: Message_[];
   chatRoom: number;
+  socket: Socket<any, any> | undefined;
+  setSocket: React.Dispatch<React.SetStateAction<Socket<any, any> | undefined>>;
 }
 
 export interface MessageWindow_ {

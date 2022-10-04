@@ -5,25 +5,41 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Socket } from 'socket.io';
+import { Socket, Server } from 'socket.io';
 import { Logger } from '@nestjs/common';
+import { ChatService } from './chat.service';
 
 // Client send a message and server broadcast it
 @WebSocketGateway(6005, { cors: '*:*' })
 export class ChatGateway {
-  logger: Logger = new Logger('ChatController');
+  constructor(private chatService: ChatService) {}
+  private logger: Logger = new Logger('ChatController');
   @WebSocketServer()
-  server;
+  server: Server;
 
   @SubscribeMessage('message')
   handleMessage(client: Socket, payload: any): void {
-    //to change with type
-    this.logger.log(payload);
-    this.server.emit('message', payload);
+    this.logger.debug('RECEIVED MESSAGE FROM : ');
+    this.logger.debug(payload.user);
+    this.logger.debug('FOR ROOM : ', payload.chatRoom);
+    this.logger.debug(payload);
+    this.server.to(payload.chatRoom).emit('message', payload);
   }
 
   @SubscribeMessage('joinRoom')
   handleJoin(client: Socket, payload: any): void {
-    this.logger.debug(payload);
+    this.logger.log('USER JOINED ROOM :', payload.chatRoom);
+    client.join(payload.chatRoom);
+    client.emit('joined', payload.chatRoom);
+  }
+
+  @SubscribeMessage('leaveRoom')
+  handleLeave(client: Socket, payload: any): void {
+    this.logger.debug(
+      'USER :' + payload.user + ' LEFT ROOM : ',
+      payload.chatRoom,
+    );
+    client.leave(payload.chatRoom);
+    this.server.emit('disconnected', 'Channel left');
   }
 }

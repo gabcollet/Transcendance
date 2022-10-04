@@ -1,11 +1,37 @@
 import styles from "./Channel.module.css";
-import { faCircleXmark, faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleXmark,
+  faCirclePlus,
+  faCommentDots,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Channel_ } from "../../../interfaces";
-import { getChannels, joinChannel, removeChannel } from "../ChatUtils";
+import { joinChannel, removeChannel } from "../ChatUtils";
+import { useEffect, useState } from "react";
+
 const Channel = (props: Channel_) => {
   let icon = <></>;
-  let channelClick = () => {};
+  let chatIcon = <></>;
+
+  const [boxStyle, setBoxStyle] = useState<string>("channel-box");
+  let channelClick = () => {
+    if (props.joined === true) {
+      props.socket?.emit("leaveRoom", { chatRoom: props.currentID });
+      console.log("ROOM SET TO ROOM : " + props.id);
+      props.socket?.emit("joinRoom", { chatRoom: props.id, user: "test" });
+      props.socket?.on("joined", (message: any) => {
+        console.log("Channel : " + message + " joined");
+      });
+      props.setRoomID(props.id);
+    }
+  };
+  useEffect(() => {
+    if (props.id === props.currentID) {
+      setBoxStyle("channel-box-selected");
+    } else {
+      setBoxStyle("channel-box");
+    }
+  }, [props.currentID]);
   if (props.joined === true) {
     icon = (
       <FontAwesomeIcon
@@ -13,7 +39,15 @@ const Channel = (props: Channel_) => {
         icon={faCircleXmark}
         onClick={() => {
           removeChannel(props.id, props.setUserChannels, props.setPublic);
+          props.setRoomID(0);
         }}
+      ></FontAwesomeIcon>
+    );
+    chatIcon = (
+      <FontAwesomeIcon
+        className={styles["chat-icon"]}
+        icon={faCommentDots}
+        onClick={channelClick}
       ></FontAwesomeIcon>
     );
   } else {
@@ -21,16 +55,18 @@ const Channel = (props: Channel_) => {
       <FontAwesomeIcon
         className={styles["join-icon"]}
         icon={faCirclePlus}
-		onClick={() => {
-			joinChannel(props.id, props.setUserChannels, props.setPublic)
-		}}
+        onClick={() => {
+          joinChannel(props.id, props.setUserChannels, props.setPublic);
+        }}
       ></FontAwesomeIcon>
     );
   }
   return (
     <div className={styles["channel-wrapper"]}>
-      <div onClick={channelClick} className={styles["channel-box"]}>
+      <div className={styles[boxStyle]}>
+        {" "}
         <p>{props.title}</p>
+        {chatIcon}
         {icon}
       </div>
     </div>

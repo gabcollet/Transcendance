@@ -18,24 +18,9 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Chatroom, Message } from '@prisma/client';
 import { ChatDto } from './chat.dto';
 import { User } from '@prisma/client';
-
-import {
-  IsString,
-  IsAlphanumeric,
-  IsNotEmpty,
-  MinLength,
-  MaxLength,
-  Matches,
-} from 'class-validator';
-
 @Controller('chat')
 export class ChatController {
-  constructor(
-    private usersService: UsersService,
-    private prisma: PrismaService,
-    private policy: ChatDto,
-    private chatService: ChatService,
-  ) {}
+  constructor(private chatService: ChatService) {}
   logger: Logger = new Logger('ChatController');
   @Get('convo')
   getConvo(@Req() req: Request, @Param() params) {}

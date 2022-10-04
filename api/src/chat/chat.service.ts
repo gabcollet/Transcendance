@@ -129,4 +129,26 @@ export class ChatService {
     });
     return channels;
   }
+  async joinRoom(id: number, username: string, room: number) {
+    const user = { id, username, room };
+  }
+  async addMessage(id: number, username: string, message: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        username: username,
+      },
+    });
+    const room = await this.prisma.chatroom.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    const convo = await this.prisma.message.create({
+      data: {
+        roomId: room.id,
+        authorID: user.id,
+        messageText: message,
+      },
+    });
+  }
 }

@@ -10,7 +10,6 @@ export async function getChannels(setChannels: any, setPublic: any) {
       },
     })
     .then((res) => {
-      console.log(res.data);
       setChannels(res.data);
       console.log("Channels list generated");
     })
@@ -25,7 +24,6 @@ export async function getChannels(setChannels: any, setPublic: any) {
       },
     })
     .then((res) => {
-      console.log(res.data);
       setPublic(res.data);
       console.log("Channels list generated");
     })
