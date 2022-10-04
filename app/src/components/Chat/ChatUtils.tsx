@@ -56,3 +56,30 @@ export async function removeChannel(
       alert(error);
     });
 }
+
+export async function joinChannel(
+  channelID: number,
+  setUserChannels: any,
+  setPublic: any
+) {
+  await axios
+    .post(
+      "http://localhost:3030/chat/join-channel",
+      {
+        value: channelID,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `bearer ${Cookies.get("jwtToken")}`,
+        },
+      }
+    )
+    .then(() => {
+      getChannels(setUserChannels, setPublic);
+      console.log("Channel joined");
+    })
+    .catch((error) => {
+      alert(error);
+    });
+}
