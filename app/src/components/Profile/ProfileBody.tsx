@@ -155,9 +155,18 @@ const AchievementsContent = (props: any) => {
 
   let achievementElement: any = [];
   for (let key in achievements) {
-    achievementElement.push(
-      <AchievementCard name={key} achieved={achievements.key} />
-    );
+    console.log("Acheivements:");
+    console.log(achievements);
+    console.log("acheivement.key:");
+    console.log(achievements[key]);
+    console.log("key:");
+    console.log(key);
+
+    if (key !== "id" && key !== "username") {
+      achievementElement.push(
+        <AchievementCard name={key} achieved={achievements[key]} />
+      );
+    }
   }
 
   return (
