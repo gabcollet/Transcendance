@@ -2,8 +2,10 @@ import axios from "axios";
 import styles from "../Pages/Login.module.css";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const TwoFAQRCode = () => {
+  const navigate = useNavigate();
   const [qrcode, setQrcode] = useState("");
   axios.defaults.headers.common["Authorization"] = `bearer ${Cookies.get(
     "jwtToken"
@@ -17,21 +19,21 @@ const TwoFAQRCode = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
         setQrcode(response.data);
       });
   }, []);
+
+  const handleClick = () => {
+    navigate("/twoFA/verify");
+  };
 
   return (
     <div className="">
       <p>Scan the QR code with Google Authenticator app</p>
       <img src={qrcode} alt="" />
-      <a
-        className={styles["auth-link"]}
-        href="http://localhost:3000/TwoFA/verify"
-      >
+      <button className={styles["login-btn"]} onClick={handleClick}>
         Continue
-      </a>
+      </button>
     </div>
   );
 };
