@@ -11,6 +11,7 @@ import {
 } from "./ProfileInterfaces";
 import { ProfileContext } from "../../App";
 import Cookies from "js-cookie";
+import { UserImage } from "./UserImage";
 
 const FriendButton = (props: FriendButtonProps) => {
   const profileName = useContext(ProfileContext);
@@ -143,7 +144,8 @@ export const FriendCard = (props: FriendCardProps) => {
   return (
     <div className={ProfileBodyStyle["friends-content-individual"]}>
       <div className={ProfileBodyStyle["individual-id"]}>
-        <img src={friendUser.picture} alt={friendUser.username} />
+        {/* <img src={friendUser.picture} alt={friendUser.username} /> */}
+        <UserImage username={props.friendUsername} />
         <h4 className={FriendCardStyle["friend-name"]}>
           {friendUser.displayname}
         </h4>

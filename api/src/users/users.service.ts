@@ -330,7 +330,6 @@ export class UsersService {
   }
 
   async getHistory(username: string) {
-    console.log(`In getHistory from users.service. username: ${username}`);
     const matchList = await this.prisma.history.findMany({
       where: {
         OR: [

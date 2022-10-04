@@ -70,7 +70,7 @@ const FriendsContent = (props: ProfileProps) => {
       "users/" + props.username + "/friendrequests",
       setFriendRequests
     );
-  }, []);
+  }, [props.username]);
 
   const friendsElement = friends?.map((friendUsername: string) => {
     return (
