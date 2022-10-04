@@ -1,7 +1,10 @@
+/* * {
+    font-family: 'Poppins', sans-serif;
+} */
+
 /* Profile Content */
 .profile-selector-container {
     border-style: solid;
-    border-color: green;
     display: flex;
     height: 40px;
     min-height: 40px;
@@ -15,11 +18,31 @@
 
 .specific-content {
     overflow-y: auto;
+    overflow-x: scroll;
+}
+
+.specific-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.specific-content::-webkit-scrollbar-track {
+    background-color: rgba(233, 233, 255, 0.5);
+}
+
+.specific-content::-webkit-scrollbar-thumb {
+    background-color: rgba(249, 249, 255, 0.5);
+    border-radius: 10px;
+}
+
+.friendrequests-header,
+.friends-header {
+    border-style: solid;
+    border-width: 0px 0px 1px 0px;
+    min-width: 100%;
 }
 
 .profile-content-container {
     border-style: solid;
-    border-color: cyan;
     min-height: 100%;
     max-height: 100%;
     display: flex;
@@ -27,25 +50,41 @@
 }
 
 /* Friends Content */
-.friends-content-individual {
-    border-style: solid;
-    border-color: gold;
-    height: 100px;
-    display: flex;
+.friends-content-container {
+    min-width: 100%;
 }
 
-.friends-content-individual > * {
+.friendrequests-header {
+    font-size: 3rem;
+}
+
+.friends-header {
+    font-size: 3rem;
+}
+
+.friends-content-individual {
     border-style: solid;
-    border-color: cyan;
+    border-width: 0px 0px 1px 0px;
+    height: 100px;
+    display: flex;
+    border-color: blue;
+    flex-shrink: 1;
+}
+
+.friends-content-individual>* {
+    flex: 1;
+    flex-shrink: 1;
+    overflow: hidden;
 }
 
 .individual-id {
+    flex: 2;
     display: grid;
     grid-template-columns: 100px 200px;
     grid-template-rows: 1fr 1fr;
-    grid-template-areas: 
-    "image name"
-    "image status";
+    grid-template-areas:
+        "image name"
+        "image status";
 }
 
 .individual-id img {
@@ -56,7 +95,7 @@
     grid-area: image;
 }
 
-.individual-id h4 {
+.individual-id {
     font-size: 2rem;
     grid-area: name;
     margin-top: 10px;
@@ -68,15 +107,11 @@
 }
 
 .individual-buttons {
-    padding: 10px;
+    /* padding: 10px; */
     display: flex;
     flex-direction: column;
-    gap: 20px;
-}
-
-.individual-buttons button {
-    padding: 0px 10px;
-    white-space: nowrap;
+    gap: 5px;
+    margin: 5px;
 }
 
 .individual-stats {
@@ -90,15 +125,13 @@
 
 /* History Content */
 .match-content-individual {
-    border-style: solid;
-    border-color: gold;
+    /* border-style: solid; */
     height: 120px;
     display: flex;
 }
 
-.match-content-individual > * {
-    border-style: solid;
-    border-color: cyan;
+.match-content-individual>* {
+    /* border-style: solid; */
 }
 
 .me-id {
@@ -120,15 +153,14 @@
     width: 80px;
     border-radius: 50%;
     margin: 5px 10px;
-    border-style: solid;
-    border-color: red;
+    /* border-style: solid; */
 }
 
 .match-id .me-id h4 {
     font-size: 1rem;
-    border-style: solid;
-    border-color: green;
+    /* border-style: solid; */
 }
+
 .foe-id {
     display: flex;
     flex-direction: column;
@@ -139,13 +171,42 @@
     width: 80px;
     border-radius: 50%;
     margin: 5px 10px;
-    border-style: solid;
-    border-color: red;
+    /* border-style: solid; */
 }
 
 .match-id .foe-id h4 {
     font-size: 1rem;
-    border-style: solid;
-    border-color: green;
+    /* border-style: solid; */
     text-align: center;
 }
+
+/*
+@media (max-width: 480px) {
+    .friends-content-individual {
+        border-style: solid;
+        border-width: 0px 0px 1px 0px;
+        height: 100px;
+        display: flex;
+        flex-direction: column;
+        border-color: blue;
+        flex-shrink: 1;
+    }
+
+    .friends-content-individual>* {
+        overflow: visible;
+        align-items: unset;
+    }
+
+    .individual-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin: 5px;
+        border-style: solid;
+        border-color: gold;
+    }
+
+    .friends-content-individual,
+    .friends-content-individual * {}
+}
+*/

@@ -14,6 +14,7 @@ import { fetchText } from "./components/Profile/FetchValue";
 import { SearchBar } from "./components/Profile/SearchBar";
 import TwoFAQRCode from "./components/TwoFAQRCode";
 import TwoFAVerify from "./Pages/TwoFAVerify";
+import { ProfileConfig } from "./components/Profile/ProfileConfig";
 import { socket } from "./Pages/PongRoom";
 
 export const ProfileContext = React.createContext("");
@@ -24,15 +25,15 @@ const App = () => {
   const [profileUsername, setProfileUsername] = useState("USER NOT LOADED");
   // const [profileUsername, setProfileUsername] = useState("test");
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
-  
+
   useEffect(() => {
     fetchText("profile/username", setProfileUsername);
   }, []);
-  
+
   const changeBG = (newClassName: string) => {
     setBackground(newClassName);
   };
-  
+
   useEffect(() => {
     async function getUsername() {
       await fetch("http://localhost:3030/profile/username", {
@@ -41,15 +42,15 @@ const App = () => {
           Authorization: `bearer ${Cookies.get("jwtToken")}`,
         },
       })
-      .then((res) => res.text())
-      .then((data) => setProfileUsername(data))
+        .then((res) => res.text())
+        .then((data) => setProfileUsername(data));
     }
     getUsername();
   }, []);
 
   useEffect(() => {
-    if (profileUsername !== "USER NOT LOADED"){
-      socket.emit('online', profileUsername);
+    if (profileUsername !== "USER NOT LOADED") {
+      socket.emit("online", profileUsername);
     }
   }, [profileUsername]);
 
@@ -69,7 +70,7 @@ const App = () => {
                 }
               />
               <Route path="/PongRoom" element={<PongRoom />} />
-              <Route path="/Pong" element={<Pong />}  />
+              <Route path="/Pong" element={<Pong />} />
               <Route
                 path="/Profile"
                 element={
@@ -85,6 +86,10 @@ const App = () => {
                 <Route
                   path="user"
                   element={<ProfileContent username={profileUsername} />}
+                />
+                <Route
+                  path="config"
+                  element={<ProfileConfig username={profileUsername} />}
                 />
               </Route>
               <Route

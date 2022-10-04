@@ -1,15 +1,11 @@
 /* Profile header */
 .profile-header-container {
-    border-style: solid;
-    border-color: red;
     height: 100%;
     width: 100%;
     display: flex;
 }
 
-.profile-header-container > * {
-    border-style: solid;
-    border-color: pink;
+.profile-header-container>* {
     flex: 1 1 0px;
 }
 
@@ -39,7 +35,6 @@
 .profile-image {
     border-radius: 50%;
     border-style: solid;
-    border-color: green;
     width: 100px;
     min-height: 100px;
     margin: auto;
@@ -68,7 +63,6 @@
 
 .primary-stats {
     border-style: solid;
-    border-color: blue;
     padding: 1rem;
     display: flex;
     flex-direction: column;
@@ -76,11 +70,11 @@
 }
 
 .primary-stats h3 {
-    border-style: solid;
-    border-color: green;
     white-space: nowrap;
     font-size: 2rem;
 }
+
+.secondary-stats {}
 
 .secondary-stats p {
     font-size: 1rem;

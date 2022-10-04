@@ -9,14 +9,18 @@ import {
   NotFoundException,
   UseGuards,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AuthorizationGuard } from '../auth/auth.guard';
 import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 import { Request, Response } from 'express';
 import { createReadStream } from 'fs';
-import { join } from 'path';
+import { extname, join } from 'path';
 import { UserDto } from './dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 @Controller('users')
 export class UsersController {
@@ -30,6 +34,12 @@ export class UsersController {
   @Get()
   getSearchedUsernames(@Query() query) {
     return this.usersService.getSearchedUsernames(query.search);
+  }
+
+  // @UseGuards(JwtAuthGuard)
+  @Get(':name/serverimg')
+  async getServerImg(@Param() params, @Query() query, @Res() res) {
+    res.sendFile(query.img, { root: 'img' });
   }
 
   // Get path of user's image from DB
@@ -77,13 +87,23 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Get(':name/friendstatus')
   getFrienshipStatus(@Query() query, @Param() params) {
-    return this.usersService.getFriendshipStatus(params.name, query.username);
+    return this.usersService.getFriendshipStatus(
+      params.name,
+      query.username,
+      params.name,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':name/friends')
   getFriends(@Param() params) {
     return this.usersService.getAcceptedFriends(params.name);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':name/friendrequests')
+  getFriendRequests(@Param() params) {
+    return this.usersService.getFriendRequests(params.name);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -101,7 +121,43 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Post(':name/removefriend')
   removeFriend(@Query() query, @Param() params) {
-    return this.usersService.cancelRequest(params.name, query.username);
+    console.log('IN REMOVE FRIENDS');
+    return this.usersService.removeFriend(params.name, query.username);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post(':name/config/displayname')
+  updateDisplayName(@Query() query, @Param() params) {
+    return this.usersService.updateDisplayName(params.name, query.displayname);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post(':name/config/picture')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './img',
+        filename: (req, file, callback) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const ext = extname(file.originalname);
+          const filename = `${uniqueSuffix}${ext}`;
+          callback(null, filename);
+        },
+      }),
+    }),
+  )
+  updateProfilePicture(
+    @Param() params,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.usersService.updateProfilePicture(
+      params.name,
+      'http://localhost:3030/users/' +
+        params.name +
+        '/serverimg?img=' +
+        file.filename,
+    );
   }
 
   @UseGuards(JwtAuthGuard)

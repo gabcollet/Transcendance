@@ -46,7 +46,7 @@ model Achievements {
     first10Wins   Boolean @default(false)
     streak5Wins   Boolean @default(false)
     streak5Losses Boolean @default(false)
-    user          User    @relation(fields: [username], references: [username])
+    user          User    @relation(fields: [username], references: [username], onDelete: Cascade)
     username      String  @unique
 
     @@map("achievements")
@@ -58,7 +58,7 @@ model Stats {
     losses        Int?   @default(0)
     winningStreak Int?   @default(0)
     losingStreak  Int?   @default(0)
-    user          User   @relation(fields: [username], references: [username])
+    user          User   @relation(fields: [username], references: [username], onDelete: Cascade)
     username      String @unique
 
     @@map("stats")
