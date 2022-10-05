@@ -9,21 +9,25 @@ import { UsersService } from './users/users.service';
 import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
-import { ProfileController } from './users/profile.controller';
+import { ProfileController } from './profile/profile.controller';
 import { TestController } from './test/test.controller';
 import { ChatDto } from './chat/chat.dto';
 import { PongService } from './pong/pong.service';
 import { TestingController } from './testing/testing.controller';
+import { ProfileService } from './profile/profile.service';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
     AuthModule,
     ChatModule,
     UsersModule,
+    ProfileModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
     PrismaModule,
+    ProfileModule,
   ],
   controllers: [
     ChatController,
@@ -32,6 +36,13 @@ import { TestingController } from './testing/testing.controller';
     TestController,
     TestingController,
   ],
-  providers: [UsersService, PongGateway, ChatGateway, PongService, ChatDto],
+  providers: [
+    UsersService,
+    PongGateway,
+    ChatGateway,
+    PongService,
+    ChatDto,
+    ProfileService,
+  ],
 })
 export class AppModule {}

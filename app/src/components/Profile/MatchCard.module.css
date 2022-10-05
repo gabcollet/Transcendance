@@ -1,0 +1,52 @@
+.match-container {
+    display: flex;
+    flex-direction: row;
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 150px;
+    max-height: 150px;
+    border-bottom: 1px solid black;
+    padding: 10px;
+    text-align: center;
+    align-items: center;
+    /* overflow: hidden; */
+}
+
+.winner-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.match-picture {
+    min-width: 75px;
+    max-width: 75px;
+    min-height: 75px;
+    max-height: 75px;
+    border-radius: 50%;
+    padding: 5px;
+}
+
+.match-score-container {
+    flex: 1;
+}
+
+.match-name {
+    font-size: 2rem;
+}
+
+.match-score {
+    font-size: 3rem;
+}
+
+.match-winorlose {
+    font-size: 2rem;
+}
+
+.loser-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

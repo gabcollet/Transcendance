@@ -2,30 +2,24 @@ import Cookies from "js-cookie";
 
 // route: The Nest route for the path
 // setCallBack: the React useState function that will change the element calling this
-export const fetchText = (route: string, setCallBack: Function) => {
-  // function fetchIt() {
-  fetch("http://localhost:3030/" + route, {
+export const fetchText = async (route: string, setCallBack: Function) => {
+  const res = await fetch("http://localhost:3030/" + route, {
     credentials: "include",
     headers: {
       Authorization: `bearer ${Cookies.get("jwtToken")}`,
     },
-  })
-    .then((res) => res.text())
-    .then((data) => setCallBack(data));
+  });
+  const data = await res.text();
+  setCallBack(data);
 };
-//   fetchIt();
-// };
 
-export const fetchObject = (route: string, setCallBack: Function) => {
-  // function fetchIt() {
-  fetch("http://localhost:3030/" + route, {
+export const fetchObject = async (route: string, setCallBack: Function) => {
+  const res = await fetch("http://localhost:3030/" + route, {
     credentials: "include",
     headers: {
       Authorization: `bearer ${Cookies.get("jwtToken")}`,
     },
-  })
-    .then((res) => res.json())
-    .then((data) => setCallBack(data));
+  });
+  const data = await res.json();
+  setCallBack(data);
 };
-// fetchIt();
-// };

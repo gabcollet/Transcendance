@@ -1,0 +1,108 @@
+.leaderboard-container {
+    border-color: red;
+    min-width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+}
+
+.leaderboard-members-container {
+    border-style: solid;
+    border-radius: 30px;
+    width: 80vw;
+    min-width: 500px;
+    max-width: 1800px;
+    height: 80vh;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+.leaderboard-header {
+    font-size: 4rem;
+    text-align: center;
+    padding: 20px;
+}
+
+.leaderboard-top-ten {
+    flex: 1;
+    overflow-y: scroll;
+}
+
+.leaderboard-profile {
+    flex: 0.3;
+}
+
+/* Player cards */
+
+.player-container {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 125px;
+    max-height: 125px;
+    border-bottom: 2px solid black;
+}
+
+.player-picture-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+    max-height: 100%;
+}
+
+.player-picture {
+    flex: 1;
+    max-width: 75px;
+    max-height: 75px;
+    min-width: 75px;
+    min-height: 75px;
+    border-radius: 50%;
+}
+
+.player-name {
+    padding-top: 5px;
+}
+
+
+.player-stats-container {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    min-height: 100%;
+    max-height: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.247)
+}
+
+.player-stats-text-container {}
+
+.player-stats-number-container {
+    margin-left: 5px;
+    padding-left: 5px;
+    border-left-style: dashed;
+    border-left-width: 2px;
+}
+
+.player-rank-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+    max-height: 100%;
+}
+
+.leaderboard-profile {
+    display: inline-block;
+    padding: 15px 5px 5px 5px;
+    border-top: 4px solid white;
+
+}
