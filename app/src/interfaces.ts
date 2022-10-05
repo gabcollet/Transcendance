@@ -100,4 +100,5 @@ export interface InputZone_ {
 export interface MessageWindow_ {
   messages: Message_[];
   chatRoom: number;
+  setMessages: React.Dispatch<React.SetStateAction<Message_[]>>;
 }

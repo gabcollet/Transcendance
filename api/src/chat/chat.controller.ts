@@ -9,6 +9,7 @@ import {
   Post,
   BadRequestException,
   RawBodyRequest,
+  Query,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { UsersService } from '../users/users.service';
@@ -22,12 +23,19 @@ import { User } from '@prisma/client';
 export class ChatController {
   constructor(private chatService: ChatService) {}
   logger: Logger = new Logger('ChatController');
-  @Get('convo')
-  getConvo(@Req() req: Request, @Param() params) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get('channels')
-  getChannels(@Req() req: Request) {}
+  @Get('convo')
+  async getConvo(@Req() req: Request, @Query() query) {
+    if (!query.id) {
+      return '';
+    }
+    const messages = await this.chatService.getMessages(
+      Number(query.id),
+      req.user.toString(),
+    );
+    return messages;
+  }
 
   @UseGuards(JwtAuthGuard)
   @Post('create-channel')
@@ -37,7 +45,7 @@ export class ChatController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('get-channels')
+  @Get('channels')
   async getChannelsReq(@Req() request: Request) {
     let channels = await this.chatService.getChannels(request);
     return channels;

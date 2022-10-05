@@ -25,7 +25,7 @@ export class ChatGateway {
       'Sent to room',
       payload.chatRoom,
     );
-
+    this.chatService.addMessage(payload.chatRoom, payload.author, payload.msg);
     this.server.to(payload.chatRoom).emit('messageReceived', payload);
   }
 

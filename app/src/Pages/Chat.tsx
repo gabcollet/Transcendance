@@ -10,7 +10,8 @@ import { Message_ } from "../interfaces";
 import { AxiosResponse } from "axios";
 import { getChannels } from "../components/Chat/ChatUtils";
 import { Socket, io } from "socket.io-client";
-import { ProfileContext } from "../App";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const Chat = (props: Chat_) => {
   const [messages, setMessages] = useState<Message_[]>([]);
@@ -26,6 +27,22 @@ const Chat = (props: Chat_) => {
   };
 
   useEffect(() => {
+    axios
+      .get("http://localhost:3030/chat/convo", {
+        params: {
+          id: roomId,
+        },
+        withCredentials: true,
+        headers: {
+          Authorization: `bearer ${Cookies.get("jwtToken")}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setMessages(response.data);
+      });
+  }, [roomId]);
+  useEffect(() => {
     const newSocket = io("localhost:6005");
     setSocket(newSocket);
   }, [setSocket]);
@@ -34,13 +51,21 @@ const Chat = (props: Chat_) => {
     if (roomId === 0) {
       setMid(
         <div className={styles["mid"]}>
-          <MessageWindow messages={messages} chatRoom={roomId}></MessageWindow>
+          <MessageWindow
+            setMessages={setMessages}
+            messages={messages}
+            chatRoom={roomId}
+          ></MessageWindow>
         </div>
       );
     } else {
       setMid(
         <div className={styles["mid"]}>
-          <MessageWindow messages={messages} chatRoom={roomId}></MessageWindow>
+          <MessageWindow
+            setMessages={setMessages}
+            messages={messages}
+            chatRoom={roomId}
+          ></MessageWindow>
           <InputZone
             setMessages={setMessages}
             messages={messages}

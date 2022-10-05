@@ -7,6 +7,7 @@ import { from, lastValueFrom } from 'rxjs';
 import { Request } from 'express';
 import { runInThisContext } from 'vm';
 import { connected } from 'process';
+import { authorize } from 'passport';
 
 @Injectable()
 export class ChatService {
@@ -138,5 +139,25 @@ export class ChatService {
   async getMessages(id: number, username: string) {
     const user = await this.getUser(username);
     const room = await this.getChannel(id);
+    const messagesDB = await this.prisma.message.findMany({
+      where: {
+        room: room,
+      },
+      orderBy: {
+        sentAt: 'asc',
+      },
+      include: {
+        author: true,
+      },
+    });
+    let messages = messagesDB.map((single) => {
+      return {
+        author: single.author.username,
+        msg: single.messageText,
+        chatRoom: single.roomId,
+        sentAt: single.sentAt,
+      };
+    });
+    return messages;
   }
 }

@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 
 export async function getChannels(setChannels: any, setPublic: any) {
   await axios
-    .get("http://localhost:3030/chat/get-channels", {
+    .get("http://localhost:3030/chat/channels", {
       withCredentials: true,
       headers: {
         Authorization: `bearer ${Cookies.get("jwtToken")}`,
