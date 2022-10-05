@@ -9,6 +9,7 @@ import {
   Post,
   BadRequestException,
   RawBodyRequest,
+  Query,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { UsersService } from '../users/users.service';
@@ -18,31 +19,23 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Chatroom, Message } from '@prisma/client';
 import { ChatDto } from './chat.dto';
 import { User } from '@prisma/client';
-
-import {
-  IsString,
-  IsAlphanumeric,
-  IsNotEmpty,
-  MinLength,
-  MaxLength,
-  Matches,
-} from 'class-validator';
-
 @Controller('chat')
 export class ChatController {
-  constructor(
-    private usersService: UsersService,
-    private prisma: PrismaService,
-    private policy: ChatDto,
-    private chatService: ChatService,
-  ) {}
+  constructor(private chatService: ChatService) {}
   logger: Logger = new Logger('ChatController');
-  @Get('convo')
-  getConvo(@Req() req: Request, @Param() params) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get('channels')
-  getChannels(@Req() req: Request) {}
+  @Get('convo')
+  async getConvo(@Req() req: Request, @Query() query) {
+    if (query.id == null) {
+      return [];
+    }
+    const messages = await this.chatService.getMessages(
+      Number(query.id),
+      req.user.toString(),
+    );
+    return messages;
+  }
 
   @UseGuards(JwtAuthGuard)
   @Post('create-channel')
@@ -52,7 +45,7 @@ export class ChatController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('get-channels')
+  @Get('channels')
   async getChannelsReq(@Req() request: Request) {
     let channels = await this.chatService.getChannels(request);
     return channels;
@@ -62,7 +55,9 @@ export class ChatController {
   @Post('join-channel')
   async joinChannelReq(@Req() request: Request) {
     let username = request.user.toString();
-    let channel = request.body.id;
+    let channel = request.body.value;
+    this.logger.debug('IN JOIN');
+    this.logger.debug(username, request.body);
     let confirmation = await this.chatService.joinChannel(username, channel);
     return confirmation;
   }

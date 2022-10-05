@@ -1,18 +1,25 @@
 import styles from "./ChatBubble.module.css";
 import { ChatBubble_ } from "../../../interfaces";
-
-let i = 0;
+import { ProfileContext } from "../../../App";
+import { useContext } from "react";
 
 const ChatBubble = (props: ChatBubble_) => {
+  let i = 0;
   let to_send = <p></p>;
-  if (i % 2 === 0) {
+  const profileName = useContext(ProfileContext);
+  let author = "";
+  if (props.author === profileName) {
+    author = "Me";
+  } else {
+    author = props.author;
+  }
+  if (props.author !== profileName) {
     to_send = (
       <div className={styles["message"]}>
         <p className={styles["bubble-sent"]}>{props.message + "\n"}</p>
-        <div className={styles["sent-by"]}>Sent by You</div>
+        <div className={styles["sent-by"]}>Sent by {props.author}</div>
       </div>
     );
-    i++;
   } else {
     to_send = (
       <div className={styles["message"]}>

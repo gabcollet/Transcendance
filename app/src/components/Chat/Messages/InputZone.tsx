@@ -1,39 +1,29 @@
 import ChatInput from "./ChatInput";
-import { useEffect, useState } from "react";
+import { useEffect, useContext } from "react";
 import io, { Socket } from "socket.io-client";
 import styles from "./InputZone.module.css";
 import { InputZone_ } from "../../../interfaces";
 import { Message_ } from "../../../interfaces";
+import { ProfileContext } from "../../../App";
 
 const InputZone = (props: InputZone_) => {
-  const [socket, setSocket] = useState<Socket>();
+  const profileName = useContext(ProfileContext);
   let send: Message_ = {
     msg: "",
     author: "",
-    chatRoom: 1,
+    chatRoom: props.chatRoom,
   };
-
   const messageListener = (message: Message_) => {
-    props.setMessages([...props.messages, message]);
+    props.setMessages((current) => [...current, message]);
   };
-  useEffect(() => {
-    socket?.on("message", messageListener);
-    return () => {
-      socket?.off("message", messageListener);
-    };
-  }, [messageListener]);
-  const sendMsg = (message: string) => {
+  const sendMsg = async (message: string) => {
     if (message !== "") {
       send.msg = message;
       send.chatRoom = props.chatRoom;
-      socket?.emit("message", send);
+      send.author = profileName;
+      await props.socket?.emit("sendMessage", send);
     }
   };
-  useEffect(() => {
-    const newSocket = io("localhost:6005");
-    setSocket(newSocket);
-    console.log("Chat socket set");
-  }, [setSocket]);
 
   return (
     <div className={styles["type-zone"]}>
