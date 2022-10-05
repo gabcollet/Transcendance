@@ -5,6 +5,7 @@ import { Room } from './pong.room';
 import { Server } from 'socket.io';
 import { Ball } from './pong.ball';
 import { PrismaService } from '../prisma/prisma.service';
+import { AchievementService } from './achievement.service';
 import { ProfileService } from 'src/profile/profile.service';
 
 @Injectable()
@@ -22,6 +23,7 @@ export class PongService {
 
   constructor(
     private prisma: PrismaService,
+    private achievementService: AchievementService,
     private profileService: ProfileService,
   ) {}
 
@@ -45,6 +47,7 @@ export class PongService {
   async joining(client: Socket, room: string, pID: number) {
     client.join(room);
     const user = await this.getUser(client);
+    if (!user) { return; }
     //Check if username already in room
     if (this.m_roomUser.has(room)) {
       const clientRoom = this.m_roomUser.get(room);
@@ -121,6 +124,7 @@ export class PongService {
   async leavingRoom(client: Socket, room: string) {
     client.leave(room);
     const user = await this.getUser(client);
+    if (!user) { return; }
     const pid = this.m_pid.get(client);
     if (pid === 1 || pid === 2) {
       this.logger.warn(`${user.username} leaved room ${room} as P${pid}`);
@@ -258,7 +262,7 @@ export class PongService {
     this.gameEnd = true;
   }
 
-  addWinLost(client: Socket, winner: number, roomID: string) {
+  addWinLost(client: Socket, pid: number, roomID: string) {
     for (let i = 0; i < this.rooms.length; i++) {
       if (
         this.rooms[i] &&
@@ -266,25 +270,25 @@ export class PongService {
         !this.rooms[i].winGiven
       ) {
         const room = this.rooms[i];
-        if (winner === 1) {
-          this.addWin(room.p1_name);
-          this.addLost(room.p2_name);
-          this.addHistory(
-            room.p1_name,
-            room.p2_name,
-            room.p1_score,
-            room.p2_score,
-          );
-        } else if (winner === 2) {
-          this.addWin(room.p2_name);
-          this.addLost(room.p1_name);
-          this.addHistory(
-            room.p2_name,
-            room.p1_name,
-            room.p2_score,
-            room.p1_score,
-          );
+        let winner: string;
+        let loser: string;
+        let scoreWinner: number;
+        let scoreLoser: number;
+        if (pid === 1) {
+          winner = room.p1_name;
+          loser = room.p2_name;
+          scoreWinner = room.p1_score;
+          scoreLoser = room.p2_score;
+        } else if (pid === 2) {
+          winner = room.p2_name;
+          loser = room.p1_name;
+          scoreWinner = room.p2_score;
+          scoreLoser = room.p1_score;
         }
+        this.addWin(winner);
+        this.addLost(loser);
+        this.addHistory(winner, loser, scoreWinner, scoreLoser);
+        this.achievementService.addAchievements(winner, loser);
         this.profileService.updateRank();
         room.winGiven = true;
       }
@@ -384,18 +388,24 @@ export class PongService {
     }
   }
 
+  convertTZ(date: Date, tzString: string) {
+    return new Date(date.toLocaleString("en-US", {timeZone: tzString}));   
+  }
+
   async addHistory(
     user1: string,
     user2: string,
     score1: number,
     score2: number,
   ) {
+    const date = new Date(new Date().toLocaleString("en-US", {timeZone: 'Etc/GMT-4'}));
     await this.prisma.history.create({
       data: {
         winner: user1,
         score1: score1,
         loser: user2,
         score2: score2,
+        date: date
       },
     });
   }

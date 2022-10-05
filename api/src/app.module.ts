@@ -14,6 +14,7 @@ import { TestController } from './test/test.controller';
 import { ChatDto } from './chat/chat.dto';
 import { PongService } from './pong/pong.service';
 import { TestingController } from './testing/testing.controller';
+import { AchievementService } from './pong/achievement.service';
 import { ProfileService } from './profile/profile.service';
 import { ProfileModule } from './profile/profile.module';
 
@@ -43,6 +44,7 @@ import { ProfileModule } from './profile/profile.module';
     PongService,
     ChatDto,
     ProfileService,
+    AchievementService,
   ],
 })
 export class AppModule {}
