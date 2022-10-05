@@ -10,8 +10,7 @@ export class AuthStrategy extends PassportStrategy(Strategy, '42') {
   constructor(private userService: UsersService) {
     super({
       clientID: process.env.CLIENT_ID,
-      // clientID:
-      //   '3187aa6aec15b19df251d4424b7bc8f7fc761603b4bae21e049ce800e217a812',
+
       clientSecret: process.env.SECRET,
       callbackURL: 'http://localhost:3030/auth/redirect',
       scope: ['public'],
@@ -20,7 +19,6 @@ export class AuthStrategy extends PassportStrategy(Strategy, '42') {
 
   async validate(accessToken, refreshToken, profile: Profile): Promise<User> {
     const user = this.userService.findCreateUser(profile);
-    // console.log(user);
     return await user;
   }
 }

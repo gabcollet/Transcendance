@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Get,
   Logger,
@@ -55,7 +54,7 @@ export class AuthController {
     }
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get('TwoFA/toggle')
   async TwoFA_Activate(@Req() req: Request) {
     return this.authService.toggleTwoFA(req.cookies['jwtToken']);
@@ -82,7 +81,6 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const pin = req.body['pin'];
-    console.log('PIN: ' + pin);
     const verified = await this.authService.twoFAVerify(
       req.cookies['jwtToken'],
       pin,
