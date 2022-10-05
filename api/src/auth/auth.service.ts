@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
@@ -11,6 +11,7 @@ import {
   scrypt as _scrypt,
 } from 'crypto';
 import { promisify } from 'util';
+import { ChatService } from 'src/chat/chat.service';
 
 //* Convert async function that uses callbacks to return a promise instead
 const scrypt = promisify(_scrypt);
@@ -20,6 +21,7 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     private userService: UsersService,
+    private chatService: ChatService,
   ) {}
 
   async hashPassword(password: string) {
@@ -33,6 +35,18 @@ export class AuthService {
     const result = salt + '.' + hash.toString('hex');
 
     return result;
+  }
+
+  async validatePassword(id: number, password: string) {
+    const room = await this.chatService.getChannels(id);
+    if (!room) throw new NotFoundException('Room not found');
+
+    const [salt, storedHash] = room['password'].split('.');
+
+    const hash = (await scrypt(password, salt, 32)) as Buffer;
+
+    if (storedHash === hash.toString('hex')) return true;
+    else return false;
   }
 
   async cipherSecret(secret: string) {
