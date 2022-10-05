@@ -299,6 +299,7 @@ export class PongService {
       data: {
         wins: userStats.wins + 1,
         winningStreak: userStats.winningStreak + 1,
+        netWins: userStats.netWins + 1,
         losingStreak: 0,
       },
     });
@@ -318,6 +319,7 @@ export class PongService {
       data: {
         losses: userStats.losses + 1,
         losingStreak: userStats.losingStreak + 1,
+        netWins: userStats.netWins - 1,
         winningStreak: 0,
       },
     });
@@ -328,7 +330,9 @@ export class PongService {
 
   async toggleGameStatus(client: Socket, status: string) {
     const user = await this.getUser(client);
-    if (!user) { return; }
+    if (!user) {
+      return;
+    }
     if (user.status !== status) {
       await this.prisma.user.update({
         where: {
@@ -348,15 +352,17 @@ export class PongService {
         username: username,
       },
     });
-    if (!user) { return; }
-    if (user.status === 'online' && user.socketID !== client.id){
+    if (!user) {
+      return;
+    }
+    if (user.status === 'online' && user.socketID !== client.id) {
       await this.prisma.user.update({
         where: {
           username: user.username,
         },
         data: {
           status: 'online',
-          socketID: client.id
+          socketID: client.id,
         },
       });
     } else if (user.status !== 'online') {
@@ -366,7 +372,7 @@ export class PongService {
         },
         data: {
           status: 'online',
-          socketID: client.id
+          socketID: client.id,
         },
       });
       this.logger.verbose(`${user.username} is now online.`);

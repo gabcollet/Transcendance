@@ -21,6 +21,7 @@ import TwoFAQRCode from "./components/TwoFAQRCode";
 import TwoFAVerify from "./Pages/TwoFAVerify";
 import { ProfileConfig } from "./components/Profile/ProfileConfig";
 import { socket } from "./Pages/PongRoom";
+import { Leaderboard } from "./Pages/Leaderboard";
 
 export const ProfileContext = React.createContext("");
 
@@ -101,22 +102,15 @@ const App = () => {
                   element={<ProfileConfig username={profileUsername} />}
                 />
               </Route>
-              <Route
-                path="/Leaderboard"
-                element={
-                  <div style={{ color: "white", fontSize: "75px" }}>
-                    LEADERBOARD
-                  </div>
-                }
-              />
-              <Route
+              <Route path="/Leaderboard" element={<Leaderboard />} />
+              {/* <Route
                 path="/Achievment"
                 element={
                   <div style={{ color: "white", fontSize: "75px" }}>
                     ACHIEVMENT
                   </div>
                 }
-              />
+              /> */}
               <Route
                 path="/Chat"
                 element={<Chat userName={profileUsername}></Chat>}
