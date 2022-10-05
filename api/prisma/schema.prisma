@@ -27,9 +27,8 @@ model User {
     socketID     String?       @default("no ID")
     Achievements Achievements?
 
-    isAdmin   Chatroom[] @relation("admin")
-    blacklist Chatroom[] @relation("blacklist")
-
+    isAdmin   Chatroom[]     @relation("admin")
+    blacklist Chatroom[]     @relation("blacklist")
     Message   Message[]
     chatrooms UserChatroom[]
 
@@ -91,7 +90,7 @@ model Friendship {
 }
 
 model Message {
-    id Int @id @default(autoincrement())
+    id Int @id @unique @default(autoincrement())
 
     author   User @relation(fields: [authorID], references: [id])
     authorID Int
