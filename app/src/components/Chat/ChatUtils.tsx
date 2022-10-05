@@ -11,7 +11,6 @@ export async function getChannels(setChannels: any, setPublic: any) {
     })
     .then((res) => {
       setChannels(res.data);
-      console.log("Channels list generated");
     })
     .catch((error) => {
       console.log(error);
@@ -25,7 +24,6 @@ export async function getChannels(setChannels: any, setPublic: any) {
     })
     .then((res) => {
       setPublic(res.data);
-      console.log("Channels list generated");
     })
     .catch((error) => {
       console.log(error);

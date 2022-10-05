@@ -134,6 +134,7 @@ export class ChatService {
       },
     });
   }
+
   async getMessages(id: number, username: string) {
     const user = await this.getUser(username);
     const room = await this.getChannel(id);

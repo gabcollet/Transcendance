@@ -17,13 +17,16 @@ export class ChatGateway {
   @WebSocketServer()
   server: Server;
 
-  @SubscribeMessage('message')
+  @SubscribeMessage('sendMessage')
   handleMessage(client: Socket, payload: any): void {
-    this.logger.debug('RECEIVED MESSAGE FROM : ');
-    this.logger.debug(payload.user);
-    this.logger.debug('FOR ROOM : ', payload.chatRoom);
-    this.logger.debug(payload);
-    this.server.to(payload.chatRoom).emit('message', payload);
+    this.logger.debug(
+      'Message from',
+      payload.author,
+      'Sent to room',
+      payload.chatRoom,
+    );
+
+    this.server.to(payload.chatRoom).emit('messageReceived', payload);
   }
 
   @SubscribeMessage('joinRoom')

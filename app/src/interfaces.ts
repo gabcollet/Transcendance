@@ -1,6 +1,7 @@
 import { MouseEventHandler } from "react";
 import React from "react";
 import { Socket, io } from "socket.io-client";
+import { Settings } from "http2";
 
 export interface ChatChannels_ {
   userChannels: any;
@@ -15,6 +16,7 @@ export interface ChatChannels_ {
 
 export interface ChatBubble_ {
   message: string;
+  author: string;
 }
 
 export interface Channel_ {

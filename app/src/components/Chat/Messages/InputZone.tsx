@@ -14,23 +14,14 @@ const InputZone = (props: InputZone_) => {
     chatRoom: props.chatRoom,
   };
   const messageListener = (message: Message_) => {
-    props.setMessages([...props.messages, message]);
+    props.setMessages((current) => [...current, message]);
   };
-  props.socket?.on("message", messageListener);
-  useEffect(() => {
-    console.log("on mount");
-    props.socket?.on("message", messageListener);
-    return () => {
-      props.socket?.off("message", messageListener);
-      console.log("LISTETING IS OVER");
-    };
-  }, []);
-  const sendMsg = (message: string) => {
+  const sendMsg = async (message: string) => {
     if (message !== "") {
       send.msg = message;
       send.chatRoom = props.chatRoom;
       send.author = profileName;
-      props.socket?.emit("message", send);
+      await props.socket?.emit("sendMessage", send);
     }
   };
 

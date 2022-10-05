@@ -21,11 +21,14 @@ const Chat = (props: Chat_) => {
   const [socket, setSocket] = useState<Socket>();
   const [mid, setMid] = useState<JSX.Element>(<></>);
 
+  const messageListener = (message: Message_) => {
+    setMessages((current) => [...current, message]);
+  };
+
   useEffect(() => {
     const newSocket = io("localhost:6005");
     setSocket(newSocket);
-    console.log("Chat socket set");
-  }, [setSocket, roomId]);
+  }, [setSocket]);
 
   useEffect(() => {
     if (roomId === 0) {
@@ -50,9 +53,14 @@ const Chat = (props: Chat_) => {
       );
     }
   }, [roomId, messages]);
+
   useEffect(() => {
     getChannels(setChannels, setPublicChannels);
-  }, []);
+    socket?.on("messageReceived", messageListener);
+    return () => {
+      socket?.off("messageReceived", messageListener);
+    };
+  }, [socket]);
   return (
     <div className={styles["chat-wrapper"]}>
       <div className={styles["left"]}>

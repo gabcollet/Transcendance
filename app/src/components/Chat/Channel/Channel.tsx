@@ -17,11 +17,8 @@ const Channel = (props: Channel_) => {
   let channelClick = () => {
     if (props.joined === true) {
       props.socket?.emit("leaveRoom", { chatRoom: props.currentID });
-      console.log("ROOM SET TO ROOM : " + props.id);
       props.socket?.emit("joinRoom", { chatRoom: props.id, user: "test" });
-      props.socket?.on("joined", (message: any) => {
-        console.log("Channel : " + message + " joined");
-      });
+      props.socket?.on("joined", (message: any) => {});
       props.setRoomID(props.id);
     }
   };
