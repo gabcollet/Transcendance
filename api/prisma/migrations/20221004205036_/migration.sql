@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "history" ADD COLUMN     "date" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP;

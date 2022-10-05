@@ -66,13 +66,14 @@ model Stats {
 }
 
 model History {
-    id     Int    @id @default(autoincrement())
-    user1  User   @relation("winner", fields: [winner], references: [username])
-    winner String
-    score1 Int    @default(0)
-    user2  User   @relation("loser", fields: [loser], references: [username])
-    loser  String
-    score2 Int    @default(0)
+    id      Int         @id @default(autoincrement())
+    user1   User        @relation("winner", fields: [winner], references: [username])
+    winner  String
+    score1  Int         @default(0)
+    user2   User        @relation("loser", fields: [loser], references: [username])
+    loser   String
+    score2  Int         @default(0)
+    date    DateTime?   @default(now())
 
     @@map("history")
 }
