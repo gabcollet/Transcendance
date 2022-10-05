@@ -55,6 +55,8 @@ model Stats {
     id            Int    @id @default(autoincrement())
     wins          Int?   @default(0)
     losses        Int?   @default(0)
+    netWins       Int?   @default(0)
+    rank          Int?   @default(0)
     winningStreak Int?   @default(0)
     losingStreak  Int?   @default(0)
     user          User   @relation(fields: [username], references: [username], onDelete: Cascade)

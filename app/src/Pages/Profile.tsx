@@ -6,18 +6,23 @@ import Cookies from "js-cookie";
 import { ProfileHeader } from "../components/Profile/ProfileHeader";
 import { ProfileBody } from "../components/Profile/ProfileBody";
 import { fetchObject } from "../components/Profile/FetchValue";
-import { Link, Outlet, Route, Routes } from "react-router-dom";
+import { Link, Outlet, Route, Routes, useParams } from "react-router-dom";
 import { SearchBar } from "../components/Profile/SearchBar";
 import { ProfileProps } from "../components/Profile/ProfileInterfaces";
 
 export const ProfileContent = (props: ProfileProps) => {
+  let usedUsername = props.username;
+  let { username } = useParams();
+  if (username) {
+    usedUsername = username;
+  }
   return (
     <>
       {props.username !== "USER NOT LOADED" && (
-        <ProfileHeader username={props.username} />
+        <ProfileHeader username={usedUsername} />
       )}
       {props.username !== "USER NOT LOADED" && (
-        <ProfileBody username={props.username} />
+        <ProfileBody username={usedUsername} />
       )}
     </>
   );

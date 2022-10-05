@@ -5,6 +5,7 @@ import { Room } from './pong.room';
 import { Server } from 'socket.io';
 import { Ball } from './pong.ball';
 import { PrismaService } from '../prisma/prisma.service';
+import { ProfileService } from 'src/profile/profile.service';
 
 @Injectable()
 export class PongService {
@@ -19,7 +20,10 @@ export class PongService {
   private m_roomUser: Map<string, string> = new Map<string, string>();
   private rooms: [Room] = [null];
 
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private profileService: ProfileService,
+  ) {}
 
   createRoom(spectator: boolean): string {
     const { v4: uuidv4 } = require('uuid');
@@ -281,6 +285,7 @@ export class PongService {
             room.p1_score,
           );
         }
+        this.profileService.updateRank();
         room.winGiven = true;
       }
     }
@@ -299,6 +304,7 @@ export class PongService {
       data: {
         wins: userStats.wins + 1,
         winningStreak: userStats.winningStreak + 1,
+        netWins: userStats.netWins + 1,
         losingStreak: 0,
       },
     });
@@ -318,6 +324,7 @@ export class PongService {
       data: {
         losses: userStats.losses + 1,
         losingStreak: userStats.losingStreak + 1,
+        netWins: userStats.netWins - 1,
         winningStreak: 0,
       },
     });
@@ -328,7 +335,9 @@ export class PongService {
 
   async toggleGameStatus(client: Socket, status: string) {
     const user = await this.getUser(client);
-    if (!user) { return; }
+    if (!user) {
+      return;
+    }
     if (user.status !== status) {
       await this.prisma.user.update({
         where: {
@@ -348,15 +357,17 @@ export class PongService {
         username: username,
       },
     });
-    if (!user) { return; }
-    if (user.status === 'online' && user.socketID !== client.id){
+    if (!user) {
+      return;
+    }
+    if (user.status === 'online' && user.socketID !== client.id) {
       await this.prisma.user.update({
         where: {
           username: user.username,
         },
         data: {
           status: 'online',
-          socketID: client.id
+          socketID: client.id,
         },
       });
     } else if (user.status !== 'online') {
@@ -366,7 +377,7 @@ export class PongService {
         },
         data: {
           status: 'online',
-          socketID: client.id
+          socketID: client.id,
         },
       });
       this.logger.verbose(`${user.username} is now online.`);

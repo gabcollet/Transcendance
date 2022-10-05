@@ -3,7 +3,12 @@ import "./index.css";
 import Menu from "./Pages/Menu";
 import Login from "./Pages/Login";
 import Profile, { ProfileContent } from "./Pages/Profile";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useParams,
+} from "react-router-dom";
 import PongRoom from "./Pages/PongRoom";
 import Pong from "./components/Pong/Pong";
 import Cookies from "js-cookie";
@@ -16,6 +21,7 @@ import TwoFAQRCode from "./components/TwoFAQRCode";
 import TwoFAVerify from "./Pages/TwoFAVerify";
 import { ProfileConfig } from "./components/Profile/ProfileConfig";
 import { socket } from "./Pages/PongRoom";
+import { Leaderboard } from "./Pages/Leaderboard";
 
 export const ProfileContext = React.createContext("");
 
@@ -88,26 +94,23 @@ const App = () => {
                   element={<ProfileContent username={profileUsername} />}
                 />
                 <Route
+                  path="user/:username"
+                  element={<ProfileContent username={profileUsername} />}
+                />
+                <Route
                   path="config"
                   element={<ProfileConfig username={profileUsername} />}
                 />
               </Route>
-              <Route
-                path="/Leaderboard"
-                element={
-                  <div style={{ color: "white", fontSize: "75px" }}>
-                    LEADERBOARD
-                  </div>
-                }
-              />
-              <Route
+              <Route path="/Leaderboard" element={<Leaderboard />} />
+              {/* <Route
                 path="/Achievment"
                 element={
                   <div style={{ color: "white", fontSize: "75px" }}>
                     ACHIEVMENT
                   </div>
                 }
-              />
+              /> */}
               <Route
                 path="/Chat"
                 element={<Chat id={0} userName={profileUsername}></Chat>}
