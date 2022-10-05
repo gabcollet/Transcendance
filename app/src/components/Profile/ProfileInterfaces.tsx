@@ -3,22 +3,22 @@ import { RefObject } from "react";
 // Props types
 export interface FriendCardProps {
   onRemove?: Function;
-  friendUsername: string;
+  friendUsername: string | undefined;
   searchString?: string;
 }
 
 export interface ProfileProps {
-  username: string;
+  username: string | undefined;
 }
 
 export interface FetchedComponentProps {
-  username: string;
+  username: string | undefined;
   className?: string;
 }
 
 export interface SpecificContentProps {
   contentType: string;
-  username: string;
+  username: string | undefined;
 }
 
 export interface UsersListProps {
@@ -48,6 +48,7 @@ export interface Stats {
   id?: number;
   wins?: number;
   losses?: number;
+  netWins?: number;
   winningStreak?: number;
   losingStreak?: number;
   username?: string;

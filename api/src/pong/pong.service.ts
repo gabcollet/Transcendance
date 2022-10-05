@@ -6,6 +6,7 @@ import { Server } from 'socket.io';
 import { Ball } from './pong.ball';
 import { PrismaService } from '../prisma/prisma.service';
 import { AchievementService } from './achievement.service';
+import { ProfileService } from 'src/profile/profile.service';
 
 @Injectable()
 export class PongService {
@@ -23,6 +24,7 @@ export class PongService {
   constructor(
     private prisma: PrismaService,
     private achievementService: AchievementService,
+    private profileService: ProfileService,
   ) {}
 
   createRoom(spectator: boolean): string {
@@ -287,6 +289,7 @@ export class PongService {
         this.addLost(loser);
         this.addHistory(winner, loser, scoreWinner, scoreLoser);
         this.achievementService.addAchievements(winner, loser);
+        this.profileService.updateRank();
         room.winGiven = true;
       }
     }
@@ -305,6 +308,7 @@ export class PongService {
       data: {
         wins: userStats.wins + 1,
         winningStreak: userStats.winningStreak + 1,
+        netWins: userStats.netWins + 1,
         losingStreak: 0,
       },
     });
@@ -324,6 +328,7 @@ export class PongService {
       data: {
         losses: userStats.losses + 1,
         losingStreak: userStats.losingStreak + 1,
+        netWins: userStats.netWins - 1,
         winningStreak: 0,
       },
     });
