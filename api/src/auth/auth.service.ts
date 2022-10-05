@@ -38,7 +38,7 @@ export class AuthService {
   }
 
   async validatePassword(id: number, password: string) {
-    const room = await this.chatService.getChannels(id);
+    const room = await this.chatService.getChannel(id);
     if (!room) throw new NotFoundException('Room not found');
 
     const [salt, storedHash] = room['password'].split('.');
