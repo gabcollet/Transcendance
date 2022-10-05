@@ -48,6 +48,7 @@ export interface Stats {
   id?: number;
   wins?: number;
   losses?: number;
+  netWins?: number;
   winningStreak?: number;
   losingStreak?: number;
   username?: string;

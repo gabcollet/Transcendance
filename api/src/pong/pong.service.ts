@@ -5,6 +5,7 @@ import { Room } from './pong.room';
 import { Server } from 'socket.io';
 import { Ball } from './pong.ball';
 import { PrismaService } from '../prisma/prisma.service';
+import { ProfileService } from 'src/profile/profile.service';
 
 @Injectable()
 export class PongService {
@@ -19,7 +20,10 @@ export class PongService {
   private m_roomUser: Map<string, string> = new Map<string, string>();
   private rooms: [Room] = [null];
 
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private profileService: ProfileService,
+  ) {}
 
   createRoom(spectator: boolean): string {
     const { v4: uuidv4 } = require('uuid');
@@ -281,6 +285,7 @@ export class PongService {
             room.p1_score,
           );
         }
+        this.profileService.updateRank();
         room.winGiven = true;
       }
     }

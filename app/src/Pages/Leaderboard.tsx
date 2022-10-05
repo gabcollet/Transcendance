@@ -1,14 +1,24 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { ProfileContext } from "../App";
 import { fetchObject } from "../components/Profile/FetchValue";
+import { Stats } from "../components/Profile/ProfileInterfaces";
 import { UserImage } from "../components/Profile/UserImage";
 import LeaderboardStyles from "./Leaderboard.module.css";
 
 export const TopTenCard = (props: any) => {
-  const [rankNumber, setRankNumber] = useState(0);
+  // const [rankNumber, setRankNumber] = useState(0);
 
-  useEffect(() => {
-    fetchObject(
-  });
+  // useEffect(() => {
+  //   const asyncFunc = async () => {
+  //     await fetchObject(
+  //       "profile/leaderboard/" + props.player.username,
+  //       setRankNumber
+  //     );
+  //     console.log("rankNumber below:");
+  //     console.log(rankNumber);
+  //   };
+  //   asyncFunc();
+  // }, [rankNumber, props.player.username]);
 
   let winRatio = props.player.wins / props.player.losses;
   let winRatioDecimal = "";
@@ -17,7 +27,6 @@ export const TopTenCard = (props: any) => {
   }
   winRatio = Math.round(winRatio * 100) / 100;
   winRatioDecimal = winRatio.toFixed(2);
-  console.log(`This is win ratio: ${winRatio}`);
 
   return (
     <div className={LeaderboardStyles["player-container"]}>
@@ -55,7 +64,7 @@ export const TopTenCard = (props: any) => {
       <div className={LeaderboardStyles["player-rank-container"]}>
         <h2 className={LeaderboardStyles["player-rank-text"]}>Rank:</h2>
         <h2 className={LeaderboardStyles["player-rank-number"]}>
-          {rankNumber}
+          {props.player.rank}
         </h2>
       </div>
     </div>
@@ -71,11 +80,11 @@ export const TopTenElements = () => {
 
   //TODO: fetch top 10 players from backend in topTenPlayers state
 
-  let topTenArray: any = [];
+  let topTenArray: JSX.Element[] = [];
   if (topTenPlayers.length !== 0) {
-    topTenArray = topTenPlayers.map((player) => {
+    topTenArray = topTenPlayers.map((player: Stats) => {
       console.log(player);
-      return <TopTenCard player={player} />;
+      return <TopTenCard key={player.username} player={player} />;
     });
   }
   return (
@@ -86,12 +95,21 @@ export const TopTenElements = () => {
 };
 
 export const Leaderboard = () => {
+  const profileName = useContext(ProfileContext);
+  const [profilePlayer, setProfilePlayer] = useState(Object);
+
+  useEffect(() => {
+    fetchObject("profile/player/" + profileName, setProfilePlayer);
+  }, [profileName]);
+
   return (
     <div className={LeaderboardStyles["leaderboard-container"]}>
       <h2 className={LeaderboardStyles["leaderboard-header"]}>Leaderboard</h2>
       <section className={LeaderboardStyles["leaderboard-members-container"]}>
         <TopTenElements />
-        <div className={LeaderboardStyles["leaderboard-profile"]}></div>
+        <div className={LeaderboardStyles["leaderboard-profile"]}>
+          <TopTenCard player={profilePlayer} />
+        </div>
       </section>
     </div>
   );

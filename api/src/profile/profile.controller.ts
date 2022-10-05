@@ -39,6 +39,12 @@ export class ProfileController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('player/:name')
+  getProfilePlayer(@Param() params) {
+    return this.profileService.getProfilePlayer(params.name);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('leaderboard/:name')
   getLeaderboardRank(@Param() params) {
     return this.profileService.getLeaderboardRank(params.name);

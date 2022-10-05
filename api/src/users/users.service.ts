@@ -4,6 +4,7 @@ import { Profile } from 'passport-42';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserDto } from './dto';
 import * as fs from 'fs';
+import { ProfileService } from 'src/profile/profile.service';
 
 enum FriendshipStatus {
   None = 0,
@@ -17,6 +18,7 @@ export class UsersService {
   constructor(
     // @InjectRepository(User) private usersRepository: Repository<User>,
     private prisma: PrismaService,
+    private profileService: ProfileService,
   ) {}
 
   private logger = new Logger('User Service');
@@ -52,6 +54,8 @@ export class UsersService {
       user.picture =
         'https://images.unsplash.com/photo-1521985429101-21bed8b75e47?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80';
     }
+    const allUsers = await this.getAllUsernames();
+
     const newUser = await this.prisma.user.create({
       data: {
         intraId: user.intraId,
@@ -64,6 +68,7 @@ export class UsersService {
     await this.prisma.stats.create({
       data: {
         username: user.username,
+        rank: allUsers.length + 1,
       },
     });
 

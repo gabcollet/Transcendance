@@ -9,11 +9,41 @@ export class ProfileService {
     const topPlayers = await this.prisma.stats.findMany({
       take: 10,
       orderBy: {
-        netWins: 'desc',
+        rank: 'asc',
       },
     });
     return topPlayers;
   }
 
-  async getLeaderboardRank() {}
+  async getLeaderboardRank(username: string) {}
+
+  async updateRank() {
+    const orderedPlayers = await this.prisma.stats.findMany({
+      orderBy: {
+        netWins: 'desc',
+      },
+      select: {
+        username: true,
+      },
+    });
+    for (let i = 0; i < orderedPlayers.length; i++) {
+      await this.prisma.stats.update({
+        where: {
+          username: orderedPlayers[i].username,
+        },
+        data: {
+          rank: i + 1,
+        },
+      });
+    }
+  }
+
+  async getProfilePlayer(username: string) {
+    const profilePlayer = this.prisma.stats.findUnique({
+      where: {
+        username: username,
+      },
+    });
+    return profilePlayer;
+  }
 }
