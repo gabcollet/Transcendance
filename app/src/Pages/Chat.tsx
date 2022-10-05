@@ -81,7 +81,7 @@ const Chat = (props: Chat_) => {
         </div>
       );
     }
-  }, [roomId, messages]);
+  }, [roomId, messages, socket]);
 
   useEffect(() => {
     getChannels(setChannels, setPublicChannels);

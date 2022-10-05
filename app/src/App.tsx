@@ -3,12 +3,7 @@ import "./index.css";
 import Menu from "./Pages/Menu";
 import Login from "./Pages/Login";
 import Profile, { ProfileContent } from "./Pages/Profile";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useParams,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PongRoom from "./Pages/PongRoom";
 import Pong from "./components/Pong/Pong";
 import Cookies from "js-cookie";

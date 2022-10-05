@@ -71,9 +71,11 @@ export async function joinChannel(
         },
       }
     )
-    .then(() => {
-      getChannels(setUserChannels, setPublic);
-      console.log("Channel joined");
+    .then((res) => {
+      if (res.data === true) {
+        getChannels(setUserChannels, setPublic);
+        console.log("Channel joined");
+      }
     })
     .catch((error) => {
       alert(error);

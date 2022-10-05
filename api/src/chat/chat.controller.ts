@@ -56,8 +56,6 @@ export class ChatController {
   async joinChannelReq(@Req() request: Request) {
     let username = request.user.toString();
     let channel = request.body.value;
-    this.logger.debug('IN JOIN');
-    this.logger.debug(username, request.body);
     let confirmation = await this.chatService.joinChannel(username, channel);
     return confirmation;
   }

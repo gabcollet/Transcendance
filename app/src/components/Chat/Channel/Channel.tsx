@@ -28,7 +28,7 @@ const Channel = (props: Channel_) => {
     } else {
       setBoxStyle("channel-box");
     }
-  }, [props.currentID]);
+  }, [props.currentID, props.id]);
   if (props.joined === true) {
     icon = (
       <FontAwesomeIcon

@@ -59,8 +59,12 @@ export class ChatService {
   }
 
   async joinChannel(username: string, channelID: number) {
-    const user = await this.getUser(username);
     const room = await this.getChannel(channelID);
+    if (room.protected === true) {
+      return false;
+    }
+    const user = await this.getUser(username);
+
     const connected = await this.prisma.userChatroom.create({
       data: {
         chatroomId: channelID,
@@ -68,7 +72,7 @@ export class ChatService {
       },
     });
     this.logger.log(username + ' joined the channel ' + room.channelName);
-    return connected;
+    return true;
   }
 
   async getChannels(req: Request) {

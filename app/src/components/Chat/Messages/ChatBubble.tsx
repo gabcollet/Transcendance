@@ -4,15 +4,8 @@ import { ProfileContext } from "../../../App";
 import { useContext } from "react";
 
 const ChatBubble = (props: ChatBubble_) => {
-  let i = 0;
   let to_send = <p></p>;
   const profileName = useContext(ProfileContext);
-  let author = "";
-  if (props.author === profileName) {
-    author = "Me";
-  } else {
-    author = props.author;
-  }
   if (props.author !== profileName) {
     to_send = (
       <div className={styles["message"]}>
@@ -27,7 +20,6 @@ const ChatBubble = (props: ChatBubble_) => {
         <div className={styles["sent-by"]}>Sent by Me</div>
       </div>
     );
-    i++;
   }
 
   return <div className={styles["bubble-wrap"]}>{to_send}</div>;
