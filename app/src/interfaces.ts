@@ -3,6 +3,10 @@ import React from "react";
 import { Socket, io } from "socket.io-client";
 import { Settings } from "http2";
 
+export interface Username_ {
+  username: string;
+}
+
 export interface ChatChannels_ {
   userChannels: any;
   setUserChannels: any;
