@@ -2,27 +2,56 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    border-style: solid;
-    border-color: gold;
+    height: 100%;
+    min-height: 80vh;
+}
+
+.config-button {
+    padding: 2px;
 }
 
 .config-header {
     font-size: 3rem;
+    padding: 10px;
 }
 
 .config-subheader {
     font-size: 2rem;
+    padding: 10px;
 }
 
-.config-displayname {
+.config-name-button-container {
+    display: flex;
+    padding: 10px 10px 20px 10px;
+}
+
+.config-displayname-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     border-style: solid;
 }
 
-.config-picture {
+.config-picture-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     border-style: solid;
+    margin: auto 0;
 }
 
-.config-twofa {
-    border-style: solid;
+.config-image-button-container {
+    display: flex;
+    padding: 10px 10px 20px 10px;
+}
 
+.config-twofa-container {
+    flex: 1;
+    display: flex;
+    border-style: solid;
+    flex-direction: column;
+}
+
+.config-twofa-button-container {
+    padding: 0 10px;
 }
