@@ -2,7 +2,8 @@ import axios from "axios";
 import styles from "../Pages/Login.module.css";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import "../Pages/PongRoom.css";
 
 const TwoFAQRCode = () => {
   const navigate = useNavigate();
@@ -29,11 +30,23 @@ const TwoFAQRCode = () => {
 
   return (
     <div className="">
-      <p>Scan the QR code with Google Authenticator app</p>
-      <img src={qrcode} alt="" />
-      <button className={styles["login-btn"]} onClick={handleClick}>
-        Continue
-      </button>
+      <div>
+        <p style={{ color: "#fff", fontSize: "35px", paddingBottom: "20px" }}>
+          Scan the QR code with Google Authenticator app
+        </p>
+      </div>
+      <div style={{ textAlign: "center" }}>
+        <img src={qrcode} style={{ display: "flex", margin: "auto" }} />
+      </div>
+      <div style={{ textAlign: "center", paddingTop: "30px" }}>
+        <button
+          className="button-78"
+          style={{ margin: "auto" }}
+          onClick={handleClick}
+        >
+          Continue
+        </button>
+      </div>
     </div>
   );
 };
