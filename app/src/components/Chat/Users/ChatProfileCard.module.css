@@ -1,0 +1,9 @@
+.chat-card-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.profile-info-container {
+    display: flex;
+    flex-direction: column;
+}
