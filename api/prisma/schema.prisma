@@ -56,6 +56,8 @@ model Stats {
     id            Int    @id @default(autoincrement())
     wins          Int?   @default(0)
     losses        Int?   @default(0)
+    netWins       Int?   @default(0)
+    rank          Int?   @default(0)
     winningStreak Int?   @default(0)
     losingStreak  Int?   @default(0)
     user          User   @relation(fields: [username], references: [username], onDelete: Cascade)
@@ -65,13 +67,14 @@ model Stats {
 }
 
 model History {
-    id     Int    @id @default(autoincrement())
-    user1  User   @relation("winner", fields: [winner], references: [username])
-    winner String
-    score1 Int    @default(0)
-    user2  User   @relation("loser", fields: [loser], references: [username])
-    loser  String
-    score2 Int    @default(0)
+    id      Int         @id @default(autoincrement())
+    user1   User        @relation("winner", fields: [winner], references: [username])
+    winner  String
+    score1  Int         @default(0)
+    user2   User        @relation("loser", fields: [loser], references: [username])
+    loser   String
+    score2  Int         @default(0)
+    date    DateTime?   @default(now())
 
     @@map("history")
 }

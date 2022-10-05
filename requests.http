@@ -8,5 +8,11 @@ GET http://localhost:3030/test/createusers
 ### TEST CREATE RELATIONSHIPS
 GET http://localhost:3030/test/createfriendships
 
+### TEST CREATE MATCHES
+GET http://localhost:3030/test/creatematches
+
 ### TEST DELETE ALL
 GET http://localhost:3030/test/deleteall
+
+### TEST MATCH HISTORY GET
+GET http://localhost:3030/users/laube/history
