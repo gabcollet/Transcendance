@@ -27,8 +27,8 @@ export class ChatController {
   @UseGuards(JwtAuthGuard)
   @Get('convo')
   async getConvo(@Req() req: Request, @Query() query) {
-    if (!query.id) {
-      return '';
+    if (query.id == null) {
+      return [];
     }
     const messages = await this.chatService.getMessages(
       Number(query.id),

@@ -27,20 +27,24 @@ const Chat = (props: Chat_) => {
   };
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3030/chat/convo", {
-        params: {
-          id: roomId,
-        },
-        withCredentials: true,
-        headers: {
-          Authorization: `bearer ${Cookies.get("jwtToken")}`,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        setMessages(response.data);
-      });
+    if (roomId !== 0) {
+      axios
+        .get("http://localhost:3030/chat/convo", {
+          params: {
+            id: roomId,
+          },
+          withCredentials: true,
+          headers: {
+            Authorization: `bearer ${Cookies.get("jwtToken")}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          setMessages(response.data);
+        });
+    } else {
+      setMessages([]);
+    }
   }, [roomId]);
   useEffect(() => {
     const newSocket = io("localhost:6005");
