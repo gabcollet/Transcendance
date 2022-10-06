@@ -15,10 +15,10 @@ export const ProfileConfig = (props: any) => {
   const [newTwoFA, setNewTwoFA] = useState(Object);
   const [profileUser, setProfileUser] = useState(Object);
   const [twoFAToggle, setTwoFAToggle] = useState(false);
+  const [displayErrorMessage, setDisplayErrorMessage] = useState("");
 
   useEffect(() => {
     fetchObject("users/" + profileName, setProfileUser);
-    console.log("useEffect called");
   }, [twoFAToggle, profileName]);
 
   const handleDisplayNameChange = (event: any) => {
@@ -26,6 +26,22 @@ export const ProfileConfig = (props: any) => {
   };
 
   const handleNameButtonClick = async (event: any) => {
+    if (newDisplayName.length > 15) {
+      setDisplayErrorMessage(
+        "ERROR: Display name cannot be over 15 characters long."
+      );
+      return;
+    } else if (newDisplayName.length < 5) {
+      setDisplayErrorMessage(
+        "ERROR: Display name cannot be under 5 characters long."
+      );
+      return;
+    } else if (!newDisplayName.match(/^[a-z0-9]+$/i)) {
+      setDisplayErrorMessage(
+        "ERROR: Display name can only contain alphanumeric characters."
+      );
+      return;
+    }
     const resp = await fetch(
       "http://localhost:3030/users/" +
         profileName +
@@ -39,6 +55,12 @@ export const ProfileConfig = (props: any) => {
         },
       }
     );
+    const data = await resp.json();
+    if (data.code === "P2002") {
+      setDisplayErrorMessage("ERROR: This display name is already taken.");
+    } else {
+      setDisplayErrorMessage(`Your display name is now: ${newDisplayName}`);
+    }
   };
 
   const handleFileSelected = async (event: any) => {
@@ -88,6 +110,11 @@ export const ProfileConfig = (props: any) => {
               >
                 Change Display Name
               </button>
+            </div>
+            <div className={styles["displayname-error-message-container"]}>
+              <p className={styles["displayname-error-message"]}>
+                {displayErrorMessage}
+              </p>
             </div>
           </div>
           <div className={styles["config-picture-container"]}>

@@ -32,6 +32,26 @@
     border-style: solid;
 }
 
+.displayname-error-message-container {
+    background-color: rgba(0, 0, 0, 0.315);
+    display: flex;
+    min-height: 2rem;
+    align-items: center;
+    text-align: center;
+}
+
+.displayname-error-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 700;
+    height: 100%;
+    color: rgb(255, 255, 255);
+    padding-left: 10px;
+}
+
 .config-picture-container {
     flex: 1;
     display: flex;
