@@ -11,11 +11,14 @@ import { ProfileButtons } from "./ProfileButtons";
 export const ProfileConfig = (props: any) => {
   const profileName = useContext(ProfileContext);
   const [newDisplayName, setNewDisplayName] = useState("");
-  const [newProfilePicture, setNewProfilePicture] = useState(Object);
+  const [newProfilePicture, setNewProfilePicture] = useState("");
   const [newTwoFA, setNewTwoFA] = useState(Object);
   const [profileUser, setProfileUser] = useState(Object);
   const [twoFAToggle, setTwoFAToggle] = useState(false);
   const [displayErrorMessage, setDisplayErrorMessage] = useState("");
+  const [imageErrorMessage, setImageErrorMessage] = useState("");
+
+  const twoMB = 2097152;
 
   useEffect(() => {
     fetchObject("users/" + profileName, setProfileUser);
@@ -64,10 +67,22 @@ export const ProfileConfig = (props: any) => {
   };
 
   const handleFileSelected = async (event: any) => {
+    if (event.target.files[0].size > twoMB) {
+      console.log(`image size: ${event.target.files[0].size}`);
+      setImageErrorMessage("ERROR: Image should be smaller than 2MB");
+      event.target.files[0].value = "";
+      setNewProfilePicture("");
+      return;
+    }
+    setImageErrorMessage(`Image is selected and ready to be updated.`);
     setNewProfilePicture(event.target.files[0]);
   };
 
   const handleFileUpload = async (event: any) => {
+    if (!newProfilePicture) {
+      setImageErrorMessage("ERROR: No image was selected");
+      return;
+    }
     const formData = new FormData();
     formData.append("file", newProfilePicture);
 
@@ -111,10 +126,8 @@ export const ProfileConfig = (props: any) => {
                 Change Display Name
               </button>
             </div>
-            <div className={styles["displayname-error-message-container"]}>
-              <p className={styles["displayname-error-message"]}>
-                {displayErrorMessage}
-              </p>
+            <div className={styles["error-message-container"]}>
+              <p className={styles["error-message"]}>{displayErrorMessage}</p>
             </div>
           </div>
           <div className={styles["config-picture-container"]}>
@@ -124,13 +137,22 @@ export const ProfileConfig = (props: any) => {
               Change Profile Picture
             </h3>
             <div className={styles["config-image-button-container"]}>
-              <input type="file" onChange={handleFileSelected} />
+              <label htmlFor="image-select">Browse Image</label>
+              <input
+                id="image-select"
+                type="file"
+                accept="image/*"
+                onChange={handleFileSelected}
+              />
               <button
-                className={styles["config-button"]}
+                className={`${styles["config-button"]} ${styles["image-update-button"]}`}
                 onClick={handleFileUpload}
               >
-                Change Profile Picture
+                Update Profile Picture
               </button>
+            </div>
+            <div className={styles["error-message-container"]}>
+              <p className={styles["error-message"]}>{imageErrorMessage}</p>
             </div>
           </div>
           <div className={styles["config-twofa-container"]}>
