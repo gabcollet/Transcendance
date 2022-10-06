@@ -1,6 +1,5 @@
 import ChatInput from "./ChatInput";
-import { useEffect, useContext } from "react";
-import io, { Socket } from "socket.io-client";
+import { useContext } from "react";
 import styles from "./InputZone.module.css";
 import { InputZone_ } from "../../../interfaces";
 import { Message_ } from "../../../interfaces";
@@ -13,9 +12,7 @@ const InputZone = (props: InputZone_) => {
     author: "",
     chatRoom: props.chatRoom,
   };
-  const messageListener = (message: Message_) => {
-    props.setMessages((current) => [...current, message]);
-  };
+
   const sendMsg = async (message: string) => {
     if (message !== "") {
       send.msg = message;

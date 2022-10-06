@@ -58,6 +58,7 @@ export async function joinChannel(
   setUserChannels: any,
   setPublic: any
 ) {
+  let ret_value = true;
   await axios
     .post(
       "http://localhost:3030/chat/join-channel",
@@ -71,11 +72,25 @@ export async function joinChannel(
         },
       }
     )
-    .then(() => {
-      getChannels(setUserChannels, setPublic);
-      console.log("Channel joined");
+    .then((res) => {
+      if (res.data === true) {
+        getChannels(setUserChannels, setPublic);
+        console.log("Channel joined");
+      }
+      if (res.data === false) {
+        ret_value = false;
+      }
     })
     .catch((error) => {
       alert(error);
     });
+  return ret_value;
+}
+
+export async function joinPassword(
+  channelID: number,
+  setTrigger: React.Dispatch<React.SetStateAction<boolean>>
+) {
+  setTrigger(true);
+  console.log("IN PASSWORD");
 }

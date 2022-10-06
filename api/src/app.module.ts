@@ -17,6 +17,8 @@ import { TestingController } from './testing/testing.controller';
 import { AchievementService } from './pong/achievement.service';
 import { ProfileService } from './profile/profile.service';
 import { ProfileModule } from './profile/profile.module';
+import { AuthService } from './auth/auth.service';
+import { ChatService } from './chat/chat.service';
 
 @Module({
   imports: [
@@ -45,6 +47,7 @@ import { ProfileModule } from './profile/profile.module';
     ChatDto,
     ProfileService,
     AchievementService,
+    ChatService,
   ],
 })
 export class AppModule {}

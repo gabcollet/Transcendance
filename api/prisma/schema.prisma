@@ -112,6 +112,9 @@ model UserChatroom {
     user   User @relation(fields: [userId], references: [id])
     userId Int
 
+    isAdmin Boolean @default(false)
+    isOwner Boolean @default(false)
+
     @@map("userchatroom")
 }
 

@@ -6,13 +6,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Channel_ } from "../../../interfaces";
-import { joinChannel, removeChannel } from "../ChatUtils";
+import { joinChannel, joinPassword, removeChannel } from "../ChatUtils";
 import { useEffect, useState } from "react";
+import { PasswordPopup_ } from "../../../interfaces";
+import PasswordPopup from "./PasswordPopup";
+import AddPopup from "./AddPopup";
 
 const Channel = (props: Channel_) => {
   let icon = <></>;
   let chatIcon = <></>;
-
   const [boxStyle, setBoxStyle] = useState<string>("channel-box");
   let channelClick = () => {
     if (props.joined === true) {
@@ -28,7 +30,7 @@ const Channel = (props: Channel_) => {
     } else {
       setBoxStyle("channel-box");
     }
-  }, [props.currentID]);
+  }, [props.currentID, props.id]);
   if (props.joined === true) {
     icon = (
       <FontAwesomeIcon
@@ -53,18 +55,27 @@ const Channel = (props: Channel_) => {
         className={styles["join-icon"]}
         icon={faCirclePlus}
         onClick={() => {
-          joinChannel(props.id, props.setUserChannels, props.setPublic);
+          joinChannel(props.id, props.setUserChannels, props.setPublic).then(
+            (res) => {
+              if (res === false) {
+                props.setPasswordID(props.id);
+                props.setPasswordTrigger(true);
+              }
+            }
+          );
         }}
       ></FontAwesomeIcon>
     );
   }
   return (
-    <div className={styles["channel-wrapper"]}>
-      <div className={styles[boxStyle]}>
-        {" "}
-        <p>{props.title}</p>
-        {chatIcon}
-        {icon}
+    <div>
+      <div className={styles["channel-wrapper"]}>
+        <div className={styles[boxStyle]}>
+          {" "}
+          <p>{props.title}</p>
+          {chatIcon}
+          {icon}
+        </div>
       </div>
     </div>
   );

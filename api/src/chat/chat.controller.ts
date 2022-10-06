@@ -2,14 +2,13 @@ import {
   Controller,
   Get,
   Req,
-  Param,
   UseGuards,
   Logger,
   Body,
   Post,
-  BadRequestException,
-  RawBodyRequest,
   Query,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { UsersService } from '../users/users.service';
@@ -56,9 +55,12 @@ export class ChatController {
   async joinChannelReq(@Req() request: Request) {
     let username = request.user.toString();
     let channel = request.body.value;
-    this.logger.debug('IN JOIN');
-    this.logger.debug(username, request.body);
-    let confirmation = await this.chatService.joinChannel(username, channel);
+    let confirmation = await this.chatService.joinChannel(
+      username,
+      channel,
+      false,
+      false,
+    );
     return confirmation;
   }
 
@@ -74,5 +76,21 @@ export class ChatController {
   async getPublicReq(@Req() request: Request) {
     const confirmation = await this.chatService.getPublic(request);
     return confirmation;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('join-password')
+  async joinPassword(@Req() request: Request, @Query() query) {
+    this.logger.debug(query);
+    const confirm = await this.chatService.confirmPassword(
+      Number(query.id),
+      query.password,
+      request.user.toString(),
+    );
+    if (confirm === true) {
+      return 'confirmed';
+    } else {
+      throw new HttpException('Wrong password', HttpStatus.FORBIDDEN);
+    }
   }
 }
