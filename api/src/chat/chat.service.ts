@@ -8,10 +8,13 @@ import { Request } from 'express';
 import { runInThisContext } from 'vm';
 import { connected } from 'process';
 import { authorize } from 'passport';
-
+import { AuthService } from 'src/auth/auth.service';
 @Injectable()
 export class ChatService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private AuthService: AuthService,
+  ) {}
   logger: Logger = new Logger('ChatController');
   async getUser(username: string) {
     const user = await this.prisma.user.findUnique({
@@ -37,7 +40,7 @@ export class ChatService {
     if (body.protected === false) {
       password = '';
     } else {
-      password = body.password;
+      //   password = await this.AuthService.hashPassword(body.password);
     }
     const channel = await this.prisma.chatroom.create({
       data: {

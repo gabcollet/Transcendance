@@ -9,6 +9,7 @@ import { fetchObject } from "../components/Profile/FetchValue";
 import { Link, Outlet, Route, Routes, useParams } from "react-router-dom";
 import { SearchBar } from "../components/Profile/SearchBar";
 import { ProfileProps } from "../components/Profile/ProfileInterfaces";
+import { ProfileButtons } from "../components/Profile/ProfileButtons";
 
 export const ProfileContent = (props: ProfileProps) => {
   let usedUsername = props.username;
@@ -17,41 +18,17 @@ export const ProfileContent = (props: ProfileProps) => {
     usedUsername = username;
   }
   return (
-    <>
-      {props.username !== "USER NOT LOADED" && (
-        <ProfileHeader username={usedUsername} />
-      )}
-      {props.username !== "USER NOT LOADED" && (
-        <ProfileBody username={usedUsername} />
-      )}
-    </>
-  );
-};
+    <div className={styles["profile-page-container"]}>
+      <ProfileButtons />
 
-const Profile = (props: ProfileProps) => {
-  return (
-    <>
-      <Link className={styles["search-link"]} to="/Profile/user">
-        <button className={styles["profile-buttons"]} type="button">
-          User
-        </button>
-      </Link>
-      <Link className={styles["search-link"]} to="/Profile/search">
-        <button className={styles["profile-buttons"]} type="button">
-          Search
-        </button>
-      </Link>
-      <Link className={styles["search-link"]} to="/Profile/config">
-        <button className={styles["profile-buttons"]} type="button">
-          Config
-        </button>
-      </Link>
-
-      <section className={styles["profile-container"]}>
-        <Outlet />
+      <section className={styles["profile-sub-container"]}>
+        {props.username !== "USER NOT LOADED" && (
+          <ProfileHeader username={usedUsername} />
+        )}
+        {props.username !== "USER NOT LOADED" && (
+          <ProfileBody username={usedUsername} />
+        )}
       </section>
-    </>
+    </div>
   );
 };
-
-export default Profile;

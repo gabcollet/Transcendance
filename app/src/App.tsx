@@ -2,7 +2,7 @@ import "./App.css";
 import "./index.css";
 import Menu from "./Pages/Menu";
 import Login from "./Pages/Login";
-import Profile, { ProfileContent } from "./Pages/Profile";
+import { ProfileContent } from "./Pages/Profile";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PongRoom from "./Pages/PongRoom";
 import Pong from "./components/Pong/Pong";
@@ -74,31 +74,27 @@ const App = () => {
               <Route path="/Pong" element={<Pong />} />
               <Route
                 path="/Profile"
-                element={
-                  <div style={{ color: "white", fontSize: "75px" }}>
-                    <Profile username={profileUsername} />
-                  </div>
-                }
-              >
-                <Route
-                  path="search"
-                  element={<SearchBar username={profileUsername} />}
-                />
-                <Route
-                  path="user"
-                  element={<ProfileContent username={profileUsername} />}
-                />
-                <Route
-                  path="user/:username"
-                  element={<ProfileContent username={profileUsername} />}
-                />
-                <Route
-                  path="config"
-                  element={<ProfileConfig username={profileUsername} />}
-                />
-              </Route>
-              <Route path="/Leaderboard" element={<Leaderboard />} />
-              {/* <Route
+                element={<ProfileContent username={profileUsername} />}
+              />
+              <Route
+                path="/Profile/search"
+                element={<SearchBar username={profileUsername} />}
+              />
+              <Route
+                path="/Profile/user"
+                element={<ProfileContent username={profileUsername} />}
+              />
+              <Route
+                path="/Profile/user/:username"
+                element={<ProfileContent username={profileUsername} />}
+              />
+              <Route
+                path="/Profile/config"
+                element={<ProfileConfig username={profileUsername} />}
+              />
+            </Route>
+            <Route path="/Leaderboard" element={<Leaderboard />} />
+            {/* <Route
                 path="/Achievment"
                 element={
                   <div style={{ color: "white", fontSize: "75px" }}>
@@ -106,11 +102,10 @@ const App = () => {
                   </div>
                 }
               /> */}
-              <Route
-                path="/Chat"
-                element={<Chat id={0} userName={profileUsername}></Chat>}
-              />
-            </Route>
+            <Route
+              path="/Chat"
+              element={<Chat id={0} userName={profileUsername}></Chat>}
+            />
           </Routes>
         </Router>
       </div>

@@ -18,7 +18,6 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Chatroom, Message } from '@prisma/client';
 import { ChatDto } from './chat.dto';
 import { User } from '@prisma/client';
-import { AuthService } from 'src/auth/auth.service';
 @Controller('chat')
 export class ChatController {
   constructor(private chatService: ChatService) {}
