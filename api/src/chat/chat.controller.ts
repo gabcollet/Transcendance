@@ -59,6 +59,7 @@ export class ChatController {
       username,
       channel,
       false,
+      false,
     );
     return confirmation;
   }
@@ -81,16 +82,15 @@ export class ChatController {
   @Get('join-password')
   async joinPassword(@Req() request: Request, @Query() query) {
     this.logger.debug(query);
-    if (query.password === 'test') {
-      throw new HttpException('Wrong password', HttpStatus.FORBIDDEN);
+    const confirm = await this.chatService.confirmPassword(
+      Number(query.id),
+      query.password,
+      request.user.toString(),
+    );
+    if (confirm === true) {
+      return 'confirmed';
     } else {
-      let confirmation = await this.chatService.joinChannel(
-        request.user.toString(),
-        Number(query.id),
-        true,
-      );
+      throw new HttpException('Wrong password', HttpStatus.FORBIDDEN);
     }
-
-    return true;
   }
 }

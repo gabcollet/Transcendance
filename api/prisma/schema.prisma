@@ -113,6 +113,7 @@ model UserChatroom {
     userId Int
 
     isAdmin Boolean @default(false)
+    isOwner Boolean @default(false)
 
     @@map("userchatroom")
 }

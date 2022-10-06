@@ -13,7 +13,7 @@ import { AuthService } from 'src/auth/auth.service';
 export class ChatService {
   constructor(
     private prisma: PrismaService,
-    // @Inject(forwardRef(() => AuthService))
+    @Inject(forwardRef(() => AuthService))
     private AuthService: AuthService,
   ) {}
   logger: Logger = new Logger('ChatController');
@@ -41,7 +41,7 @@ export class ChatService {
     if (body.protected === false) {
       password = '';
     } else {
-      //   password = await this.AuthService.hashPassword(body.password);
+      password = await this.AuthService.hashPassword(body.password);
     }
     const channel = await this.prisma.chatroom.create({
       data: {
@@ -62,21 +62,27 @@ export class ChatService {
       request.user.toString(),
       channel.id,
       true,
+      true,
     );
     return channel;
   }
 
-  async joinChannel(username: string, channelID: number, creator: Boolean) {
+  async joinChannel(
+    username: string,
+    channelID: number,
+    creator: boolean,
+    authorized: boolean,
+  ) {
     const room = await this.getChannel(channelID);
     const user = await this.getUser(username);
-    if (room.protected === true && creator === false) {
+    if (room.protected === true && authorized === false) {
       return false;
     }
-
     const connected = await this.prisma.userChatroom.create({
       data: {
         chatroomId: channelID,
         userId: user.id,
+        isOwner: creator,
       },
     });
     this.logger.log(username + ' joined the channel ' + room.channelName);
@@ -171,5 +177,14 @@ export class ChatService {
       };
     });
     return messages;
+  }
+  async confirmPassword(id: number, password: string, username: string) {
+    let confirm = await this.AuthService.validatePassword(id, password);
+    if (confirm === true) {
+      const join = await this.joinChannel(username, id, false, true);
+      return true;
+    } else {
+      return false;
+    }
   }
 }
