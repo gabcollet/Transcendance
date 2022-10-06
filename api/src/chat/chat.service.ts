@@ -26,9 +26,6 @@ export class ChatService {
       where: {
         id: id,
       },
-      //   include: {
-      //     admin: true,
-      //   },
     });
     return room;
   }
@@ -68,7 +65,7 @@ export class ChatService {
   async joinChannel(username: string, channelID: number, creator: Boolean) {
     const room = await this.getChannel(channelID);
     const user = await this.getUser(username);
-    if (room.protected === true) {
+    if (room.protected === true && creator === false) {
       return false;
     }
 
