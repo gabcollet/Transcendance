@@ -27,7 +27,6 @@ const FriendButton = (props: FriendButtonProps) => {
           props.friendUsername,
         setFriendStatus
       );
-      console.log(`friendStatus: ${friendStatus}`);
     }
     fetchAsync();
   }, [props.friendUsername, friendStatus]);

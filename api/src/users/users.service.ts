@@ -54,16 +54,27 @@ export class UsersService {
       user.picture =
         'https://images.unsplash.com/photo-1521985429101-21bed8b75e47?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80';
     }
+    if (user.username.includes('<') || user.username.includes('>')) {
+      throw 'Username cannot include opening and closing tags';
+    }
+    const randomDisplayName =
+      user.displayname + Date.now().toString().slice(-4);
     const allUsers = await this.getAllUsernames();
-
-    const newUser = await this.prisma.user.create({
-      data: {
-        intraId: user.intraId,
-        displayname: user.displayname,
-        username: user.username,
-        picture: user.picture,
-      },
-    });
+    let newUser;
+    try {
+      const newUser = await this.prisma.user.create({
+        data: {
+          intraId: user.intraId,
+          displayname: randomDisplayName,
+          username: user.username,
+          picture: user.picture,
+        },
+      });
+    } catch (error) {
+      this.logger.log(
+        `*** User could not be created. Error: ${error.code} ***`,
+      );
+    }
 
     await this.prisma.stats.create({
       data: {
@@ -97,7 +108,7 @@ export class UsersService {
     const user = await this.findByUsername(username);
 
     if (!user) {
-      this.logger.log('*** User Not Found... Adding New User to Database***');
+      this.logger.log('*** User Not Found... Adding New User to Database ***');
       return this.createUser({
         intraId: id,
         username: username,
@@ -311,14 +322,20 @@ export class UsersService {
   }
 
   async updateDisplayName(username: string, displayName: string) {
-    return this.prisma.user.update({
-      where: {
-        username: username,
-      },
-      data: {
-        displayname: displayName,
-      },
-    });
+    let updatedUser;
+    try {
+      updatedUser = await this.prisma.user.update({
+        where: {
+          username: username,
+        },
+        data: {
+          displayname: displayName,
+        },
+      });
+    } catch (error) {
+      return error;
+    }
+    return { code: 'OK' };
   }
 
   async updateProfilePicture(username: string, picturePath: string) {

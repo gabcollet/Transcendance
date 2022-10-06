@@ -1,3 +1,4 @@
 node_modules
 mydatabase
 .env
+./api/img/*
