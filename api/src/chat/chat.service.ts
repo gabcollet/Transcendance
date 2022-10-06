@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UsersService } from '../users/users.service';
 import { ChatDto } from './chat.dto';
@@ -13,6 +13,7 @@ import { AuthService } from 'src/auth/auth.service';
 export class ChatService {
   constructor(
     private prisma: PrismaService,
+    // @Inject(forwardRef(() => AuthService))
     private AuthService: AuthService,
   ) {}
   logger: Logger = new Logger('ChatController');

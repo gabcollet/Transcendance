@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
@@ -21,6 +26,7 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     private userService: UsersService,
+    // @Inject(forwardRef(() => ChatService))
     private chatService: ChatService,
   ) {}
 

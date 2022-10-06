@@ -10,11 +10,13 @@ import { JwtStrategy } from './jwt/jwt.strategy';
 import { PrismaModule } from '../prisma/prisma.module';
 import { ProfileService } from 'src/profile/profile.service';
 import { ChatService } from 'src/chat/chat.service';
+import { ChatModule } from 'src/chat/chat.module';
 
 @Module({
   imports: [
     UsersModule,
     PrismaModule,
+    ChatModule,
     PassportModule.register(AuthStrategy),
     JwtModule.register({
       secret: process.env.JWT_SECRET_KEY,

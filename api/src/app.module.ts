@@ -18,6 +18,7 @@ import { AchievementService } from './pong/achievement.service';
 import { ProfileService } from './profile/profile.service';
 import { ProfileModule } from './profile/profile.module';
 import { AuthService } from './auth/auth.service';
+import { ChatService } from './chat/chat.service';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { AuthService } from './auth/auth.service';
     ChatDto,
     ProfileService,
     AchievementService,
+    ChatService,
   ],
 })
 export class AppModule {}
