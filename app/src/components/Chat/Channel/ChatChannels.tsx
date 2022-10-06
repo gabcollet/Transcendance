@@ -13,22 +13,20 @@ const ChatChannels = (props: ChatChannels_) => {
   if (typeof props.userChannels == "object") {
     list = props.userChannels.map((object: ChannelDB_, index: number) => {
       return (
-        <div>
-          <Channel
-            title={object.chatroom.channelName}
-            id={object.chatroom.id}
-            key={index}
-            joined={true}
-            setUserChannels={props.setUserChannels}
-            setPublic={props.setPublic}
-            setRoomID={props.setRoomID}
-            currentID={props.currentID}
-            setSocket={props.setSocket}
-            socket={props.socket}
-            setPasswordTrigger={setPopPassword}
-            setPasswordID={setPasswordID}
-          ></Channel>
-        </div>
+        <Channel
+          title={object.chatroom.channelName}
+          id={object.chatroom.id}
+          key={index}
+          joined={true}
+          setUserChannels={props.setUserChannels}
+          setPublic={props.setPublic}
+          setRoomID={props.setRoomID}
+          currentID={props.currentID}
+          setSocket={props.setSocket}
+          socket={props.socket}
+          setPasswordTrigger={setPopPassword}
+          setPasswordID={setPasswordID}
+        ></Channel>
       );
     });
   } else {

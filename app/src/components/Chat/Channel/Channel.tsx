@@ -58,7 +58,7 @@ const Channel = (props: Channel_) => {
           joinChannel(props.id, props.setUserChannels, props.setPublic).then(
             (res) => {
               if (res === false) {
-                props.setPasswordID(props.currentID);
+                props.setPasswordID(props.id);
                 props.setPasswordTrigger(true);
               }
             }

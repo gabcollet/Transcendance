@@ -2,14 +2,13 @@ import {
   Controller,
   Get,
   Req,
-  Param,
   UseGuards,
   Logger,
   Body,
   Post,
-  BadRequestException,
-  RawBodyRequest,
   Query,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { UsersService } from '../users/users.service';
@@ -19,6 +18,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Chatroom, Message } from '@prisma/client';
 import { ChatDto } from './chat.dto';
 import { User } from '@prisma/client';
+import { AuthService } from 'src/auth/auth.service';
 @Controller('chat')
 export class ChatController {
   constructor(private chatService: ChatService) {}
@@ -76,5 +76,22 @@ export class ChatController {
   async getPublicReq(@Req() request: Request) {
     const confirmation = await this.chatService.getPublic(request);
     return confirmation;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('join-password')
+  async joinPassword(@Req() request: Request, @Query() query) {
+    this.logger.debug(query);
+    if (query.password === 'test') {
+      throw new HttpException('Wrong password', HttpStatus.FORBIDDEN);
+    } else {
+      let confirmation = await this.chatService.joinChannel(
+        request.user.toString(),
+        Number(query.id),
+        true,
+      );
+    }
+
+    return true;
   }
 }
