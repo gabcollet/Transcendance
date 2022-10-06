@@ -18,6 +18,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Chatroom, Message } from '@prisma/client';
 import { ChatDto } from './chat.dto';
 import { User } from '@prisma/client';
+
 @Controller('chat')
 export class ChatController {
   constructor(private chatService: ChatService) {}
@@ -76,6 +77,12 @@ export class ChatController {
   async getPublicReq(@Req() request: Request) {
     const confirmation = await this.chatService.getPublic(request);
     return confirmation;
+  }
+  @UseGuards(JwtAuthGuard)
+  @Get('members')
+  async roomMembers(@Req() request: Request, @Query() query) {
+    const members = this.chatService.getMembers(Number(query.id));
+    return members;
   }
 
   @UseGuards(JwtAuthGuard)
