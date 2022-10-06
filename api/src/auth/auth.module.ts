@@ -9,6 +9,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt/jwt.strategy';
 import { PrismaModule } from '../prisma/prisma.module';
 import { ProfileService } from 'src/profile/profile.service';
+import { ChatService } from 'src/chat/chat.service';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ProfileService } from 'src/profile/profile.service';
   ],
   providers: [
     AuthService,
+    ChatService,
     AuthStrategy,
     JwtStrategy,
     UsersService,
