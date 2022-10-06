@@ -88,7 +88,6 @@ export class ChatController {
   @UseGuards(JwtAuthGuard)
   @Get('join-password')
   async joinPassword(@Req() request: Request, @Query() query) {
-    this.logger.debug(query);
     const confirm = await this.chatService.confirmPassword(
       Number(query.id),
       query.password,
@@ -99,5 +98,12 @@ export class ChatController {
     } else {
       throw new HttpException('Wrong password', HttpStatus.FORBIDDEN);
     }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('friends')
+  async friendList(@Req() request: Request) {
+    let list = await this.chatService.getFriendList(request.user.toString());
+    return list;
   }
 }

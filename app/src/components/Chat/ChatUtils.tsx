@@ -116,7 +116,7 @@ export async function getChatMembers(roomID: number) {
   return members;
 }
 
-export function getChatRequest(
+export async function getChatRequest(
   setMessages: React.Dispatch<React.SetStateAction<Message_[]>>,
   setMembers: React.Dispatch<React.SetStateAction<string[]>>,
   roomId: number,
@@ -149,5 +149,14 @@ export function getChatRequest(
     .then((response) => {
       setMembers(response.data);
     });
-  fetchObject("users/" + profileName + "/friends", setFriends);
+  axios
+    .get("http://localhost:3030/chat/friends", {
+      withCredentials: true,
+      headers: {
+        Authorization: `bearer ${Cookies.get("jwtToken")}`,
+      },
+    })
+    .then((response) => {
+      setFriends(response.data);
+    });
 }

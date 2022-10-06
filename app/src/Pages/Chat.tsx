@@ -24,7 +24,7 @@ const Chat = (props: Chat_) => {
   const [socket, setSocket] = useState<Socket>();
   const [mid, setMid] = useState<JSX.Element>(<></>);
   const [members, setMembers] = useState<string[]>([]);
-  const [friends, setFriends] = useState<any[]>([]);
+  const [friends, setFriends] = useState<string[]>([]);
 
   const messageListener = (message: Message_) => {
     setMessages((current) => [...current, message]);
@@ -34,7 +34,6 @@ const Chat = (props: Chat_) => {
     if (roomId !== 0) {
       getChatRequest(setMessages, setMembers, roomId, profileName, setFriends);
       console.log("Friend list");
-      console.log(friends);
     } else {
       setMessages([]);
       setMembers([]);
@@ -95,7 +94,11 @@ const Chat = (props: Chat_) => {
       {mid}
       <div className={styles["right"]}>
         <Members id={roomId} members={members}></Members>
-        <ChatFriendsList></ChatFriendsList>
+        <ChatFriendsList
+          friends={friends}
+          setFriends={setFriends}
+          username={profileName}
+        ></ChatFriendsList>
       </div>
     </div>
   );

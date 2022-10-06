@@ -116,3 +116,9 @@ export interface PasswordPopup_ {
   setUserChannels: any;
   setPublic: any;
 }
+
+export interface ChatFriendList_ {
+  friends: string[];
+  setFriends: React.Dispatch<React.SetStateAction<string[]>>;
+  username: string;
+}

@@ -204,4 +204,9 @@ export class ChatService {
     });
     return ret;
   }
+
+  async getFriendList(username: string) {
+    let list = await this.userService.getAcceptedFriends(username);
+    return list;
+  }
 }

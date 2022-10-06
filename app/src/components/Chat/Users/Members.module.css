@@ -8,6 +8,17 @@
   min-height: 50%;
 }
 
+.friendsWrapper {
+  display: flex;
+  color: aliceblue;
+  overflow-y: auto;
+  flex-direction: column;
+  width: 100%;
+  max-height: 50%;
+  min-height: 50%;
+  border-top: 3px solid black;
+}
+
 .top-title {
   align-self: center;
   display: flex;
