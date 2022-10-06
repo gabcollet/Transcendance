@@ -1,0 +1,61 @@
+.pong-wrap {
+    font-size: 0px;
+    border: 2px solid white;
+}
+
+.pong-text {
+    color: azure;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 0px 0px;
+    grid-template-areas: ". left midle right .";
+    align-items: center;
+    margin-bottom: 5px;
+}
+.midle {
+    justify-self: center;
+    grid-area: midle;
+}
+
+.left {
+    justify-self: left;
+    grid-area: left;
+}
+
+.right {
+    justify-self: right;
+    grid-area: right;
+}
+
+.column {
+    float: left;
+    width: 16.66%;
+}
+
+.column2 {
+    float: left;
+    text-align: center;
+    width: 33.33%;
+}
+
+.column3 {
+    float: right;
+    text-align: right;
+    width: 16.66%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
