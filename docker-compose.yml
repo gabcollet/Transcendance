@@ -18,12 +18,12 @@ services:
     image: node:18-alpine
     container_name: api
     restart: always
-    ports: 
+    ports:
       - 6006:6006
       - 6005:6005
       - 3030:3030
       - 5555:5555
-    links: 
+    links:
       - db
     volumes:
       - ./api:/app
@@ -35,9 +35,9 @@ services:
     image: node:18-alpine
     container_name: app
     restart: always
-    ports: 
+    ports:
       - 3000:3000
-    links: 
+    links:
       - db
     volumes:
       - ./app:/app

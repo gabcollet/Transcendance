@@ -56,7 +56,11 @@ export class ChatController {
   async joinChannelReq(@Req() request: Request) {
     let username = request.user.toString();
     let channel = request.body.value;
-    let confirmation = await this.chatService.joinChannel(username, channel);
+    let confirmation = await this.chatService.joinChannel(
+      username,
+      channel,
+      false,
+    );
     return confirmation;
   }
 

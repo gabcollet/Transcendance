@@ -26,6 +26,9 @@ export class ChatService {
       where: {
         id: id,
       },
+      //   include: {
+      //     admin: true,
+      //   },
     });
     return room;
   }
@@ -54,16 +57,20 @@ export class ChatService {
         isDM: false,
       },
     });
-    const join = await this.joinChannel(request.user.toString(), channel.id);
+    const join = await this.joinChannel(
+      request.user.toString(),
+      channel.id,
+      true,
+    );
     return channel;
   }
 
-  async joinChannel(username: string, channelID: number) {
+  async joinChannel(username: string, channelID: number, creator: Boolean) {
     const room = await this.getChannel(channelID);
+    const user = await this.getUser(username);
     if (room.protected === true) {
       return false;
     }
-    const user = await this.getUser(username);
 
     const connected = await this.prisma.userChatroom.create({
       data: {
