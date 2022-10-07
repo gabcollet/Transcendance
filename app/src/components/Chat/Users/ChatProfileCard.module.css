@@ -1,9 +1,24 @@
 .chat-card-container {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
+  background-color: rgba(56, 56, 56, 0.505);
+  border: 1px solid rgba(102, 101, 101, 0.505);
+  border-radius: 8px;
+}
+
+.chatPicture {
+  border-radius: 50%;
+  border-style: solid;
+  width: 75px;
+  min-height: 75px;
+  margin: auto;
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .profile-info-container {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
 }

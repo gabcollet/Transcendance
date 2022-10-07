@@ -1,5 +1,29 @@
-.members-wrapper {
+.membersWrapper {
+  display: flex;
   color: aliceblue;
   overflow-y: auto;
-  height: 50%;
+  flex-direction: column;
+  width: 100%;
+  max-height: 50%;
+  min-height: 50%;
+}
+
+.friendsWrapper {
+  display: flex;
+  color: aliceblue;
+  overflow-y: auto;
+  flex-direction: column;
+  width: 100%;
+  max-height: 50%;
+  min-height: 50%;
+  border-top: 3px solid black;
+}
+
+.top-title {
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  /* position: fixed; */
+  z-index: 0;
+  margin-bottom: 5px;
 }
