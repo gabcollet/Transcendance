@@ -122,3 +122,8 @@ export interface ChatFriendList_ {
   setFriends: React.Dispatch<React.SetStateAction<string[]>>;
   username: string;
 }
+
+export interface UserPopup_ {
+  trigger: boolean;
+  setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+}
