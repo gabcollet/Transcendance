@@ -12,10 +12,12 @@ import { getChannels, getChatRequest } from "../components/Chat/ChatUtils";
 import { Socket, io } from "socket.io-client";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { ProfileContext } from "../App";
+import { OtherUsernameContext, ProfileContext } from "../App";
 
 const Chat = (props: Chat_) => {
   const profileName = useContext(ProfileContext);
+  const otherUsernameContext = useContext(OtherUsernameContext);
+
   const [messages, setMessages] = useState<Message_[]>([]);
   const [roomId, setRoomId] = useState<number>(0);
   const [channels, setChannels] = useState<AxiosResponse<any, any>>();
@@ -25,6 +27,11 @@ const Chat = (props: Chat_) => {
   const [mid, setMid] = useState<JSX.Element>(<></>);
   const [members, setMembers] = useState<string[]>([]);
   const [friends, setFriends] = useState<string[]>([]);
+  const otherName =
+    otherUsernameContext === "" ? props.userName : otherUsernameContext;
+
+  console.log(`This is otherUsernamecontext: ${otherUsernameContext}`);
+  console.log(`THIS IS OTHERNAME: ${otherName}`);
 
   const messageListener = (message: Message_) => {
     setMessages((current) => [...current, message]);
@@ -64,7 +71,6 @@ const Chat = (props: Chat_) => {
             setSocket={setSocket}
             socket={socket}
           ></InputZone>
-          ;
         </div>
       );
     }

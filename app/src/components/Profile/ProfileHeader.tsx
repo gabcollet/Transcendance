@@ -10,11 +10,14 @@ import { UserWins } from "./UserWins";
 import LeaderboardStyles from "../../Pages/Leaderboard.module.css";
 import { FriendButton } from "./FriendButton";
 import { ProfileContext } from "../../App";
+import { Link } from "react-router-dom";
+import { MessageUser } from "./MessageUser";
 
 export const ProfileHeader = (props: ProfileProps) => {
   const profileName = useContext(ProfileContext);
   const [stats, setStats] = useState(Object);
 
+  console.log(`profileheader props.username: ${props.username}`);
   useEffect(() => {
     fetchObject("profile/stats/" + props.username, setStats);
   }, [props.username]);
@@ -48,7 +51,7 @@ export const ProfileHeader = (props: ProfileProps) => {
           {props.username !== profileName && (
             <>
               <FriendButton friendUsername={props.username} />
-              <button>Message</button>
+              <MessageUser otherUsername={props.username} />
             </>
           )}
         </div>
