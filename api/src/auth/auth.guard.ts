@@ -11,12 +11,13 @@ export class AuthorizationGuard extends AuthGuard('42') {
     status?: any,
   ): TUser | null {
     if (err || !user) {
+      console.log('THIS IS AN ERROR:\n');
       console.log(err);
       return null;
     }
 
-    // Logger.log('*** SUCCESS ***\n' + user);
-    // console.log(user);
+    Logger.log('*** SUCCESS ***\n' + user);
+    console.log(user);
 
     return user;
   }

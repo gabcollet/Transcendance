@@ -54,7 +54,7 @@ export class AuthController {
     }
   }
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('TwoFA/toggle')
   async TwoFA_Activate(@Req() req: Request) {
     return this.authService.toggleTwoFA(req.cookies['jwtToken']);
