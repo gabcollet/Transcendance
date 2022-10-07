@@ -6,7 +6,7 @@
 }
 
 .profile-header-container>* {
-    flex: 1 1 0px;
+    flex: 1 0 0px;
 }
 
 .profile-id-container {
@@ -61,7 +61,8 @@
 }
 
 .primary-stats {
-    border-style: solid;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
     padding: 1rem;
     display: flex;
     flex-direction: column;
@@ -73,8 +74,37 @@
     font-size: 2rem;
 }
 
-.secondary-stats {}
+.profile-rank-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    overflow: hidden;
+}
 
-.secondary-stats p {
-    font-size: 1rem;
+.profile-rank-text {
+    font-size: 2rem;
+}
+
+
+.profile-rank-number {
+    font-size: 3rem;
+    padding: 10px;
+}
+
+.primary-stats-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+    padding: 1rem;
+    min-height: 100%;
+}
+
+.primary-stats-text-container {
+    display: flex;
+    flex-direction: column;
+    white-space: nowrap;
+    padding: 10px;
 }

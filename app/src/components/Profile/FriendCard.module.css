@@ -1,63 +1,98 @@
 .friend-button {
     min-width: 100%;
     margin: auto;
-    padding: 25px;
+    font-size: 0.8rem;
+    white-space: nowrap;
 }
 
 .friend-name {
     font-size: 1rem;
 }
 
-
-/* CSS */
-.button-65 {
-    margin: auto;
-    appearance: none;
-    backface-visibility: hidden;
-    background-color: #2f80ed;
-    border-radius: 2px;
+.button-78 {
+    background-color: initial;
     border-style: none;
-    box-shadow: none;
-    box-sizing: border-box;
     color: #fff;
     cursor: pointer;
-    display: inline-block;
-    font-family: 'Poppins', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    letter-spacing: normal;
-    line-height: 1.1;
-    outline: none;
-    overflow: hidden;
-    padding: 10px 20px;
+    font-family: Eina01, sans-serif;
+    font-weight: 800;
+    /* min-height: 40px; */
     position: relative;
-    text-align: center;
-    text-decoration: none;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    vertical-align: top;
-    white-space: nowrap;
+    z-index: 0;
+    flex: 1;
+    padding: 10px;
 }
 
-.button-65:hover {
-    background-color: #1366d6;
-    box-shadow: rgba(0, 0, 0, .05) 0 5px 30px, rgba(0, 0, 0, .05) 0 1px 4px;
-    opacity: 1;
-    transform: translateY(0);
-    transition-duration: .35s;
+/* 
+@media (min-width: 768px) {
+    .button-78 {
+        padding: 19px 32px;
+    }
+} */
+
+.button-78:before,
+.button-78:after {
+    border-radius: 8px;
 }
 
-.button-65:hover:after {
-    opacity: .5;
+.button-78:before {
+    background-image: linear-gradient(92.83deg, #ff005c 0, #f91313 100%);
+    content: "";
+    display: block;
+    height: 100%;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: -2;
 }
 
-.button-65:active {
-    box-shadow: rgba(0, 0, 0, .1) 0 3px 6px 0, rgba(0, 0, 0, .1) 0 0 10px 0, rgba(0, 0, 0, .1) 0 1px 4px -1px;
-    transform: translateY(2px);
-    transition-duration: .35s;
+.button-78:after {
+    background-color: initial;
+    background-image: linear-gradient(#541a0f 0, #0c0d0d 100%);
+    bottom: 2px;
+    content: "";
+    display: block;
+    left: 2px;
+    overflow: hidden;
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    transition: all 100ms ease-out;
+    z-index: -1;
 }
 
-.button-65:active:after {
-    opacity: 1;
+.button-78:hover:not(:disabled):before {
+    background: linear-gradient(92.83deg, #ff005c 0%, #ff0019 100%);
+}
+
+.button-78:hover:not(:disabled):after {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    transition-timing-function: ease-in;
+    opacity: 0;
+}
+
+.button-78:active:not(:disabled) {
+    color: #ccc;
+}
+
+.button-78:active:not(:disabled):before {
+    background-image: linear-gradient(0deg, rgba(0, 0, 0, .2), rgba(0, 0, 0, .2)), linear-gradient(92.83deg, #ff005c 0, #f91313 100%);
+}
+
+.button-78:active:not(:disabled):after {
+    background-image: linear-gradient(#541a0f 0, #0c0d0d 100%);
+    bottom: 4px;
+    left: 4px;
+    right: 4px;
+    top: 4px;
+}
+
+.button-78:disabled {
+    cursor: default;
+    opacity: .24;
 }

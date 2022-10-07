@@ -6,20 +6,6 @@ import { UserImage } from "../components/Profile/UserImage";
 import LeaderboardStyles from "./Leaderboard.module.css";
 
 export const TopTenCard = (props: any) => {
-  // const [rankNumber, setRankNumber] = useState(0);
-
-  // useEffect(() => {
-  //   const asyncFunc = async () => {
-  //     await fetchObject(
-  //       "profile/leaderboard/" + props.player.username,
-  //       setRankNumber
-  //     );
-  //     console.log("rankNumber below:");
-  //     console.log(rankNumber);
-  //   };
-  //   asyncFunc();
-  // }, [rankNumber, props.player.username]);
-
   let winRatio = props.player.wins / props.player.losses;
   let winRatioDecimal = "";
   if (!isFinite(winRatio)) {
