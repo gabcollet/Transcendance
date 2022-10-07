@@ -126,4 +126,6 @@ export interface ChatFriendList_ {
 export interface UserPopup_ {
   trigger: boolean;
   setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+  username: string;
+  isAdmin: boolean;
 }
