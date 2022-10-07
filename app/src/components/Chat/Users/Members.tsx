@@ -5,6 +5,7 @@ import { useState, useContext } from "react";
 import axios from "axios";
 import UserPopup from "./UserPopup";
 import { ProfileContext } from "../../../App";
+import { isAdminRequest } from "../ChatUtils";
 
 const Members = (props: { id: number; members: string[] }) => {
   const profileName = useContext(ProfileContext);
@@ -16,10 +17,13 @@ const Members = (props: { id: number; members: string[] }) => {
   const list = props.members.map((member: any, index: number) => {
     return (
       <div
-        onClick={() => {
+        key={index}
+        onClick={async () => {
           if (profileName !== member) {
             setCurrentMember(member);
             setPopMember(true);
+            const result = isAdminRequest(props.id, member.username);
+            console.log(result);
           }
         }}
       >

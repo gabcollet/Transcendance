@@ -7,7 +7,7 @@ import { from, lastValueFrom } from 'rxjs';
 import { Request } from 'express';
 import { runInThisContext } from 'vm';
 import { connected } from 'process';
-import { authorize } from 'passport';
+import { authorize, use } from 'passport';
 import { AuthService } from 'src/auth/auth.service';
 @Injectable()
 export class ChatService {
@@ -84,6 +84,8 @@ export class ChatService {
         chatroomId: channelID,
         userId: user.id,
         isOwner: creator,
+        isAdmin: creator,
+        joined: true,
       },
     });
     this.logger.log(username + ' joined the channel ' + room.channelName);
@@ -208,5 +210,40 @@ export class ChatService {
   async getFriendList(username: string) {
     let list = await this.userService.getAcceptedFriends(username);
     return list;
+  }
+
+  async getAdmin(username: string, roomID: number) {
+    let isAdmin: boolean;
+    const admin = await this.prisma.userChatroom.findMany({
+      where: {
+        AND: {
+          user: {
+            username: username,
+          },
+          isAdmin: true,
+        },
+        chatroom: {
+          id: roomID,
+        },
+      },
+    });
+    return admin;
+  }
+
+  async giveAdmin(username: string, roomID: number) {
+    const confirm = await this.prisma.userChatroom.updateMany({
+      where: {
+        chatroom: {
+          id: roomID,
+        },
+        user: {
+          username: username,
+        },
+      },
+      data: {
+        isAdmin: true,
+      },
+    });
+    return confirm;
   }
 }

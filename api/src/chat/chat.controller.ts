@@ -103,7 +103,17 @@ export class ChatController {
   @UseGuards(JwtAuthGuard)
   @Get('friends')
   async friendList(@Req() request: Request) {
-    let list = await this.chatService.getFriendList(request.user.toString());
+    const list = await this.chatService.getFriendList(request.user.toString());
     return list;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('is-admin')
+  async isAdmin(@Query() query) {
+    const confirmation = await this.chatService.getAdmin(
+      query.username,
+      Number(query.id),
+    );
+    return confirmation;
   }
 }
