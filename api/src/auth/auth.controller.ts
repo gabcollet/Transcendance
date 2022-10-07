@@ -43,11 +43,11 @@ export class AuthController {
     //* Add the token to browser cookies
     //! httpOnly: true makes the cookie unaccessible from the Frontend.
     res.cookie('jwtToken', jwtToken, { httpOnly: false });
-    res.cookie('logged', true, { httpOnly: false });
 
-    if (req.user['twoFAEnabled'] === false)
+    if (req.user['twoFAEnabled'] === false) {
+      res.cookie('verified', true, { httpOnly: false });
       res.status(301).redirect('http://localhost:3000/Menu');
-    else {
+    } else {
       req.user['twoFASecret']
         ? res.status(301).redirect('http://localhost:3000/TwoFA/verify')
         : res.status(301).redirect('http://localhost:3000/TwoFA');
@@ -85,6 +85,8 @@ export class AuthController {
       req.cookies['jwtToken'],
       pin,
     );
+
+    res.cookie('verified', verified, { httpOnly: false });
 
     return verified;
   }

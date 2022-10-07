@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { Navigate } from "react-router-dom";
 import "../Pages/PongRoom.css";
-import { faBorderStyle } from "@fortawesome/free-solid-svg-icons";
 
 const TwoFAVerify = () => {
   const [verified, setVerified] = useState(false);

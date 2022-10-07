@@ -18,7 +18,7 @@ export class AuthStrategy extends PassportStrategy(Strategy, '42') {
   }
 
   async validate(accessToken, refreshToken, profile: Profile): Promise<User> {
-    const user = this.userService.findCreateUser(profile);
-    return await user;
+    const user = await this.userService.findCreateUser(profile);
+    return user;
   }
 }

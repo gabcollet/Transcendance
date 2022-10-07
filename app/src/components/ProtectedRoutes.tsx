@@ -1,16 +1,14 @@
 import { Outlet, Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
-const getCookie = (): Boolean => {
-  const token = Cookies.get("jwtToken");
-
-  if (!token) return false;
-  return true;
+const isVerified = (): Boolean => {
+  const verified = Cookies.get("verified");
+  if (verified === "false") return false;
+  else return true;
 };
 
 const ProtectedRoutes = () => {
-  const token = getCookie();
-  return token ? <Outlet /> : <Navigate to="/" />;
+  return isVerified() ? <Outlet /> : <Navigate to="/" />;
 };
 
 export default ProtectedRoutes;

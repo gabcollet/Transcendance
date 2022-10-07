@@ -60,9 +60,9 @@ export class UsersService {
     const randomDisplayName =
       user.displayname + Date.now().toString().slice(-4);
     const allUsers = await this.getAllUsernames();
-    let newUser;
+    let newUser: User;
     try {
-      const newUser = await this.prisma.user.create({
+      newUser = await this.prisma.user.create({
         data: {
           intraId: user.intraId,
           displayname: randomDisplayName,
@@ -74,6 +74,7 @@ export class UsersService {
       this.logger.log(
         `*** User could not be created. Error: ${error.code} ***`,
       );
+      return newUser;
     }
 
     await this.prisma.stats.create({

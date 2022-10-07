@@ -1,5 +1,4 @@
 import axios from "axios";
-import styles from "../Pages/Login.module.css";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
