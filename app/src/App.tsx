@@ -19,7 +19,6 @@ import { socket } from "./Pages/PongRoom";
 import { Leaderboard } from "./Pages/Leaderboard";
 
 export const ProfileContext = React.createContext("");
-export const OtherUsernameContext = React.createContext("");
 
 const App = () => {
   let [background, setBackground] = useState("root-default");

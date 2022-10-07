@@ -17,7 +17,6 @@ export const ProfileHeader = (props: ProfileProps) => {
   const profileName = useContext(ProfileContext);
   const [stats, setStats] = useState(Object);
 
-  console.log(`profileheader props.username: ${props.username}`);
   useEffect(() => {
     fetchObject("profile/stats/" + props.username, setStats);
   }, [props.username]);

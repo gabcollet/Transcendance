@@ -1,19 +1,18 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { OtherUsernameContext } from "../../App";
 import { Username_ } from "../../interfaces";
+import styles from "./MessageUser.module.css";
 
 export const MessageUser = (props: any) => {
-  const otherUsernameContext = useContext(OtherUsernameContext);
-
-  console.log(`messageUser props.otherName: ${props.otherUsername}`);
-
   return (
-    <>
-      <OtherUsernameContext.Provider value={props.otherUsername}>
-        <Link to="/Chat">Message</Link>;
-      </OtherUsernameContext.Provider>
-      {/* <OtherUsernameContext.Provider value={""}></OtherUsernameContext.Provider> */}
-    </>
+    <div className={styles["button-container"]}>
+      <Link
+        className={styles["button-78"]}
+        to="/Chat"
+        state={{ otherName: props.otherUsername }}
+      >
+        Message
+      </Link>
+    </div>
   );
 };
