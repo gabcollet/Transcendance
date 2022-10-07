@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
+
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import * as speakeasy from 'speakeasy';
@@ -74,6 +75,15 @@ export class AuthService {
     ]);
 
     return decryptedSecret;
+  }
+
+  genVerifiedToken(value: Boolean) {
+    const payload = { verified: value };
+    const jwtToken = this.jwtService.sign(payload, {
+      secret: process.env.JWT_SECRET_KEY,
+    });
+
+    return jwtToken;
   }
 
   generateJwtToken(req: Request) {

@@ -45,7 +45,11 @@ export class AuthController {
     res.cookie('jwtToken', jwtToken, { httpOnly: false });
 
     if (req.user['twoFAEnabled'] === false) {
-      res.cookie('verified', true, { httpOnly: false });
+      const verifiedToken = this.authService.genVerifiedToken(true);
+      res.cookie('verified', verifiedToken, {
+        httpOnly: false,
+        sameSite: 'none',
+      });
       res.status(301).redirect('http://localhost:3000/Menu');
     } else {
       req.user['twoFASecret']
@@ -86,7 +90,11 @@ export class AuthController {
       pin,
     );
 
-    res.cookie('verified', verified, { httpOnly: false });
+    const verifiedToken = this.authService.genVerifiedToken(true);
+    res.cookie('verified', verifiedToken, {
+      httpOnly: false,
+      sameSite: 'none',
+    });
 
     return verified;
   }
