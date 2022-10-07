@@ -3,6 +3,10 @@ import React from "react";
 import { Socket, io } from "socket.io-client";
 import { Settings } from "http2";
 
+export interface Username_ {
+  username: string;
+}
+
 export interface ChatChannels_ {
   userChannels: any;
   setUserChannels: any;
@@ -29,6 +33,8 @@ export interface Channel_ {
   currentID: number;
   socket: Socket<any, any> | undefined;
   setSocket: React.Dispatch<React.SetStateAction<Socket<any, any> | undefined>>;
+  setPasswordTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+  setPasswordID: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export interface ChannelDB_ {
@@ -101,4 +107,18 @@ export interface MessageWindow_ {
   messages: Message_[];
   chatRoom: number;
   setMessages: React.Dispatch<React.SetStateAction<Message_[]>>;
+}
+
+export interface PasswordPopup_ {
+  trigger: boolean;
+  setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+  channelID: number;
+  setUserChannels: any;
+  setPublic: any;
+}
+
+export interface ChatFriendList_ {
+  friends: string[];
+  setFriends: React.Dispatch<React.SetStateAction<string[]>>;
+  username: string;
 }

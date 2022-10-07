@@ -3,9 +3,9 @@ import styles from "./AddChannel.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import AddPopup from "./AddPopup";
-import { ChatChannels_ } from "../../../interfaces";
+import PasswordPopup from "./PasswordPopup";
 
-const AddChannel = (props: ChatChannels_) => {
+const AddChannel = (props: any) => {
   const [pop, setPop] = useState(false);
   const addChanel = () => {
     let state = pop === true ? false : true;
@@ -28,6 +28,13 @@ const AddChannel = (props: ChatChannels_) => {
         setUserChannels={props.setUserChannels}
         setPublic={props.setPublic}
       ></AddPopup>
+      <PasswordPopup
+        trigger={props.passwordTrigger}
+        setTrigger={props.setPasswordTrigger}
+        channelID={props.passwordID}
+        setUserChannels={props.setUserChannels}
+        setPublic={props.setPublic}
+      ></PasswordPopup>
     </div>
   );
 };

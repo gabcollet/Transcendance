@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UsersService } from '../users/users.service';
 import { ChatDto } from './chat.dto';
@@ -8,10 +8,15 @@ import { Request } from 'express';
 import { runInThisContext } from 'vm';
 import { connected } from 'process';
 import { authorize } from 'passport';
-
+import { AuthService } from 'src/auth/auth.service';
 @Injectable()
 export class ChatService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Inject(forwardRef(() => AuthService))
+    private AuthService: AuthService,
+    private userService: UsersService,
+  ) {}
   logger: Logger = new Logger('ChatController');
   async getUser(username: string) {
     const user = await this.prisma.user.findUnique({
@@ -37,7 +42,7 @@ export class ChatService {
     if (body.protected === false) {
       password = '';
     } else {
-      password = body.password;
+      password = await this.AuthService.hashPassword(body.password);
     }
     const channel = await this.prisma.chatroom.create({
       data: {
@@ -54,21 +59,35 @@ export class ChatService {
         isDM: false,
       },
     });
-    const join = await this.joinChannel(request.user.toString(), channel.id);
+    const join = await this.joinChannel(
+      request.user.toString(),
+      channel.id,
+      true,
+      true,
+    );
     return channel;
   }
 
-  async joinChannel(username: string, channelID: number) {
-    const user = await this.getUser(username);
+  async joinChannel(
+    username: string,
+    channelID: number,
+    creator: boolean,
+    authorized: boolean,
+  ) {
     const room = await this.getChannel(channelID);
+    const user = await this.getUser(username);
+    if (room.protected === true && authorized === false) {
+      return false;
+    }
     const connected = await this.prisma.userChatroom.create({
       data: {
         chatroomId: channelID,
         userId: user.id,
+        isOwner: creator,
       },
     });
     this.logger.log(username + ' joined the channel ' + room.channelName);
-    return connected;
+    return true;
   }
 
   async getChannels(req: Request) {
@@ -159,5 +178,35 @@ export class ChatService {
       };
     });
     return messages;
+  }
+  async confirmPassword(id: number, password: string, username: string) {
+    let confirm = await this.AuthService.validatePassword(id, password);
+    if (confirm === true) {
+      const join = await this.joinChannel(username, id, false, true);
+      return true;
+    } else {
+      return false;
+    }
+  }
+  async getMembers(id: number) {
+    let members = await this.prisma.userChatroom.findMany({
+      where: {
+        chatroom: {
+          id: id,
+        },
+      },
+      include: {
+        user: true,
+      },
+    });
+    let ret = members.map((member) => {
+      return member.user.username;
+    });
+    return ret;
+  }
+
+  async getFriendList(username: string) {
+    let list = await this.userService.getAcceptedFriends(username);
+    return list;
   }
 }

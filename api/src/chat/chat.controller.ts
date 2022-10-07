@@ -2,14 +2,13 @@ import {
   Controller,
   Get,
   Req,
-  Param,
   UseGuards,
   Logger,
   Body,
   Post,
-  BadRequestException,
-  RawBodyRequest,
   Query,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { UsersService } from '../users/users.service';
@@ -19,6 +18,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Chatroom, Message } from '@prisma/client';
 import { ChatDto } from './chat.dto';
 import { User } from '@prisma/client';
+
 @Controller('chat')
 export class ChatController {
   constructor(private chatService: ChatService) {}
@@ -56,9 +56,12 @@ export class ChatController {
   async joinChannelReq(@Req() request: Request) {
     let username = request.user.toString();
     let channel = request.body.value;
-    this.logger.debug('IN JOIN');
-    this.logger.debug(username, request.body);
-    let confirmation = await this.chatService.joinChannel(username, channel);
+    let confirmation = await this.chatService.joinChannel(
+      username,
+      channel,
+      false,
+      false,
+    );
     return confirmation;
   }
 
@@ -74,5 +77,33 @@ export class ChatController {
   async getPublicReq(@Req() request: Request) {
     const confirmation = await this.chatService.getPublic(request);
     return confirmation;
+  }
+  @UseGuards(JwtAuthGuard)
+  @Get('members')
+  async roomMembers(@Req() request: Request, @Query() query) {
+    const members = this.chatService.getMembers(Number(query.id));
+    return members;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('join-password')
+  async joinPassword(@Req() request: Request, @Query() query) {
+    const confirm = await this.chatService.confirmPassword(
+      Number(query.id),
+      query.password,
+      request.user.toString(),
+    );
+    if (confirm === true) {
+      return 'confirmed';
+    } else {
+      throw new HttpException('Wrong password', HttpStatus.FORBIDDEN);
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('friends')
+  async friendList(@Req() request: Request) {
+    let list = await this.chatService.getFriendList(request.user.toString());
+    return list;
   }
 }
