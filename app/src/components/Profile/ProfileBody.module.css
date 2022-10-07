@@ -56,16 +56,20 @@
 
 .friendrequests-header {
     font-size: 3rem;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.363)
 }
 
 .friends-header {
     font-size: 3rem;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.363)
 }
 
 .friends-content-individual {
     border-style: solid;
     border-width: 0px 0px 1px 0px;
-    height: 100px;
+    height: 120px;
     display: flex;
     border-color: blue;
     flex-shrink: 1;
@@ -79,12 +83,10 @@
 
 .individual-id {
     flex: 2;
-    display: grid;
-    grid-template-columns: 100px 200px;
-    grid-template-rows: 1fr 1fr;
-    grid-template-areas:
-        "image name"
-        "image status";
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 .individual-id img {
@@ -92,18 +94,29 @@
     width: 80px;
     border-radius: 50%;
     margin: auto 10px;
-    grid-area: image;
-}
-
-.individual-id {
-    font-size: 2rem;
-    grid-area: name;
-    margin-top: 10px;
 }
 
 .individual-id p {
     font-size: 1rem;
-    grid-area: status;
+}
+
+.user-image-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-info-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100%;
+    gap: 20px;
+}
+
+.user-info-container h4 {
+    font-size: 16px;
 }
 
 .individual-buttons {
@@ -114,15 +127,23 @@
     margin: 5px;
 }
 
-.individual-stats {
+.individual-stats-container {
     padding: 10px;
     min-width: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-.individual-stats h3 {
-    font-size: 1.5rem;
+.stats-numbers-container h3 {
+    padding: 8px;
+    font-size: 40px;
 }
 
+.stats-text-container h4 {
+    padding: 4px;
+}
 
 
 /*

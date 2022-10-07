@@ -10,10 +10,10 @@
   display: grid;
   grid-template-rows: 200px auto;
   grid-template-columns: 100%;
+  overflow: hidden;
 }
 
-.profile-buttons {
-}
+.profile-buttons {}
 
 .search-link {
   font-size: 20px;

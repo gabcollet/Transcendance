@@ -15,8 +15,6 @@ export class ProfileService {
     return topPlayers;
   }
 
-  async getLeaderboardRank(username: string) {}
-
   async updateRank() {
     const orderedPlayers = await this.prisma.stats.findMany({
       orderBy: {
@@ -45,5 +43,13 @@ export class ProfileService {
       },
     });
     return profilePlayer;
+  }
+
+  async getStatsPlayer(username: string) {
+    return this.prisma.stats.findUnique({
+      where: {
+        username: username,
+      },
+    });
   }
 }

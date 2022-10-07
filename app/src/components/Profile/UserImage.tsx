@@ -14,6 +14,11 @@ export const UserImage = (props: FetchedComponentProps) => {
   const [userImage, setUserImage] = useState("");
   const navigate = useNavigate();
 
+  const imageStyles = {
+    border: "1px solid white",
+    cursor: "pointer",
+  };
+
   const navigateToUser = () => {
     navigate("/Profile/user/" + props.username);
   };
@@ -31,6 +36,7 @@ export const UserImage = (props: FetchedComponentProps) => {
       className={props.className}
       src={userImage}
       alt=""
+      style={imageStyles}
     />
   );
 };
