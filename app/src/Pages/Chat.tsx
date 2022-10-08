@@ -8,7 +8,11 @@ import { Chat_ } from "../interfaces";
 import Members from "../components/Chat/Users/Members";
 import { Message_ } from "../interfaces";
 import { AxiosResponse } from "axios";
-import { getChannels, getChatRequest } from "../components/Chat/ChatUtils";
+import {
+  getChannels,
+  getChatRequest,
+  isAdminRequest,
+} from "../components/Chat/ChatUtils";
 import { Socket, io } from "socket.io-client";
 import { ProfileContext } from "../App";
 import { useLocation } from "react-router-dom";
@@ -24,6 +28,7 @@ const Chat = (props: Chat_) => {
   const [mid, setMid] = useState<JSX.Element>(<></>);
   const [members, setMembers] = useState<string[]>([]);
   const [friends, setFriends] = useState<string[]>([]);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   const location = useLocation();
 
@@ -42,6 +47,10 @@ const Chat = (props: Chat_) => {
   useEffect(() => {
     if (roomId !== 0) {
       getChatRequest(setMessages, setMembers, roomId, profileName, setFriends);
+      isAdminRequest(roomId, profileName).then((res) => {
+        console.log(res);
+        setIsAdmin(res);
+      });
       console.log("Friend list");
     } else {
       setMessages([]);
@@ -101,7 +110,7 @@ const Chat = (props: Chat_) => {
       </div>
       {mid}
       <div className={styles["right"]}>
-        <Members id={roomId} members={members}></Members>
+        <Members id={roomId} members={members} isAdmin={isAdmin}></Members>
         <ChatFriendsList
           friends={friends}
           setFriends={setFriends}

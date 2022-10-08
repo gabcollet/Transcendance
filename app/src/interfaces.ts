@@ -5,6 +5,8 @@ import { Settings } from "http2";
 
 export interface Username_ {
   username: string;
+  member: boolean;
+  admin: boolean;
 }
 
 export interface ChatChannels_ {

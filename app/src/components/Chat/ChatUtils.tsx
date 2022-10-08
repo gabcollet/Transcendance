@@ -117,17 +117,22 @@ export async function getChatMembers(roomID: number) {
 }
 
 export async function isAdminRequest(chatRoom: number, username: string) {
-  const result = await axios.get("http://localhost:3030/chat/is-admin", {
-    params: {
-      id: chatRoom,
-      username: username,
-    },
-    withCredentials: true,
-    headers: {
-      Authorization: `bearer ${Cookies.get("jwtToken")}`,
-    },
-  });
-  return result;
+  let isAdmin = false;
+  await axios
+    .get("http://localhost:3030/chat/is-admin", {
+      params: {
+        id: chatRoom,
+        username: username,
+      },
+      withCredentials: true,
+      headers: {
+        Authorization: `bearer ${Cookies.get("jwtToken")}`,
+      },
+    })
+    .then((res) => {
+      isAdmin = res.data;
+    });
+  return isAdmin;
 }
 
 export async function getChatRequest(

@@ -103,8 +103,6 @@ model Message {
 }
 
 model UserChatroom {
-    id Int @id @unique @default(autoincrement())
-
     chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
     chatroomId Int
 
@@ -119,6 +117,7 @@ model UserChatroom {
     banned    Boolean  @default(false)
     timeStamp DateTime @default(now())
 
+    @@unique([chatroomId, userId])
     @@map("userchatroom")
 }
 

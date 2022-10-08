@@ -5,7 +5,7 @@ import { ChatProfileCard } from "./ChatProfileCard";
 
 const ChatFriendsList = (props: ChatFriendList_) => {
   const list = props.friends.map((member: any, index: number) => {
-    return <ChatProfileCard key={index} username={member}></ChatProfileCard>;
+    return <ChatProfileCard key={index} username={member} member={false} admin={false}></ChatProfileCard>;
   });
   return (
     <div className={styles["friendsWrapper"]}>
