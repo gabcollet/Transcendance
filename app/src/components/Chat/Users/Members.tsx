@@ -18,6 +18,7 @@ const Members = (props: {
   const [currentMember, setCurrentMember] = useState<string>("");
   const [isSelectAdmin, setIsSelectAdmin] = useState<boolean>(false);
   let list = [<></>];
+  let admin: boolean;
   list = props.members.map((member: any, index: number) => {
     return (
       <div
@@ -25,7 +26,6 @@ const Members = (props: {
         onClick={async () => {
           if (profileName !== member) {
             setCurrentMember(member);
-            setPopMember(true);
             const result = await isAdminRequest(props.id, member);
             setIsSelectAdmin(result);
           }
@@ -36,6 +36,7 @@ const Members = (props: {
           username={member}
           member={true}
           admin={props.isAdmin}
+          setTrigger={setPopMember}
         ></ChatProfileCard>
       </div>
     );

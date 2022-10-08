@@ -7,6 +7,7 @@ export interface Username_ {
   username: string;
   member: boolean;
   admin: boolean;
+  setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface ChatChannels_ {

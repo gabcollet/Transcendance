@@ -222,7 +222,6 @@ export class ChatService {
         isAdmin: true,
       },
     });
-    this.logger.debug('IS ADMIN :', username, admin);
     if (!admin) {
       return false;
     } else {

@@ -22,3 +22,27 @@
   flex-direction: column;
   margin: 10px;
 }
+
+.admin-icon {
+  color: #ff005c;
+  display: flex;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  cursor: pointer;
+}
+
+.dm-icon {
+  display: flex;
+  display: relative;
+  color: #f3efff;
+  margin-top: 8px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.icon-wrap {
+  display: flex;
+  position: relative;
+  width: 100%;
+}

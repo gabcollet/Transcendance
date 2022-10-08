@@ -1,18 +1,47 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Username_ } from "../../../interfaces";
 import { fetchObject } from "../../Profile/FetchValue";
 import { User } from "../../Profile/ProfileInterfaces";
 import { UserImage } from "../../Profile/UserImage";
 import styles from "./ChatProfileCard.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear } from "@fortawesome/free-solid-svg-icons";
+import { faGear, faMessage } from "@fortawesome/free-solid-svg-icons";
+import { ProfileContext } from "../../../App";
 
 // Takes in "username" as props, which is the username of the user
 export const ChatProfileCard = (props: Username_) => {
   const [chatUser, setChatUser] = useState<User>({});
-  let icon = <></>;
-  if (props.admin === true) {
-    icon = <FontAwesomeIcon icon={faGear}></FontAwesomeIcon>;
+  let iconAdmin = <></>;
+  let iconDM = <></>;
+  const profileName = useContext(ProfileContext);
+  let diffUser: boolean;
+  if (profileName !== props.username) {
+    diffUser = true;
+  } else {
+    diffUser = false;
+  }
+  const openMember = () => {
+    props.setTrigger(true);
+  };
+  if (props.admin === true && diffUser === true) {
+    iconAdmin = (
+      <div className={styles["icon-wrap"]}>
+        <FontAwesomeIcon
+          className={styles["admin-icon"]}
+          icon={faGear}
+          onClick={openMember}
+        ></FontAwesomeIcon>
+      </div>
+    );
+    iconDM = (
+      <div className={styles["icon-wrap"]}>
+        <FontAwesomeIcon
+          className={styles["dm-icon"]}
+          icon={faMessage}
+          onClick={openMember}
+        ></FontAwesomeIcon>
+      </div>
+    );
   }
   useEffect(() => {
     fetchObject("users/" + props.username, setChatUser);
@@ -29,7 +58,8 @@ export const ChatProfileCard = (props: Username_) => {
         <h4 className={styles["profile-name"]}>{chatUser.displayname}</h4>
         <p className={styles["profile-status"]}>{chatUser.status}</p>
       </div>
-      {icon}
+      {iconDM}
+      {iconAdmin}
     </div>
   );
 };

@@ -48,10 +48,8 @@ const Chat = (props: Chat_) => {
     if (roomId !== 0) {
       getChatRequest(setMessages, setMembers, roomId, profileName, setFriends);
       isAdminRequest(roomId, profileName).then((res) => {
-        console.log(res);
         setIsAdmin(res);
       });
-      console.log("Friend list");
     } else {
       setMessages([]);
       setMembers([]);
