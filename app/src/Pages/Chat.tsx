@@ -30,7 +30,9 @@ const Chat = (props: Chat_) => {
   const location = useLocation();
 
   // "otherName" is name of user we want to message
-  const { otherName } = location.state;
+  if (location.state) {
+    const { otherName } = location.state;
+  }
 
   const messageListener = (message: Message_) => {
     setMessages((current) => [...current, message]);

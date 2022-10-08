@@ -5,7 +5,6 @@ export const AchievementCard = (props: any) => {
   let achievementTitle = "???";
   let achievementDescription = "???";
 
-  console.log(`name: ${props.name} | achieved: ${props.achieved}`);
   if (props.achieved === true) {
     if (props.name === "firstWin") {
       achievementImage = "/assets/achievement_images/first_win.png";
