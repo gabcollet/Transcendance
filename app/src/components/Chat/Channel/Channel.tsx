@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 import { PasswordPopup_ } from "../../../interfaces";
 import PasswordPopup from "./PasswordPopup";
 import AddPopup from "./AddPopup";
+import { clickChannel } from "../ChatUtils";
+import { click } from "@testing-library/user-event/dist/click";
 
 const Channel = (props: Channel_) => {
   let icon = <></>;
@@ -18,10 +20,7 @@ const Channel = (props: Channel_) => {
   const [boxStyle, setBoxStyle] = useState<string>("channel-box");
   let channelClick = () => {
     if (props.joined === true) {
-      props.socket?.emit("leaveRoom", { chatRoom: props.currentID });
-      props.socket?.emit("joinRoom", { chatRoom: props.id, user: "test" });
-      props.socket?.on("joined", (message: any) => {});
-      props.setRoomID(props.id);
+      clickChannel(props.currentID, props.id, props.setRoomID, props.socket);
     }
   };
   useEffect(() => {

@@ -9,8 +9,10 @@ import Members from "../components/Chat/Users/Members";
 import { Message_ } from "../interfaces";
 import { AxiosResponse } from "axios";
 import {
+  clickChannel,
   getChannels,
   getChatRequest,
+  getDM,
   isAdminRequest,
 } from "../components/Chat/ChatUtils";
 import { Socket, io } from "socket.io-client";
@@ -64,7 +66,15 @@ const Chat = (props: Chat_) => {
   }, [roomId]);
   useEffect(() => {
     const newSocket = io("localhost:6005");
+    console.log("chat socket conencted");
     setSocket(newSocket);
+    if (otherName !== "") {
+      getDM(otherName, setChannelsTrigger).then((newID) => {
+        console.log(newID);
+        clickChannel(roomId, Number(newID), setRoomId, socket);
+        location.state = null;
+      });
+    }
   }, [setSocket]);
   const messageWindow = (
     <MessageWindow

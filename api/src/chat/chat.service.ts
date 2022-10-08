@@ -215,18 +215,19 @@ export class ChatService {
   async getAdmin(username: string, roomID: number) {
     let isAdmin: boolean;
     const user = await this.getUser(username);
-    const admin = await this.prisma.userChatroom.findFirst({
-      where: {
-        chatroomId: roomID,
-        userId: user.id,
-        isAdmin: true,
-      },
-    });
-    if (!admin) {
-      return false;
-    } else {
-      return true;
+    if (user) {
+      const admin = await this.prisma.userChatroom.findFirst({
+        where: {
+          chatroomId: roomID,
+          userId: user.id,
+          isAdmin: true,
+        },
+      });
+      if (admin) {
+        return true;
+      }
     }
+    return false;
   }
 
   async giveAdmin(username: string, roomID: number) {

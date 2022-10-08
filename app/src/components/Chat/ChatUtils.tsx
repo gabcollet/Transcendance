@@ -1,6 +1,7 @@
 import { getCardMediaUtilityClass } from "@mui/material";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { Socket } from "socket.io-client";
 import { Message_ } from "../../interfaces";
 import { fetchObject } from "../Profile/FetchValue";
 
@@ -119,21 +120,24 @@ export async function getChatMembers(roomID: number) {
 
 export async function isAdminRequest(chatRoom: number, username: string) {
   let isAdmin = false;
-  await axios
-    .get("http://localhost:3030/chat/is-admin", {
-      params: {
-        id: chatRoom,
-        username: username,
-      },
-      withCredentials: true,
-      headers: {
-        Authorization: `bearer ${Cookies.get("jwtToken")}`,
-      },
-    })
-    .then((res) => {
-      isAdmin = res.data;
-    });
-  return isAdmin;
+  if (chatRoom && username) {
+    await axios
+      .get("http://localhost:3030/chat/is-admin", {
+        params: {
+          id: chatRoom,
+          username: username,
+        },
+        withCredentials: true,
+        headers: {
+          Authorization: `bearer ${Cookies.get("jwtToken")}`,
+        },
+      })
+      .then((res) => {
+        isAdmin = res.data;
+      });
+    return isAdmin;
+  }
+  return false;
 }
 
 export async function getChatRequest(
@@ -185,19 +189,27 @@ export async function getDM(
   target: string,
   trigger: React.Dispatch<React.SetStateAction<boolean>>
 ) {
-  let retId: number;
-  axios
-    .get("http://localhost:3030/chat/dm", {
-      params: {
-        target: target,
-      },
-      withCredentials: true,
-      headers: {
-        Authorization: `bearer ${Cookies.get("jwtToken")}`,
-      },
-    })
-    .then((res) => {
-      trigger(true);
-    });
-  return true;
+  let retId = await axios.get("http://localhost:3030/chat/dm", {
+    params: {
+      target: target,
+    },
+    withCredentials: true,
+    headers: {
+      Authorization: `bearer ${Cookies.get("jwtToken")}`,
+    },
+  });
+  trigger(true);
+  return Number(retId.data);
+}
+
+export async function clickChannel(
+  currentID: number,
+  newID: number,
+  setRoom: React.Dispatch<React.SetStateAction<number>>,
+  socket: any
+) {
+  socket?.emit("leaveRoom", { chatRoom: currentID });
+  socket?.emit("joinRoom", { chatRoom: newID, user: "test" });
+  socket?.on("joined", (message: any) => {});
+  setRoom(newID);
 }
