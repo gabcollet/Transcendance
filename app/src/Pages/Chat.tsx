@@ -13,6 +13,7 @@ import { Socket, io } from "socket.io-client";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { ProfileContext } from "../App";
+import { useLocation } from "react-router-dom";
 
 const Chat = (props: Chat_) => {
   const profileName = useContext(ProfileContext);
@@ -25,6 +26,13 @@ const Chat = (props: Chat_) => {
   const [mid, setMid] = useState<JSX.Element>(<></>);
   const [members, setMembers] = useState<string[]>([]);
   const [friends, setFriends] = useState<string[]>([]);
+
+  const location = useLocation();
+
+  // "otherName" is name of user we want to message
+  if (location.state) {
+    const { otherName } = location.state;
+  }
 
   const messageListener = (message: Message_) => {
     setMessages((current) => [...current, message]);
@@ -64,7 +72,6 @@ const Chat = (props: Chat_) => {
             setSocket={setSocket}
             socket={socket}
           ></InputZone>
-          ;
         </div>
       );
     }

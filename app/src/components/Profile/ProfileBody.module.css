@@ -125,6 +125,11 @@
     flex-direction: column;
     gap: 5px;
     margin: 5px;
+    align-items: center;
+}
+
+.individual-buttons>* {
+    width: 100%;
 }
 
 .individual-stats-container {
@@ -144,7 +149,6 @@
 .stats-text-container h4 {
     padding: 4px;
 }
-
 
 /*
 @media (max-width: 480px) {

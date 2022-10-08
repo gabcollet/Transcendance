@@ -12,10 +12,13 @@ import {
 import { ProfileContext } from "../../App";
 import Cookies from "js-cookie";
 import { UserImage } from "./UserImage";
+import { MessageUser } from "./MessageUser";
 
 const FriendButton = (props: FriendButtonProps) => {
   const profileName = useContext(ProfileContext);
   const [friendStatus, setFriendStatus] = useState("1");
+
+  const test = profileName;
 
   useEffect(() => {
     async function fetchAsync() {
@@ -134,6 +137,7 @@ const FriendButton = (props: FriendButtonProps) => {
 export const FriendCard = (props: FriendCardProps) => {
   const [friendUser, setFriendUser] = useState<User>({});
   const [userStats, setUserStats] = useState<Stats>({});
+  const profileName = useContext(ProfileContext);
 
   useEffect(() => {
     fetchObject("users/" + props.friendUsername, setFriendUser);
@@ -154,15 +158,15 @@ export const FriendCard = (props: FriendCardProps) => {
         </div>
       </div>
       <div className={ProfileBodyStyle["individual-buttons"]}>
-        <FriendButton
-          onRemove={props.onRemove}
-          friendUsername={friendUser.username}
-        />
-        <button
-          className={`${FriendCardStyle["friend-button"]} ${FriendCardStyle["button-78"]}`}
-        >
-          Message
-        </button>
+        {profileName !== props.friendUsername ? (
+          <>
+            <MessageUser otherUsername={props.friendUsername} />
+            <FriendButton
+              onRemove={props.onRemove}
+              friendUsername={friendUser.username}
+            />
+          </>
+        ) : null}
       </div>
       <div className={ProfileBodyStyle["individual-stats-container"]}>
         <div className={ProfileBodyStyle["stats-text-container"]}>
