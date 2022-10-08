@@ -32,16 +32,20 @@ const Channel = (props: Channel_) => {
     }
   }, [props.currentID, props.id]);
   if (props.joined === true) {
-    icon = (
-      <FontAwesomeIcon
-        className={styles["leave-icon"]}
-        icon={faCircleXmark}
-        onClick={() => {
-          removeChannel(props.id, props.setUserChannels, props.setPublic);
-          props.setRoomID(0);
-        }}
-      ></FontAwesomeIcon>
-    );
+    if (props.isDM === false) {
+      icon = (
+        <FontAwesomeIcon
+          className={styles["leave-icon"]}
+          icon={faCircleXmark}
+          onClick={() => {
+            removeChannel(props.id, props.setUserChannels, props.setPublic);
+            props.setRoomID(0);
+          }}
+        ></FontAwesomeIcon>
+      );
+    } else {
+      icon = <></>;
+    }
     chatIcon = (
       <FontAwesomeIcon
         className={styles["chat-icon"]}

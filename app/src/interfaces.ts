@@ -39,6 +39,7 @@ export interface Channel_ {
   setSocket: React.Dispatch<React.SetStateAction<Socket<any, any> | undefined>>;
   setPasswordTrigger: React.Dispatch<React.SetStateAction<boolean>>;
   setPasswordID: React.Dispatch<React.SetStateAction<number>>;
+  isDM: boolean;
 }
 
 export interface ChannelDB_ {
