@@ -12,6 +12,7 @@ import { FriendButton } from "./FriendButton";
 import { ProfileContext } from "../../App";
 import { Link } from "react-router-dom";
 import { MessageUser } from "./MessageUser";
+import { BlockUser } from "./BlockUser";
 
 export const ProfileHeader = (props: ProfileProps) => {
   const profileName = useContext(ProfileContext);
@@ -51,6 +52,7 @@ export const ProfileHeader = (props: ProfileProps) => {
             <>
               <FriendButton friendUsername={props.username} />
               <MessageUser otherUsername={props.username} />
+              <BlockUser otherUsername={props.username} />
             </>
           )}
         </div>

@@ -93,41 +93,41 @@ const FriendButton = (props: FriendButtonProps) => {
   }
 
   if (friendStatus === "0") {
-    return (
+    return profileName !== props.friendUsername ? (
       <button
         className={`${FriendCardStyle["friend-button"]} ${FriendCardStyle["button-78"]}`}
         onClick={addFriend}
       >
         Add friend
       </button>
-    );
+    ) : null;
   } else if (friendStatus === "1") {
-    return (
+    return profileName !== props.friendUsername ? (
       <button
         className={`${FriendCardStyle["friend-button"]} ${FriendCardStyle["button-78"]}`}
         onClick={cancelRequest}
       >
         Cancel <br></br>friend request
       </button>
-    );
+    ) : null;
   } else if (friendStatus === "2") {
-    return (
+    return profileName !== props.friendUsername ? (
       <button
         className={`${FriendCardStyle["friend-button"]} ${FriendCardStyle["button-78"]}`}
         onClick={addFriend}
       >
         Accept <br></br>friend request
       </button>
-    );
+    ) : null;
   } else {
-    return (
+    return profileName !== props.friendUsername ? (
       <button
         className={`${FriendCardStyle["friend-button"]} ${FriendCardStyle["button-78"]}`}
         onClick={removeFriend}
       >
         Remove friend
       </button>
-    );
+    ) : null;
   }
 };
 

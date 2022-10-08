@@ -9,6 +9,7 @@
     font-size: 1rem;
 }
 
+
 .button-78 {
     background-color: initial;
     border-style: none;
@@ -28,6 +29,8 @@
     min-width: 130px;
     display: flex;
 }
+
+
 
 /* 
 @media (min-width: 768px) {
@@ -101,4 +104,11 @@
 .button-78:disabled {
     cursor: default;
     opacity: .24;
+}
+
+.block-button:after {
+    top: 8px;
+    bottom: 8px;
+    right: 8px;
+    left: 8px;
 }
