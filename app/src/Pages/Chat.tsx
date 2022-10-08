@@ -10,8 +10,6 @@ import { Message_ } from "../interfaces";
 import { AxiosResponse } from "axios";
 import { getChannels, getChatRequest } from "../components/Chat/ChatUtils";
 import { Socket, io } from "socket.io-client";
-import axios from "axios";
-import Cookies from "js-cookie";
 import { ProfileContext } from "../App";
 import { useLocation } from "react-router-dom";
 
@@ -29,8 +27,13 @@ const Chat = (props: Chat_) => {
 
   const location = useLocation();
 
-  // "otherName" is name of user we want to message
-  const { otherName } = location.state;
+  //TO DO -> automaticly open to DM if otherName is not empty
+  let otherName: string;
+  if (location.state) {
+    otherName = location.state.otherName;
+  } else {
+    otherName = "";
+  }
 
   const messageListener = (message: Message_) => {
     setMessages((current) => [...current, message]);
