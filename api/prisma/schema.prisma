@@ -31,10 +31,7 @@ model User {
     Message   Message[]
     chatrooms UserChatroom[]
 
-    blockedUsers User[] @relation("blocked-list")
-
-    blocked User? @relation("blocked-list", fields: [userId], references: [id], onDelete: NoAction)
-    userId  Int?
+    blockedUsernames String[] @unique
 
     @@map("users")
 }

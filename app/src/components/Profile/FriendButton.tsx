@@ -95,7 +95,7 @@ export const FriendButton = (props: FriendButtonProps) => {
   if (friendStatus === "0") {
     return (
       <button
-        className={`${FriendCardStyle["friend-button"]} ${FriendCardStyle["button-65"]}`}
+        className={`${FriendCardStyle["friend-button"]} ${FriendCardStyle["button-78"]}`}
         onClick={addFriend}
       >
         Add friend
@@ -104,7 +104,7 @@ export const FriendButton = (props: FriendButtonProps) => {
   } else if (friendStatus === "1") {
     return (
       <button
-        className={`${FriendCardStyle["friend-button"]} ${FriendCardStyle["button-65"]}`}
+        className={`${FriendCardStyle["friend-button"]} ${FriendCardStyle["button-78"]}`}
         onClick={cancelRequest}
       >
         Cancel friend request
@@ -113,7 +113,7 @@ export const FriendButton = (props: FriendButtonProps) => {
   } else if (friendStatus === "2") {
     return (
       <button
-        className={`${FriendCardStyle["friend-button"]} ${FriendCardStyle["button-65"]}`}
+        className={`${FriendCardStyle["friend-button"]} ${FriendCardStyle["button-78"]}`}
         onClick={addFriend}
       >
         Accept <br></br>friend request
@@ -122,7 +122,7 @@ export const FriendButton = (props: FriendButtonProps) => {
   } else {
     return (
       <button
-        className={`${FriendCardStyle["friend-button"]} ${FriendCardStyle["button-65"]}`}
+        className={`${FriendCardStyle["friend-button"]} ${FriendCardStyle["button-78"]}`}
         onClick={removeFriend}
       >
         Remove friend

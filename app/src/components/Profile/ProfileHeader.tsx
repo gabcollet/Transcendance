@@ -10,6 +10,9 @@ import { UserWins } from "./UserWins";
 import LeaderboardStyles from "../../Pages/Leaderboard.module.css";
 import { FriendButton } from "./FriendButton";
 import { ProfileContext } from "../../App";
+import { Link } from "react-router-dom";
+import { MessageUser } from "./MessageUser";
+import { BlockUser } from "./BlockUser";
 
 export const ProfileHeader = (props: ProfileProps) => {
   const profileName = useContext(ProfileContext);
@@ -48,7 +51,8 @@ export const ProfileHeader = (props: ProfileProps) => {
           {props.username !== profileName && (
             <>
               <FriendButton friendUsername={props.username} />
-              <button>Message</button>
+              <MessageUser otherUsername={props.username} />
+              <BlockUser otherUsername={props.username} />
             </>
           )}
         </div>

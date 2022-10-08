@@ -24,12 +24,12 @@
 .id-container-buttons {
     display: flex;
     flex-direction: column;
-    padding: 1rem 1rem 1rem 0;
-    row-gap: 1rem;
+    padding: 10px;
+    justify-content: flex-start;
 }
 
-.id-container-buttons button {
-    width: 100px;
+.id-container-buttons>* {
+    flex: 1;
 }
 
 .profile-image {
