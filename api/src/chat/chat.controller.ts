@@ -116,4 +116,17 @@ export class ChatController {
     );
     return confirmation;
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('dm')
+  async dmRequest(@Req() req, @Query() query) {
+    const user = req.user.toString();
+    const exist = await this.chatService.getDmId(user, query.target);
+    if (!exist) {
+      //create and join if dm doesnt exist
+      const response = await this.chatService.createDm(user, query.target);
+      return response;
+    }
+    return exist.id;
+  }
 }

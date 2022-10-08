@@ -29,15 +29,17 @@
   position: absolute;
   right: 5px;
   top: 5px;
+  font-size: 20px;
   cursor: pointer;
 }
 
 .dm-icon {
   display: flex;
-  display: relative;
+  position: absolute;
   color: #f3efff;
-  margin-top: 8px;
   font-size: 20px;
+  right: 5px;
+  bottom: 5px;
   cursor: pointer;
 }
 

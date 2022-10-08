@@ -9,8 +9,10 @@ import { isAdminRequest } from "../ChatUtils";
 
 const Members = (props: {
   id: number;
+  setId: React.Dispatch<React.SetStateAction<number>>;
   members: string[];
   isAdmin: boolean;
+  channelTrigger: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const profileName = useContext(ProfileContext);
   const [members, setMembers] = useState<string[]>([]);
@@ -37,6 +39,7 @@ const Members = (props: {
           member={true}
           admin={props.isAdmin}
           setTrigger={setPopMember}
+          channelTrigger={props.channelTrigger}
         ></ChatProfileCard>
       </div>
     );

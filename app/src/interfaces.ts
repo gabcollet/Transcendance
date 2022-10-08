@@ -8,6 +8,7 @@ export interface Username_ {
   member: boolean;
   admin: boolean;
   setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+  channelTrigger: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface ChatChannels_ {
@@ -124,6 +125,8 @@ export interface ChatFriendList_ {
   friends: string[];
   setFriends: React.Dispatch<React.SetStateAction<string[]>>;
   username: string;
+  setRoomId: React.Dispatch<React.SetStateAction<number>>;
+  channelTrigger: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface UserPopup_ {

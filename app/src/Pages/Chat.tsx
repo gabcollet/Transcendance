@@ -29,7 +29,7 @@ const Chat = (props: Chat_) => {
   const [members, setMembers] = useState<string[]>([]);
   const [friends, setFriends] = useState<string[]>([]);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
-
+  const [channelsTrigger, setChannelsTrigger] = useState<boolean>(false);
   const location = useLocation();
 
   //TO DO -> automaticly open to DM if otherName is not empty
@@ -43,6 +43,13 @@ const Chat = (props: Chat_) => {
   const messageListener = (message: Message_) => {
     setMessages((current) => [...current, message]);
   };
+
+  useEffect(() => {
+    if (channelsTrigger === true) {
+      getChannels(setChannels, setPublicChannels);
+      setChannelsTrigger(false);
+    }
+  }, [channelsTrigger]);
 
   useEffect(() => {
     if (roomId !== 0) {
@@ -108,11 +115,19 @@ const Chat = (props: Chat_) => {
       </div>
       {mid}
       <div className={styles["right"]}>
-        <Members id={roomId} members={members} isAdmin={isAdmin}></Members>
+        <Members
+          id={roomId}
+          setId={setRoomId}
+          members={members}
+          isAdmin={isAdmin}
+          channelTrigger={setChannelsTrigger}
+        ></Members>
         <ChatFriendsList
           friends={friends}
           setFriends={setFriends}
           username={profileName}
+          setRoomId={setRoomId}
+          channelTrigger={setChannelsTrigger}
         ></ChatFriendsList>
       </div>
     </div>

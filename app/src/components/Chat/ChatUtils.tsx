@@ -1,3 +1,4 @@
+import { getCardMediaUtilityClass } from "@mui/material";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { Message_ } from "../../interfaces";
@@ -178,4 +179,25 @@ export async function getChatRequest(
     .then((response) => {
       setFriends(response.data);
     });
+}
+
+export async function getDM(
+  target: string,
+  trigger: React.Dispatch<React.SetStateAction<boolean>>
+) {
+  let retId: number;
+  axios
+    .get("http://localhost:3030/chat/dm", {
+      params: {
+        target: target,
+      },
+      withCredentials: true,
+      headers: {
+        Authorization: `bearer ${Cookies.get("jwtToken")}`,
+      },
+    })
+    .then((res) => {
+      trigger(true);
+    });
+  return true;
 }

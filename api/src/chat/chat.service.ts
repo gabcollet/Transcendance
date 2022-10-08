@@ -245,4 +245,38 @@ export class ChatService {
     });
     return confirm;
   }
+
+  async getDmId(target: string, username: string) {
+    const dms = await this.prisma.chatroom.findFirst({
+      where: {
+        isDM: true,
+        users: {
+          some: {
+            user: {
+              username: { in: [username, target] },
+            },
+          },
+        },
+      },
+      include: {
+        users: true,
+      },
+    });
+    return dms;
+  }
+
+  async createDm(target: string, username: string) {
+    const channel = await this.prisma.chatroom.create({
+      data: {
+        channelName: target + ' & ' + username,
+        protected: false,
+        password: '',
+        private: true,
+        isDM: true,
+      },
+    });
+    const join = await this.joinChannel(username, channel.id, false, true);
+    const join2 = await this.joinChannel(target, channel.id, false, true);
+    return channel.id;
+  }
 }
