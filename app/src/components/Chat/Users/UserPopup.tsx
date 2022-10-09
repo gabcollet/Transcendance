@@ -11,6 +11,7 @@ import { UserImage } from "../../Profile/UserImage";
 import { faShieldHalved } from "@fortawesome/free-solid-svg-icons";
 import { isAdminRequest } from "../ChatUtils";
 import { giveAdmin } from "../ChatUtils";
+import { restrictUser } from "../ChatUtils";
 
 const UserPopup = (props: UserPopup_) => {
   const [adminComponent, setAdminComponent] = useState(<></>);
@@ -19,7 +20,6 @@ const UserPopup = (props: UserPopup_) => {
   };
   useEffect(() => {
     isAdminRequest(props.currentRoom, props.username).then((res) => {
-      console.log(res);
       if (res === false) {
         setAdminComponent(
           <div className={styles["admin-wrap"]}>
@@ -35,15 +35,57 @@ const UserPopup = (props: UserPopup_) => {
             </div>
             <div className={styles["give-wrap"]}>
               <p className={styles["admin-title-ban"]}>Ban User</p>
-              <button className={styles["timeout"]}>10M</button>
-              <button className={styles["timeout"]}>1J</button>
-              <button className={styles["timeout"]}>1W</button>
+              <button
+                className={styles["timeout"]}
+                onClick={() => {
+                  restrictUser(props.username, props.currentRoom, 10, "ban");
+                }}
+              >
+                10M
+              </button>
+              <button
+                className={styles["timeout"]}
+                onClick={() => {
+                  restrictUser(props.username, props.currentRoom, 24, "ban");
+                }}
+              >
+                1J
+              </button>
+              <button
+                className={styles["timeout"]}
+                onClick={() => {
+                  restrictUser(props.username, props.currentRoom, 7, "ban");
+                }}
+              >
+                1W
+              </button>
             </div>
             <div className={styles["give-wrap"]}>
               <p className={styles["admin-title"]}>Mute User</p>
-              <button className={styles["timeout"]}>10M</button>
-              <button className={styles["timeout"]}>1J</button>
-              <button className={styles["timeout"]}>1W</button>
+              <button
+                className={styles["timeout"]}
+                onClick={() => {
+                  restrictUser(props.username, props.currentRoom, 10, "ban");
+                }}
+              >
+                10M
+              </button>
+              <button
+                className={styles["timeout"]}
+                onClick={() => {
+                  restrictUser(props.username, props.currentRoom, 7, "ban");
+                }}
+              >
+                1J
+              </button>
+              <button
+                className={styles["timeout"]}
+                onClick={() => {
+                  restrictUser(props.username, props.currentRoom, 24, "ban");
+                }}
+              >
+                1W
+              </button>
             </div>
           </div>
         );

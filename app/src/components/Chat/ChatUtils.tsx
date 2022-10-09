@@ -166,6 +166,33 @@ export async function giveAdmin(chatRoom: number, username: string) {
   }
 }
 
+export async function restrictUser(
+  username: string,
+  chatroom: number,
+  time: number,
+  type: string
+) {
+  console.log(username + " " + chatroom + " " + time + " " + type);
+  const restrict = await axios
+    .post(
+      "http://localhost:3030/chat/" + type,
+      {
+        chatroom: chatroom,
+        username: username,
+        time: time,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `bearer ${Cookies.get("jwtToken")}`,
+        },
+      }
+    )
+    .then((res) => {
+      console.log("USER RESTRICTED");
+    });
+}
+
 export async function getChatRequest(
   setMessages: React.Dispatch<React.SetStateAction<Message_[]>>,
   setMembers: React.Dispatch<React.SetStateAction<string[]>>,

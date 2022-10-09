@@ -114,24 +114,53 @@ export class ChatController {
       query.username,
       Number(query.id),
     );
-    this.logger.debug('IS ADMIN = ', confirmation);
     return confirmation;
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('give-admin')
   async giveAdmin(@Req() req) {
+    if (!req.body.chatroom || !req.body.username) return false;
     const isAdmin = await this.chatService.getAdmin(
       req.user.toString(),
-      req.chatroom,
+      req.body.chatroom,
     );
     if (isAdmin === true) {
       const confirmation = await this.chatService.giveAdmin(
-        req.username,
-        req.chatroom,
+        req.body.username,
+        req.body.chatroom,
       );
     }
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('ban')
+  async banUser(@Req() req) {
+    const username = req.user.toString();
+    const target = req.body.username;
+    const chatroom = req.body.chatroom;
+    const time = req.body.time;
+    if (!target || !username || !chatroom || !time) {
+      return false;
+    }
+    const banRight = await this.chatService.validateRestriction(
+      username,
+      target,
+      chatroom,
+    );
+    if (banRight === true) {
+      const confirm = await this.chatService.giveRestriction(
+        target,
+        chatroom,
+        'ban',
+        time,
+      );
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('mute')
+  async muteUser(@Req() req) {}
 
   @UseGuards(JwtAuthGuard)
   @Get('dm')

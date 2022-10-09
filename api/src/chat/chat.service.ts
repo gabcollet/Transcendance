@@ -9,6 +9,8 @@ import { runInThisContext } from 'vm';
 import { connected } from 'process';
 import { authorize, use } from 'passport';
 import { AuthService } from 'src/auth/auth.service';
+import { networkInterfaces } from 'os';
+import { UpdateDateColumn } from 'typeorm';
 @Injectable()
 export class ChatService {
   constructor(
@@ -279,5 +281,53 @@ export class ChatService {
     const join = await this.joinChannel(username, channel.id, false, true);
     const join2 = await this.joinChannel(target, channel.id, false, true);
     return channel.id;
+  }
+
+  async validateRestriction(user: string, target: string, chatroom: number) {
+    const userAdmin = await this.getAdmin(user, chatroom);
+    if (userAdmin === false) {
+      this.logger.debug('USER NOT ADMIN');
+      return false;
+    }
+    const targetAdmin = await this.getAdmin(target, chatroom);
+    if (targetAdmin === true) {
+      this.logger.debug('TARGET IS ADMIN');
+      return false;
+    }
+    return true;
+  }
+
+  async giveRestriction(
+    target: string,
+    chatroomId: number,
+    type: string,
+    time: number,
+  ) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        username: target,
+      },
+    });
+    if (!user) return false;
+    const user_chatroom = await this.prisma.userChatroom.findUnique({
+      where: {
+        chatroomId_userId: {
+          userId: user.id,
+          chatroomId: chatroomId,
+        },
+      },
+    });
+    if (!user_chatroom) return false;
+    const restrict = await this.prisma.userChatroom.update({
+      where: {
+        chatroomId_userId: {
+          userId: user.id,
+          chatroomId: chatroomId,
+        },
+      },
+      data: {
+        banned: true,
+      },
+    });
   }
 }

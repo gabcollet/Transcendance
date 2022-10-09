@@ -113,12 +113,26 @@ model UserChatroom {
     isAdmin Boolean @default(false)
     isOwner Boolean @default(false)
 
-    muted     Boolean  @default(false)
-    banned    Boolean  @default(false)
-    timeStamp DateTime @default(now())
+    muted      Boolean     @default(false)
+    banned     Boolean     @default(false)
+    Restricted Restricted?
 
     @@unique([chatroomId, userId])
     @@map("userchatroom")
+}
+
+model Restricted {
+    id Int @id @default(autoincrement())
+
+    userchatroomId         UserChatroom @relation(fields: [userChatroomChatroomId, userChatroomUserId], references: [chatroomId, userId])
+    userChatroomChatroomId Int          @unique
+    userChatroomUserId     Int          @unique
+    createdAt              DateTime     @default(now())
+
+    type  String
+    timer Int
+
+    @@unique([userChatroomChatroomId, userChatroomUserId])
 }
 
 model Chatroom {
@@ -135,7 +149,7 @@ model Chatroom {
 
     messages Message[] @relation()
 
-    users UserChatroom[]
+    users UserChatroom[] @relation()
 
     @@map("chatroom")
 }
