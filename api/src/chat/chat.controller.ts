@@ -18,6 +18,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Chatroom, Message } from '@prisma/client';
 import { ChatDto } from './chat.dto';
 import { User } from '@prisma/client';
+
 @Controller('chat')
 export class ChatController {
   constructor(private chatService: ChatService) {}
@@ -77,11 +78,16 @@ export class ChatController {
     const confirmation = await this.chatService.getPublic(request);
     return confirmation;
   }
+  @UseGuards(JwtAuthGuard)
+  @Get('members')
+  async roomMembers(@Req() request: Request, @Query() query) {
+    const members = this.chatService.getMembers(Number(query.id));
+    return members;
+  }
 
   @UseGuards(JwtAuthGuard)
   @Get('join-password')
   async joinPassword(@Req() request: Request, @Query() query) {
-    this.logger.debug(query);
     const confirm = await this.chatService.confirmPassword(
       Number(query.id),
       query.password,
@@ -92,5 +98,12 @@ export class ChatController {
     } else {
       throw new HttpException('Wrong password', HttpStatus.FORBIDDEN);
     }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('friends')
+  async friendList(@Req() request: Request) {
+    let list = await this.chatService.getFriendList(request.user.toString());
+    return list;
   }
 }

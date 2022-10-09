@@ -15,6 +15,7 @@ export class ChatService {
     private prisma: PrismaService,
     @Inject(forwardRef(() => AuthService))
     private AuthService: AuthService,
+    private userService: UsersService,
   ) {}
   logger: Logger = new Logger('ChatController');
   async getUser(username: string) {
@@ -186,5 +187,26 @@ export class ChatService {
     } else {
       return false;
     }
+  }
+  async getMembers(id: number) {
+    let members = await this.prisma.userChatroom.findMany({
+      where: {
+        chatroom: {
+          id: id,
+        },
+      },
+      include: {
+        user: true,
+      },
+    });
+    let ret = members.map((member) => {
+      return member.user.username;
+    });
+    return ret;
+  }
+
+  async getFriendList(username: string) {
+    let list = await this.userService.getAcceptedFriends(username);
+    return list;
   }
 }

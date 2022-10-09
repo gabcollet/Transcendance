@@ -12,13 +12,10 @@ import {
 import { ProfileContext } from "../../App";
 import Cookies from "js-cookie";
 import { UserImage } from "./UserImage";
-import { MessageUser } from "./MessageUser";
 
-const FriendButton = (props: FriendButtonProps) => {
+export const FriendButton = (props: FriendButtonProps) => {
   const profileName = useContext(ProfileContext);
   const [friendStatus, setFriendStatus] = useState("1");
-
-  const test = profileName;
 
   useEffect(() => {
     async function fetchAsync() {
@@ -110,7 +107,7 @@ const FriendButton = (props: FriendButtonProps) => {
         className={`${FriendCardStyle["friend-button"]} ${FriendCardStyle["button-78"]}`}
         onClick={cancelRequest}
       >
-        Cancel <br></br>friend request
+        Cancel friend request
       </button>
     );
   } else if (friendStatus === "2") {
@@ -132,52 +129,4 @@ const FriendButton = (props: FriendButtonProps) => {
       </button>
     );
   }
-};
-
-export const FriendCard = (props: FriendCardProps) => {
-  const [friendUser, setFriendUser] = useState<User>({});
-  const [userStats, setUserStats] = useState<Stats>({});
-  const profileName = useContext(ProfileContext);
-
-  useEffect(() => {
-    fetchObject("users/" + props.friendUsername, setFriendUser);
-    fetchObject("users/" + props.friendUsername + "/stats", setUserStats);
-  }, [props.searchString, props.friendUsername]);
-
-  return (
-    <div className={ProfileBodyStyle["friends-content-individual"]}>
-      <div className={ProfileBodyStyle["individual-id"]}>
-        <div className={ProfileBodyStyle["user-image-container"]}>
-          <UserImage username={props.friendUsername} />
-        </div>
-        <div className={ProfileBodyStyle["user-info-container"]}>
-          <h4 className={FriendCardStyle["friend-name"]}>
-            {friendUser.displayname}
-          </h4>
-          <p>status: {friendUser.status}</p>
-        </div>
-      </div>
-      <div className={ProfileBodyStyle["individual-buttons"]}>
-        {profileName !== props.friendUsername ? (
-          <>
-            <MessageUser otherUsername={props.friendUsername} />
-            <FriendButton
-              onRemove={props.onRemove}
-              friendUsername={friendUser.username}
-            />
-          </>
-        ) : null}
-      </div>
-      <div className={ProfileBodyStyle["individual-stats-container"]}>
-        <div className={ProfileBodyStyle["stats-text-container"]}>
-          <h4>W/L</h4>
-        </div>
-        <div className={ProfileBodyStyle["stats-numbers-container"]}>
-          <h3 className={ProfileBodyStyle["stats-number"]}>
-            {userStats.wins}/{userStats.losses}
-          </h3>
-        </div>
-      </div>
-    </div>
-  );
 };

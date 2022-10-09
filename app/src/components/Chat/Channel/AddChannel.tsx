@@ -3,7 +3,6 @@ import styles from "./AddChannel.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import AddPopup from "./AddPopup";
-import { ChatChannels_ } from "../../../interfaces";
 import PasswordPopup from "./PasswordPopup";
 
 const AddChannel = (props: any) => {

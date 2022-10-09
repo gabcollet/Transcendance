@@ -179,6 +179,12 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get(':name/block')
+  async blockUser(@Req() req: Request, @Param() params) {
+    return await this.usersService.blockUser(req.user as string, params.name);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':name')
   async findByUsername(@Param() params) {
     return await this.usersService.findByUsername(params.name);

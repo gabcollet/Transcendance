@@ -375,6 +375,29 @@ export class UsersService {
     return achievements;
   }
 
+  async blockUser(username: string, otherUser: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        username: username,
+      },
+    });
+
+    if (user) {
+      if (!user.blockedUsernames.includes(otherUser)) {
+        user.blockedUsernames.push(otherUser);
+      }
+    }
+
+    const updatedUser = await this.prisma.user.update({
+      where: {
+        username: username,
+      },
+      data: {
+        blockedUsernames: user.blockedUsernames,
+      },
+    });
+  }
+
   /*
    ** TEST FUNCTIONS
    */

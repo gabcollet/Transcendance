@@ -1,5 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { Message_ } from "../../interfaces";
+import { fetchObject } from "../Profile/FetchValue";
 
 export async function getChannels(setChannels: any, setPublic: any) {
   await axios
@@ -29,6 +31,7 @@ export async function getChannels(setChannels: any, setPublic: any) {
       console.log(error);
     });
 }
+
 export async function removeChannel(
   channelID: number,
   setUserChannels: any,
@@ -93,4 +96,67 @@ export async function joinPassword(
 ) {
   setTrigger(true);
   console.log("IN PASSWORD");
+}
+
+export async function getChatMembers(roomID: number) {
+  let members: any;
+  let result = await axios
+    .get("http://localhost:3030/chat/members", {
+      params: {
+        id: roomID,
+      },
+      withCredentials: true,
+      headers: {
+        Authorization: `bearer ${Cookies.get("jwtToken")}`,
+      },
+    })
+    .then((response) => {
+      members = response.data;
+    });
+  return members;
+}
+
+export async function getChatRequest(
+  setMessages: React.Dispatch<React.SetStateAction<Message_[]>>,
+  setMembers: React.Dispatch<React.SetStateAction<string[]>>,
+  roomId: number,
+  profileName: string,
+  setFriends: React.Dispatch<React.SetStateAction<any[]>>
+) {
+  axios
+    .get("http://localhost:3030/chat/convo", {
+      params: {
+        id: roomId,
+      },
+      withCredentials: true,
+      headers: {
+        Authorization: `bearer ${Cookies.get("jwtToken")}`,
+      },
+    })
+    .then((response) => {
+      setMessages(response.data);
+    });
+  axios
+    .get("http://localhost:3030/chat/members", {
+      params: {
+        id: roomId,
+      },
+      withCredentials: true,
+      headers: {
+        Authorization: `bearer ${Cookies.get("jwtToken")}`,
+      },
+    })
+    .then((response) => {
+      setMembers(response.data);
+    });
+  axios
+    .get("http://localhost:3030/chat/friends", {
+      withCredentials: true,
+      headers: {
+        Authorization: `bearer ${Cookies.get("jwtToken")}`,
+      },
+    })
+    .then((response) => {
+      setFriends(response.data);
+    });
 }

@@ -45,8 +45,14 @@ export class ProfileController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('leaderboard/:name')
-  getLeaderboardRank(@Param() params) {
-    return this.profileService.getLeaderboardRank(params.name);
+  @Get('stats/:name')
+  getStatsPlayer(@Param() params) {
+    return this.profileService.getStatsPlayer(params.name);
   }
+
+  // @UseGuards(JwtAuthGuard)
+  // @Get('leaderboard/:name')
+  // getLeaderboardRank(@Param() params) {
+  //   return this.profileService.getLeaderboardRank(params.name);
+  // }
 }

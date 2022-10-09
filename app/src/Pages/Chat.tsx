@@ -1,5 +1,5 @@
 import styles from "./Chat.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import InputZone from "../components/Chat/Messages/InputZone";
 import MessageWindow from "../components/Chat/Messages/MessageWindow";
 import ChatChannels from "../components/Chat/Channel/ChatChannels";
@@ -8,12 +8,15 @@ import { Chat_ } from "../interfaces";
 import Members from "../components/Chat/Users/Members";
 import { Message_ } from "../interfaces";
 import { AxiosResponse } from "axios";
-import { getChannels } from "../components/Chat/ChatUtils";
+import { getChannels, getChatRequest } from "../components/Chat/ChatUtils";
 import { Socket, io } from "socket.io-client";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { ProfileContext } from "../App";
+import { useLocation } from "react-router-dom";
 
 const Chat = (props: Chat_) => {
+  const profileName = useContext(ProfileContext);
   const [messages, setMessages] = useState<Message_[]>([]);
   const [roomId, setRoomId] = useState<number>(0);
   const [channels, setChannels] = useState<AxiosResponse<any, any>>();
@@ -21,6 +24,15 @@ const Chat = (props: Chat_) => {
     useState<AxiosResponse<any, any>>();
   const [socket, setSocket] = useState<Socket>();
   const [mid, setMid] = useState<JSX.Element>(<></>);
+  const [members, setMembers] = useState<string[]>([]);
+  const [friends, setFriends] = useState<string[]>([]);
+
+  const location = useLocation();
+
+  // "otherName" is name of user we want to message
+  if (location.state) {
+    const { otherName } = location.state;
+  }
 
   const messageListener = (message: Message_) => {
     setMessages((current) => [...current, message]);
@@ -28,48 +40,31 @@ const Chat = (props: Chat_) => {
 
   useEffect(() => {
     if (roomId !== 0) {
-      axios
-        .get("http://localhost:3030/chat/convo", {
-          params: {
-            id: roomId,
-          },
-          withCredentials: true,
-          headers: {
-            Authorization: `bearer ${Cookies.get("jwtToken")}`,
-          },
-        })
-        .then((response) => {
-          console.log(response.data);
-          setMessages(response.data);
-        });
+      getChatRequest(setMessages, setMembers, roomId, profileName, setFriends);
+      console.log("Friend list");
     } else {
       setMessages([]);
+      setMembers([]);
     }
   }, [roomId]);
   useEffect(() => {
     const newSocket = io("localhost:6005");
     setSocket(newSocket);
   }, [setSocket]);
-
+  const messageWindow = (
+    <MessageWindow
+      setMessages={setMessages}
+      messages={messages}
+      chatRoom={roomId}
+    ></MessageWindow>
+  );
   useEffect(() => {
     if (roomId === 0) {
-      setMid(
-        <div className={styles["mid"]}>
-          <MessageWindow
-            setMessages={setMessages}
-            messages={messages}
-            chatRoom={roomId}
-          ></MessageWindow>
-        </div>
-      );
+      setMid(<div className={styles["mid"]}>{messageWindow}</div>);
     } else {
       setMid(
         <div className={styles["mid"]}>
-          <MessageWindow
-            setMessages={setMessages}
-            messages={messages}
-            chatRoom={roomId}
-          ></MessageWindow>
+          {messageWindow}
           <InputZone
             setMessages={setMessages}
             messages={messages}
@@ -77,7 +72,6 @@ const Chat = (props: Chat_) => {
             setSocket={setSocket}
             socket={socket}
           ></InputZone>
-          ;
         </div>
       );
     }
@@ -106,8 +100,12 @@ const Chat = (props: Chat_) => {
       </div>
       {mid}
       <div className={styles["right"]}>
-        <Members></Members>
-        <ChatFriendsList></ChatFriendsList>
+        <Members id={roomId} members={members}></Members>
+        <ChatFriendsList
+          friends={friends}
+          setFriends={setFriends}
+          username={profileName}
+        ></ChatFriendsList>
       </div>
     </div>
   );
