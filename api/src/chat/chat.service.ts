@@ -208,6 +208,7 @@ export class ChatService {
         chatroom: {
           id: id,
         },
+        joined: true,
       },
       include: {
         user: true,
