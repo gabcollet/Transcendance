@@ -66,16 +66,16 @@ const Chat = (props: Chat_) => {
   }, [roomId]);
   useEffect(() => {
     const newSocket = io("localhost:6005");
-    console.log("chat socket conencted");
+    console.log("chat socket connected");
     setSocket(newSocket);
-    if (otherName !== "") {
+    if (newSocket && otherName !== "") {
       getDM(otherName, setChannelsTrigger).then((newID) => {
-        console.log(newID);
-        clickChannel(roomId, Number(newID), setRoomId, socket);
+        clickChannel(roomId, Number(newID), setRoomId, newSocket);
         location.state = null;
       });
     }
   }, [setSocket]);
+
   const messageWindow = (
     <MessageWindow
       setMessages={setMessages}
