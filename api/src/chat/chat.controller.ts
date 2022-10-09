@@ -118,6 +118,21 @@ export class ChatController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Post('give-admin')
+  async giveAdmin(@Req() req) {
+    const isAdmin = await this.chatService.getAdmin(
+      req.user.toString(),
+      req.chatroom,
+    );
+    if (isAdmin === true) {
+      const confirmation = await this.chatService.giveAdmin(
+        req.username,
+        req.chatroom,
+      );
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('dm')
   async dmRequest(@Req() req, @Query() query) {
     const user = req.user.toString();

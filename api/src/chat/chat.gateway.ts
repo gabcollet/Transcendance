@@ -31,6 +31,7 @@ export class ChatGateway {
 
   @SubscribeMessage('joinRoom')
   handleJoin(client: Socket, payload: any): void {
+    //need to be secured
     this.logger.log('USER JOINED ROOM :', payload.chatRoom);
     client.join(payload.chatRoom);
     client.emit('joined', payload.chatRoom);

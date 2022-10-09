@@ -103,7 +103,7 @@ model Message {
 }
 
 model UserChatroom {
-    chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
+    chatroom   Chatroom @relation(fields: [chatroomId], references: [id], onDelete: NoAction)
     chatroomId Int
 
     user   User @relation(fields: [userId], references: [id])

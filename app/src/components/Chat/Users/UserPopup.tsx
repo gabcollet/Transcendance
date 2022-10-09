@@ -1,7 +1,7 @@
 import styles from "../Channel/AddPopup.module.css";
 import { UserPopup_ } from "../../../interfaces";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChatProfileCard } from "./ChatProfileCard";
 import {
   faCircleXmark,
@@ -9,11 +9,19 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { UserImage } from "../../Profile/UserImage";
 import { faShieldHalved } from "@fortawesome/free-solid-svg-icons";
+import { isAdminRequest } from "../ChatUtils";
+import { giveAdmin } from "../ChatUtils";
 
 const UserPopup = (props: UserPopup_) => {
+  let adminComponent = <></>;
   const handleExit = () => {
     props.setTrigger(false);
   };
+  useEffect(() => {
+    isAdminRequest(props.currentRoom, props.username).then((res) => {
+      console.log("USER : " + props.username + "ADMIN STATUS = " + res);
+    });
+  }, []);
   const popup = (
     <div className={styles["addpop-wrap"]}>
       <div className={styles["addpop-in-user"]}>
@@ -34,6 +42,9 @@ const UserPopup = (props: UserPopup_) => {
               <FontAwesomeIcon
                 className={styles["give-admin"]}
                 icon={faShieldHalved}
+                onClick={() => {
+                  giveAdmin(props.currentRoom, props.username);
+                }}
               ></FontAwesomeIcon>
             </div>
             <div className={styles["give-wrap"]}>

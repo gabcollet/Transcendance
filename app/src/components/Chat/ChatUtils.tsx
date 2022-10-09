@@ -37,7 +37,8 @@ export async function getChannels(setChannels: any, setPublic: any) {
 export async function removeChannel(
   channelID: number,
   setUserChannels: any,
-  setPublic: any
+  setPublic: any,
+  socket: any
 ) {
   await axios
     .post(
@@ -51,6 +52,7 @@ export async function removeChannel(
       }
     )
     .then((res) => {
+      socket?.emit("leaveRoom", { chatRoom: channelID });
       getChannels(setUserChannels, setPublic);
     })
     .catch((error) => {
@@ -138,6 +140,30 @@ export async function isAdminRequest(chatRoom: number, username: string) {
     return isAdmin;
   }
   return false;
+}
+
+export async function giveAdmin(chatRoom: number, username: string) {
+  console.log(username);
+  console.log(chatRoom);
+  if (chatRoom && username) {
+    await axios
+      .post(
+        "http://localhost:3030/chat/give-admin",
+        {
+          chatroom: chatRoom,
+          username: username,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `bearer ${Cookies.get("jwtToken")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log("RESPONSE FROM GIVE : " + res.data);
+      });
+  }
 }
 
 export async function getChatRequest(

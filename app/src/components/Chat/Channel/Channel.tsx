@@ -37,7 +37,12 @@ const Channel = (props: Channel_) => {
           className={styles["leave-icon"]}
           icon={faCircleXmark}
           onClick={() => {
-            removeChannel(props.id, props.setUserChannels, props.setPublic);
+            removeChannel(
+              props.id,
+              props.setUserChannels,
+              props.setPublic,
+              props.socket
+            );
             props.setRoomID(0);
           }}
         ></FontAwesomeIcon>
