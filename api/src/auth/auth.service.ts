@@ -77,13 +77,9 @@ export class AuthService {
     return decryptedSecret;
   }
 
-  genVerifiedToken(value: Boolean) {
-    const payload = { verified: value };
-    const jwtToken = this.jwtService.sign(payload, {
-      secret: process.env.JWT_SECRET_KEY,
-    });
-
-    return jwtToken;
+  genVerifiedToken(value: string) {
+    const cipheredCookie = this.cipherSecret(value);
+    return cipheredCookie;
   }
 
   generateJwtToken(req: Request) {

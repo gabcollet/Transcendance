@@ -35,7 +35,7 @@ const TwoFAQRCode = () => {
         </p>
       </div>
       <div style={{ textAlign: "center" }}>
-        <img src={qrcode} style={{ display: "flex", margin: "auto" }} />
+        <img src={qrcode} style={{ display: "flex", margin: "auto" }} alt="" />
       </div>
       <div style={{ textAlign: "center", paddingTop: "30px" }}>
         <button

@@ -1,6 +1,5 @@
 import styles from "./Login.module.css";
 import { FC, useState } from "react";
-import Cookies from "js-cookie";
 
 const Login: FC<{ onChangeBg: (newClassName: string) => void }> = (props) => {
   const [isClicked, setIsClicked] = useState(false);
@@ -34,8 +33,6 @@ const Login: FC<{ onChangeBg: (newClassName: string) => void }> = (props) => {
     "&state=" +
     genRandStr(12);
 
-  Cookies.set("verified", "UNSET", { httpOnly: false, sameSite: "strict" });
-  Cookies.set("jwtToken", "UNSET", { httpOnly: false, sameSite: "strict" });
   return !isClicked ? (
     <div className={styles["login-container"]}>
       <button className={styles["login-btn"]} onClick={login42Handler}>
