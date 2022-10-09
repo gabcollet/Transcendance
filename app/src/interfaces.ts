@@ -5,6 +5,10 @@ import { Settings } from "http2";
 
 export interface Username_ {
   username: string;
+  member: boolean;
+  admin: boolean;
+  setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+  channelTrigger: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface ChatChannels_ {
@@ -35,6 +39,7 @@ export interface Channel_ {
   setSocket: React.Dispatch<React.SetStateAction<Socket<any, any> | undefined>>;
   setPasswordTrigger: React.Dispatch<React.SetStateAction<boolean>>;
   setPasswordID: React.Dispatch<React.SetStateAction<number>>;
+  isDM: boolean;
 }
 
 export interface ChannelDB_ {
@@ -121,4 +126,13 @@ export interface ChatFriendList_ {
   friends: string[];
   setFriends: React.Dispatch<React.SetStateAction<string[]>>;
   username: string;
+  setRoomId: React.Dispatch<React.SetStateAction<number>>;
+  channelTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface UserPopup_ {
+  trigger: boolean;
+  setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+  username: string;
+  isAdmin: boolean;
 }

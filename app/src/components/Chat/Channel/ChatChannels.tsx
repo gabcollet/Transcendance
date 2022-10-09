@@ -16,7 +16,6 @@ const ChatChannels = (props: ChatChannels_) => {
         <Channel
           title={object.chatroom.channelName}
           id={object.chatroom.id}
-          key={index}
           joined={true}
           setUserChannels={props.setUserChannels}
           setPublic={props.setPublic}
@@ -26,6 +25,8 @@ const ChatChannels = (props: ChatChannels_) => {
           socket={props.socket}
           setPasswordTrigger={setPopPassword}
           setPasswordID={setPasswordID}
+          key={index}
+          isDM={object.chatroom.isDM}
         ></Channel>
       );
     });
@@ -49,6 +50,7 @@ const ChatChannels = (props: ChatChannels_) => {
             key={index}
             setPasswordTrigger={setPopPassword}
             setPasswordID={setPasswordID}
+            isDM={false}
           ></Channel>
         </div>
       );

@@ -103,7 +103,30 @@ export class ChatController {
   @UseGuards(JwtAuthGuard)
   @Get('friends')
   async friendList(@Req() request: Request) {
-    let list = await this.chatService.getFriendList(request.user.toString());
+    const list = await this.chatService.getFriendList(request.user.toString());
     return list;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('is-admin')
+  async isAdmin(@Query() query) {
+    const confirmation = await this.chatService.getAdmin(
+      query.username,
+      Number(query.id),
+    );
+    return confirmation;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('dm')
+  async dmRequest(@Req() req, @Query() query) {
+    const user = req.user.toString();
+    const exist = await this.chatService.getDmId(user, query.target);
+    if (!exist) {
+      //create and join if dm doesnt exist
+      const response = await this.chatService.createDm(user, query.target);
+      return response;
+    }
+    return exist.id;
   }
 }
