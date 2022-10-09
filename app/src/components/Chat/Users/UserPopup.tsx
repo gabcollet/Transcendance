@@ -13,29 +13,15 @@ import { isAdminRequest } from "../ChatUtils";
 import { giveAdmin } from "../ChatUtils";
 
 const UserPopup = (props: UserPopup_) => {
-  let adminComponent = <></>;
+  const [adminComponent, setAdminComponent] = useState(<></>);
   const handleExit = () => {
     props.setTrigger(false);
   };
   useEffect(() => {
     isAdminRequest(props.currentRoom, props.username).then((res) => {
-      console.log("USER : " + props.username + "ADMIN STATUS = " + res);
-    });
-  }, []);
-  const popup = (
-    <div className={styles["addpop-wrap"]}>
-      <div className={styles["addpop-in-user"]}>
-        <FontAwesomeIcon
-          className={styles["exit"]}
-          icon={faCircleXmark}
-          onClick={handleExit}
-        ></FontAwesomeIcon>
-        <div className={styles["user-info"]}>
-          <UserImage
-            className={styles["chatPicture"]}
-            username={props.username}
-          />
-          <h4 className={styles["profile-name"]}>{props.username}</h4>
+      console.log(res);
+      if (res === false) {
+        setAdminComponent(
           <div className={styles["admin-wrap"]}>
             <div className={styles["give-wrap"]}>
               <p className={styles["admin-title"]}>Grant Admin</p>
@@ -60,6 +46,31 @@ const UserPopup = (props: UserPopup_) => {
               <button className={styles["timeout"]}>1W</button>
             </div>
           </div>
+        );
+      } else {
+        setAdminComponent(
+          <div className={styles["admin-wrap"]}>
+            <p className={styles["restricted"]}>Restricted: Admin</p>
+          </div>
+        );
+      }
+    });
+  }, [props.trigger]);
+  const popup = (
+    <div className={styles["addpop-wrap"]}>
+      <div className={styles["addpop-in-user"]}>
+        <FontAwesomeIcon
+          className={styles["exit"]}
+          icon={faCircleXmark}
+          onClick={handleExit}
+        ></FontAwesomeIcon>
+        <div className={styles["user-info"]}>
+          <UserImage
+            className={styles["chatPicture"]}
+            username={props.username}
+          />
+          <h4 className={styles["profile-name"]}>{props.username}</h4>
+          {adminComponent}
         </div>
         <div className={styles["action-bar"]}></div>
       </div>

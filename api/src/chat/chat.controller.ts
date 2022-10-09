@@ -114,6 +114,7 @@ export class ChatController {
       query.username,
       Number(query.id),
     );
+    this.logger.debug('IS ADMIN = ', confirmation);
     return confirmation;
   }
 
