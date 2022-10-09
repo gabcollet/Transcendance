@@ -34,7 +34,7 @@ const Login: FC<{ onChangeBg: (newClassName: string) => void }> = (props) => {
     "&state=" +
     genRandStr(12);
 
-  Cookies.set("verified", "");
+  Cookies.set("jwtToken", "");
 
   return !isClicked ? (
     <div className={styles["login-container"]}>

@@ -38,19 +38,29 @@ export class AuthController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const jwtToken = this.authService.generateJwtToken(req);
+    const user = req.user['username'];
+    const userID = req.user['id'];
 
-    //* Add the token to browser cookies
-    //! httpOnly: true makes the cookie unaccessible from the Frontend.
-    res.cookie('jwtToken', jwtToken, { httpOnly: false });
+    const username = await this.authService.cipher(user);
+    res.cookie('username', username.content, {
+      httpOnly: true,
+    });
+    res.cookie('usernameiv', username.iv, { httpOnly: true });
 
     if (req.user['twoFAEnabled'] === false) {
-      res.cookie('verified', 'true', { httpOnly: false });
+      const jwtToken = this.authService.generateJwtToken(user, userID);
+      res.cookie('jwtToken', jwtToken, { httpOnly: false });
       res.status(301).redirect('http://localhost:3000/Menu');
     } else {
       req.user['twoFASecret']
-        ? res.status(301).redirect('http://localhost:3000/TwoFA/verify')
-        : res.status(301).redirect('http://localhost:3000/TwoFA');
+        ? res
+            .status(301)
+            .clearCookie('jwtToken')
+            .redirect('http://localhost:3000/TwoFA/verify')
+        : res
+            .status(301)
+            .clearCookie('jwtToken')
+            .redirect('http://localhost:3000/TwoFA');
     }
   }
 
@@ -60,31 +70,45 @@ export class AuthController {
     return this.authService.toggleTwoFA(req.cookies['jwtToken']);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get('TwoFA/pair')
-  async TwoFA_QR_Code(@Req() req: Request) {
-    const jwtToken = this.jwtService.decode(req.cookies['jwtToken']);
-    const username = jwtToken['username'];
+  async TwoFA_QR_Code(@Req() req: Request, @Res() res: Response) {
+    const username = this.authService.decipher(
+      req.cookies['username'],
+      process.env.CIPHER_SECRET,
+      req.cookies['usernameiv'],
+    );
 
     //* Generates a secret for the Authenticator App and updates the user in the DB with the secret
     const secret = await this.authService.genTwoFASecret(username);
 
     // //* Generates a Google Authenticator compatible qrcode for the user to scan
     const img = await this.authService.genQRCode(secret.otpauth_url);
+
+    res.clearCookie('jwtToken').json(img);
     return img;
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Post('TwoFA/verify')
   async verify2FA(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
     const pin = req.body['pin'];
-    const verified = await this.authService.twoFAVerify(
-      req.cookies['jwtToken'],
-      pin,
+
+    const username = this.authService.decipher(
+      req.cookies['username'],
+      process.env.CIPHER_SECRET,
+      req.cookies['usernameiv'],
     );
+
+    const verified = await this.authService.twoFAVerify(username, pin);
+
+    if (verified === true) {
+      const jwtToken = this.authService.generateJwtToken(username);
+      res.cookie('jwtToken', jwtToken, { httpOnly: false });
+    }
 
     return verified;
   }

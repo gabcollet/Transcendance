@@ -23,7 +23,7 @@ const TwoFAVerify = () => {
       )
       .then((res) => {
         if (res.data === true) {
-          Cookies.set("verified", "true", { httpOnly: false });
+          Cookies.set("verified", res.data, { httpOnly: false });
           setVerified(res.data);
         }
         if (res.data === false) setError("Wrong Pin Code, Try Again!");
