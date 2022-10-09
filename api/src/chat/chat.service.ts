@@ -78,6 +78,20 @@ export class ChatService {
   ) {
     const room = await this.getChannel(channelID);
     const user = await this.getUser(username);
+    if (!room || !user) return false;
+    const restriction = await this.prisma.restricted.findUnique({
+      where: {
+        restrictionRoomId_restrictionUserId: {
+          restrictionRoomId: room.id,
+          restrictionUserId: user.id,
+        },
+      },
+    });
+    this.logger.log(restriction);
+    if (restriction) {
+      this.logger.log('USER ' + user.username + ' IS BANNED');
+      return false;
+    }
     if (room.protected === true && authorized === false) {
       return false;
     }
@@ -101,6 +115,7 @@ export class ChatService {
         user: {
           id: user.id,
         },
+        joined: true,
       },
       include: {
         chatroom: true,
@@ -110,20 +125,15 @@ export class ChatService {
   }
 
   //https://www.prisma.io/docs/concepts/components/prisma-client/relation-queries#disconnect-a-related-record
-  async removeChannel(req: Request) {
-    const user = await this.getUser(req.user.toString());
-    const relation = await this.prisma.userChatroom.deleteMany({
+  async removeChannel(roomId: number, username: string) {
+    const user = await this.getUser(username);
+    if (!user) return false;
+    const relation = await this.prisma.userChatroom.delete({
       where: {
-        AND: [
-          {
-            chatroom: {
-              id: req.body.value,
-            },
-            user: {
-              id: user.id,
-            },
-          },
-        ],
+        chatroomId_userId: {
+          chatroomId: roomId,
+          userId: user.id,
+        },
       },
     });
     return relation;
@@ -318,15 +328,41 @@ export class ChatService {
       },
     });
     if (!user_chatroom) return false;
-    const restrict = await this.prisma.userChatroom.update({
+    const already = await this.prisma.restricted.findUnique({
+      where: {
+        restrictionRoomId_restrictionUserId: {
+          restrictionRoomId: user_chatroom.chatroomId,
+          restrictionUserId: user.id,
+        },
+      },
+    });
+    if (already) {
+      this.logger.log('USER ALREADY BANNED');
+      return false;
+    }
+    const restrict = await this.prisma.restricted.create({
+      data: {
+        restrictionRoomId: chatroomId,
+        restrictionUserId: user.id,
+        type: type,
+        timer: time,
+      },
+    });
+    if (type === 'ban') {
+      const banning = this.handleBan(user.id, chatroomId);
+    }
+    return true;
+  }
+  async handleBan(targetId: number, chatroomId: number) {
+    const user_chatroom = await this.prisma.userChatroom.update({
       where: {
         chatroomId_userId: {
-          userId: user.id,
+          userId: targetId,
           chatroomId: chatroomId,
         },
       },
       data: {
-        banned: true,
+        joined: false,
       },
     });
   }

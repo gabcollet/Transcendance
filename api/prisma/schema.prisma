@@ -103,7 +103,7 @@ model Message {
 }
 
 model UserChatroom {
-    chatroom   Chatroom @relation(fields: [chatroomId], references: [id], onDelete: NoAction)
+    chatroom   Chatroom @relation(fields: [chatroomId], references: [id], onDelete: Cascade)
     chatroomId Int
 
     user   User @relation(fields: [userId], references: [id])
@@ -124,15 +124,16 @@ model UserChatroom {
 model Restricted {
     id Int @id @default(autoincrement())
 
-    userchatroomId         UserChatroom @relation(fields: [userChatroomChatroomId, userChatroomUserId], references: [chatroomId, userId])
-    userChatroomChatroomId Int          @unique
-    userChatroomUserId     Int          @unique
-    createdAt              DateTime     @default(now())
+    restriction       UserChatroom @relation(fields: [restrictionRoomId, restrictionUserId], references: [chatroomId, userId], onDelete: Cascade)
+    restrictionRoomId Int          @unique
+    restrictionUserId Int          @unique
+    createdAt         DateTime     @default(now())
 
     type  String
     timer Int
 
-    @@unique([userChatroomChatroomId, userChatroomUserId])
+    @@unique([restrictionRoomId, restrictionUserId])
+    @@map("restricted")
 }
 
 model Chatroom {

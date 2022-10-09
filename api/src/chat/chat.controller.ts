@@ -68,7 +68,14 @@ export class ChatController {
   @UseGuards(JwtAuthGuard)
   @Post('delete-channel')
   async removeChannelReq(@Req() request: Request) {
-    const confirmation = await this.chatService.removeChannel(request);
+    if (!request.user || !request.body.value) {
+      return false;
+    }
+    this.logger.debug(request.body.value, request.user.toString());
+    const confirmation = await this.chatService.removeChannel(
+      request.body.value,
+      request.user.toString(),
+    );
     return confirmation;
   }
 
@@ -155,7 +162,12 @@ export class ChatController {
         'ban',
         time,
       );
+      if (confirm === false) {
+        return false;
+      }
     }
+    this.logger.debug('USER BANNED');
+    return true;
   }
 
   @UseGuards(JwtAuthGuard)
