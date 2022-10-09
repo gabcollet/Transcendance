@@ -22,7 +22,10 @@ const TwoFAVerify = () => {
         }
       )
       .then((res) => {
-        setVerified(res.data);
+        if (res.data === true) {
+          Cookies.set("verified", "true", { httpOnly: false });
+          setVerified(res.data);
+        }
         if (res.data === false) setError("Wrong Pin Code, Try Again!");
       })
       .catch((err) => console.log(err));
@@ -34,7 +37,7 @@ const TwoFAVerify = () => {
   };
 
   useEffect(() => {
-    if (pin != "") verifyPin();
+    if (pin !== "") verifyPin();
   }, []);
 
   return verified ? (

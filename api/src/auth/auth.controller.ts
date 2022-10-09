@@ -45,6 +45,7 @@ export class AuthController {
     res.cookie('jwtToken', jwtToken, { httpOnly: false });
 
     if (req.user['twoFAEnabled'] === false) {
+      res.cookie('verified', 'true', { httpOnly: false });
       res.status(301).redirect('http://localhost:3000/Menu');
     } else {
       req.user['twoFASecret']

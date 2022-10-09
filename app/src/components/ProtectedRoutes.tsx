@@ -3,9 +3,9 @@ import Cookies from "js-cookie";
 
 const ProtectedRoutes = () => {
   const isVerified = () => {
-    const token = Cookies.get("jwtToken");
+    const verified = Cookies.get("verified");
 
-    if (token) return true;
+    if (verified === "true") return true;
     else return false;
   };
 
