@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { socket } from "../Pages/PongRoom";
 
@@ -11,13 +11,9 @@ const TwoFAVerify = () => {
   const [error, setError] = useState("");
 
   const verifyPin = useCallback(async () => {
-    console.log(pin);
-
     const payload = await axios.post(
       "http://localhost:3030/auth/TwoFA/verify",
-      {
-        pin: pin,
-      },
+      { pin: pin },
       { withCredentials: true }
     );
 
@@ -26,18 +22,19 @@ const TwoFAVerify = () => {
 
     if (payload.data["verified"] === true)
       socket.emit("online", payload.data["username"]);
+
     setVerified(payload.data["verified"]);
   }, [pin]);
 
   const handleSubmit = useCallback(
-    (e: any) => {
+    (e: React.BaseSyntheticEvent) => {
       e.preventDefault();
       verifyPin();
     },
     [verifyPin]
   );
 
-  const handleChange = useCallback((e: any) => {
+  const handleChange = useCallback((e: React.BaseSyntheticEvent) => {
     setPin(e.target.value);
   }, []);
 
