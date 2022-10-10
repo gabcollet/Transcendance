@@ -398,6 +398,18 @@ export class UsersService {
     });
   }
 
+  async getBlockedUsers(username: string) {
+    const blockedUsers = await this.prisma.user.findUnique({
+      where: {
+        username: username,
+      },
+      select: {
+        blockedUsernames: true,
+      },
+    });
+    return blockedUsers;
+  }
+
   /*
    ** TEST FUNCTIONS
    */

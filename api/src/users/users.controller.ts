@@ -185,6 +185,12 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get(':name/blockedusers')
+  async getBlockedUsers(@Param() params) {
+    return await this.usersService.getBlockedUsers(params.name);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':name')
   async findByUsername(@Param() params) {
     return await this.usersService.findByUsername(params.name);
