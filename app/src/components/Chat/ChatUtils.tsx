@@ -65,7 +65,7 @@ export async function joinChannel(
   setUserChannels: any,
   setPublic: any
 ) {
-  let ret_value = true;
+  let ret_value = "";
   await axios
     .post(
       "http://localhost:3030/chat/join-channel",
@@ -80,12 +80,10 @@ export async function joinChannel(
       }
     )
     .then((res) => {
-      if (res.data === true) {
+      ret_value = res.data;
+      if (res.data === "connected") {
         getChannels(setUserChannels, setPublic);
         console.log("Channel joined");
-      }
-      if (res.data === false) {
-        ret_value = false;
       }
     })
     .catch((error) => {

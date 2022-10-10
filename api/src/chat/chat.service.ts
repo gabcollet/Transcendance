@@ -78,14 +78,14 @@ export class ChatService {
   ) {
     const room = await this.getChannel(channelID);
     const user = await this.getUser(username);
-    if (!room || !user) return false;
+    if (!room || !user) return 'error';
     const restriction = await this.checkRestriction(user.id, channelID, 'ban');
     if (restriction === true) {
       this.logger.log('USER ' + user.username + ' IS BANNED');
-      return false;
+      return 'banned';
     }
     if (room.protected === true && authorized === false) {
-      return false;
+      return 'protected';
     }
     const joined = await this.prisma.userChatroom.findUnique({
       where: {
@@ -108,7 +108,7 @@ export class ChatService {
           joined: true,
         },
       });
-      return true;
+      return 'connected';
     }
     const connected = await this.prisma.userChatroom.create({
       data: {
@@ -120,7 +120,7 @@ export class ChatService {
       },
     });
     this.logger.log(username + ' joined the channel ' + room.channelName);
-    return true;
+    return 'connected';
   }
 
   async getChannels(req: Request) {
@@ -382,6 +382,7 @@ export class ChatService {
     }
     return true;
   }
+
   async handleBan(targetId: number, chatroomId: number) {
     const user_chatroom = await this.prisma.userChatroom.update({
       where: {
@@ -394,6 +395,7 @@ export class ChatService {
         joined: false,
       },
     });
+    this.logger.log('USER BANNED');
   }
 
   async checkRestriction(userID: number, roomID: number, type: string) {

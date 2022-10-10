@@ -65,9 +65,12 @@ const Channel = (props: Channel_) => {
         onClick={() => {
           joinChannel(props.id, props.setUserChannels, props.setPublic).then(
             (res) => {
-              if (res === false) {
+              if (res === "protected") {
                 props.setPasswordID(props.id);
                 props.setPasswordTrigger(true);
+              }
+              if (res === "banned") {
+                alert("Banned from channel");
               }
             }
           );

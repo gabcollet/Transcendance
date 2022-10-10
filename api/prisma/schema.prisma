@@ -90,10 +90,10 @@ model Friendship {
 model Message {
     id Int @id @unique @default(autoincrement())
 
-    author   User @relation(fields: [authorID], references: [id])
+    author   User @relation(fields: [authorID], references: [id], onDelete: Cascade)
     authorID Int
 
-    room   Chatroom @relation(fields: [roomId], references: [id])
+    room   Chatroom @relation(fields: [roomId], references: [id], onDelete: Cascade)
     roomId Int
 
     messageText String
@@ -106,7 +106,7 @@ model UserChatroom {
     chatroom   Chatroom @relation(fields: [chatroomId], references: [id], onDelete: Cascade)
     chatroomId Int
 
-    user   User @relation(fields: [userId], references: [id])
+    user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId Int
 
     joined  Boolean @default(false)
