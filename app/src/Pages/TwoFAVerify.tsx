@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import Cookies from "js-cookie";
 import { Navigate } from "react-router-dom";
 import "../Pages/PongRoom.css";
@@ -9,39 +9,35 @@ const TwoFAVerify = () => {
   const [pin, setPin] = useState("");
   const [error, setError] = useState("");
 
-  async function verifyPin() {
-    axios
-      .post(
-        "http://localhost:3030/auth/TwoFA/verify",
-        { pin: pin },
-        {
-          withCredentials: true,
-          headers: {
-            Authorization: `bearer ${Cookies.get("jwtToken")}`,
-          },
-        }
-      )
-      .then((res) => {
-        if (res.data === true) {
-          Cookies.set("verified", res.data, { httpOnly: false });
-          setVerified(res.data);
-        }
-        if (res.data === false) setError("Wrong Pin Code, Try Again!");
-      })
-      .catch((err) => console.log(err));
-  }
+  const verifyPin = useCallback(async () => {
+    console.log(pin);
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    verifyPin();
-  };
+    const payload = await axios.post(
+      "http://localhost:3030/auth/TwoFA/verify",
+      {
+        pin: pin,
+      },
+      { withCredentials: true }
+    );
 
-  useEffect(() => {
-    if (pin !== "") verifyPin();
+    if (payload.data === false) setError("Wrong pin code, Try Again!");
+    setVerified(payload.data);
+  }, [pin]);
+
+  const handleSubmit = useCallback(
+    (e: any) => {
+      e.preventDefault();
+      verifyPin();
+    },
+    [verifyPin]
+  );
+
+  const handleChange = useCallback((e: any) => {
+    setPin(e.target.value);
   }, []);
 
   return verified ? (
-    <Navigate to="/Menu" />
+    <Navigate to="/menu" />
   ) : (
     <div style={{ textAlign: "center" }}>
       <form onSubmit={(e) => handleSubmit(e)}>
@@ -51,8 +47,9 @@ const TwoFAVerify = () => {
           </p>
         </div>
         <input
-          name="pin"
           type="text"
+          name="pin"
+          value={pin}
           style={{
             marginRight: "10px",
             backgroundColor: "#f000",
@@ -64,7 +61,7 @@ const TwoFAVerify = () => {
             outline: "none",
           }}
           placeholder="Enter Pin Code..."
-          onChange={(e) => setPin(e.target.value)}
+          onChange={handleChange}
         />
         <button
           className="button-78"
