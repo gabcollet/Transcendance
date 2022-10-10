@@ -141,6 +141,21 @@ export class ChatController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('is-restricted')
+  async isRestricted(@Query() query) {
+    console.log(query);
+    if (!query.author || !query.chatroom) return false;
+    const user = await this.chatService.getUser(query.author);
+    if (!user) return false;
+    const status = await this.chatService.checkRestriction(
+      user.id,
+      Number(query.chatroom),
+      'ban',
+    );
+    return status;
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post('ban')
   async banUser(@Req() req) {
     const username = req.user.toString();
@@ -154,6 +169,7 @@ export class ChatController {
       username,
       target,
       chatroom,
+      true,
     );
     if (banRight === true) {
       const confirm = await this.chatService.giveRestriction(

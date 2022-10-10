@@ -152,6 +152,8 @@ export class ChatService {
       },
       data: {
         joined: false,
+        isOwner: false,
+        isAdmin: false,
       },
     });
     // const relation = await this.prisma.userChatroom.delete({
@@ -322,11 +324,18 @@ export class ChatService {
     return channel.id;
   }
 
-  async validateRestriction(user: string, target: string, chatroom: number) {
-    const userAdmin = await this.getAdmin(user, chatroom);
-    if (userAdmin === false) {
-      this.logger.debug('USER NOT ADMIN');
-      return false;
+  async validateRestriction(
+    user: string,
+    target: string,
+    chatroom: number,
+    check: boolean,
+  ) {
+    if (check === true) {
+      const userAdmin = await this.getAdmin(user, chatroom);
+      if (userAdmin === false) {
+        this.logger.debug('USER NOT ADMIN');
+        return false;
+      }
     }
     const targetAdmin = await this.getAdmin(target, chatroom);
     if (targetAdmin === true) {

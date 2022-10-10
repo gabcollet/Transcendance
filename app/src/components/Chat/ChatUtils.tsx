@@ -264,3 +264,21 @@ export async function clickChannel(
   socket?.on("joined", (message: any) => {});
   setRoom(newID);
 }
+
+export async function isMutedBlocked(author: string, roomID: number) {
+  const result = await axios.get("http://localhost:3030/chat/is-restricted", {
+    params: {
+      author: author,
+      chatroom: roomID,
+    },
+    withCredentials: true,
+    headers: {
+      Authorization: `bearer ${Cookies.get("jwtToken")}`,
+    },
+  });
+  if (result.data === true) {
+    return true;
+  } else {
+    return false;
+  }
+}
