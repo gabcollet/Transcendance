@@ -4,30 +4,43 @@ import AddChannel from "./AddChannel";
 import { ChatChannels_, ChannelDB_ } from "../../../interfaces";
 import { useState } from "react";
 import PasswordPopup from "./PasswordPopup";
+import OwnerPopup from "./OwnerPopup";
+import { channel } from "diagnostics_channel";
 
 const ChatChannels = (props: ChatChannels_) => {
   let list: JSX.Element;
   let publicList: JSX.Element;
   const [popPassword, setPopPassword] = useState(false);
   const [passwordID, setPasswordID] = useState(0);
+  const [ownerTrigger, setOwnerTrigger] = useState(false);
+
   if (typeof props.userChannels == "object") {
     list = props.userChannels.map((object: ChannelDB_, index: number) => {
       return (
-        <Channel
-          title={object.chatroom.channelName}
-          id={object.chatroom.id}
-          joined={true}
-          setUserChannels={props.setUserChannels}
-          setPublic={props.setPublic}
-          setRoomID={props.setRoomID}
-          currentID={props.currentID}
-          setSocket={props.setSocket}
-          socket={props.socket}
-          setPasswordTrigger={setPopPassword}
-          setPasswordID={setPasswordID}
-          key={index}
-          isDM={object.chatroom.isDM}
-        ></Channel>
+        <div key={index}>
+          <OwnerPopup
+            trigger={ownerTrigger}
+            setTrigger={setOwnerTrigger}
+            channelID={object.chatroom.id}
+          ></OwnerPopup>
+          <Channel
+            title={object.chatroom.channelName}
+            id={object.chatroom.id}
+            joined={true}
+            setUserChannels={props.setUserChannels}
+            setPublic={props.setPublic}
+            setRoomID={props.setRoomID}
+            currentID={props.currentID}
+            setSocket={props.setSocket}
+            socket={props.socket}
+            setPasswordTrigger={setPopPassword}
+            setPasswordID={setPasswordID}
+            key={index}
+            isDM={object.chatroom.isDM}
+            ownerTrigger={ownerTrigger}
+            setOwnerTrigger={setOwnerTrigger}
+          ></Channel>
+        </div>
       );
     });
   } else {
@@ -51,6 +64,8 @@ const ChatChannels = (props: ChatChannels_) => {
             setPasswordTrigger={setPopPassword}
             setPasswordID={setPasswordID}
             isDM={false}
+            ownerTrigger={ownerTrigger}
+            setOwnerTrigger={setOwnerTrigger}
           ></Channel>
         </div>
       );

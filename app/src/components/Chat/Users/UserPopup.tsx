@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { UserImage } from "../../Profile/UserImage";
 import { faShieldHalved } from "@fortawesome/free-solid-svg-icons";
-import { isAdminRequest } from "../ChatUtils";
+import { getChatMembers, isAdminRequest } from "../ChatUtils";
 import { giveAdmin } from "../ChatUtils";
 import { restrictUser } from "../ChatUtils";
 
@@ -37,24 +37,45 @@ const UserPopup = (props: UserPopup_) => {
               <p className={styles["admin-title-ban"]}>Ban User</p>
               <button
                 className={styles["timeout"]}
-                onClick={() => {
-                  restrictUser(props.username, props.currentRoom, 10, "ban");
+                onClick={async () => {
+                  const restricted = await restrictUser(
+                    props.username,
+                    props.currentRoom,
+                    10,
+                    "ban"
+                  );
+                  const members = await getChatMembers(props.currentRoom);
+                  props.setMembers(members);
                 }}
               >
                 10M
               </button>
               <button
                 className={styles["timeout"]}
-                onClick={() => {
-                  restrictUser(props.username, props.currentRoom, 24, "ban");
+                onClick={async () => {
+                  const restricted = await restrictUser(
+                    props.username,
+                    props.currentRoom,
+                    24,
+                    "ban"
+                  );
+                  const members = await getChatMembers(props.currentRoom);
+                  props.setMembers(members);
                 }}
               >
                 1J
               </button>
               <button
                 className={styles["timeout"]}
-                onClick={() => {
-                  restrictUser(props.username, props.currentRoom, 7, "ban");
+                onClick={async () => {
+                  const restricted = await restrictUser(
+                    props.username,
+                    props.currentRoom,
+                    7,
+                    "ban"
+                  );
+                  const members = await getChatMembers(props.currentRoom);
+                  props.setMembers(members);
                 }}
               >
                 1W

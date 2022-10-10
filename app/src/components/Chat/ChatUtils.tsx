@@ -283,3 +283,22 @@ export async function isMutedBlocked(author: string, roomID: number) {
     return false;
   }
 }
+
+export async function isOwner(
+  roomID: number,
+  setOwner: React.Dispatch<React.SetStateAction<boolean>>
+) {
+  const ownership = await axios.get("http://localhost:3030/chat/is-owner", {
+    params: {
+      chatroom: roomID,
+    },
+    withCredentials: true,
+    headers: {
+      Authorization: `bearer ${Cookies.get("jwtToken")}`,
+    },
+  });
+  setOwner(ownership.data);
+  return ownership.data;
+}
+
+export async function invitePlay(username: string) {}

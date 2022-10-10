@@ -35,6 +35,8 @@ const Chat = (props: Chat_) => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [channelsTrigger, setChannelsTrigger] = useState<boolean>(false);
   const [blockedUsers, setBlockedUsers] = useState(Object);
+  const [ownerTrigger, setOwnerTrigger] = useState<boolean>(false);
+
   const location = useLocation();
 
   let otherName: string;
@@ -159,6 +161,7 @@ const Chat = (props: Chat_) => {
           members={members}
           isAdmin={isAdmin}
           channelTrigger={setChannelsTrigger}
+          setMembers={setMembers}
         ></Members>
         <ChatFriendsList
           friends={friends}

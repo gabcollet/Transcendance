@@ -13,6 +13,7 @@ const Members = (props: {
   members: string[];
   isAdmin: boolean;
   channelTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+  setMembers: React.Dispatch<React.SetStateAction<string[]>>;
 }) => {
   const profileName = useContext(ProfileContext);
   const [members, setMembers] = useState<string[]>([]);
@@ -21,6 +22,7 @@ const Members = (props: {
   const [isSelectAdmin, setIsSelectAdmin] = useState<boolean>(false);
   let list = [<></>];
   let admin: boolean;
+
   list = props.members.map((member: any, index: number) => {
     return (
       <div
@@ -55,6 +57,7 @@ const Members = (props: {
         username={currentMember}
         isAdmin={props.isAdmin}
         currentRoom={props.id}
+        setMembers={props.setMembers}
       ></UserPopup>
     </div>
   );

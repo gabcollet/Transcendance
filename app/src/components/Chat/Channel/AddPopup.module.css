@@ -9,6 +9,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 10;
 }
 
 .title {
@@ -17,7 +18,7 @@
   position: relative;
   align-self: center;
   justify-self: center;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .user-input {
@@ -101,6 +102,24 @@
   cursor: pointer;
 }
 
+.remove-password {
+  display: flex;
+  position: relative;
+  background-color: #ff005c;
+  border-radius: 10px;
+  padding: 10px;
+  color: #f3efff;
+  border: none;
+  cursor: pointer;
+}
+
+.remove-password-wrap {
+  display: flex;
+  align-self: center;
+  position: relative;
+  margin-bottom: 15px;
+  margin-top: 0px;
+}
 .action-bar {
   display: flex;
 }
