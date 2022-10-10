@@ -24,7 +24,6 @@ const Members = (props: {
   let admin: boolean;
 
   list = props.members.map((member: any, index: number) => {
-    console.log(member);
     return (
       <div
         key={index}

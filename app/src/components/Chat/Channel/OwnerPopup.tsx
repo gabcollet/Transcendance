@@ -21,24 +21,27 @@ const OwnerPopup = (props: OwnerPopup_) => {
           icon={faCircleXmark}
           onClick={handleExit}
         ></FontAwesomeIcon>
-        <div className={styles["title"]}>Enter Password</div>
+        <div className={styles["title"]}>Channel Settings</div>
         <div className={styles["error-wrap"]}>{errorMsg}</div>
-        <div className={styles["user-input"]}>
-          <div className={styles["user-input"]}>
-            <p>Channel Password:</p>
-            <input
-              value={password}
-              type="password"
-              className={styles["password"]}
-              onChange={(event) => {
-                setPassword(event.target.value);
-              }}
-            ></input>
-          </div>
-          <button onClick={() => {}} className={styles["close"]}>
-            Send
+        <div className={styles["remove-password-wrap"]}>
+          <button onClick={() => {}} className={styles["remove-password"]}>
+            Remove Password
           </button>
         </div>
+        <div className={styles["user-input"]}>
+          <p>Change Password:</p>
+          <input
+            value={password}
+            type="password"
+            className={styles["password"]}
+            onChange={(event) => {
+              setPassword(event.target.value);
+            }}
+          ></input>
+        </div>
+        <button onClick={() => {}} className={styles["close"]}>
+          Send
+        </button>
       </div>
     </div>
   );

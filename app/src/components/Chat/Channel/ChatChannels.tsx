@@ -17,7 +17,7 @@ const ChatChannels = (props: ChatChannels_) => {
   if (typeof props.userChannels == "object") {
     list = props.userChannels.map((object: ChannelDB_, index: number) => {
       return (
-        <div>
+        <div key={index}>
           <OwnerPopup
             trigger={ownerTrigger}
             setTrigger={setOwnerTrigger}

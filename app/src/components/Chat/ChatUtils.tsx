@@ -297,7 +297,6 @@ export async function isOwner(
       Authorization: `bearer ${Cookies.get("jwtToken")}`,
     },
   });
-  console.log(ownership.data);
   setOwner(ownership.data);
   return ownership.data;
 }
