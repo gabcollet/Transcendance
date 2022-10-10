@@ -35,7 +35,6 @@ const Chat = (props: Chat_) => {
   const [channelsTrigger, setChannelsTrigger] = useState<boolean>(false);
   const location = useLocation();
 
-  //TO DO -> automaticly open to DM if otherName is not empty
   let otherName: string;
   if (location.state) {
     otherName = location.state.otherName;
