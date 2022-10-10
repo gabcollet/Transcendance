@@ -65,7 +65,7 @@ const UserPopup = (props: UserPopup_) => {
               <button
                 className={styles["timeout"]}
                 onClick={() => {
-                  restrictUser(props.username, props.currentRoom, 10, "ban");
+                  restrictUser(props.username, props.currentRoom, 10, "mute");
                 }}
               >
                 10M
@@ -73,7 +73,7 @@ const UserPopup = (props: UserPopup_) => {
               <button
                 className={styles["timeout"]}
                 onClick={() => {
-                  restrictUser(props.username, props.currentRoom, 7, "ban");
+                  restrictUser(props.username, props.currentRoom, 7, "mute");
                 }}
               >
                 1J
@@ -81,7 +81,7 @@ const UserPopup = (props: UserPopup_) => {
               <button
                 className={styles["timeout"]}
                 onClick={() => {
-                  restrictUser(props.username, props.currentRoom, 24, "ban");
+                  restrictUser(props.username, props.currentRoom, 24, "mute");
                 }}
               >
                 1W
