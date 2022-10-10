@@ -136,4 +136,5 @@ export interface UserPopup_ {
   username: string;
   isAdmin: boolean;
   currentRoom: number;
+  setMembers: React.Dispatch<React.SetStateAction<string[]>>;
 }

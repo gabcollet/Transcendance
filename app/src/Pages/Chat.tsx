@@ -131,6 +131,7 @@ const Chat = (props: Chat_) => {
           members={members}
           isAdmin={isAdmin}
           channelTrigger={setChannelsTrigger}
+          setMembers={setMembers}
         ></Members>
         <ChatFriendsList
           friends={friends}
