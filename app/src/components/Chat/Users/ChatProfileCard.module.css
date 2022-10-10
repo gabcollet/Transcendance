@@ -48,3 +48,11 @@
   position: relative;
   width: 100%;
 }
+
+.play-icon {
+  display: flex;
+  position: absolute;
+  color: #01ab78;
+  top: 8px;
+  cursor: pointer;
+}

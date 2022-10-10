@@ -300,3 +300,5 @@ export async function isOwner(
   setOwner(ownership.data);
   return ownership.data;
 }
+
+export async function invitePlay(username: string) {}
