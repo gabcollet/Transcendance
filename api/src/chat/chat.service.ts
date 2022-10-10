@@ -374,10 +374,27 @@ export class ChatService {
         },
       },
     });
+    if (already && already.type === 'mute' && type === 'ban') {
+      const update = await this.prisma.restricted.update({
+        where: {
+          restrictionRoomId_restrictionUserId: {
+            restrictionRoomId: user_chatroom.chatroomId,
+            restrictionUserId: user.id,
+          },
+        },
+        data: {
+          type: 'ban',
+        },
+      });
+      const banning = this.handleBan(user.id, chatroomId);
+      return true;
+    }
     if (already) {
       this.logger.log('USER ALREADY BANNED');
       return false;
     }
+    console.log(chatroomId);
+    console.log(user.id);
     const restrict = await this.prisma.restricted.create({
       data: {
         restrictionRoomId: chatroomId,

@@ -125,8 +125,8 @@ model Restricted {
     id Int @id @default(autoincrement())
 
     restriction       UserChatroom @relation(fields: [restrictionRoomId, restrictionUserId], references: [chatroomId, userId], onDelete: Cascade)
-    restrictionRoomId Int          @unique
-    restrictionUserId Int          @unique
+    restrictionRoomId Int
+    restrictionUserId Int
     createdAt         DateTime     @default(now())
 
     type  String
