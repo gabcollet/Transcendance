@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 import { PasswordPopup_ } from "../../../interfaces";
 import PasswordPopup from "./PasswordPopup";
 import AddPopup from "./AddPopup";
+import { clickChannel } from "../ChatUtils";
+import { click } from "@testing-library/user-event/dist/click";
 
 const Channel = (props: Channel_) => {
   let icon = <></>;
@@ -18,10 +20,7 @@ const Channel = (props: Channel_) => {
   const [boxStyle, setBoxStyle] = useState<string>("channel-box");
   let channelClick = () => {
     if (props.joined === true) {
-      props.socket?.emit("leaveRoom", { chatRoom: props.currentID });
-      props.socket?.emit("joinRoom", { chatRoom: props.id, user: "test" });
-      props.socket?.on("joined", (message: any) => {});
-      props.setRoomID(props.id);
+      clickChannel(props.currentID, props.id, props.setRoomID, props.socket);
     }
   };
   useEffect(() => {
@@ -32,16 +31,20 @@ const Channel = (props: Channel_) => {
     }
   }, [props.currentID, props.id]);
   if (props.joined === true) {
-    icon = (
-      <FontAwesomeIcon
-        className={styles["leave-icon"]}
-        icon={faCircleXmark}
-        onClick={() => {
-          removeChannel(props.id, props.setUserChannels, props.setPublic);
-          props.setRoomID(0);
-        }}
-      ></FontAwesomeIcon>
-    );
+    if (props.isDM === false) {
+      icon = (
+        <FontAwesomeIcon
+          className={styles["leave-icon"]}
+          icon={faCircleXmark}
+          onClick={() => {
+            removeChannel(props.id, props.setUserChannels, props.setPublic);
+            props.setRoomID(0);
+          }}
+        ></FontAwesomeIcon>
+      );
+    } else {
+      icon = <></>;
+    }
     chatIcon = (
       <FontAwesomeIcon
         className={styles["chat-icon"]}

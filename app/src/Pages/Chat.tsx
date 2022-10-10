@@ -8,10 +8,14 @@ import { Chat_ } from "../interfaces";
 import Members from "../components/Chat/Users/Members";
 import { Message_ } from "../interfaces";
 import { AxiosResponse } from "axios";
-import { getChannels, getChatRequest } from "../components/Chat/ChatUtils";
+import {
+  clickChannel,
+  getChannels,
+  getChatRequest,
+  getDM,
+  isAdminRequest,
+} from "../components/Chat/ChatUtils";
 import { Socket, io } from "socket.io-client";
-import axios from "axios";
-import Cookies from "js-cookie";
 import { ProfileContext } from "../App";
 import { useLocation } from "react-router-dom";
 
@@ -26,12 +30,16 @@ const Chat = (props: Chat_) => {
   const [mid, setMid] = useState<JSX.Element>(<></>);
   const [members, setMembers] = useState<string[]>([]);
   const [friends, setFriends] = useState<string[]>([]);
-
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [channelsTrigger, setChannelsTrigger] = useState<boolean>(false);
   const location = useLocation();
 
-  // "otherName" is name of user we want to message
+  //TO DO -> automaticly open to DM if otherName is not empty
+  let otherName: string;
   if (location.state) {
-    const { otherName } = location.state;
+    otherName = location.state.otherName;
+  } else {
+    otherName = "";
   }
 
   const messageListener = (message: Message_) => {
@@ -39,9 +47,18 @@ const Chat = (props: Chat_) => {
   };
 
   useEffect(() => {
+    if (channelsTrigger === true) {
+      getChannels(setChannels, setPublicChannels);
+      setChannelsTrigger(false);
+    }
+  }, [channelsTrigger]);
+
+  useEffect(() => {
     if (roomId !== 0) {
       getChatRequest(setMessages, setMembers, roomId, profileName, setFriends);
-      console.log("Friend list");
+      isAdminRequest(roomId, profileName).then((res) => {
+        setIsAdmin(res);
+      });
     } else {
       setMessages([]);
       setMembers([]);
@@ -49,8 +66,16 @@ const Chat = (props: Chat_) => {
   }, [roomId]);
   useEffect(() => {
     const newSocket = io("localhost:6005");
+    console.log("chat socket connected");
     setSocket(newSocket);
+    if (newSocket && otherName !== "") {
+      getDM(otherName, setChannelsTrigger).then((newID) => {
+        clickChannel(roomId, Number(newID), setRoomId, newSocket);
+        location.state = null;
+      });
+    }
   }, [setSocket]);
+
   const messageWindow = (
     <MessageWindow
       setMessages={setMessages}
@@ -100,11 +125,19 @@ const Chat = (props: Chat_) => {
       </div>
       {mid}
       <div className={styles["right"]}>
-        <Members id={roomId} members={members}></Members>
+        <Members
+          id={roomId}
+          setId={setRoomId}
+          members={members}
+          isAdmin={isAdmin}
+          channelTrigger={setChannelsTrigger}
+        ></Members>
         <ChatFriendsList
           friends={friends}
           setFriends={setFriends}
           username={profileName}
+          setRoomId={setRoomId}
+          channelTrigger={setChannelsTrigger}
         ></ChatFriendsList>
       </div>
     </div>

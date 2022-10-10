@@ -7,7 +7,7 @@ import { from, lastValueFrom } from 'rxjs';
 import { Request } from 'express';
 import { runInThisContext } from 'vm';
 import { connected } from 'process';
-import { authorize } from 'passport';
+import { authorize, use } from 'passport';
 import { AuthService } from 'src/auth/auth.service';
 @Injectable()
 export class ChatService {
@@ -84,6 +84,8 @@ export class ChatService {
         chatroomId: channelID,
         userId: user.id,
         isOwner: creator,
+        isAdmin: creator,
+        joined: true,
       },
     });
     this.logger.log(username + ' joined the channel ' + room.channelName);
@@ -208,5 +210,74 @@ export class ChatService {
   async getFriendList(username: string) {
     let list = await this.userService.getAcceptedFriends(username);
     return list;
+  }
+
+  async getAdmin(username: string, roomID: number) {
+    let isAdmin: boolean;
+    const user = await this.getUser(username);
+    if (user) {
+      const admin = await this.prisma.userChatroom.findFirst({
+        where: {
+          chatroomId: roomID,
+          userId: user.id,
+          isAdmin: true,
+        },
+      });
+      if (admin) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  async giveAdmin(username: string, roomID: number) {
+    const confirm = await this.prisma.userChatroom.updateMany({
+      where: {
+        chatroom: {
+          id: roomID,
+        },
+        user: {
+          username: username,
+        },
+      },
+      data: {
+        isAdmin: true,
+      },
+    });
+    return confirm;
+  }
+
+  async getDmId(target: string, username: string) {
+    const dms = await this.prisma.chatroom.findFirst({
+      where: {
+        isDM: true,
+        users: {
+          some: {
+            user: {
+              username: { in: [username, target] },
+            },
+          },
+        },
+      },
+      include: {
+        users: true,
+      },
+    });
+    return dms;
+  }
+
+  async createDm(target: string, username: string) {
+    const channel = await this.prisma.chatroom.create({
+      data: {
+        channelName: target + ' & ' + username,
+        protected: false,
+        password: '',
+        private: true,
+        isDM: true,
+      },
+    });
+    const join = await this.joinChannel(username, channel.id, false, true);
+    const join2 = await this.joinChannel(target, channel.id, false, true);
+    return channel.id;
   }
 }

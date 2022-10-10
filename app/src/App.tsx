@@ -92,6 +92,10 @@ const App = () => {
                 path="/Profile/config"
                 element={<ProfileConfig username={profileUsername} />}
               />
+              <Route
+                path="/Chat"
+                element={<Chat id={0} userName={profileUsername}></Chat>}
+              />
             </Route>
             <Route path="/Leaderboard" element={<Leaderboard />} />
             {/* <Route
@@ -102,10 +106,6 @@ const App = () => {
                   </div>
                 }
               /> */}
-            <Route
-              path="/Chat"
-              element={<Chat id={0} userName={profileUsername}></Chat>}
-            />
           </Routes>
         </Router>
       </div>
