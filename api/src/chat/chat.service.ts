@@ -79,21 +79,36 @@ export class ChatService {
     const room = await this.getChannel(channelID);
     const user = await this.getUser(username);
     if (!room || !user) return false;
-    const restriction = await this.prisma.restricted.findUnique({
-      where: {
-        restrictionRoomId_restrictionUserId: {
-          restrictionRoomId: room.id,
-          restrictionUserId: user.id,
-        },
-      },
-    });
-    this.logger.log(restriction);
-    if (restriction) {
+    const restriction = await this.checkRestriction(user.id, channelID, 'ban');
+    if (restriction === true) {
       this.logger.log('USER ' + user.username + ' IS BANNED');
       return false;
     }
     if (room.protected === true && authorized === false) {
       return false;
+    }
+    const joined = await this.prisma.userChatroom.findUnique({
+      where: {
+        chatroomId_userId: {
+          userId: user.id,
+          chatroomId: channelID,
+        },
+      },
+    });
+    this.logger.debug('ALREADY EXIST ?', joined);
+    if (joined) {
+      const joining = await this.prisma.userChatroom.update({
+        where: {
+          chatroomId_userId: {
+            userId: user.id,
+            chatroomId: channelID,
+          },
+        },
+        data: {
+          joined: true,
+        },
+      });
+      return true;
     }
     const connected = await this.prisma.userChatroom.create({
       data: {
@@ -128,15 +143,26 @@ export class ChatService {
   async removeChannel(roomId: number, username: string) {
     const user = await this.getUser(username);
     if (!user) return false;
-    const relation = await this.prisma.userChatroom.delete({
+    const relationUpdate = await this.prisma.userChatroom.update({
       where: {
         chatroomId_userId: {
           chatroomId: roomId,
           userId: user.id,
         },
       },
+      data: {
+        joined: false,
+      },
     });
-    return relation;
+    // const relation = await this.prisma.userChatroom.delete({
+    //   where: {
+    //     chatroomId_userId: {
+    //       chatroomId: roomId,
+    //       userId: user.id,
+    //     },
+    //   },
+    // });
+    return relationUpdate;
   }
   async getPublic(req: Request) {
     const user = await this.getUser(req.user.toString());
@@ -149,6 +175,7 @@ export class ChatService {
               user: {
                 id: user.id,
               },
+              joined: true,
             },
           },
         },
@@ -194,7 +221,8 @@ export class ChatService {
     return messages;
   }
   async confirmPassword(id: number, password: string, username: string) {
-    let confirm = await this.AuthService.validatePassword(id, password);
+    const confirm = await this.AuthService.validatePassword(id, password);
+    const user = await this.getUser(username);
     if (confirm === true) {
       const join = await this.joinChannel(username, id, false, true);
       return true;
@@ -366,5 +394,18 @@ export class ChatService {
         joined: false,
       },
     });
+  }
+
+  async checkRestriction(userID: number, roomID: number, type: string) {
+    const restricted = await this.prisma.restricted.findUnique({
+      where: {
+        restrictionRoomId_restrictionUserId: {
+          restrictionRoomId: roomID,
+          restrictionUserId: userID,
+        },
+      },
+    });
+    if (restricted && restricted.type === type) return true;
+    return false;
   }
 }
