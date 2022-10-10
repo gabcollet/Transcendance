@@ -44,6 +44,11 @@ export class PongService {
     return this.roomiD;
   }
 
+  createCustomRoom(): string {
+    const { v4: uuidv4 } = require('uuid');
+    return uuidv4();
+  }
+
   async joining(client: Socket, room: string, pID: number) {
     client.join(room);
     const user = await this.getUser(client);
@@ -88,6 +93,17 @@ export class PongService {
     }
     this.joining(client, room, 3);
     this.toggleGameStatus(client, 'spectating');
+  }
+  
+  joinCustom(client: Socket, roomID: string) {
+    let room = roomID;
+    let pID = 2;
+    if (!roomID) {
+      room = this.createCustomRoom();
+      pID = 1;
+    }
+    this.joining(client, room, pID);
+    this.toggleGameStatus(client, 'in game');
   }
 
   async playerReady(
