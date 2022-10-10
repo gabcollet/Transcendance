@@ -110,6 +110,6 @@ export class AuthController {
       res.cookie('jwtToken', jwtToken, { httpOnly: false });
     }
 
-    return verified;
+    return { verified, username };
   }
 }

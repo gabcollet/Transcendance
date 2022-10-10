@@ -1,7 +1,8 @@
 import axios from "axios";
-import React, { useCallback, useState } from "react";
-import Cookies from "js-cookie";
+import { useCallback, useState } from "react";
 import { Navigate } from "react-router-dom";
+import { socket } from "../Pages/PongRoom";
+
 import "../Pages/PongRoom.css";
 
 const TwoFAVerify = () => {
@@ -20,8 +21,12 @@ const TwoFAVerify = () => {
       { withCredentials: true }
     );
 
-    if (payload.data === false) setError("Wrong pin code, Try Again!");
-    setVerified(payload.data);
+    if (payload.data["verified"] === false)
+      setError("Wrong pin code, Try Again!");
+
+    if (payload.data["verified"] === true)
+      socket.emit("online", payload.data["username"]);
+    setVerified(payload.data["verified"]);
   }, [pin]);
 
   const handleSubmit = useCallback(
