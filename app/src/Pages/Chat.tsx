@@ -18,6 +18,7 @@ import {
 import { Socket, io } from "socket.io-client";
 import { ProfileContext } from "../App";
 import { useLocation } from "react-router-dom";
+import { isMutedBlocked } from "../components/Chat/ChatUtils";
 
 const Chat = (props: Chat_) => {
   const profileName = useContext(ProfileContext);
@@ -34,7 +35,6 @@ const Chat = (props: Chat_) => {
   const [channelsTrigger, setChannelsTrigger] = useState<boolean>(false);
   const location = useLocation();
 
-  //TO DO -> automaticly open to DM if otherName is not empty
   let otherName: string;
   if (location.state) {
     otherName = location.state.otherName;

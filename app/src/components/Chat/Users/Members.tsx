@@ -54,6 +54,7 @@ const Members = (props: {
         setTrigger={setPopMember}
         username={currentMember}
         isAdmin={props.isAdmin}
+        currentRoom={props.id}
       ></UserPopup>
     </div>
   );

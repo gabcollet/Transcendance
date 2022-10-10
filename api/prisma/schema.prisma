@@ -90,10 +90,10 @@ model Friendship {
 model Message {
     id Int @id @unique @default(autoincrement())
 
-    author   User @relation(fields: [authorID], references: [id])
+    author   User @relation(fields: [authorID], references: [id], onDelete: Cascade)
     authorID Int
 
-    room   Chatroom @relation(fields: [roomId], references: [id])
+    room   Chatroom @relation(fields: [roomId], references: [id], onDelete: Cascade)
     roomId Int
 
     messageText String
@@ -103,22 +103,37 @@ model Message {
 }
 
 model UserChatroom {
-    chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
+    chatroom   Chatroom @relation(fields: [chatroomId], references: [id], onDelete: Cascade)
     chatroomId Int
 
-    user   User @relation(fields: [userId], references: [id])
+    user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId Int
 
     joined  Boolean @default(false)
     isAdmin Boolean @default(false)
     isOwner Boolean @default(false)
 
-    muted     Boolean  @default(false)
-    banned    Boolean  @default(false)
-    timeStamp DateTime @default(now())
+    muted      Boolean     @default(false)
+    banned     Boolean     @default(false)
+    Restricted Restricted?
 
     @@unique([chatroomId, userId])
     @@map("userchatroom")
+}
+
+model Restricted {
+    id Int @id @default(autoincrement())
+
+    restriction       UserChatroom @relation(fields: [restrictionRoomId, restrictionUserId], references: [chatroomId, userId], onDelete: Cascade)
+    restrictionRoomId Int
+    restrictionUserId Int
+    createdAt         DateTime     @default(now())
+
+    type  String
+    timer Int
+
+    @@unique([restrictionRoomId, restrictionUserId])
+    @@map("restricted")
 }
 
 model Chatroom {
@@ -135,7 +150,7 @@ model Chatroom {
 
     messages Message[] @relation()
 
-    users UserChatroom[]
+    users UserChatroom[] @relation()
 
     @@map("chatroom")
 }

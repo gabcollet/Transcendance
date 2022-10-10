@@ -135,4 +135,5 @@ export interface UserPopup_ {
   setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
   username: string;
   isAdmin: boolean;
+  currentRoom: number;
 }

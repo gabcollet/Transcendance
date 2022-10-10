@@ -37,7 +37,8 @@ export async function getChannels(setChannels: any, setPublic: any) {
 export async function removeChannel(
   channelID: number,
   setUserChannels: any,
-  setPublic: any
+  setPublic: any,
+  socket: any
 ) {
   await axios
     .post(
@@ -51,6 +52,7 @@ export async function removeChannel(
       }
     )
     .then((res) => {
+      socket?.emit("leaveRoom", { chatRoom: channelID });
       getChannels(setUserChannels, setPublic);
     })
     .catch((error) => {
@@ -63,7 +65,7 @@ export async function joinChannel(
   setUserChannels: any,
   setPublic: any
 ) {
-  let ret_value = true;
+  let ret_value = "";
   await axios
     .post(
       "http://localhost:3030/chat/join-channel",
@@ -78,12 +80,10 @@ export async function joinChannel(
       }
     )
     .then((res) => {
-      if (res.data === true) {
+      ret_value = res.data;
+      if (res.data === "connected") {
         getChannels(setUserChannels, setPublic);
         console.log("Channel joined");
-      }
-      if (res.data === false) {
-        ret_value = false;
       }
     })
     .catch((error) => {
@@ -138,6 +138,58 @@ export async function isAdminRequest(chatRoom: number, username: string) {
     return isAdmin;
   }
   return false;
+}
+
+export async function giveAdmin(chatRoom: number, username: string) {
+  console.log(username);
+  console.log(chatRoom);
+  if (chatRoom && username) {
+    await axios
+      .post(
+        "http://localhost:3030/chat/give-admin",
+        {
+          chatroom: chatRoom,
+          username: username,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `bearer ${Cookies.get("jwtToken")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log("RESPONSE FROM GIVE : " + res.data);
+      });
+  }
+}
+
+export async function restrictUser(
+  username: string,
+  chatroom: number,
+  time: number,
+  type: string
+) {
+  console.log(username + " " + chatroom + " " + time + " " + type);
+  const restrict = await axios
+    .post(
+      "http://localhost:3030/chat/ban-mute",
+      {
+        chatroom: chatroom,
+        username: username,
+        time: time,
+        type: type,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `bearer ${Cookies.get("jwtToken")}`,
+        },
+      }
+    )
+    .then((res) => {
+      console.log("USER RESTRICTED");
+    });
 }
 
 export async function getChatRequest(
@@ -212,4 +264,22 @@ export async function clickChannel(
   socket?.emit("joinRoom", { chatRoom: newID, user: "test" });
   socket?.on("joined", (message: any) => {});
   setRoom(newID);
+}
+
+export async function isMutedBlocked(author: string, roomID: number) {
+  const result = await axios.get("http://localhost:3030/chat/is-restricted", {
+    params: {
+      author: author,
+      chatroom: roomID,
+    },
+    withCredentials: true,
+    headers: {
+      Authorization: `bearer ${Cookies.get("jwtToken")}`,
+    },
+  });
+  if (result.data === true) {
+    return true;
+  } else {
+    return false;
+  }
 }

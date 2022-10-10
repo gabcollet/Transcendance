@@ -37,7 +37,12 @@ const Channel = (props: Channel_) => {
           className={styles["leave-icon"]}
           icon={faCircleXmark}
           onClick={() => {
-            removeChannel(props.id, props.setUserChannels, props.setPublic);
+            removeChannel(
+              props.id,
+              props.setUserChannels,
+              props.setPublic,
+              props.socket
+            );
             props.setRoomID(0);
           }}
         ></FontAwesomeIcon>
@@ -60,9 +65,12 @@ const Channel = (props: Channel_) => {
         onClick={() => {
           joinChannel(props.id, props.setUserChannels, props.setPublic).then(
             (res) => {
-              if (res === false) {
+              if (res === "protected") {
                 props.setPasswordID(props.id);
                 props.setPasswordTrigger(true);
+              }
+              if (res === "banned") {
+                alert("Banned from channel");
               }
             }
           );

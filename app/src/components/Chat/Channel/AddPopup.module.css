@@ -215,3 +215,13 @@
   color: #f3efff;
   border: none;
 }
+
+.restricted {
+  color: #01ab78;
+  display: flex;
+  align-self: center;
+  font-size: 25px;
+  font-weight: bold;
+  margin-top: 25px;
+  cursor: default;
+}
