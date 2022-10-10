@@ -173,11 +173,12 @@ export async function restrictUser(
   console.log(username + " " + chatroom + " " + time + " " + type);
   const restrict = await axios
     .post(
-      "http://localhost:3030/chat/" + type,
+      "http://localhost:3030/chat/ban-mute",
       {
         chatroom: chatroom,
         username: username,
         time: time,
+        type: type,
       },
       {
         withCredentials: true,

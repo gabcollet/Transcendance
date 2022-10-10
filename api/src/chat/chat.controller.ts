@@ -150,19 +150,19 @@ export class ChatController {
     const status = await this.chatService.checkRestriction(
       user.id,
       Number(query.chatroom),
-      'ban',
+      query.type,
     );
     return status;
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('ban')
-  async banUser(@Req() req) {
+  @Post('ban-mute')
+  async banMuteUser(@Req() req) {
     const username = req.user.toString();
     const target = req.body.username;
     const chatroom = req.body.chatroom;
     const time = req.body.time;
-    if (!target || !username || !chatroom || !time) {
+    if (!target || !username || !chatroom || !time || !req.body.type) {
       return false;
     }
     const banRight = await this.chatService.validateRestriction(
@@ -175,20 +175,34 @@ export class ChatController {
       const confirm = await this.chatService.giveRestriction(
         target,
         chatroom,
-        'ban',
+        req.body.type,
         time,
       );
       if (confirm === false) {
         return false;
       }
     }
-    this.logger.debug('USER BANNED');
+    this.logger.debug('USER RESTRICTED : ' + req.body.type);
     return true;
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('mute')
-  async muteUser(@Req() req) {}
+  async muteUser(@Req() req) {
+    const username = req.user.toString();
+    const target = req.body.username;
+    const chatroom = req.body.chatroom;
+    const time = req.body.time;
+    if (!target || !username || !chatroom || !time) {
+      return false;
+    }
+    const muteRight = await this.chatService.validateRestriction(
+      username,
+      target,
+      chatroom,
+      true,
+    );
+  }
 
   @UseGuards(JwtAuthGuard)
   @Get('dm')

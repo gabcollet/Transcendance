@@ -416,6 +416,7 @@ export class ChatService {
         },
       },
     });
+    if (type === 'both' && restricted) return true;
     if (restricted && restricted.type === type) return true;
     return false;
   }
