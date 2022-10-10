@@ -216,4 +216,15 @@ export class ChatController {
     }
     return exist.id;
   }
+  @UseGuards(JwtAuthGuard)
+  @Get('is-owner')
+  async isOwner(@Req() req, @Query() query) {
+    if (!query.chatroom) return false;
+    const username = req.user.toString();
+    const owner = await this.chatService.checkOwer(
+      username,
+      Number(query.chatroom),
+    );
+    return owner;
+  }
 }

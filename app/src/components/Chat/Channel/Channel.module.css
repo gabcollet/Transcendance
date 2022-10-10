@@ -74,3 +74,12 @@
   align-self: center;
   margin-right: 3px;
 }
+
+.owner-icon {
+  color: #adacac;
+  margin-left: 10px;
+  cursor: pointer;
+  display: flex;
+  font-size: 22px;
+  align-self: center;
+}

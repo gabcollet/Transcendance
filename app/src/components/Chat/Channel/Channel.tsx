@@ -3,6 +3,7 @@ import {
   faCircleXmark,
   faCirclePlus,
   faCommentDots,
+  faCog,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Channel_ } from "../../../interfaces";
@@ -13,12 +14,33 @@ import PasswordPopup from "./PasswordPopup";
 import AddPopup from "./AddPopup";
 import { clickChannel } from "../ChatUtils";
 import { click } from "@testing-library/user-event/dist/click";
+import { isOwner } from "../ChatUtils";
+import OwnerPopup from "./OwnerPopup";
 
 const Channel = (props: Channel_) => {
   let icon = <></>;
   let chatIcon = <></>;
   const [boxStyle, setBoxStyle] = useState<string>("channel-box");
-  let channelClick = () => {
+  const [owner, setOwner] = useState(false);
+  const [ownerIcon, setOwnerIcon] = useState(<></>);
+  const [ownerTrigger, setOwnerTrigger] = useState(false);
+
+  useEffect(() => {
+    isOwner(props.id, setOwner).then((res) => {
+      if (res === true) {
+        setOwnerIcon(
+          <FontAwesomeIcon
+            className={styles["owner-icon"]}
+            icon={faCog}
+            onClick={() => {
+              props.setOwnerTrigger(true);
+            }}
+          ></FontAwesomeIcon>
+        );
+      }
+    });
+  }, []);
+  const channelClick = async () => {
     if (props.joined === true) {
       clickChannel(props.currentID, props.id, props.setRoomID, props.socket);
     }
@@ -86,6 +108,7 @@ const Channel = (props: Channel_) => {
           <p>{props.title}</p>
           {chatIcon}
           {icon}
+          {ownerIcon}
         </div>
       </div>
     </div>

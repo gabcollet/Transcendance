@@ -437,4 +437,19 @@ export class ChatService {
     if (restricted && restricted.type === type) return true;
     return false;
   }
+
+  async checkOwer(username: string, chatroom: number) {
+    const user = await this.getUser(username);
+    if (!user) return false;
+    const userChatroom = await this.prisma.userChatroom.findUnique({
+      where: {
+        chatroomId_userId: {
+          userId: user.id,
+          chatroomId: chatroom,
+        },
+      },
+    });
+    if (!userChatroom || userChatroom.isOwner === false) return false;
+    return true;
+  }
 }
