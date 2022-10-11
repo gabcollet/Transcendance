@@ -6,6 +6,7 @@ import { Message_ } from "../../interfaces";
 import { fetchObject } from "../Profile/FetchValue";
 import { setCustom } from "../../Pages/PongRoom";
 import { roomID } from "../Menu/useCanvas";
+import styles from "./Channel/AddPopup.module.css";
 
 export async function getChannels(setChannels: any, setPublic: any) {
   await axios
@@ -327,4 +328,51 @@ export async function removePassword(channelID: number) {
       },
     }
   );
+}
+
+export async function changePassword(
+  channelID: number,
+  password: string,
+  setErrorMsg: React.Dispatch<React.SetStateAction<JSX.Element>>
+) {
+  let ret = true;
+  const changed = await axios
+    .post(
+      "http://localhost:3030/chat/change-password",
+      {
+        chatroom: channelID,
+        password: password,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `bearer ${Cookies.get("jwtToken")}`,
+        },
+      }
+    )
+    .catch((error) => {
+      if (
+        error.response.status === 500 ||
+        typeof error.response.data.message == "string"
+      ) {
+        setErrorMsg(
+          <div>
+            <li key="1" className={styles["msg-list"]}>
+              <p className={styles["error-msg"]}>Server Error</p>
+            </li>
+          </div>
+        );
+      } else {
+        const listMessage = error.response.data.message.map(
+          (message: string) => (
+            <li key="2" className={styles["msg-list"]}>
+              <p className={styles["error-msg"]}>{message}</p>
+            </li>
+          )
+        );
+        setErrorMsg(<div>{listMessage}</div>);
+      }
+      ret = false;
+    });
+  return ret;
 }

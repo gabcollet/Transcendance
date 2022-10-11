@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { OwnerPopup_ } from "../../../interfaces";
-import { removePassword } from "../ChatUtils";
+import { removePassword, changePassword } from "../ChatUtils";
 
 const OwnerPopup = (props: OwnerPopup_) => {
   const [password, setPassword] = useState("");
@@ -14,6 +14,18 @@ const OwnerPopup = (props: OwnerPopup_) => {
     setErrorMsg(<></>);
     props.setTrigger(false);
   };
+
+  const handlePassword = async () => {
+    if (password !== "") {
+      const done = await changePassword(props.channelID, password, setErrorMsg);
+      if (done === true) {
+        setPassword("");
+        setErrorMsg(<></>);
+        props.setTrigger(false);
+      }
+    }
+  };
+
   const popup = (
     <div className={styles["addpop-wrap"]}>
       <div className={styles["addpop-in-pass"]}>
@@ -48,7 +60,7 @@ const OwnerPopup = (props: OwnerPopup_) => {
             }}
           ></input>
         </div>
-        <button onClick={() => {}} className={styles["close"]}>
+        <button onClick={handlePassword} className={styles["close"]}>
           Send
         </button>
       </div>

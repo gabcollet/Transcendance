@@ -479,4 +479,18 @@ export class ChatService {
       },
     });
   }
+
+  async changePassword(chatroom: number, password: string) {
+    const hashed = await this.AuthService.hashPassword(password);
+    const changed = await this.prisma.chatroom.update({
+      where: {
+        id: chatroom,
+      },
+      data: {
+        password: hashed,
+        protected: true,
+      },
+    });
+    console.log(changed);
+  }
 }
