@@ -9,8 +9,8 @@ export const fetchText = async (route: string, setCallBack: Function) => {
       Authorization: `bearer ${Cookies.get("jwtToken")}`,
     },
   });
-  const data = await res.text();
-  setCallBack(data);
+  // const data = await res.text();
+  setCallBack(await res.text());
 };
 
 export const fetchObject = async (route: string, setCallBack: Function) => {
