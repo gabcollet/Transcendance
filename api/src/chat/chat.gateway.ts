@@ -51,7 +51,7 @@ export class ChatGateway {
       'USER :' + payload.user + ' LEFT ROOM : ',
       payload.chatRoom,
     );
+    this.server.to(payload.chatRoom).emit('leaved');
     client.leave(payload.chatRoom);
-    this.server.emit('disconnected', 'Channel left');
   }
 }

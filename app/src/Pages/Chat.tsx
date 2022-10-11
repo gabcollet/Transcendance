@@ -47,10 +47,6 @@ const Chat = (props: Chat_) => {
     otherName = "";
   }
 
-  socket?.on("joined", () => {
-    console.log("USER JOINED THE ROOM");
-    setJoinedAlert(true);
-  });
   // Function to get list of banned users
   const getBlockedUsers = async () => {
     if (profileName) {
@@ -99,12 +95,6 @@ const Chat = (props: Chat_) => {
       setMembers([]);
     }
   }, [roomId]);
-
-  useEffect(() => {
-    getChatMembers(roomId).then((members_list) => {
-      setMembers(members_list);
-    });
-  }, [joinedAlert]);
 
   useEffect(() => {
     const newSocket = io("localhost:6005");
@@ -164,6 +154,7 @@ const Chat = (props: Chat_) => {
           setSocket={setSocket}
           socket={socket}
           setJoinedAlert={setJoinedAlert}
+          setMembers={setMembers}
         ></ChatChannels>
       </div>
       {mid}

@@ -40,6 +40,7 @@ const ChatChannels = (props: ChatChannels_) => {
             ownerTrigger={ownerTrigger}
             setOwnerTrigger={setOwnerTrigger}
             setJoinedAlert={props.setJoinedAlert}
+            setMembers={props.setMembers}
           ></Channel>
         </div>
       );
@@ -68,6 +69,7 @@ const ChatChannels = (props: ChatChannels_) => {
             ownerTrigger={ownerTrigger}
             setOwnerTrigger={setOwnerTrigger}
             setJoinedAlert={props.setJoinedAlert}
+            setMembers={props.setMembers}
           ></Channel>
         </div>
       );

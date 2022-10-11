@@ -16,6 +16,7 @@ import { clickChannel } from "../ChatUtils";
 import { click } from "@testing-library/user-event/dist/click";
 import { isOwner } from "../ChatUtils";
 import OwnerPopup from "./OwnerPopup";
+import { getChatMembers } from "../ChatUtils";
 
 const Channel = (props: Channel_) => {
   let icon = <></>;
@@ -25,9 +26,6 @@ const Channel = (props: Channel_) => {
   const [ownerIcon, setOwnerIcon] = useState(<></>);
   const [ownerTrigger, setOwnerTrigger] = useState(false);
 
-  props.socket?.on("joined", (message: any) => {
-    props.setJoinedAlert(true);
-  });
   useEffect(() => {
     isOwner(props.id, setOwner).then((res) => {
       if (res === true) {
@@ -43,6 +41,13 @@ const Channel = (props: Channel_) => {
       }
     });
   }, []);
+  //   useEffect(() => {
+  //     props.socket?.on("joined", () => {
+  //       getChatMembers(props.currentID).then((members_list) => {
+  //         if (members_list) props.setMembers(members_list);
+  //       });
+  //     });
+  //   }, [props.socket]);
   const channelClick = async () => {
     if (props.joined === true) {
       clickChannel(props.currentID, props.id, props.setRoomID, props.socket);
