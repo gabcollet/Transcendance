@@ -41,13 +41,7 @@ const Channel = (props: Channel_) => {
       }
     });
   }, []);
-  //   useEffect(() => {
-  //     props.socket?.on("joined", () => {
-  //       getChatMembers(props.currentID).then((members_list) => {
-  //         if (members_list) props.setMembers(members_list);
-  //       });
-  //     });
-  //   }, [props.socket]);
+
   const channelClick = async () => {
     if (props.joined === true) {
       clickChannel(props.currentID, props.id, props.setRoomID, props.socket);

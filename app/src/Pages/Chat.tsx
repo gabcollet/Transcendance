@@ -73,6 +73,13 @@ const Chat = (props: Chat_) => {
     setMessages((current) => [...current, message]);
   };
 
+  const joinedListener = async (room: any) => {
+    if (room !== 0) {
+      const joinlist = await getChatMembers(room);
+      setMembers(joinlist);
+    }
+  };
+
   useEffect(() => {
     getBlockedUsers();
   }, [profileName]);
@@ -137,8 +144,12 @@ const Chat = (props: Chat_) => {
   useEffect(() => {
     getChannels(setChannels, setPublicChannels);
     socket?.on("messageReceived", messageListener);
+    socket?.on("joined", joinedListener);
+    socket?.on("leaved", joinedListener);
     return () => {
       socket?.off("messageReceived", messageListener);
+      socket?.off("joined", joinedListener);
+      socket?.off("leaved", joinedListener);
     };
   }, [socket]);
   return (

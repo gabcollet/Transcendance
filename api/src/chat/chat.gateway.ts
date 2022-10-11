@@ -43,7 +43,7 @@ export class ChatGateway {
     //need to be secured
     this.logger.log('USER JOINED ROOM :', payload.chatRoom);
     client.join(payload.chatRoom);
-    this.server.to(payload.chatRoom).emit('joined');
+    this.server.to(payload.chatRoom).emit('joined', payload.chatRoom);
   }
   @SubscribeMessage('leaveRoom')
   handleLeave(client: Socket, payload: any): void {
@@ -51,7 +51,7 @@ export class ChatGateway {
       'USER :' + payload.user + ' LEFT ROOM : ',
       payload.chatRoom,
     );
-    this.server.to(payload.chatRoom).emit('leaved');
+    this.server.to(payload.chatRoom).emit('leaved', payload.chatRoom);
     client.leave(payload.chatRoom);
   }
 }
