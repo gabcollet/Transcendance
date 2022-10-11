@@ -11,6 +11,7 @@ import { authorize, use } from 'passport';
 import { AuthService } from 'src/auth/auth.service';
 import { networkInterfaces } from 'os';
 import { UpdateDateColumn } from 'typeorm';
+
 @Injectable()
 export class ChatService {
   constructor(
@@ -492,5 +493,13 @@ export class ChatService {
       },
     });
     console.log(changed);
+  }
+
+  async isBlocked(username: string, target: string) {
+    const user_list = await this.userService.getBlockedUsers(username);
+    user_list.blockedUsernames.map((blocked) => {
+      if (blocked === target) return true;
+    });
+    return false;
   }
 }
