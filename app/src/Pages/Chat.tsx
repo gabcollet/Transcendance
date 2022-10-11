@@ -138,10 +138,15 @@ const Chat = () => {
         if (room === roomId) setMembers(joinlist);
       }
     };
+    const invitedListener = async (room: any) => {
+      alert(room);
+    };
+
     getChannels(setChannels, setPublicChannels);
     socket?.on("messageReceived", messageListener);
     socket?.on("joined", joinedListener);
     socket?.on("leaved", joinedListener);
+    socket?.on("invited", invitedListener);
     return () => {
       socket?.off("messageReceived", messageListener);
       socket?.off("joined", joinedListener);

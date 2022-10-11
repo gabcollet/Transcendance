@@ -15,13 +15,13 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   private logger: Logger = new Logger('PongGateway');
 
   @WebSocketServer() server: Server;
-  
+
   afterInit(server: Server) {
     this.logger.log('Pong gateway initialized');
   }
-  
+
   @SubscribeMessage('online')
-  handleOnline(client: Socket, profileUsername: string){
+  handleOnline(client: Socket, profileUsername: string) {
     this.pongService.toggleOnline(client, profileUsername);
   }
 
@@ -29,23 +29,34 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   async handleJoinRoom(client: Socket, random: boolean) {
     this.pongService.joinRoom(client, random);
   }
+  @SubscribeMessage('invite')
+  async handleInvite(
+    client: Socket,
+    payload: { username: string; roomID: number },
+  ) {
+    if (payload.username && payload.roomID) {
+      const done = await this.pongService.invitePlayer(
+        payload.username,
+        payload.roomID,
+        client,
+        this.server,
+      );
+    }
+  }
 
   @SubscribeMessage('playerReady')
-  handleReady(
-    client: Socket,
-    payload: { room: string; pID: number},
-  ) {
+  handleReady(client: Socket, payload: { room: string; pID: number }) {
     this.pongService.playerReady(client, payload, this.server);
   }
 
   //This handle when a client quit or refresh the page
   handleDisconnect(client: Socket) {
-    this.pongService.playerDisconnect(client, this.server, "offline");
+    this.pongService.playerDisconnect(client, this.server, 'offline');
   }
   //This handle when a client change location (aka go back one page)
   @SubscribeMessage('leaveRoom')
   handleLeaveRoom(client: Socket) {
-    this.pongService.playerDisconnect(client, this.server, "online");
+    this.pongService.playerDisconnect(client, this.server, 'online');
   }
 
   @SubscribeMessage('playerPosServer')
@@ -92,7 +103,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   handleSpectate(client: Socket) {
     this.pongService.joinSpectator(client);
   }
-  
+
   @SubscribeMessage('custom')
   handleCustom(client: Socket, roomID: string) {
     this.pongService.joinCustom(client, roomID);

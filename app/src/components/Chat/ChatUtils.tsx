@@ -3,6 +3,8 @@ import Cookies from "js-cookie";
 import { Message_ } from "../../interfaces";
 import { setCustom } from "../../Pages/PongRoom";
 import styles from "./Channel/AddPopup.module.css";
+import io from "socket.io-client";
+import { socket } from "../../Pages/PongRoom";
 
 export async function getChannels(setChannels: any, setPublic: any) {
   await axios
@@ -294,15 +296,15 @@ export async function isOwner(roomID: number) {
   return ownership.data;
 }
 
-export function invitePlay(username: string) {
-  setCustom(null).then((roomID) => {
-    //get the username of second player
-    //pull socketID from DB using username
-    //send signal to second player
-    //second player get popup that onClic call "setCustom(roomID)"
-    //and <Link to="/Pong"></Link>
-    console.log(roomID);
-  });
+export async function invitePlay(username: string) {
+  //get the username of second player
+  //pull socketID from DB using username
+  //send signal to second player
+  //second player get popup that onClic call "setCustom(roomID)"
+  //and <Link to="/Pong"></Link>
+  const roomID = await setCustom(null);
+  socket?.emit("invite", { username: username, roomID: roomID });
+  console.log("ROOMID = " + roomID);
 }
 
 export async function removePassword(channelID: number) {

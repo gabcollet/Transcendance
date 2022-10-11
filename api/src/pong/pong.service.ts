@@ -52,7 +52,9 @@ export class PongService {
   async joining(client: Socket, room: string, pID: number) {
     client.join(room);
     const user = await this.getUser(client);
-    if (!user) { return; }
+    if (!user) {
+      return;
+    }
     //Check if username already in room
     if (this.m_roomUser.has(room)) {
       const clientRoom = this.m_roomUser.get(room);
@@ -94,7 +96,7 @@ export class PongService {
     this.joining(client, room, 3);
     this.toggleGameStatus(client, 'spectating');
   }
-  
+
   joinCustom(client: Socket, roomID: string) {
     let room = roomID;
     let pID = 2;
@@ -140,7 +142,9 @@ export class PongService {
   async leavingRoom(client: Socket, room: string) {
     client.leave(room);
     const user = await this.getUser(client);
-    if (!user) { return; }
+    if (!user) {
+      return;
+    }
     const pid = this.m_pid.get(client);
     if (pid === 1 || pid === 2) {
       this.logger.warn(`${user.username} leaved room ${room} as P${pid}`);
@@ -405,7 +409,7 @@ export class PongService {
   }
 
   convertTZ(date: Date, tzString: string) {
-    return new Date(date.toLocaleString("en-US", {timeZone: tzString}));   
+    return new Date(date.toLocaleString('en-US', { timeZone: tzString }));
   }
 
   async addHistory(
@@ -414,14 +418,16 @@ export class PongService {
     score1: number,
     score2: number,
   ) {
-    const date = new Date(new Date().toLocaleString("en-US", {timeZone: 'Etc/GMT-4'}));
+    const date = new Date(
+      new Date().toLocaleString('en-US', { timeZone: 'Etc/GMT-4' }),
+    );
     await this.prisma.history.create({
       data: {
         winner: user1,
         score1: score1,
         loser: user2,
         score2: score2,
-        date: date
+        date: date,
       },
     });
   }
@@ -433,5 +439,21 @@ export class PongService {
       },
     });
     return user;
+  }
+
+  async invitePlayer(
+    username: string,
+    roomID: number,
+    client: Socket,
+    server: Server,
+  ) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        username: username,
+      },
+    });
+    if (!user) return false;
+    const socketID = user.socketID;
+    server.to(socketID).emit('invited', roomID);
   }
 }
