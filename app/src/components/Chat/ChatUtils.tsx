@@ -1,11 +1,7 @@
-import { getCardMediaUtilityClass } from "@mui/material";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { Socket } from "socket.io-client";
 import { Message_ } from "../../interfaces";
-import { fetchObject } from "../Profile/FetchValue";
 import { setCustom } from "../../Pages/PongRoom";
-import { roomID } from "../Menu/useCanvas";
 import styles from "./Channel/AddPopup.module.css";
 
 export async function getChannels(setChannels: any, setPublic: any) {
@@ -105,7 +101,7 @@ export async function joinPassword(
 
 export async function getChatMembers(roomID: number) {
   let members: any;
-  let result = await axios
+  await axios
     .get("http://localhost:3030/chat/members", {
       params: {
         id: roomID,
@@ -174,7 +170,7 @@ export async function restrictUser(
   type: string
 ) {
   console.log(username + " " + chatroom + " " + time + " " + type);
-  const restrict = await axios
+  await axios
     .post(
       "http://localhost:3030/chat/ban-mute",
       {
@@ -199,7 +195,6 @@ export async function getChatRequest(
   setMessages: React.Dispatch<React.SetStateAction<Message_[]>>,
   setMembers: React.Dispatch<React.SetStateAction<string[]>>,
   roomId: number,
-  profileName: string,
   setFriends: React.Dispatch<React.SetStateAction<any[]>>
 ) {
   axios
@@ -286,10 +281,7 @@ export async function isMutedBlocked(author: string, roomID: number) {
   }
 }
 
-export async function isOwner(
-  roomID: number,
-  setOwner: React.Dispatch<React.SetStateAction<boolean>>
-) {
+export async function isOwner(roomID: number) {
   const ownership = await axios.get("http://localhost:3030/chat/is-owner", {
     params: {
       chatroom: roomID,
@@ -299,7 +291,6 @@ export async function isOwner(
       Authorization: `bearer ${Cookies.get("jwtToken")}`,
     },
   });
-  setOwner(ownership.data);
   return ownership.data;
 }
 
@@ -315,7 +306,7 @@ export function invitePlay(username: string) {
 }
 
 export async function removePassword(channelID: number) {
-  const removed = await axios.post(
+  await axios.post(
     "http://localhost:3030/chat/remove-password",
     {
       chatroom: channelID,
@@ -335,7 +326,7 @@ export async function changePassword(
   setErrorMsg: React.Dispatch<React.SetStateAction<JSX.Element>>
 ) {
   let ret = true;
-  const changed = await axios
+  await axios
     .post(
       "http://localhost:3030/chat/change-password",
       {

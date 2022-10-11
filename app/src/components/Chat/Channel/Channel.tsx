@@ -7,27 +7,19 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Channel_ } from "../../../interfaces";
-import { joinChannel, joinPassword, removeChannel } from "../ChatUtils";
+import { joinChannel, removeChannel } from "../ChatUtils";
 import { useEffect, useState } from "react";
-import { PasswordPopup_ } from "../../../interfaces";
-import PasswordPopup from "./PasswordPopup";
-import AddPopup from "./AddPopup";
 import { clickChannel } from "../ChatUtils";
-import { click } from "@testing-library/user-event/dist/click";
 import { isOwner } from "../ChatUtils";
-import OwnerPopup from "./OwnerPopup";
-import { getChatMembers } from "../ChatUtils";
 
 const Channel = (props: Channel_) => {
   let icon = <></>;
   let chatIcon = <></>;
   const [boxStyle, setBoxStyle] = useState<string>("channel-box");
-  const [owner, setOwner] = useState(false);
   const [ownerIcon, setOwnerIcon] = useState(<></>);
-  const [ownerTrigger, setOwnerTrigger] = useState(false);
 
   useEffect(() => {
-    isOwner(props.id, setOwner).then((res) => {
+    isOwner(props.id).then((res) => {
       if (res === true) {
         setOwnerIcon(
           <FontAwesomeIcon
@@ -40,7 +32,7 @@ const Channel = (props: Channel_) => {
         );
       }
     });
-  }, []);
+  }, [props]);
 
   const channelClick = async () => {
     if (props.joined === true) {
