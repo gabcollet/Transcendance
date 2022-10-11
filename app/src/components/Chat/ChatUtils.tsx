@@ -264,8 +264,7 @@ export async function clickChannel(
   socket: any
 ) {
   socket?.emit("leaveRoom", { chatRoom: currentID });
-  socket?.emit("joinRoom", { chatRoom: newID, user: "test" });
-  socket?.on("joined", (message: any) => {});
+  socket?.emit("joinRoom", { chatRoom: newID });
   setRoom(newID);
 }
 

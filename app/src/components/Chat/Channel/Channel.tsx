@@ -16,6 +16,7 @@ import { clickChannel } from "../ChatUtils";
 import { click } from "@testing-library/user-event/dist/click";
 import { isOwner } from "../ChatUtils";
 import OwnerPopup from "./OwnerPopup";
+import { getChatMembers } from "../ChatUtils";
 
 const Channel = (props: Channel_) => {
   let icon = <></>;
@@ -40,6 +41,7 @@ const Channel = (props: Channel_) => {
       }
     });
   }, []);
+
   const channelClick = async () => {
     if (props.joined === true) {
       clickChannel(props.currentID, props.id, props.setRoomID, props.socket);

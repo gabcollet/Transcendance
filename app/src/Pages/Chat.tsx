@@ -11,6 +11,7 @@ import { AxiosResponse } from "axios";
 import {
   clickChannel,
   getChannels,
+  getChatMembers,
   getChatRequest,
   getDM,
   isAdminRequest,
@@ -36,7 +37,7 @@ const Chat = (props: Chat_) => {
   const [channelsTrigger, setChannelsTrigger] = useState<boolean>(false);
   const [blockedUsers, setBlockedUsers] = useState(Object);
   const [ownerTrigger, setOwnerTrigger] = useState<boolean>(false);
-
+  const [joinedAlert, setJoinedAlert] = useState<boolean>(false);
   const location = useLocation();
 
   let otherName: string;
@@ -69,7 +70,16 @@ const Chat = (props: Chat_) => {
   };
 
   const messageListener = (message: Message_) => {
-    setMessages((current) => [...current, message]);
+    if (compareBlockedUsers(message.author) === false) {
+      setMessages((current) => [...current, message]);
+    }
+  };
+
+  const joinedListener = async (room: any) => {
+    if (room !== 0) {
+      const joinlist = await getChatMembers(room);
+      if (room === roomId) setMembers(joinlist);
+    }
   };
 
   useEffect(() => {
@@ -94,6 +104,7 @@ const Chat = (props: Chat_) => {
       setMembers([]);
     }
   }, [roomId]);
+
   useEffect(() => {
     const newSocket = io("localhost:6005");
     console.log("chat socket connected");
@@ -135,10 +146,14 @@ const Chat = (props: Chat_) => {
   useEffect(() => {
     getChannels(setChannels, setPublicChannels);
     socket?.on("messageReceived", messageListener);
+    socket?.on("joined", joinedListener);
+    socket?.on("leaved", joinedListener);
     return () => {
       socket?.off("messageReceived", messageListener);
+      socket?.off("joined", joinedListener);
+      socket?.off("leaved", joinedListener);
     };
-  }, [socket]);
+  }, [socket, roomId]);
   return (
     <div className={styles["chat-wrapper"]}>
       <div className={styles["left"]}>
@@ -151,6 +166,8 @@ const Chat = (props: Chat_) => {
           currentID={roomId}
           setSocket={setSocket}
           socket={socket}
+          setJoinedAlert={setJoinedAlert}
+          setMembers={setMembers}
         ></ChatChannels>
       </div>
       {mid}
