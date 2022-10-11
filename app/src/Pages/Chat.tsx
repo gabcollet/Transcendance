@@ -11,6 +11,7 @@ import { AxiosResponse } from "axios";
 import {
   clickChannel,
   getChannels,
+  getChatMembers,
   getChatRequest,
   getDM,
   isAdminRequest,
@@ -36,7 +37,7 @@ const Chat = (props: Chat_) => {
   const [channelsTrigger, setChannelsTrigger] = useState<boolean>(false);
   const [blockedUsers, setBlockedUsers] = useState(Object);
   const [ownerTrigger, setOwnerTrigger] = useState<boolean>(false);
-
+  const [joinedAlert, setJoinedAlert] = useState<boolean>(false);
   const location = useLocation();
 
   let otherName: string;
@@ -46,6 +47,10 @@ const Chat = (props: Chat_) => {
     otherName = "";
   }
 
+  socket?.on("joined", () => {
+    console.log("USER JOINED THE ROOM");
+    setJoinedAlert(true);
+  });
   // Function to get list of banned users
   const getBlockedUsers = async () => {
     if (profileName) {
@@ -94,6 +99,13 @@ const Chat = (props: Chat_) => {
       setMembers([]);
     }
   }, [roomId]);
+
+  useEffect(() => {
+    getChatMembers(roomId).then((members_list) => {
+      setMembers(members_list);
+    });
+  }, [joinedAlert]);
+
   useEffect(() => {
     const newSocket = io("localhost:6005");
     console.log("chat socket connected");
@@ -151,6 +163,7 @@ const Chat = (props: Chat_) => {
           currentID={roomId}
           setSocket={setSocket}
           socket={socket}
+          setJoinedAlert={setJoinedAlert}
         ></ChatChannels>
       </div>
       {mid}

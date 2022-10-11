@@ -25,6 +25,9 @@ const Channel = (props: Channel_) => {
   const [ownerIcon, setOwnerIcon] = useState(<></>);
   const [ownerTrigger, setOwnerTrigger] = useState(false);
 
+  props.socket?.on("joined", (message: any) => {
+    props.setJoinedAlert(true);
+  });
   useEffect(() => {
     isOwner(props.id, setOwner).then((res) => {
       if (res === true) {
