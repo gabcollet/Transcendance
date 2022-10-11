@@ -227,4 +227,18 @@ export class ChatController {
     );
     return owner;
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('remove-password')
+  async removePassword(@Req() req) {
+    if (!req.body || !req.body.chatroom) return false;
+    const chatroom = Number(req.body.chatroom);
+    const verification = await this.chatService.isOwner(
+      req.user.toString(),
+      chatroom,
+    );
+    if (verification === false) return false;
+    const removed = this.chatService.removePassword(chatroom);
+    return true;
+  }
 }
