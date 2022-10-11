@@ -78,7 +78,7 @@ const Chat = (props: Chat_) => {
   const joinedListener = async (room: any) => {
     if (room !== 0) {
       const joinlist = await getChatMembers(room);
-      setMembers(joinlist);
+      if (room === roomId) setMembers(joinlist);
     }
   };
 
@@ -153,7 +153,7 @@ const Chat = (props: Chat_) => {
       socket?.off("joined", joinedListener);
       socket?.off("leaved", joinedListener);
     };
-  }, [socket]);
+  }, [socket, roomId]);
   return (
     <div className={styles["chat-wrapper"]}>
       <div className={styles["left"]}>
