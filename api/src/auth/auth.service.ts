@@ -1,9 +1,4 @@
-import {
-  forwardRef,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
@@ -26,7 +21,6 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     private userService: UsersService,
-    // @Inject(forwardRef(() => ChatService))
     private chatService: ChatService,
   ) {}
 
@@ -55,37 +49,40 @@ export class AuthService {
     else return false;
   }
 
-  async cipherSecret(secret: string) {
+  async cipher(secret: string) {
     const iv = randomBytes(16);
-    const salt = randomBytes(8).toString('hex');
+    const secretKey = process.env.CIPHER_SECRET;
 
-    const password = process.env.CIPHER_SECRET;
-
-    const key = (await scrypt(password, salt, 32)) as Buffer;
-    const cipher = createCipheriv('aes-256-ctr', key, iv);
+    const cipher = createCipheriv('aes-256-ctr', secretKey, iv);
 
     const encryptedSecret = Buffer.concat([
       cipher.update(secret),
       cipher.final(),
     ]);
 
-    return encryptedSecret;
+    const payload = {
+      iv: iv.toString('hex'),
+      content: encryptedSecret.toString('hex'),
+    };
+
+    return payload;
   }
 
-  decipherSecret(secret: Buffer, key: Buffer, iv: Buffer) {
-    const decipher = createDecipheriv('aes-256-ctr', key, iv);
+  decipher(secret: string, key: string, iv: string) {
+    const decipher = createDecipheriv(
+      'aes-256-ctr',
+      key,
+      Buffer.from(iv, 'hex'),
+    );
     const decryptedSecret = Buffer.concat([
-      decipher.update(secret),
+      decipher.update(Buffer.from(secret, 'hex')),
       decipher.final(),
     ]);
 
-    return decryptedSecret;
+    return decryptedSecret.toString();
   }
 
-  generateJwtToken(req: Request) {
-    const username = req.user['username'];
-    const userID = req.user['id'];
-
+  generateJwtToken(username: string, userID?: string) {
     const payload = { username: username, userID: userID };
     const jwtToken = this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET_KEY,
@@ -129,9 +126,8 @@ export class AuthService {
     return img;
   }
 
-  async twoFAVerify(tokenString: string, token: string) {
-    const jwtToken = this.jwtService.decode(tokenString);
-    const user = await this.userService.findById(jwtToken['userID']);
+  async twoFAVerify(username: string, token: string) {
+    const user = await this.userService.findByUsername(username); //! change for username
 
     const secret = user['twoFASecret'];
     const verified = speakeasy.totp.verify({

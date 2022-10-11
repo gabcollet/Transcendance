@@ -60,7 +60,7 @@ export class UsersService {
     const randomDisplayName =
       user.displayname + Date.now().toString().slice(-4);
     const allUsers = await this.getAllUsernames();
-    let newUser;
+    let newUser: User;
     try {
       newUser = await this.prisma.user.create({
         data: {

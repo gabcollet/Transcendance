@@ -14,10 +14,7 @@ export class AuthorizationGuard extends AuthGuard('42') {
       console.log(err);
       return null;
     }
-
-    // Logger.log('*** SUCCESS ***\n' + user);
-    // console.log(user);
-
+    Logger.log('*** SUCCESS ***\n' + user);
     return user;
   }
 }
