@@ -18,6 +18,8 @@ import {
 import { Socket, io } from "socket.io-client";
 import { ProfileContext } from "../App";
 import { useLocation } from "react-router-dom";
+import { isMutedBlocked } from "../components/Chat/ChatUtils";
+import { fetchObject } from "../components/Profile/FetchValue";
 
 const Chat = (props: Chat_) => {
   const profileName = useContext(ProfileContext);
@@ -32,9 +34,11 @@ const Chat = (props: Chat_) => {
   const [friends, setFriends] = useState<string[]>([]);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [channelsTrigger, setChannelsTrigger] = useState<boolean>(false);
+  const [blockedUsers, setBlockedUsers] = useState(Object);
+  const [ownerTrigger, setOwnerTrigger] = useState<boolean>(false);
+
   const location = useLocation();
 
-  //TO DO -> automaticly open to DM if otherName is not empty
   let otherName: string;
   if (location.state) {
     otherName = location.state.otherName;
@@ -42,9 +46,35 @@ const Chat = (props: Chat_) => {
     otherName = "";
   }
 
+  // Function to get list of banned users
+  const getBlockedUsers = async () => {
+    if (profileName) {
+      await fetchObject(
+        "users/" + profileName + "/blockedusers",
+        setBlockedUsers
+      );
+    }
+  };
+
+  // Function returns true if "user" is in the list of blockedUsers
+  const compareBlockedUsers = (user: string) => {
+    if (blockedUsers?.blockedUsernames && profileName) {
+      for (const username of blockedUsers.blockedUsernames) {
+        if (username === user) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
   const messageListener = (message: Message_) => {
     setMessages((current) => [...current, message]);
   };
+
+  useEffect(() => {
+    getBlockedUsers();
+  }, [profileName]);
 
   useEffect(() => {
     if (channelsTrigger === true) {
@@ -131,6 +161,7 @@ const Chat = (props: Chat_) => {
           members={members}
           isAdmin={isAdmin}
           channelTrigger={setChannelsTrigger}
+          setMembers={setMembers}
         ></Members>
         <ChatFriendsList
           friends={friends}

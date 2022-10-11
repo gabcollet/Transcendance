@@ -68,7 +68,14 @@ export class ChatController {
   @UseGuards(JwtAuthGuard)
   @Post('delete-channel')
   async removeChannelReq(@Req() request: Request) {
-    const confirmation = await this.chatService.removeChannel(request);
+    if (!request.user || !request.body.value) {
+      return false;
+    }
+    this.logger.debug(request.body.value, request.user.toString());
+    const confirmation = await this.chatService.removeChannel(
+      request.body.value,
+      request.user.toString(),
+    );
     return confirmation;
   }
 
@@ -118,6 +125,86 @@ export class ChatController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Post('give-admin')
+  async giveAdmin(@Req() req) {
+    if (!req.body.chatroom || !req.body.username) return false;
+    const isAdmin = await this.chatService.getAdmin(
+      req.user.toString(),
+      req.body.chatroom,
+    );
+    if (isAdmin === true) {
+      const confirmation = await this.chatService.giveAdmin(
+        req.body.username,
+        req.body.chatroom,
+      );
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('is-restricted')
+  async isRestricted(@Query() query) {
+    console.log(query);
+    if (!query.author || !query.chatroom) return false;
+    const user = await this.chatService.getUser(query.author);
+    if (!user) return false;
+    const status = await this.chatService.checkRestriction(
+      user.id,
+      Number(query.chatroom),
+      query.type,
+    );
+    return status;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('ban-mute')
+  async banMuteUser(@Req() req) {
+    const username = req.user.toString();
+    const target = req.body.username;
+    const chatroom = req.body.chatroom;
+    const time = req.body.time;
+    if (!target || !username || !chatroom || !time || !req.body.type) {
+      return false;
+    }
+    const banRight = await this.chatService.validateRestriction(
+      username,
+      target,
+      chatroom,
+      true,
+    );
+    if (banRight === true) {
+      const confirm = await this.chatService.giveRestriction(
+        target,
+        chatroom,
+        req.body.type,
+        time,
+      );
+      if (confirm === false) {
+        return false;
+      }
+    }
+    this.logger.debug('USER RESTRICTED : ' + req.body.type);
+    return true;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('mute')
+  async muteUser(@Req() req) {
+    const username = req.user.toString();
+    const target = req.body.username;
+    const chatroom = req.body.chatroom;
+    const time = req.body.time;
+    if (!target || !username || !chatroom || !time) {
+      return false;
+    }
+    const muteRight = await this.chatService.validateRestriction(
+      username,
+      target,
+      chatroom,
+      true,
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('dm')
   async dmRequest(@Req() req, @Query() query) {
     const user = req.user.toString();
@@ -128,5 +215,16 @@ export class ChatController {
       return response;
     }
     return exist.id;
+  }
+  @UseGuards(JwtAuthGuard)
+  @Get('is-owner')
+  async isOwner(@Req() req, @Query() query) {
+    if (!query.chatroom) return false;
+    const username = req.user.toString();
+    const owner = await this.chatService.checkOwer(
+      username,
+      Number(query.chatroom),
+    );
+    return owner;
   }
 }

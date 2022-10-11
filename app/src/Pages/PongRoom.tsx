@@ -5,7 +5,28 @@ import { pID } from "../components/Menu/useCanvas";
 import io from "socket.io-client";
 
 export const socket = io("localhost:6006");
-export let pQuit : boolean = false;
+export let pQuit: boolean = false;
+
+export const setCustom = async (room: string | null) => {
+  socket.emit("custom", room);
+  pQuit = false;
+
+  const promise = new Promise((resolve) =>
+    socket.on(
+      "roomInfo",
+      function ([room, pid, username1, username2]: [
+        string,
+        number,
+        string,
+        string
+      ]) {
+        resolve(room);
+      }
+    )
+  );
+  const roomID = await promise;
+  return roomID;
+};
 
 const PongRoom = () => {
   const location = useLocation();
@@ -27,7 +48,7 @@ const PongRoom = () => {
     socket.emit("joinRoom", false);
     pQuit = false;
   };
-  
+
   const setRandomMode = () => {
     socket.emit("joinRoom", true);
     pQuit = false;
@@ -49,7 +70,8 @@ const PongRoom = () => {
       <Link to="/Pong">
         <button className="button-78" onClick={setRdy}>
           Start Normal Game
-        </button> <br/>
+        </button>{" "}
+        <br />
         <button className="button-78" onClick={setRandomMode}>
           Start Random Game
         </button>

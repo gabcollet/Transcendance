@@ -40,6 +40,8 @@ export interface Channel_ {
   setPasswordTrigger: React.Dispatch<React.SetStateAction<boolean>>;
   setPasswordID: React.Dispatch<React.SetStateAction<number>>;
   isDM: boolean;
+  setOwnerTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+  ownerTrigger: boolean;
 }
 
 export interface ChannelDB_ {
@@ -122,6 +124,12 @@ export interface PasswordPopup_ {
   setPublic: any;
 }
 
+export interface OwnerPopup_ {
+  trigger: boolean;
+  setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+  channelID: number;
+}
+
 export interface ChatFriendList_ {
   friends: string[];
   setFriends: React.Dispatch<React.SetStateAction<string[]>>;
@@ -135,4 +143,6 @@ export interface UserPopup_ {
   setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
   username: string;
   isAdmin: boolean;
+  currentRoom: number;
+  setMembers: React.Dispatch<React.SetStateAction<string[]>>;
 }

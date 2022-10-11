@@ -23,7 +23,7 @@ export const ProfileContext = React.createContext("");
 const App = () => {
   let [background, setBackground] = useState("root-default");
   const [menuOpening, setMenuOpening] = useState<boolean>(false);
-  const [profileUsername, setProfileUsername] = useState("USER NOT LOADED");
+  const [profileUsername, setProfileUsername] = useState("");
   // const [profileUsername, setProfileUsername] = useState("test");
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -50,7 +50,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (profileUsername !== "USER NOT LOADED") {
+    if (profileUsername !== "") {
       socket.emit("online", profileUsername);
     }
   }, [profileUsername]);

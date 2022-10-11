@@ -92,6 +92,11 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
   handleSpectate(client: Socket) {
     this.pongService.joinSpectator(client);
   }
+  
+  @SubscribeMessage('custom')
+  handleCustom(client: Socket, roomID: string) {
+    this.pongService.joinCustom(client, roomID);
+  }
 
   @SubscribeMessage('gameEnd')
   handleEndGame(client: Socket) {

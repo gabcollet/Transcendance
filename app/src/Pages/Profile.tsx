@@ -22,12 +22,8 @@ export const ProfileContent = (props: ProfileProps) => {
       <ProfileButtons />
 
       <section className={styles["profile-sub-container"]}>
-        {props.username !== "USER NOT LOADED" && (
-          <ProfileHeader username={usedUsername} />
-        )}
-        {props.username !== "USER NOT LOADED" && (
-          <ProfileBody username={usedUsername} />
-        )}
+        {props.username !== "" && <ProfileHeader username={usedUsername} />}
+        {props.username !== "" && <ProfileBody username={usedUsername} />}
       </section>
     </div>
   );

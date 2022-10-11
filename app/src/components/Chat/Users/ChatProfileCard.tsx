@@ -5,9 +5,10 @@ import { User } from "../../Profile/ProfileInterfaces";
 import { UserImage } from "../../Profile/UserImage";
 import styles from "./ChatProfileCard.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear, faMessage } from "@fortawesome/free-solid-svg-icons";
+import { faGear, faMessage, faPlay } from "@fortawesome/free-solid-svg-icons";
 import { ProfileContext } from "../../../App";
-import { getDM } from "../ChatUtils";
+import { getDM, invitePlay } from "../ChatUtils";
+import { Link } from "react-router-dom";
 
 // Takes in "username" as props, which is the username of the user
 export const ChatProfileCard = (props: Username_) => {
@@ -44,6 +45,15 @@ export const ChatProfileCard = (props: Username_) => {
     icons = (
       <div className={styles["icon-wrap"]}>
         {iconAdmin}
+        <Link to="/Pong">
+          <FontAwesomeIcon
+            className={styles["play-icon"]}
+            icon={faPlay}
+            onClick={() => {
+              invitePlay(props.username);
+            }}
+          ></FontAwesomeIcon>
+        </Link>
         <FontAwesomeIcon
           className={styles["dm-icon"]}
           icon={faMessage}

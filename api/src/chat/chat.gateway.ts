@@ -18,19 +18,28 @@ export class ChatGateway {
   server: Server;
 
   @SubscribeMessage('sendMessage')
-  handleMessage(client: Socket, payload: any): void {
+  async handleMessage(client: Socket, payload: any) {
     this.logger.debug(
       'Message from',
       payload.author,
       'Sent to room',
       payload.chatRoom,
     );
+    const user = await this.chatService.getUser(payload.author);
+    if (!user) return;
+    const allowed = await this.chatService.checkRestriction(
+      user.id,
+      payload.chatRoom,
+      'both',
+    );
+    if (allowed === true) return;
     this.chatService.addMessage(payload.chatRoom, payload.author, payload.msg);
     this.server.to(payload.chatRoom).emit('messageReceived', payload);
   }
 
   @SubscribeMessage('joinRoom')
   handleJoin(client: Socket, payload: any): void {
+    //need to be secured
     this.logger.log('USER JOINED ROOM :', payload.chatRoom);
     client.join(payload.chatRoom);
     client.emit('joined', payload.chatRoom);
