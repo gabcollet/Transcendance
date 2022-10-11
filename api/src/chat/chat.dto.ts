@@ -13,14 +13,14 @@ export class ChatDto {
   @IsString()
   @IsAlphanumeric()
   @MinLength(4)
-  @MaxLength(20)
+  @MaxLength(10)
   public name: string;
 
   @IsOptional()
   @IsString()
   @IsAlphanumeric()
   @MinLength(4)
-  @MaxLength(20)
+  @MaxLength(10)
   public password: string;
 
   @IsBoolean()
@@ -28,4 +28,12 @@ export class ChatDto {
 
   @IsBoolean()
   public protected: boolean;
+}
+
+export class PasswordDto {
+  @IsString()
+  @IsAlphanumeric()
+  @MinLength(4)
+  @MaxLength(10)
+  public password: string;
 }
