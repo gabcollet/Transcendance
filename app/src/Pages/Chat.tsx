@@ -83,10 +83,10 @@ const Chat = () => {
   useEffect(() => {
     if (socket && otherName !== "") {
       getDM(otherName, setChannelsTrigger).then((newID) => {
-        clickChannel(roomId, Number(newID), setRoomId, socket);
+        clickChannel(0, Number(newID), setRoomId, socket);
       });
     }
-  }, [socket, roomId, otherName]);
+  }, [socket, otherName]);
 
   useEffect(() => {
     const messageWindow = (
