@@ -43,31 +43,6 @@ const Chat = () => {
     otherName = "";
   }
 
-  // Function returns true if "user" is in the list of blockedUsers
-  const compareBlockedUsers = (user: string) => {
-    if (blockedUsers?.blockedUsernames && profileName) {
-      for (const username of blockedUsers.blockedUsernames) {
-        if (username === user) {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
-
-  const messageListener = (message: Message_) => {
-    if (compareBlockedUsers(message.author) === false) {
-      setMessages((current) => [...current, message]);
-    }
-  };
-
-  const joinedListener = async (room: any) => {
-    if (room !== 0) {
-      const joinlist = await getChatMembers(room);
-      if (room === roomId) setMembers(joinlist);
-    }
-  };
-
   useEffect(() => {
     const getBlockedUsers = async () => {
       if (profileName) {
@@ -103,22 +78,24 @@ const Chat = () => {
     const newSocket = io("localhost:6005");
     console.log("chat socket connected");
     setSocket(newSocket);
-    if (newSocket && otherName !== "") {
-      getDM(otherName, setChannelsTrigger).then((newID) => {
-        clickChannel(roomId, Number(newID), setRoomId, newSocket);
-        location.state = null;
-      });
-    }
   }, [setSocket]);
 
-  const messageWindow = (
-    <MessageWindow
-      setMessages={setMessages}
-      messages={messages}
-      chatRoom={roomId}
-    ></MessageWindow>
-  );
   useEffect(() => {
+    if (socket && otherName !== "") {
+      getDM(otherName, setChannelsTrigger).then((newID) => {
+        clickChannel(roomId, Number(newID), setRoomId, socket);
+      });
+    }
+  }, [socket, roomId, otherName]);
+
+  useEffect(() => {
+    const messageWindow = (
+      <MessageWindow
+        setMessages={setMessages}
+        messages={messages}
+        chatRoom={roomId}
+      ></MessageWindow>
+    );
     if (roomId === 0) {
       setMid(<div className={styles["mid"]}>{messageWindow}</div>);
     } else {
@@ -138,6 +115,29 @@ const Chat = () => {
   }, [roomId, messages, socket]);
 
   useEffect(() => {
+    // Function returns true if "user" is in the list of blockedUsers
+    const compareBlockedUsers = (user: string) => {
+      if (blockedUsers?.blockedUsernames && profileName) {
+        for (const username of blockedUsers.blockedUsernames) {
+          if (username === user) {
+            return true;
+          }
+        }
+      }
+      return false;
+    };
+    const messageListener = (message: Message_) => {
+      if (compareBlockedUsers(message.author) === false) {
+        setMessages((current) => [...current, message]);
+      }
+    };
+
+    const joinedListener = async (room: any) => {
+      if (room !== 0) {
+        const joinlist = await getChatMembers(room);
+        if (room === roomId) setMembers(joinlist);
+      }
+    };
     getChannels(setChannels, setPublicChannels);
     socket?.on("messageReceived", messageListener);
     socket?.on("joined", joinedListener);
@@ -147,7 +147,7 @@ const Chat = () => {
       socket?.off("joined", joinedListener);
       socket?.off("leaved", joinedListener);
     };
-  }, [socket, roomId]);
+  }, [socket, roomId, blockedUsers?.blockedUsernames, profileName]);
   return (
     <div className={styles["chat-wrapper"]}>
       <div className={styles["left"]}>
