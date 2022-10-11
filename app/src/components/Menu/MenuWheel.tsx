@@ -94,7 +94,7 @@ const MenuWheel = (props: MenuWheel_) => {
         </Link> */}
         <Link className={styles["link"]} to="/Chat">
           <MenuButton
-            className={"five" + iconName}
+            className={"four" + iconName}
             icon={faCommentDots}
             iconClassName="chat"
           ></MenuButton>

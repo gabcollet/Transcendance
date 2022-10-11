@@ -42,77 +42,76 @@ a {
 
 .zero-t {
   /* transform-origin: 400px; */
-  transform: rotate(calc(360deg / 6 * 0));
+  transform: rotate(calc(-50deg / 5 * 1));
   transition: 1s;
   transition-delay: calc(0.2s * var(0));
 }
 
 .one-t {
   /* transform-origin: 400px; */
-  transform: rotate(calc(360deg / 6 * 1));
+  transform: rotate(calc(270deg / 5 * 1));
   transition: 1s;
   transition-delay: calc(0.2s * var(1));
 }
 
 .two-t {
   /* transform-origin: 400px; */
-  transform: rotate(calc(360deg / 6 * 2));
+  transform: rotate(calc(320deg / 5 * 2));
   transition: 1s;
   transition-delay: calc(0.2s * var(2));
 }
 
 .three-t {
   /* transform-origin: 400px; */
-  transform: rotate(calc(360deg / 6 * 3));
+  transform: rotate(calc(320deg / 5 * 3));
   transition: 1s;
   transition-delay: calc(0.2s * var(3));
 }
 
 .four-t {
   /* transform-origin: 400px; */
-  transform: rotate(calc(360deg / 6 * 4));
+  transform: rotate(calc(340deg / 5 * 4));
   transition: 1s;
   transition-delay: calc(0.2s * var(4));
 }
 
-.five-t {
-  /* transform-origin: 400px; */
+/* .five-t {
   transform: rotate(calc(360deg / 6 * 5));
   transition: 1s;
   transition-delay: calc(0.2s * var(5));
-}
+} */
 
 .play {
-  transform: rotate(calc(360deg / -6 * 0));
+  transform: rotate(calc(-50deg / -5 * 1));
   padding-top: 35px;
   padding-right: 1px;
 }
 
 .bino {
-  transform: rotate(calc(360deg / -6 * 1));
+  transform: rotate(calc(270deg / -5 * 1));
   padding-right: 43px;
   padding-top: 20px;
 }
 
 .user {
-  transform: rotate(calc(360deg / -6 * 2));
+  transform: rotate(calc(320deg / -5 * 2));
   padding-right: 33px;
   padding-bottom: 30px;
 }
 
 .leader {
-  transform: rotate(calc(360deg / -6 * 3));
+  transform: rotate(calc(320deg / -5 * 3));
   padding-bottom: 45px;
 }
 
-.achiev {
-  transform: rotate(calc(360deg / -6 * 4));
-  padding-bottom: 23px;
-  padding-left: 40px;
-}
-
 .chat {
-  transform: rotate(calc(360deg / -6 * 5));
+  transform: rotate(calc(340deg / -5 * 4));
   padding-top: 23px;
   padding-left: 43px;
 }
+
+/* .achiev {
+  transform: rotate(calc(360deg / -6 * 4));
+  padding-bottom: 23px;
+  padding-left: 40px;
+} */
