@@ -11,13 +11,9 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
-import { UsersService } from '../users/users.service';
 import { ChatService } from './chat.service';
-import { Request, Response } from 'express';
-import { PrismaService } from '../prisma/prisma.service';
-import { Chatroom, Message } from '@prisma/client';
-import { ChatDto } from './chat.dto';
-import { User } from '@prisma/client';
+import { Request } from 'express';
+import { ChatDto, PasswordDto } from './chat.dto';
 
 @Controller('chat')
 export class ChatController {
@@ -226,5 +222,31 @@ export class ChatController {
       Number(query.chatroom),
     );
     return owner;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('remove-password')
+  async removePassword(@Req() req) {
+    if (!req.body || !req.body.chatroom) return false;
+    const chatroom = Number(req.body.chatroom);
+    const verification = await this.chatService.isOwner(
+      req.user.toString(),
+      chatroom,
+    );
+    if (verification === false) return false;
+    const removed = this.chatService.removePassword(chatroom);
+    return true;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('change-password')
+  async changePassword(@Req() req, @Body() body: PasswordDto) {
+    const chatroom = Number(req.body.chatroom);
+    const verification = await this.chatService.isOwner(
+      req.user.toString(),
+      chatroom,
+    );
+    if (verification === false) return false;
+    const changed = this.chatService.changePassword(chatroom, body.password);
   }
 }
