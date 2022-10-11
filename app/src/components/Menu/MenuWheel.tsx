@@ -85,13 +85,13 @@ const MenuWheel = (props: MenuWheel_) => {
             iconClassName="leader"
           ></MenuButton>
         </Link>
-        <Link className={styles["link"]} to="/Achievment">
+        {/* <Link className={styles["link"]} to="/Achievment">
           <MenuButton
             className={"four" + iconName}
             icon={faTrophy}
             iconClassName="achiev"
           ></MenuButton>
-        </Link>
+        </Link> */}
         <Link className={styles["link"]} to="/Chat">
           <MenuButton
             className={"five" + iconName}
