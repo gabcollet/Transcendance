@@ -20,7 +20,6 @@ export interface ChatChannels_ {
   currentID: number;
   socket: Socket<any, any> | undefined;
   setSocket: React.Dispatch<React.SetStateAction<Socket<any, any> | undefined>>;
-  setJoinedAlert: React.Dispatch<React.SetStateAction<boolean>>;
   setMembers: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
@@ -44,7 +43,6 @@ export interface Channel_ {
   isDM: boolean;
   setOwnerTrigger: React.Dispatch<React.SetStateAction<boolean>>;
   ownerTrigger: boolean;
-  setJoinedAlert: React.Dispatch<React.SetStateAction<boolean>>;
   setMembers: React.Dispatch<React.SetStateAction<string[]>>;
 }
 

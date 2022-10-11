@@ -1,7 +1,6 @@
 import {
   faCommentDots,
   faPlayCircle,
-  faTrophy,
   faRankingStar,
   faUser,
   faBinoculars,
@@ -9,7 +8,6 @@ import {
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 import Toggle from "./Toggle";
-import _Toggle from "./Toggle";
 import MenuButton from "./MenuButton";
 import { MouseEventHandler, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -28,7 +26,7 @@ const MenuWheel = (props: MenuWheel_) => {
       setIconName("-t");
       setToggleName("toggle-open");
     }
-  }, []);
+  }, [props.opening]);
 
   const openMenu: MouseEventHandler<HTMLDivElement> = () => {
     if (props.opening === false) {
