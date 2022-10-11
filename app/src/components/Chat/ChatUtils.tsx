@@ -4,6 +4,8 @@ import Cookies from "js-cookie";
 import { Socket } from "socket.io-client";
 import { Message_ } from "../../interfaces";
 import { fetchObject } from "../Profile/FetchValue";
+import { setCustom } from "../../Pages/PongRoom"
+import { roomID } from "../Menu/useCanvas";
 
 export async function getChannels(setChannels: any, setPublic: any) {
   await axios
@@ -301,4 +303,13 @@ export async function isOwner(
   return ownership.data;
 }
 
-export async function invitePlay(username: string) {}
+export function invitePlay(username: string) {
+  setCustom(null).then( roomID => {
+    //get the username of second player
+    //pull socketID from DB using username
+    //send signal to second player
+    //second player get popup that onClic call "setCustom(roomID)" 
+    //and <Link to="/Pong"></Link>
+    console.log(roomID);
+  })
+}
