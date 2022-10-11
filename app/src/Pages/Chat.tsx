@@ -70,7 +70,9 @@ const Chat = (props: Chat_) => {
   };
 
   const messageListener = (message: Message_) => {
-    setMessages((current) => [...current, message]);
+    if (compareBlockedUsers(message.author) === false) {
+      setMessages((current) => [...current, message]);
+    }
   };
 
   const joinedListener = async (room: any) => {

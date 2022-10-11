@@ -1,6 +1,6 @@
-// import "./Login.css";
 import styles from "./Login.module.css";
 import { FC, useState } from "react";
+import Cookies from "js-cookie";
 
 const Login: FC<{ onChangeBg: (newClassName: string) => void }> = (props) => {
   const [isClicked, setIsClicked] = useState(false);
@@ -24,10 +24,6 @@ const Login: FC<{ onChangeBg: (newClassName: string) => void }> = (props) => {
     return result;
   };
 
-  console.log(process.env.REACT_APP_REDIRECT_BASE_URL);
-  console.log(process.env.REACT_APP_CLIENT_ID);
-  console.log(process.env.REACT_APP_REDIRECT_URI);
-
   const url: string =
     process.env.REACT_APP_REDIRECT_BASE_URL +
     "?client_id=" +
@@ -37,6 +33,8 @@ const Login: FC<{ onChangeBg: (newClassName: string) => void }> = (props) => {
     "&response_type=code" +
     "&state=" +
     genRandStr(12);
+
+  Cookies.set("jwtToken", "");
 
   return !isClicked ? (
     <div className={styles["login-container"]}>

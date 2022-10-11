@@ -139,6 +139,21 @@ export class ChatService {
     return channels;
   }
 
+  async isOwner(username: string, chatroom: number) {
+    const user = await this.getUser(username);
+    if (!user) return false;
+    const userchatroom = await this.prisma.userChatroom.findUnique({
+      where: {
+        chatroomId_userId: {
+          userId: user.id,
+          chatroomId: chatroom,
+        },
+      },
+    });
+    if (!userchatroom || userchatroom.isOwner === false) return false;
+    return true;
+  }
+
   //https://www.prisma.io/docs/concepts/components/prisma-client/relation-queries#disconnect-a-related-record
   async removeChannel(roomId: number, username: string) {
     const user = await this.getUser(username);
@@ -451,5 +466,31 @@ export class ChatService {
     });
     if (!userChatroom || userChatroom.isOwner === false) return false;
     return true;
+  }
+
+  async removePassword(chatroom: number) {
+    const removed = await this.prisma.chatroom.update({
+      where: {
+        id: chatroom,
+      },
+      data: {
+        protected: false,
+        password: '',
+      },
+    });
+  }
+
+  async changePassword(chatroom: number, password: string) {
+    const hashed = await this.AuthService.hashPassword(password);
+    const changed = await this.prisma.chatroom.update({
+      where: {
+        id: chatroom,
+      },
+      data: {
+        password: hashed,
+        protected: true,
+      },
+    });
+    console.log(changed);
   }
 }
