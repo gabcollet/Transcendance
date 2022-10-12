@@ -21,12 +21,6 @@ export class AuthController {
   ) {}
 
   private logger = new Logger('Auth Controller');
-  //* localhost:3030/auth/login
-  @Get('login')
-  @UseGuards(AuthorizationGuard)
-  async login() {
-    return;
-  }
 
   /**
    * * the guard here automatically use the authorization code to generate a token and return a user
