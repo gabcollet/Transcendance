@@ -9,6 +9,7 @@ export interface Username_ {
   admin: boolean;
   setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
   channelTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+  trigger?: boolean;
 }
 
 export interface ChatChannels_ {
