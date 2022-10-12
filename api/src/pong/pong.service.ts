@@ -65,6 +65,8 @@ export class PongService {
           null,
           null,
           null,
+          null,
+          null
         ]);
         return;
       }
@@ -78,7 +80,7 @@ export class PongService {
       this.logger.log(`${user.username} joined room ${room} as Spectator`);
     }
     client.emit('joinedRoom', [room, pID]);
-    client.emit('roomInfo', [room, pID, user.username, null]);
+    client.emit('roomInfo', [room, pID, user.username, null, user.displayname, null]);
   }
 
   joinRoom(client: Socket, random: boolean) {
@@ -122,8 +124,10 @@ export class PongService {
           return;
         } else if (payload.pID === 1) {
           room.p1_name = user.username;
+          room.p1_display_name = user.displayname;
         } else {
           room.p2_name = user.username;
+          room.p2_display_name = user.displayname;
         }
         room.ready++;
         server.to(payload.room).emit('playerRdy', room.ready);
@@ -134,6 +138,8 @@ export class PongService {
             payload.pID,
             room.p1_name,
             room.p2_name,
+            room.p1_display_name,
+            room.p2_display_name,
           ]);
       }
     }

@@ -1,6 +1,11 @@
 .pong-wrap {
     font-size: 0px;
     border: 2px solid white;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
 
 .pong-text {
@@ -14,12 +19,12 @@
 
 .container {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr minmax(105px, auto) 1fr minmax(105px, auto) 1fr;
     grid-template-rows: 1fr;
     gap: 0px 0px;
-    grid-template-areas: ". left midle right .";
+    grid-template-areas: "left . midle . right";
     align-items: center;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 .midle {
     justify-self: center;
@@ -27,13 +32,15 @@
 }
 
 .left {
-    justify-self: left;
+    justify-self: right;
     grid-area: left;
+    margin-right: 10px;
 }
 
 .right {
-    justify-self: right;
+    justify-self: left;
     grid-area: right;
+    margin-left: 10px;
 }
 
 .column {

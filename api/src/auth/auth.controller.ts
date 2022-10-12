@@ -21,12 +21,6 @@ export class AuthController {
   ) {}
 
   private logger = new Logger('Auth Controller');
-  //* localhost:3030/auth/login
-  @Get('login')
-  @UseGuards(AuthorizationGuard)
-  async login() {
-    return;
-  }
 
   /**
    * * the guard here automatically use the authorization code to generate a token and return a user
@@ -38,6 +32,12 @@ export class AuthController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
+    if (!req.user) {
+      this.logger.warn('User Authentication Refused');
+      res.status(301).redirect('http://localhost:3000/');
+      return;
+    }
+
     const user = req.user['username'];
     const userID = req.user['id'];
 

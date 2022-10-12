@@ -14,9 +14,11 @@ export const setCustom = async (room: string | null) => {
   const promise = new Promise((resolve) =>
     socket.on(
       "roomInfo",
-      function ([room, pid, username1, username2]: [
+      function ([room, pid, username1, username2, display1, display2]: [
         string,
         number,
+        string,
+        string,
         string,
         string
       ]) {
