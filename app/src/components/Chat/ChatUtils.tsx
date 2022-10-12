@@ -3,7 +3,6 @@ import Cookies from "js-cookie";
 import { Message_ } from "../../interfaces";
 import { setCustom } from "../../Pages/PongRoom";
 import styles from "./Channel/AddPopup.module.css";
-import io from "socket.io-client";
 import { socket } from "../../Pages/PongRoom";
 
 export async function getChannels(setChannels: any, setPublic: any) {
