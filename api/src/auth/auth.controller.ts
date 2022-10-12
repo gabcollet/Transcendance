@@ -38,6 +38,12 @@ export class AuthController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
+    if (!req.user) {
+      this.logger.warn('User Authentication Refused');
+      res.status(301).redirect('http://localhost:3000/');
+      return;
+    }
+
     const user = req.user['username'];
     const userID = req.user['id'];
 
