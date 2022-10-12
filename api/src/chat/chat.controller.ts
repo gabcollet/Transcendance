@@ -204,6 +204,9 @@ export class ChatController {
   @Get('dm')
   async dmRequest(@Req() req, @Query() query) {
     const user = req.user.toString();
+    if (!user || !query || !query.target) return false;
+    if ((await this.chatService.isBlocked(user, query.target)) === true)
+      return false;
     const exist = await this.chatService.getDmId(user, query.target);
     if (!exist) {
       //create and join if dm doesnt exist

@@ -3,9 +3,7 @@ import Channel from "./Channel";
 import AddChannel from "./AddChannel";
 import { ChatChannels_, ChannelDB_ } from "../../../interfaces";
 import { useState } from "react";
-import PasswordPopup from "./PasswordPopup";
 import OwnerPopup from "./OwnerPopup";
-import { channel } from "diagnostics_channel";
 
 const ChatChannels = (props: ChatChannels_) => {
   let list: JSX.Element;
@@ -39,6 +37,7 @@ const ChatChannels = (props: ChatChannels_) => {
             isDM={object.chatroom.isDM}
             ownerTrigger={ownerTrigger}
             setOwnerTrigger={setOwnerTrigger}
+            setMembers={props.setMembers}
           ></Channel>
         </div>
       );
@@ -66,6 +65,7 @@ const ChatChannels = (props: ChatChannels_) => {
             isDM={false}
             ownerTrigger={ownerTrigger}
             setOwnerTrigger={setOwnerTrigger}
+            setMembers={props.setMembers}
           ></Channel>
         </div>
       );

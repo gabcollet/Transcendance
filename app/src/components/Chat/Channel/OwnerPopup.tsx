@@ -66,9 +66,7 @@ const OwnerPopup = (props: OwnerPopup_) => {
       </div>
     </div>
   );
-
   return props.trigger ? popup : <></>;
-  return <></>;
 };
 
 export default OwnerPopup;

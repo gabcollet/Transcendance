@@ -20,6 +20,7 @@ export interface ChatChannels_ {
   currentID: number;
   socket: Socket<any, any> | undefined;
   setSocket: React.Dispatch<React.SetStateAction<Socket<any, any> | undefined>>;
+  setMembers: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export interface ChatBubble_ {
@@ -42,6 +43,7 @@ export interface Channel_ {
   isDM: boolean;
   setOwnerTrigger: React.Dispatch<React.SetStateAction<boolean>>;
   ownerTrigger: boolean;
+  setMembers: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export interface ChannelDB_ {
