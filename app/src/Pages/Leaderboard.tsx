@@ -6,6 +6,14 @@ import { UserImage } from "../components/Profile/UserImage";
 import LeaderboardStyles from "./Leaderboard.module.css";
 
 export const TopTenCard = (props: any) => {
+  const [playerObject, setPlayerObject] = useState(Object);
+
+  useEffect(() => {
+    if (props.player.username) {
+      fetchObject("users/" + props.player.username, setPlayerObject);
+    }
+  }, []);
+
   let winRatio = props.player.wins / props.player.losses;
   let winRatioDecimal = "";
   if (!isFinite(winRatio)) {
@@ -22,7 +30,7 @@ export const TopTenCard = (props: any) => {
           className={LeaderboardStyles["player-picture"]}
         />
         <h2 className={LeaderboardStyles["player-name"]}>
-          {props.player.username}
+          {playerObject.displayname}
         </h2>
       </div>
       <div className={LeaderboardStyles["player-stats-container"]}>
@@ -69,7 +77,6 @@ export const TopTenElements = () => {
   let topTenArray: JSX.Element[] = [];
   if (topTenPlayers.length !== 0) {
     topTenArray = topTenPlayers.map((player: Stats) => {
-      console.log(player);
       return <TopTenCard key={player.username} player={player} />;
     });
   }
@@ -85,7 +92,9 @@ export const Leaderboard = () => {
   const [profilePlayer, setProfilePlayer] = useState(Object);
 
   useEffect(() => {
-    fetchObject("profile/player/" + profileName, setProfilePlayer);
+    if (profileName) {
+      fetchObject("profile/player/" + profileName, setProfilePlayer);
+    }
   }, [profileName]);
 
   return (

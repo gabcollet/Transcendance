@@ -13,11 +13,9 @@ export const MatchCard = (props: any) => {
   const newDate = Date.parse(props.match.date);
   const date = new Date(newDate).toString();
 
-  console.log(date);
   const dateArray = date.split(" ");
   const slicedDate = dateArray.slice(1, 4);
   const finalDate = slicedDate.join(" ");
-  console.log(finalDate);
 
   useEffect(() => {
     fetchObject("users/" + props.match.winner, setWinnerUser);

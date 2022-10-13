@@ -6,7 +6,7 @@ export const ProfileButtons = () => {
     <div className={styles["path-buttons-container"]}>
       <Link className={styles["search-link"]} to="/Profile/user">
         <button className={styles["button-78"]} type="button">
-          User
+          My User
         </button>
       </Link>
       <Link className={styles["search-link"]} to="/Profile/search">
@@ -16,7 +16,7 @@ export const ProfileButtons = () => {
       </Link>
       <Link className={styles["search-link"]} to="/Profile/config">
         <button className={styles["button-78"]} type="button">
-          Config
+          My Config
         </button>
       </Link>
     </div>
