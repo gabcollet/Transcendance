@@ -12,15 +12,14 @@ export const UsersList = (props: UsersListProps) => {
   const [searchUsers, setSearchUsers] = useState<any>([]);
 
   useEffect(() => {
-    console.log(`This is searchString ${props.searchString}`);
     fetchObject(`users?search=${props.searchString}`, setSearchUsers);
   }, [props.searchString]);
 
   const searchElements = searchUsers?.map((searchUsername: ProfileProps) => {
-    console.log(searchUsername);
     return (
       searchUsername && (
         <FriendCard
+          key={searchUsername.username}
           friendUsername={searchUsername.username}
           searchString={props.searchString}
           onRemove={() => {}}
