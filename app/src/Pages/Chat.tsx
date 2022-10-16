@@ -125,8 +125,8 @@ const Chat = () => {
       setInviteID(payload.room);
       setInvitee(payload.user);
     };
-    socket?.on("invited", invitedListener);
-  }, [socket]);
+    socket.on("invited", invitedListener);
+  });
 
   useEffect(() => {
     // Function returns true if "user" is in the list of blockedUsers
