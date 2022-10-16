@@ -123,20 +123,14 @@ const HistoryContent = (props: ProfileProps) => {
         setMatchHistory
       );
       setHasFetched(1);
-      console.log("useEffect: matchHistory:");
-      console.log(matchHistory);
     };
     asyncFetch();
   }, [props.username]);
 
   let matchesElement = null;
-  console.log(matchHistory);
-  console.log(props.username);
   if (hasFetched) {
-    console.log("IN MATCH HISTORY MAP");
-    console.log(matchHistory);
-    matchesElement = matchHistory?.map((match: History) => {
-      return <MatchCard match={match} />;
+    matchesElement = matchHistory?.map((match: History, i: number) => {
+      return <MatchCard key={`${i}-matchCard`} match={match} />;
     });
   }
   return (
@@ -155,16 +149,13 @@ const AchievementsContent = (props: any) => {
 
   let achievementElement: any = [];
   for (let key in achievements) {
-    console.log("Acheivements:");
-    console.log(achievements);
-    console.log("acheivement.key:");
-    console.log(achievements[key]);
-    console.log("key:");
-    console.log(key);
-
     if (key !== "id" && key !== "username") {
       achievementElement.push(
-        <AchievementCard name={key} achieved={achievements[key]} />
+        <AchievementCard
+          key={`achievementCard-${key}`}
+          name={key}
+          achieved={achievements[key]}
+        />
       );
     }
   }

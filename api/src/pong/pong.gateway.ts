@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
 import {
   OnGatewayDisconnect,
   OnGatewayInit,
@@ -7,6 +7,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { PongService } from './pong.service';
 
 @WebSocketGateway(6006, { cors: '*' })

@@ -28,7 +28,10 @@ const App = () => {
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    fetchText("profile/username", setProfileUsername);
+    const cookie = Cookies.get("jwtToken");
+    if (cookie) {
+      fetchText("profile/username", setProfileUsername);
+    }
   }, []);
 
   const changeBG = (newClassName: string) => {
@@ -46,7 +49,10 @@ const App = () => {
         .then((res) => res.text())
         .then((data) => setProfileUsername(data));
     }
-    getUsername();
+    const cookie = Cookies.get("jwtToken");
+    if (cookie) {
+      getUsername();
+    }
   }, []);
 
   useEffect(() => {

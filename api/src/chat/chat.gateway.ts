@@ -6,9 +6,10 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
-import { Logger } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { OneToMany } from 'typeorm';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 
 // Client send a message and server broadcast it
 @WebSocketGateway(6005, { cors: '*:*' })
