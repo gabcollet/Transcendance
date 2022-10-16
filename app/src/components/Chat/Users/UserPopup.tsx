@@ -2,11 +2,7 @@ import styles from "../Channel/AddPopup.module.css";
 import { UserPopup_ } from "../../../interfaces";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { ChatProfileCard } from "./ChatProfileCard";
-import {
-  faCircleXmark,
-  faSheetPlastic,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { UserImage } from "../../Profile/UserImage";
 import { faShieldHalved } from "@fortawesome/free-solid-svg-icons";
 import { getChatMembers, isAdminRequest } from "../ChatUtils";
@@ -38,7 +34,7 @@ const UserPopup = (props: UserPopup_) => {
               <button
                 className={styles["timeout"]}
                 onClick={async () => {
-                  const restricted = await restrictUser(
+                  await restrictUser(
                     props.username,
                     props.currentRoom,
                     10,
@@ -53,7 +49,7 @@ const UserPopup = (props: UserPopup_) => {
               <button
                 className={styles["timeout"]}
                 onClick={async () => {
-                  const restricted = await restrictUser(
+                  await restrictUser(
                     props.username,
                     props.currentRoom,
                     24,
@@ -68,7 +64,7 @@ const UserPopup = (props: UserPopup_) => {
               <button
                 className={styles["timeout"]}
                 onClick={async () => {
-                  const restricted = await restrictUser(
+                  await restrictUser(
                     props.username,
                     props.currentRoom,
                     7,
@@ -118,7 +114,7 @@ const UserPopup = (props: UserPopup_) => {
         );
       }
     });
-  }, [props.trigger]);
+  }, [props]);
   const popup = (
     <div className={styles["addpop-wrap"]}>
       <div className={styles["addpop-in-user"]}>

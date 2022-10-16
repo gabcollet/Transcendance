@@ -50,7 +50,7 @@ export const ChatProfileCard = (props: Username_) => {
             className={styles["play-icon"]}
             icon={faPlay}
             onClick={() => {
-              invitePlay(props.username);
+              invitePlay(props.username, profileName);
             }}
           ></FontAwesomeIcon>
         </Link>

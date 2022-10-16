@@ -14,6 +14,7 @@ const ChatFriendsList = (props: ChatFriendList_) => {
         member={false}
         admin={false}
         setTrigger={setTrigger}
+        trigger={trigger}
         channelTrigger={props.channelTrigger}
       ></ChatProfileCard>
     );

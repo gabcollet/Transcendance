@@ -1,7 +1,6 @@
 import styles from "./MessageWindow.module.css";
 import ChatBubble from "./ChatBubble";
 import { MessageWindow_ } from "../../../interfaces";
-import { useState } from "react";
 
 const MessageWindow = (props: MessageWindow_) => {
   return (

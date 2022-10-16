@@ -51,8 +51,9 @@
 
 .play-icon {
   display: flex;
-  position: absolute;
+  position: relative;
   color: #01ab78;
-  top: 8px;
+  top: 7px;
+  padding-right: 5px;
   cursor: pointer;
 }
