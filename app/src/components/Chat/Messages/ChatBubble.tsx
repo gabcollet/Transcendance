@@ -10,7 +10,7 @@ const ChatBubble = (props: ChatBubble_) => {
     to_send = (
       <div className={styles["message"]}>
         <p className={styles["bubble-sent"]}>{props.message + "\n"}</p>
-        <div className={styles["sent-by"]}>Sent by {props.author}</div>
+        <div className={styles["sent-by"]}>Sent by {props.displayname}</div>
       </div>
     );
   } else {

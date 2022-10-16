@@ -21,7 +21,7 @@ export class ChatGateway {
 
   @SubscribeMessage('sendMessage')
   async handleMessage(client: Socket, payload: any) {
-    this.logger.debug(
+    this.logger.log(
       'Message from',
       payload.author,
       'Sent to room',
@@ -36,8 +36,13 @@ export class ChatGateway {
     );
     if (allowed === true) return;
     this.chatService.addMessage(payload.chatRoom, payload.author, payload.msg);
-    this.logger.debug(payload.chatRoom);
-    this.server.to(payload.chatRoom).emit('messageReceived', payload);
+    const newPayload = {
+      msg: payload.msg,
+      chatRoom: payload.chatRoom,
+      author: payload.author,
+      displayname: user.displayname,
+    };
+    this.server.to(payload.chatRoom).emit('messageReceived', newPayload);
   }
 
   @SubscribeMessage('joinRoom')
