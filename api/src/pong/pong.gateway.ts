@@ -36,12 +36,11 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
     payload: { username: string; roomID: number },
   ) {
     if (payload.username && payload.roomID) {
-      const done = await this.pongService.invitePlayer(
-        payload.username,
-        payload.roomID,
-        client,
-        this.server,
-      );
+      const playerID = await this.pongService.getPlayerID(payload.username);
+      if (playerID === -1) return false;
+      this.logger.debug('INVITING :', payload.roomID, playerID);
+      this.server.emit('joined', 'testINVITE');
+      return true;
     }
   }
 

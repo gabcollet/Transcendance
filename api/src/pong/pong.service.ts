@@ -66,7 +66,7 @@ export class PongService {
           null,
           null,
           null,
-          null
+          null,
         ]);
         return;
       }
@@ -80,7 +80,14 @@ export class PongService {
       this.logger.log(`${user.username} joined room ${room} as Spectator`);
     }
     client.emit('joinedRoom', [room, pID]);
-    client.emit('roomInfo', [room, pID, user.username, null, user.displayname, null]);
+    client.emit('roomInfo', [
+      room,
+      pID,
+      user.username,
+      null,
+      user.displayname,
+      null,
+    ]);
   }
 
   joinRoom(client: Socket, random: boolean) {
@@ -447,19 +454,13 @@ export class PongService {
     return user;
   }
 
-  async invitePlayer(
-    username: string,
-    roomID: number,
-    client: Socket,
-    server: Server,
-  ) {
+  async getPlayerID(username: string) {
     const user = await this.prisma.user.findUnique({
       where: {
         username: username,
       },
     });
-    if (!user) return false;
-    const socketID = user.socketID;
-    server.to(socketID).emit('invited', roomID);
+    if (!user) return -1;
+    return user.socketID;
   }
 }

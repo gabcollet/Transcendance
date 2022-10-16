@@ -24,7 +24,6 @@ const App = () => {
   let [background, setBackground] = useState("root-default");
   const [menuOpening, setMenuOpening] = useState<boolean>(false);
   const [profileUsername, setProfileUsername] = useState("");
-  // const [profileUsername, setProfileUsername] = useState("test");
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {

@@ -139,6 +139,7 @@ const Chat = () => {
       }
     };
     const invitedListener = async (room: any) => {
+      console.log("INVITED");
       alert(room);
     };
 

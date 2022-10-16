@@ -36,6 +36,7 @@ export class ChatGateway {
     );
     if (allowed === true) return;
     this.chatService.addMessage(payload.chatRoom, payload.author, payload.msg);
+    this.logger.debug(payload.chatRoom);
     this.server.to(payload.chatRoom).emit('messageReceived', payload);
   }
 
