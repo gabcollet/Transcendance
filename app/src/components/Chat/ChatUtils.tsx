@@ -306,9 +306,13 @@ export async function channelRights(roomID: number, target: string) {
   const admin = await isAdminRequest(roomID, target);
   if (admin === true) {
     const owner = await isOwner(roomID);
-    if (owner === true) return false;
+    if (owner === true) {
+      return false;
+    } else {
+      return true;
+    }
   }
-  return true;
+  return false;
 }
 
 export async function isOwner(roomID: number) {

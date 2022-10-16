@@ -361,6 +361,7 @@ export class ChatService {
       this.logger.debug('TARGET IS ADMIN');
       return false;
     }
+    this.logger.debug('RETURNING TRUE');
     return true;
   }
 
@@ -438,6 +439,7 @@ export class ChatService {
       },
       data: {
         joined: false,
+        isOwner: false,
       },
     });
     this.logger.log('USER BANNED');
