@@ -356,7 +356,8 @@ export class ChatService {
       }
     }
     const targetAdmin = await this.getAdmin(target, chatroom);
-    if (targetAdmin === true) {
+    const owner = await this.isOwner(user, chatroom);
+    if (targetAdmin === true && owner === false) {
       this.logger.debug('TARGET IS ADMIN');
       return false;
     }

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { faCircleXmark, faUserMinus } from "@fortawesome/free-solid-svg-icons";
 import { UserImage } from "../../Profile/UserImage";
 import { faShieldHalved } from "@fortawesome/free-solid-svg-icons";
-import { getChatMembers, isAdminRequest } from "../ChatUtils";
+import { getChatMembers, channelRights } from "../ChatUtils";
 import { giveAdmin } from "../ChatUtils";
 import { restrictUser } from "../ChatUtils";
 import { kickUser } from "../ChatUtils";
@@ -16,7 +16,7 @@ const UserPopup = (props: UserPopup_) => {
     props.setTrigger(false);
   };
   useEffect(() => {
-    isAdminRequest(props.currentRoom, props.username).then((res) => {
+    channelRights(props.currentRoom, props.username).then((res) => {
       if (res === false) {
         setAdminComponent(
           <div className={styles["admin-wrap"]}>
@@ -130,7 +130,7 @@ const UserPopup = (props: UserPopup_) => {
       } else {
         setAdminComponent(
           <div className={styles["admin-wrap"]}>
-            <p className={styles["restricted"]}>Restricted: Admin</p>
+            <p className={styles["restricted"]}>Restricted</p>
           </div>
         );
       }

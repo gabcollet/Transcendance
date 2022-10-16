@@ -302,6 +302,15 @@ export async function isMutedBlocked(author: string, roomID: number) {
   }
 }
 
+export async function channelRights(roomID: number, target: string) {
+  const admin = await isAdminRequest(roomID, target);
+  if (admin === true) {
+    const owner = await isOwner(roomID);
+    if (owner === true) return false;
+  }
+  return true;
+}
+
 export async function isOwner(roomID: number) {
   const ownership = await axios.get("http://localhost:3030/chat/is-owner", {
     params: {
