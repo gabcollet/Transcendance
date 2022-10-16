@@ -295,14 +295,18 @@ export async function isOwner(roomID: number) {
   return ownership.data;
 }
 
-export async function invitePlay(username: string) {
+export async function invitePlay(target: string, username: string) {
   //get the username of second player
   //pull socketID from DB using username
   //send signal to second player
   //second player get popup that onClic call "setCustom(roomID)"
   //and <Link to="/Pong"></Link>
   const roomID = await setCustom(null);
-  socket?.emit("invite", { username: username, roomID: roomID });
+  socket?.emit("invite", {
+    target: target,
+    username: username,
+    roomID: roomID,
+  });
   console.log("ROOMID = " + roomID);
 }
 

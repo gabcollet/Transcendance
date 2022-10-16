@@ -19,6 +19,8 @@ import { Socket, io } from "socket.io-client";
 import { ProfileContext } from "../App";
 import { useLocation } from "react-router-dom";
 import { fetchObject } from "../components/Profile/FetchValue";
+import { socket } from "./PongRoom";
+import InvitePopup from "../components/Chat/InvitePopup";
 
 const Chat = () => {
   const profileName = useContext(ProfileContext);
@@ -27,13 +29,16 @@ const Chat = () => {
   const [channels, setChannels] = useState<AxiosResponse<any, any>>();
   const [publicChannels, setPublicChannels] =
     useState<AxiosResponse<any, any>>();
-  const [socket, setSocket] = useState<Socket>();
+  const [socketChat, setSocket] = useState<Socket>();
   const [mid, setMid] = useState<JSX.Element>(<></>);
   const [members, setMembers] = useState<string[]>([]);
   const [friends, setFriends] = useState<string[]>([]);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [channelsTrigger, setChannelsTrigger] = useState<boolean>(false);
   const [blockedUsers, setBlockedUsers] = useState(Object);
+  const [inviteTrigger, setInviteTrigger] = useState(false);
+  const [inviteID, setInviteID] = useState("");
+  const [invitee, setInvitee] = useState("");
   const location = useLocation();
 
   let otherName: string;
@@ -81,12 +86,12 @@ const Chat = () => {
   }, [setSocket]);
 
   useEffect(() => {
-    if (socket && otherName !== "") {
+    if (socketChat && otherName !== "") {
       getDM(otherName, setChannelsTrigger).then((newID) => {
-        clickChannel(0, Number(newID), setRoomId, socket);
+        clickChannel(0, Number(newID), setRoomId, socketChat);
       });
     }
-  }, [socket, otherName]);
+  }, [socketChat, otherName]);
 
   useEffect(() => {
     const messageWindow = (
@@ -107,12 +112,21 @@ const Chat = () => {
             messages={messages}
             chatRoom={roomId}
             setSocket={setSocket}
-            socket={socket}
+            socket={socketChat}
           ></InputZone>
         </div>
       );
     }
-  }, [roomId, messages, socket]);
+  }, [roomId, messages, socketChat]);
+
+  useEffect(() => {
+    const invitedListener = async (payload: any) => {
+      setInviteTrigger(true);
+      setInviteID(payload.room);
+      setInvitee(payload.user);
+    };
+    socket?.on("invited", invitedListener);
+  }, [socket]);
 
   useEffect(() => {
     // Function returns true if "user" is in the list of blockedUsers
@@ -138,22 +152,17 @@ const Chat = () => {
         if (room === roomId) setMembers(joinlist);
       }
     };
-    const invitedListener = async (room: any) => {
-      console.log("INVITED");
-      alert(room);
-    };
 
     getChannels(setChannels, setPublicChannels);
-    socket?.on("messageReceived", messageListener);
-    socket?.on("joined", joinedListener);
-    socket?.on("leaved", joinedListener);
-    socket?.on("invited", invitedListener);
+    socketChat?.on("messageReceived", messageListener);
+    socketChat?.on("joined", joinedListener);
+    socketChat?.on("leaved", joinedListener);
     return () => {
-      socket?.off("messageReceived", messageListener);
-      socket?.off("joined", joinedListener);
-      socket?.off("leaved", joinedListener);
+      socketChat?.off("messageReceived", messageListener);
+      socketChat?.off("joined", joinedListener);
+      socketChat?.off("leaved", joinedListener);
     };
-  }, [socket, roomId, blockedUsers?.blockedUsernames, profileName]);
+  }, [socketChat, roomId, blockedUsers?.blockedUsernames, profileName]);
   return (
     <div className={styles["chat-wrapper"]}>
       <div className={styles["left"]}>
@@ -165,11 +174,17 @@ const Chat = () => {
           setRoomID={setRoomId}
           currentID={roomId}
           setSocket={setSocket}
-          socket={socket}
+          socket={socketChat}
           setMembers={setMembers}
         ></ChatChannels>
       </div>
       {mid}
+      <InvitePopup
+        trigger={inviteTrigger}
+        invitee={invitee}
+        roomID={inviteID}
+        setTrigger={setInviteTrigger}
+      ></InvitePopup>
       <div className={styles["right"]}>
         <Members
           id={roomId}

@@ -102,6 +102,39 @@
   cursor: pointer;
 }
 
+.refuse-inv {
+  position: absolute;
+  bottom: 8px;
+  right: 13px;
+  background-color: #ff005c;
+  border-radius: 10px;
+  padding: 10px;
+  color: #f3efff;
+  border: none;
+  cursor: pointer;
+}
+
+.accept-inv {
+  position: absolute;
+  bottom: 8px;
+  left: 13px;
+  background-color: #01ab78;
+  border-radius: 10px;
+  padding: 10px;
+  color: #f3efff;
+  border: none;
+  cursor: pointer;
+}
+
+.game-invite {
+  display: flex;
+  position: relative;
+  padding-bottom: 40px;
+  font-size: large;
+  /* color: rgb(157, 138, 223); */
+  font-weight: bold;
+}
+
 .remove-password {
   display: flex;
   position: relative;
