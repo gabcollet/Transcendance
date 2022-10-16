@@ -257,6 +257,15 @@
   z-index: 3;
 }
 
+.kick-icon {
+  color: red;
+  position: absolute;
+  cursor: pointer;
+  right: 15px;
+  top: 10px;
+  font-size: 20px;
+}
+
 .timeout {
   border-radius: 50%;
   height: 30px;

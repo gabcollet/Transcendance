@@ -164,6 +164,26 @@ export async function giveAdmin(chatRoom: number, username: string) {
   }
 }
 
+export async function kickUser(username: string, chatroom: number) {
+  await axios
+    .post(
+      "http://localhost:3030/chat/kick-user",
+      {
+        chatroom: chatroom,
+        username: username,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `bearer ${Cookies.get("jwtToken")}`,
+        },
+      }
+    )
+    .then((res) => {
+      console.log("USER KICKED");
+    });
+}
+
 export async function restrictUser(
   username: string,
   chatroom: number,
@@ -280,6 +300,19 @@ export async function isMutedBlocked(author: string, roomID: number) {
   } else {
     return false;
   }
+}
+
+export async function channelRights(roomID: number, target: string) {
+  const admin = await isAdminRequest(roomID, target);
+  if (admin === true) {
+    const owner = await isOwner(roomID);
+    if (owner === true) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+  return false;
 }
 
 export async function isOwner(roomID: number) {

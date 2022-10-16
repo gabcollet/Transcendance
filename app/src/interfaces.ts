@@ -27,6 +27,7 @@ export interface ChatChannels_ {
 export interface ChatBubble_ {
   message: string;
   author: string;
+  displayname: string;
 }
 
 export interface Channel_ {
@@ -103,6 +104,7 @@ export interface Message_ {
   author: string;
   msg: string;
   chatRoom: number;
+  displayname: string;
 }
 
 export interface InputZone_ {

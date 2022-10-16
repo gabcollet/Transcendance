@@ -10,6 +10,7 @@ const MessageWindow = (props: MessageWindow_) => {
           <ChatBubble
             message={message.msg}
             author={message.author}
+            displayname={message.displayname}
           ></ChatBubble>
         </div>
       ))}

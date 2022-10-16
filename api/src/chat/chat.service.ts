@@ -205,6 +205,7 @@ export class ChatService {
   async addMessage(id: number, username: string, message: string) {
     const user = await this.getUser(username);
     const room = await this.getChannel(id);
+    if (!user || !room) return;
     const convo = await this.prisma.message.create({
       data: {
         roomId: room.id,
@@ -231,6 +232,7 @@ export class ChatService {
     let messages = messagesDB.map((single) => {
       return {
         author: single.author.username,
+        displayname: single.author.displayname,
         msg: single.messageText,
         chatRoom: single.roomId,
         sentAt: single.sentAt,
@@ -354,10 +356,12 @@ export class ChatService {
       }
     }
     const targetAdmin = await this.getAdmin(target, chatroom);
-    if (targetAdmin === true) {
+    const owner = await this.isOwner(user, chatroom);
+    if (targetAdmin === true && owner === false) {
       this.logger.debug('TARGET IS ADMIN');
       return false;
     }
+    this.logger.debug('RETURNING TRUE');
     return true;
   }
 
@@ -435,6 +439,7 @@ export class ChatService {
       },
       data: {
         joined: false,
+        isOwner: false,
       },
     });
     this.logger.log('USER BANNED');

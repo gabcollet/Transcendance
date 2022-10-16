@@ -2,12 +2,13 @@ import styles from "../Channel/AddPopup.module.css";
 import { UserPopup_ } from "../../../interfaces";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCircleXmark, faUserMinus } from "@fortawesome/free-solid-svg-icons";
 import { UserImage } from "../../Profile/UserImage";
 import { faShieldHalved } from "@fortawesome/free-solid-svg-icons";
-import { getChatMembers, isAdminRequest } from "../ChatUtils";
+import { getChatMembers, channelRights } from "../ChatUtils";
 import { giveAdmin } from "../ChatUtils";
 import { restrictUser } from "../ChatUtils";
+import { kickUser } from "../ChatUtils";
 
 const UserPopup = (props: UserPopup_) => {
   const [adminComponent, setAdminComponent] = useState(<></>);
@@ -15,7 +16,7 @@ const UserPopup = (props: UserPopup_) => {
     props.setTrigger(false);
   };
   useEffect(() => {
-    isAdminRequest(props.currentRoom, props.username).then((res) => {
+    channelRights(props.currentRoom, props.username).then((res) => {
       if (res === false) {
         setAdminComponent(
           <div className={styles["admin-wrap"]}>
@@ -26,6 +27,7 @@ const UserPopup = (props: UserPopup_) => {
                 icon={faShieldHalved}
                 onClick={() => {
                   giveAdmin(props.currentRoom, props.username);
+                  props.setTrigger(false);
                 }}
               ></FontAwesomeIcon>
             </div>
@@ -42,6 +44,7 @@ const UserPopup = (props: UserPopup_) => {
                   );
                   const members = await getChatMembers(props.currentRoom);
                   props.setMembers(members);
+                  props.setTrigger(false);
                 }}
               >
                 10M
@@ -57,6 +60,7 @@ const UserPopup = (props: UserPopup_) => {
                   );
                   const members = await getChatMembers(props.currentRoom);
                   props.setMembers(members);
+                  props.setTrigger(false);
                 }}
               >
                 1J
@@ -72,6 +76,7 @@ const UserPopup = (props: UserPopup_) => {
                   );
                   const members = await getChatMembers(props.currentRoom);
                   props.setMembers(members);
+                  props.setTrigger(false);
                 }}
               >
                 1W
@@ -83,6 +88,7 @@ const UserPopup = (props: UserPopup_) => {
                 className={styles["timeout"]}
                 onClick={() => {
                   restrictUser(props.username, props.currentRoom, 10, "mute");
+                  props.setTrigger(false);
                 }}
               >
                 10M
@@ -91,6 +97,7 @@ const UserPopup = (props: UserPopup_) => {
                 className={styles["timeout"]}
                 onClick={() => {
                   restrictUser(props.username, props.currentRoom, 7, "mute");
+                  props.setTrigger(false);
                 }}
               >
                 1J
@@ -99,17 +106,31 @@ const UserPopup = (props: UserPopup_) => {
                 className={styles["timeout"]}
                 onClick={() => {
                   restrictUser(props.username, props.currentRoom, 24, "mute");
+                  props.setTrigger(false);
                 }}
               >
                 1W
               </button>
+            </div>
+            <div
+              onClick={async () => {
+                await kickUser(props.username, props.currentRoom);
+                const members = await getChatMembers(props.currentRoom);
+                props.setMembers(members);
+                props.setTrigger(false);
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faUserMinus}
+                className={styles["kick-icon"]}
+              ></FontAwesomeIcon>
             </div>
           </div>
         );
       } else {
         setAdminComponent(
           <div className={styles["admin-wrap"]}>
-            <p className={styles["restricted"]}>Restricted: Admin</p>
+            <p className={styles["restricted"]}>Restricted</p>
           </div>
         );
       }

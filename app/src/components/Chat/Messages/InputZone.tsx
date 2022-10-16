@@ -11,6 +11,7 @@ const InputZone = (props: InputZone_) => {
     msg: "",
     author: "",
     chatRoom: props.chatRoom,
+    displayname: "",
   };
 
   const sendMsg = async (message: string) => {
