@@ -152,6 +152,27 @@ export class ChatController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Post('kick-user')
+  async kickUser(@Req() req) {
+    if (!req.user || !req.body || !req.body.username || !req.body.chatroom)
+      return false;
+    const username = req.user.toString();
+    const target = req.body.username;
+    const chatroom = req.body.chatroom;
+    const kickRight = await this.chatService.validateRestriction(
+      username,
+      target,
+      chatroom,
+      true,
+    );
+    const targetUser = await this.chatService.getUser(target);
+    if (!targetUser) return false;
+    if (kickRight === true) {
+      this.chatService.handleBan(targetUser.id, chatroom);
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post('ban-mute')
   async banMuteUser(@Req() req) {
     const username = req.user.toString();

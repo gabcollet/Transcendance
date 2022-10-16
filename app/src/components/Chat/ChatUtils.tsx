@@ -164,6 +164,26 @@ export async function giveAdmin(chatRoom: number, username: string) {
   }
 }
 
+export async function kickUser(username: string, chatroom: number) {
+  await axios
+    .post(
+      "http://localhost:3030/chat/kick-user",
+      {
+        chatroom: chatroom,
+        username: username,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `bearer ${Cookies.get("jwtToken")}`,
+        },
+      }
+    )
+    .then((res) => {
+      console.log("USER KICKED");
+    });
+}
+
 export async function restrictUser(
   username: string,
   chatroom: number,
