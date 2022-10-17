@@ -2,14 +2,14 @@ import styles from "./Login.module.css";
 import { FC, useState } from "react";
 import Cookies from "js-cookie";
 
-const Login: FC<{ onChangeBg: (newClassName: string) => void }> = (props) => {
+const Login = () => {
   const [isClicked, setIsClicked] = useState(false);
 
   const login42Handler = () => {
     setIsClicked(!isClicked);
   };
 
-  props.onChangeBg("root-login");
+  // props.onChangeBg("root-login");
 
   const genRandStr = (length: number) => {
     const characters =
