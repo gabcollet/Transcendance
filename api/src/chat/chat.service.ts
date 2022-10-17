@@ -2,7 +2,7 @@ import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UsersService } from '../users/users.service';
 import { ChatDto } from './chat.dto';
-import { User } from '@prisma/client';
+import { Restricted, User } from '@prisma/client';
 import { from, lastValueFrom } from 'rxjs';
 import { Request } from 'express';
 import { runInThisContext } from 'vm';
@@ -445,6 +445,47 @@ export class ChatService {
     this.logger.log('USER BANNED');
   }
 
+  async checkTime(restricted: Restricted) {
+    let diff: number;
+    if (restricted.timer === 10) {
+      diff = this.timeDiff_in_minutes(restricted.createdAt.toString());
+      this.logger.log('USER RESTRICTION TIME DIFF = ' + diff + ' MINUTES');
+      if (diff >= 10) {
+        this.prisma.restricted.delete({
+          where: {
+            id: restricted.id,
+          },
+        });
+        return true;
+      }
+    }
+    if (restricted.timer === 7) {
+      diff = this.timeDiff_in_days(restricted.createdAt.toString());
+      this.logger.log('USER RESTRICTION TIME DIFF = ' + diff + ' DAYS');
+      if (diff >= 7) {
+        this.prisma.restricted.delete({
+          where: {
+            id: restricted.id,
+          },
+        });
+        return true;
+      }
+    }
+    if (restricted.timer === 24) {
+      diff = this.timeDiff_in_hours(restricted.createdAt.toString());
+      this.logger.log('USER RESTRICTION TIME DIFF = ' + diff + ' HOURS');
+      if (diff >= 24) {
+        this.prisma.restricted.delete({
+          where: {
+            id: restricted.id,
+          },
+        });
+        return true;
+      }
+    }
+    return false;
+  }
+
   async checkRestriction(userID: number, roomID: number, type: string) {
     const restricted = await this.prisma.restricted.findUnique({
       where: {
@@ -454,6 +495,10 @@ export class ChatService {
         },
       },
     });
+    if (restricted) {
+      const timing = await this.checkTime(restricted);
+      if (timing === true) return false;
+    }
     if (type === 'both' && restricted) return true;
     if (restricted && restricted.type === type) return true;
     return false;
@@ -506,5 +551,41 @@ export class ChatService {
       if (blocked === target) return true;
     });
     return false;
+  }
+
+  timeDiff_in_seconds(timestr: string) {
+    const time = new Date(timestr).valueOf();
+    const time_now = new Date().valueOf();
+    const diff = time_now - time;
+
+    const seconds = diff / 1000;
+    return Math.floor(seconds);
+  }
+
+  timeDiff_in_minutes(timestr: string) {
+    const time = new Date(timestr).valueOf();
+    const time_now = new Date().valueOf();
+    const diff = time_now - time;
+
+    const minutes = diff / (1000 * 60);
+    return Math.floor(minutes);
+  }
+
+  timeDiff_in_hours(timestr: string) {
+    const time = new Date(timestr).valueOf();
+    const time_now = new Date().valueOf();
+    const diff = time_now - time;
+
+    const hours = diff / (1000 * 60 * 60);
+    return Math.floor(hours);
+  }
+
+  timeDiff_in_days(timestr: string) {
+    const time = new Date(timestr).valueOf();
+    const time_now = new Date().valueOf();
+    const diff = time_now - time;
+
+    const days = diff / (1000 * 60 * 60 * 24);
+    return Math.floor(days);
   }
 }
