@@ -21,10 +21,9 @@ import { Leaderboard } from "./Pages/Leaderboard";
 export const ProfileContext = React.createContext("");
 
 const App = () => {
-  let [background, setBackground] = useState("root-default");
+  let [background, setBackground] = useState("root-login");
   const [menuOpening, setMenuOpening] = useState<boolean>(false);
   const [profileUsername, setProfileUsername] = useState("");
-  // const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const cookie = Cookies.get("jwtToken");
@@ -32,10 +31,6 @@ const App = () => {
       fetchText("profile/username", setProfileUsername);
     }
   }, []);
-
-  const changeBG = (newClassName: string) => {
-    setBackground(newClassName);
-  };
 
   useEffect(() => {
     async function getUsername() {
@@ -57,6 +52,7 @@ const App = () => {
   useEffect(() => {
     if (profileUsername !== "") {
       socket.emit("online", profileUsername);
+      setBackground("root-default");
     }
   }, [profileUsername]);
 
@@ -65,7 +61,7 @@ const App = () => {
       <div className={background}>
         <Router>
           <Routes>
-            <Route path="/" element={<Login onChangeBg={changeBG}></Login>} />
+            <Route path="/" element={<Login></Login>} />
             <Route path="/TwoFA" element={<TwoFAQRCode />} />
             <Route path="/TwoFA/verify" element={<TwoFAVerify />} />
             <Route element={<ProtectedRoutes />}>
