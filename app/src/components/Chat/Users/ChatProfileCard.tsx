@@ -41,7 +41,6 @@ export const ChatProfileCard = (props: Username_) => {
         className={styles["invite-icon"]}
         icon={faCirclePlus}
         onClick={() => {
-          console.log("INVITING PLAYER");
           inviteMember(props.roomID, props.username);
         }}
       ></FontAwesomeIcon>

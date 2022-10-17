@@ -55,7 +55,7 @@ export class ChatController {
     const isAdmin = await this.chatService.getAdmin(username, body.roomID);
     if (isAdmin === false) return false;
     await this.chatService.joinChannel(body.friend, body.roomID, false, true);
-    this.logger.log('INVITED');
+    this.logger.log(' PLAYER ' + request.user + ' INVITED TO CHANNEL');
     return true;
   }
 
