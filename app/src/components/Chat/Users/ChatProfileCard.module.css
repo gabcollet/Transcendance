@@ -23,6 +23,15 @@
   margin: 10px;
 }
 
+.invite-icon {
+  color: #fbff00;
+  display: flex;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  cursor: pointer;
+}
+
 .admin-icon {
   color: #ff005c;
   display: flex;

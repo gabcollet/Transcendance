@@ -1,5 +1,5 @@
 import styles from "./Login.module.css";
-import { FC, useState } from "react";
+import { useState } from "react";
 import Cookies from "js-cookie";
 
 const Login = () => {

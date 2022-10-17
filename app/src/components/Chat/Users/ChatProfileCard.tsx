@@ -5,9 +5,14 @@ import { User } from "../../Profile/ProfileInterfaces";
 import { UserImage } from "../../Profile/UserImage";
 import styles from "./ChatProfileCard.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear, faMessage, faPlay } from "@fortawesome/free-solid-svg-icons";
+import {
+  faGear,
+  faMessage,
+  faPlay,
+  faCirclePlus,
+} from "@fortawesome/free-solid-svg-icons";
 import { ProfileContext } from "../../../App";
-import { getDM, invitePlay } from "../ChatUtils";
+import { getDM, inviteMember, invitePlay } from "../ChatUtils";
 import { Link } from "react-router-dom";
 
 // Takes in "username" as props, which is the username of the user
@@ -15,6 +20,7 @@ export const ChatProfileCard = (props: Username_) => {
   const [chatUser, setChatUser] = useState<User>({});
   let iconAdmin = <></>;
   let icons = <></>;
+  let inviteIcon = <></>;
   const profileName = useContext(ProfileContext);
   let diffUser: boolean;
   if (profileName !== props.username) {
@@ -29,9 +35,20 @@ export const ChatProfileCard = (props: Username_) => {
   const handleDM = () => {
     getDM(props.username, props.channelTrigger);
   };
-
+  if (props.friend === true && props.admin === true) {
+    inviteIcon = (
+      <FontAwesomeIcon
+        className={styles["invite-icon"]}
+        icon={faCirclePlus}
+        onClick={() => {
+          console.log("INVITING PLAYER");
+          inviteMember(props.roomID, props.username);
+        }}
+      ></FontAwesomeIcon>
+    );
+  }
   if (diffUser === true) {
-    if (props.admin === true) {
+    if (props.admin === true && props.friend === false) {
       iconAdmin = (
         <div className={styles["icon-wrap"]}>
           <FontAwesomeIcon
@@ -45,6 +62,7 @@ export const ChatProfileCard = (props: Username_) => {
     icons = (
       <div className={styles["icon-wrap"]}>
         {iconAdmin}
+        {inviteIcon}
         <Link to="/Pong">
           <FontAwesomeIcon
             className={styles["play-icon"]}

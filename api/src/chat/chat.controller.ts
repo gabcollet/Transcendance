@@ -48,6 +48,18 @@ export class ChatController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Post('invite-channel')
+  async inviateChannel(@Req() request: Request, @Body() body) {
+    if (!body.friend || !body.roomID || !request.user) return false;
+    const username = request.user.toString();
+    const isAdmin = await this.chatService.getAdmin(username, body.roomID);
+    if (isAdmin === false) return false;
+    await this.chatService.joinChannel(body.friend, body.roomID, false, true);
+    this.logger.log('INVITED');
+    return true;
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post('join-channel')
   async joinChannelReq(@Req() request: Request) {
     let username = request.user.toString();
