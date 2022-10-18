@@ -34,7 +34,7 @@ const Login = () => {
     "&state=" +
     genRandStr(12);
 
-  Cookies.set("jwtToken", "");
+  Cookies.set("jwtToken", "", { sameSite: "lax" });
 
   return !isClicked ? (
     <div className={styles["login-container"]}>
