@@ -42,6 +42,8 @@ const Members = (props: {
           admin={props.isAdmin}
           setTrigger={setPopMember}
           channelTrigger={props.channelTrigger}
+          friend={false}
+          roomID={0}
         ></ChatProfileCard>
       </div>
     );

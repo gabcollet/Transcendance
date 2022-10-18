@@ -44,12 +44,13 @@ export class AuthController {
     const username = await this.authService.cipher(user);
     res.cookie('username', username.content, {
       httpOnly: true,
+      sameSite: 'lax',
     });
-    res.cookie('usernameiv', username.iv, { httpOnly: true });
+    res.cookie('usernameiv', username.iv, { httpOnly: true, sameSite: 'lax' });
 
     if (req.user['twoFAEnabled'] === false) {
       const jwtToken = this.authService.generateJwtToken(user, userID);
-      res.cookie('jwtToken', jwtToken, { httpOnly: false });
+      res.cookie('jwtToken', jwtToken, { httpOnly: false, sameSite: 'lax' });
       res.status(301).redirect('http://localhost:3000/Menu');
     } else {
       req.user['twoFASecret']
@@ -107,7 +108,7 @@ export class AuthController {
 
     if (verified === true) {
       const jwtToken = this.authService.generateJwtToken(username);
-      res.cookie('jwtToken', jwtToken, { httpOnly: false });
+      res.cookie('jwtToken', jwtToken, { httpOnly: false, sameSite: 'lax' });
     }
 
     return { verified, username };

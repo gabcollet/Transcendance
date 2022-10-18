@@ -404,3 +404,19 @@ export async function changePassword(
     });
   return ret;
 }
+
+export function inviteMember(roomID: number, friend: string) {
+  axios.post(
+    "http://localhost:3030/chat/invite-channel",
+    {
+      roomID: roomID,
+      friend: friend,
+    },
+    {
+      withCredentials: true,
+      headers: {
+        Authorization: `bearer ${Cookies.get("jwtToken")}`,
+      },
+    }
+  );
+}

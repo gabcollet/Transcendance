@@ -14,7 +14,9 @@ const TwoFAVerify = () => {
     const payload = await axios.post(
       "http://localhost:3030/auth/TwoFA/verify",
       { pin: pin },
-      { withCredentials: true }
+      {
+        withCredentials: true,
+      }
     );
 
     if (payload.data["verified"] === false)

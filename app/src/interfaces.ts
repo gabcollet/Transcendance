@@ -10,6 +10,8 @@ export interface Username_ {
   setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
   channelTrigger: React.Dispatch<React.SetStateAction<boolean>>;
   trigger?: boolean;
+  friend: boolean;
+  roomID: number;
 }
 
 export interface ChatChannels_ {
@@ -141,6 +143,8 @@ export interface ChatFriendList_ {
   username: string;
   setRoomId: React.Dispatch<React.SetStateAction<number>>;
   channelTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+  isAdmin: boolean;
+  roomID: number;
 }
 
 export interface UserPopup_ {

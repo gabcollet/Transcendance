@@ -200,6 +200,8 @@ const Chat = () => {
           username={profileName}
           setRoomId={setRoomId}
           channelTrigger={setChannelsTrigger}
+          isAdmin={isAdmin}
+          roomID={roomId}
         ></ChatFriendsList>
       </div>
     </div>

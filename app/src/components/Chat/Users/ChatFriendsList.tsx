@@ -12,10 +12,12 @@ const ChatFriendsList = (props: ChatFriendList_) => {
         key={index}
         username={member}
         member={false}
-        admin={false}
+        admin={props.isAdmin}
         setTrigger={setTrigger}
         trigger={trigger}
         channelTrigger={props.channelTrigger}
+        friend={true}
+        roomID={props.roomID}
       ></ChatProfileCard>
     );
   });
