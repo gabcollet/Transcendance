@@ -166,7 +166,6 @@ const Chat = () => {
 
   useEffect(() => {
     const alarmListener = async () => {
-      console.log("ALARM LISTENER");
       getChatRequest(setMessages, setMembers, roomId, setFriends);
       getChannels(setChannels, setPublicChannels);
     };

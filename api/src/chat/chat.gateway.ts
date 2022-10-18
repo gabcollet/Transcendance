@@ -48,8 +48,10 @@ export class ChatGateway {
 
   @SubscribeMessage('alarm-channel')
   handleAlarmCh(client: Socket, payload: any) {
-    this.logger.log('alarm-chanel');
-    this.server.to(payload.chatRoom).emit('alarm-channel');
+    this.logger.log('alarm-chanel', payload);
+    if (!payload) return false;
+    // this.server.to(Number(payload)).emit('alarm-channel');
+    this.server.emit('alarm-all');
   }
 
   @SubscribeMessage('alarm-all')

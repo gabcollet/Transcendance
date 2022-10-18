@@ -53,6 +53,7 @@ const AddPopup = (props: AddPopup_) => {
           setErrorMsg(<></>);
           console.log("Getting channels...");
           getChannels(props.setUserChannels, props.setPublic);
+          props.socket.emit("alarm-all");
         })
         .catch((error) => {
           if (

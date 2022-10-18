@@ -127,7 +127,7 @@ export class ChatController {
   @UseGuards(JwtAuthGuard)
   @Get('is-admin')
   async isAdmin(@Query() query) {
-    if (!query.id || query.username) return false;
+    if (!query.id || !query.username) return false;
     const confirmation = await this.chatService.getAdmin(
       query.username,
       Number(query.id),
