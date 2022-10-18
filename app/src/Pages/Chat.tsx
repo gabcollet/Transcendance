@@ -163,6 +163,15 @@ const Chat = () => {
       socketChat?.off("leaved", joinedListener);
     };
   }, [socketChat, roomId, blockedUsers?.blockedUsernames, profileName]);
+
+  useEffect(() => {
+    const alarmListener = async () => {
+      getChatRequest(setMessages, setMembers, roomId, setFriends);
+      getChannels(setChannels, setPublicChannels);
+    };
+    socketChat?.on("alarm-channel", alarmListener);
+    socketChat?.on("alarm-all", alarmListener);
+  }, [socketChat, roomId]);
   return (
     <div className={styles["chat-wrapper"]}>
       <div className={styles["left"]}>

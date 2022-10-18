@@ -23,9 +23,10 @@ export class ChatController {
   @UseGuards(JwtAuthGuard)
   @Get('convo')
   async getConvo(@Req() req: Request, @Query() query) {
-    if (query.id == null) {
+    if (!query.id || query.id === '0') {
       return [];
     }
+    this.logger.debug('ROOM ID = ' + query.id);
     const messages = await this.chatService.getMessages(
       Number(query.id),
       req.user.toString(),
@@ -96,6 +97,7 @@ export class ChatController {
   @UseGuards(JwtAuthGuard)
   @Get('members')
   async roomMembers(@Req() request: Request, @Query() query) {
+    if (!query.id) return false;
     const members = this.chatService.getMembers(Number(query.id));
     return members;
   }
@@ -125,6 +127,7 @@ export class ChatController {
   @UseGuards(JwtAuthGuard)
   @Get('is-admin')
   async isAdmin(@Query() query) {
+    if (!query.id || !query.username) return false;
     const confirmation = await this.chatService.getAdmin(
       query.username,
       Number(query.id),
