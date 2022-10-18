@@ -27,6 +27,7 @@ const AddChannel = (props: any) => {
         userChannels={props.userChannels}
         setUserChannels={props.setUserChannels}
         setPublic={props.setPublic}
+        socket={props.socket}
       ></AddPopup>
       <PasswordPopup
         trigger={props.passwordTrigger}

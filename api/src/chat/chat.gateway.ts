@@ -10,6 +10,7 @@ import { Logger, UseGuards } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { OneToMany } from 'typeorm';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import { throws } from 'assert';
 
 // Client send a message and server broadcast it
 @WebSocketGateway(6005, { cors: '*:*' })
@@ -43,6 +44,18 @@ export class ChatGateway {
       displayname: user.displayname,
     };
     this.server.to(payload.chatRoom).emit('messageReceived', newPayload);
+  }
+
+  @SubscribeMessage('alarm-channel')
+  handleAlarmCh(client: Socket, payload: any) {
+    this.logger.log('alarm-chanel');
+    this.server.to(payload.chatRoom).emit('alarm-channel');
+  }
+
+  @SubscribeMessage('alarm-all')
+  handleAlarmAll(client: Socket) {
+    this.logger.debug('alarm-all');
+    this.server.emit('alarm-all');
   }
 
   @SubscribeMessage('joinRoom')

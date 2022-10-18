@@ -100,6 +100,7 @@ export interface AddPopup_ {
   userChannels: any;
   setUserChannels: any;
   setPublic: any;
+  socket: Socket;
 }
 
 export interface Message_ {
