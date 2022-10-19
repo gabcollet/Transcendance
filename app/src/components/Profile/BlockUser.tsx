@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from "react";
-import { fetchObject, fetchText } from "./FetchValue";
+import { fetchText } from "./FetchValue";
 import FriendCardStyle from "./FriendCard.module.css";
 
 export const BlockUser = (props: any) => {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useContext, useEffect, useState } from "react";
 import { fetchObject } from "./FetchValue";
 import styles from "./ProfileHeader.module.css";
