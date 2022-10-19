@@ -13,7 +13,7 @@ export const fetchText = async (route: string, setCallBack: Function) => {
   setCallBack(await res.text());
 };
 
-export const fetchObject = async (route: string, setCallBack: Function) => {
+export const fetchObject = async (route: string, setCallBack?: Function) => {
   const res = await fetch("http://localhost:3030/" + route, {
     credentials: "include",
     headers: {
@@ -21,5 +21,7 @@ export const fetchObject = async (route: string, setCallBack: Function) => {
     },
   });
   const data = await res.json();
-  setCallBack(data);
+  if (setCallBack){
+    setCallBack(data);
+  }
 };

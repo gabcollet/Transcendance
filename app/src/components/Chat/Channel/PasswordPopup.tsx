@@ -37,7 +37,7 @@ const PasswordPopup = (props: PasswordPopup_) => {
           getChannels(props.setUserChannels, props.setPublic);
         })
         .catch((error) => {
-          console.log(error.response.data.message);
+          // console.log(error.response.data.message);
           if (typeof error.response.data.message == "string") {
             setErrorMsg(
               <div>

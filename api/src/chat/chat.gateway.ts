@@ -56,23 +56,23 @@ export class ChatGateway {
 
   @SubscribeMessage('alarm-all')
   handleAlarmAll(client: Socket) {
-    this.logger.debug('alarm-all');
+    // this.logger.debug('alarm-all');
     this.server.emit('alarm-all');
   }
 
   @SubscribeMessage('joinRoom')
   handleJoin(client: Socket, payload: any): void {
     //need to be secured
-    this.logger.log('USER JOINED ROOM :', payload.chatRoom);
+    this.logger.log(`USER JOINED ROOM : ${payload.chatRoom}`);
     client.join(payload.chatRoom);
     this.server.to(payload.chatRoom).emit('joined', payload.chatRoom);
   }
   @SubscribeMessage('leaveRoom')
   handleLeave(client: Socket, payload: any): void {
-    this.logger.debug(
-      'USER :' + payload.user + ' LEFT ROOM : ',
-      payload.chatRoom,
-    );
+    // this.logger.debug(
+    //   'USER :' + payload.user + ' LEFT ROOM : ',
+    //   payload.chatRoom,
+    // );
     this.server.to(payload.chatRoom).emit('leaved', payload.chatRoom);
     client.leave(payload.chatRoom);
   }
