@@ -17,7 +17,7 @@ export async function getChannels(setChannels: any, setPublic: any) {
       setChannels(res.data);
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
     });
   await axios
     .get("http://localhost:3030/chat/public-channels", {
@@ -30,7 +30,7 @@ export async function getChannels(setChannels: any, setPublic: any) {
       setPublic(res.data);
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
     });
 }
 
@@ -83,7 +83,7 @@ export async function joinChannel(
       ret_value = res.data;
       if (res.data === "connected") {
         getChannels(setUserChannels, setPublic);
-        console.log("Channel joined");
+        // console.log("Channel joined");
       }
     })
     .catch((error) => {
@@ -97,7 +97,7 @@ export async function joinPassword(
   setTrigger: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   setTrigger(true);
-  console.log("IN PASSWORD");
+  // console.log("IN PASSWORD");
 }
 
 export async function getChatMembers(roomID: number) {
@@ -141,8 +141,8 @@ export async function isAdminRequest(chatRoom: number, username: string) {
 }
 
 export async function giveAdmin(chatRoom: number, username: string) {
-  console.log(username);
-  console.log(chatRoom);
+  // console.log(username);
+  // console.log(chatRoom);
   if (chatRoom && username) {
     await axios
       .post(
@@ -159,7 +159,7 @@ export async function giveAdmin(chatRoom: number, username: string) {
         }
       )
       .then((res) => {
-        console.log("RESPONSE FROM GIVE : " + res.data);
+        // console.log("RESPONSE FROM GIVE : " + res.data);
       });
   }
 }
@@ -180,7 +180,7 @@ export async function kickUser(username: string, chatroom: number) {
       }
     )
     .then((res) => {
-      console.log("USER KICKED");
+      // console.log("USER KICKED");
     });
 }
 
@@ -190,7 +190,7 @@ export async function restrictUser(
   time: number,
   type: string
 ) {
-  console.log(username + " " + chatroom + " " + time + " " + type);
+  // console.log(username + " " + chatroom + " " + time + " " + type);
   await axios
     .post(
       "http://localhost:3030/chat/ban-mute",
@@ -208,7 +208,7 @@ export async function restrictUser(
       }
     )
     .then((res) => {
-      console.log("USER RESTRICTED");
+      // console.log("USER RESTRICTED");
     });
 }
 
@@ -340,7 +340,7 @@ export async function invitePlay(target: string, username: string) {
     username: username,
     roomID: roomID,
   });
-  console.log("ROOMID = " + roomID);
+  // console.log("ROOMID = " + roomID);
 }
 
 export async function removePassword(channelID: number) {

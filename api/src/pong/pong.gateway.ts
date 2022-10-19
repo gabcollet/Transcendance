@@ -38,7 +38,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayDisconnect {
     if (payload.username && payload.roomID && payload.target) {
       const playerID = await this.pongService.getPlayerID(payload.target);
       if (playerID === -1) return false;
-      this.logger.debug('INVITING :', payload.roomID, playerID);
+      // this.logger.debug('INVITING :', payload.roomID, playerID);
       this.server
         .to(playerID)
         .emit('invited', { room: payload.roomID, user: payload.username });

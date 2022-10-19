@@ -4,7 +4,7 @@ import { ProfileContext } from "../../App";
 import styles from "./ProfileConfig.module.css";
 import ProfileStyles from "../../Pages/Profile.module.css";
 
-import axios from "axios";
+// import axios from "axios";
 import { fetchObject } from "./FetchValue";
 import { ProfileButtons } from "./ProfileButtons";
 
@@ -12,7 +12,7 @@ export const ProfileConfig = (props: any) => {
   const profileName = useContext(ProfileContext);
   const [newDisplayName, setNewDisplayName] = useState("");
   const [newProfilePicture, setNewProfilePicture] = useState("");
-  const [newTwoFA, setNewTwoFA] = useState(Object);
+  // const [newTwoFA, setNewTwoFA] = useState(Object);
   const [profileUser, setProfileUser] = useState(Object);
   const [twoFAToggle, setTwoFAToggle] = useState(false);
   const [displayErrorMessage, setDisplayErrorMessage] = useState("");
@@ -68,7 +68,7 @@ export const ProfileConfig = (props: any) => {
 
   const handleFileSelected = async (event: any) => {
     if (event.target.files[0].size > twoMB) {
-      console.log(`image size: ${event.target.files[0].size}`);
+      // console.log(`image size: ${event.target.files[0].size}`);
       setImageErrorMessage("ERROR: Image should be smaller than 2MB");
       event.target.files[0].value = "";
       setNewProfilePicture("");
@@ -101,7 +101,7 @@ export const ProfileConfig = (props: any) => {
   };
 
   const handleTwoFAClick = async (event: any) => {
-    await fetchObject("auth/TwoFA/toggle", setNewTwoFA);
+    await fetchObject("auth/TwoFA/toggle");
     twoFAToggle === true ? setTwoFAToggle(false) : setTwoFAToggle(true);
   };
 

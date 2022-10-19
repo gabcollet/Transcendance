@@ -45,13 +45,13 @@ const AddPopup = (props: AddPopup_) => {
           },
         })
         .then((response) => {
-          console.log("Channel Created");
+          // console.log("Channel Created");
           props.setTrigger(false);
           setName("");
           setPassword("");
           setChecked(false);
           setErrorMsg(<></>);
-          console.log("Getting channels...");
+          // console.log("Getting channels...");
           getChannels(props.setUserChannels, props.setPublic);
           props.socket.emit("alarm-all");
         })

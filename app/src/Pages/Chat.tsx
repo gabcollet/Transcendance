@@ -22,7 +22,7 @@ import { fetchObject } from "../components/Profile/FetchValue";
 import { socket } from "./PongRoom";
 import InvitePopup from "../components/Chat/InvitePopup";
 
-const Chat = () => {
+const Chat = (props:any) => {
   const profileName = useContext(ProfileContext);
   const [messages, setMessages] = useState<Message_[]>([]);
   const [roomId, setRoomId] = useState<number>(0);
@@ -47,6 +47,10 @@ const Chat = () => {
   } else {
     otherName = "";
   }
+
+  useEffect(() => {
+    socket.emit("leaveRoom");
+  }, [location]);
 
   useEffect(() => {
     const getBlockedUsers = async () => {
@@ -81,7 +85,7 @@ const Chat = () => {
 
   useEffect(() => {
     const newSocket = io("localhost:6005");
-    console.log("chat socket connected");
+    // console.log("chat socket connected");
     setSocket(newSocket);
   }, [setSocket]);
 

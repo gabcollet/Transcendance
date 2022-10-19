@@ -26,7 +26,7 @@ export class ChatController {
     if (!query.id || query.id === '0') {
       return [];
     }
-    this.logger.debug('ROOM ID = ' + query.id);
+    // this.logger.debug('ROOM ID = ' + query.id);
     const messages = await this.chatService.getMessages(
       Number(query.id),
       req.user.toString(),
@@ -80,7 +80,7 @@ export class ChatController {
     if (!request.user || !request.body.value) {
       return false;
     }
-    this.logger.debug(request.body.value, request.user.toString());
+    // this.logger.debug(request.body.value, request.user.toString());
     const confirmation = await this.chatService.removeChannel(
       request.body.value,
       request.user.toString(),
@@ -154,7 +154,7 @@ export class ChatController {
   @UseGuards(JwtAuthGuard)
   @Get('is-restricted')
   async isRestricted(@Query() query) {
-    console.log(query);
+    // console.log(query);
     if (!query.author || !query.chatroom) return false;
     const user = await this.chatService.getUser(query.author);
     if (!user) return false;
@@ -214,7 +214,7 @@ export class ChatController {
         return false;
       }
     }
-    this.logger.debug('USER RESTRICTED : ' + req.body.type);
+    // this.logger.debug('USER RESTRICTED : ' + req.body.type);
     return true;
   }
 

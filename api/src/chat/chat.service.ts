@@ -96,7 +96,7 @@ export class ChatService {
         },
       },
     });
-    this.logger.debug('ALREADY EXIST ?', joined);
+    // this.logger.debug('ALREADY EXIST ?', joined);
     if (joined) {
       const joining = await this.prisma.userChatroom.update({
         where: {
@@ -351,17 +351,17 @@ export class ChatService {
     if (check === true) {
       const userAdmin = await this.getAdmin(user, chatroom);
       if (userAdmin === false) {
-        this.logger.debug('USER NOT ADMIN');
+        // this.logger.debug('USER NOT ADMIN');
         return false;
       }
     }
     const targetAdmin = await this.getAdmin(target, chatroom);
     const owner = await this.isOwner(user, chatroom);
     if (targetAdmin === true && owner === false) {
-      this.logger.debug('TARGET IS ADMIN');
+      // this.logger.debug('TARGET IS ADMIN');
       return false;
     }
-    this.logger.debug('RETURNING TRUE');
+    // this.logger.debug('RETURNING TRUE');
     return true;
   }
 
@@ -413,8 +413,8 @@ export class ChatService {
       this.logger.log('USER ALREADY BANNED');
       return false;
     }
-    console.log(chatroomId);
-    console.log(user.id);
+    // console.log(chatroomId);
+    // console.log(user.id);
     const restrict = await this.prisma.restricted.create({
       data: {
         restrictionRoomId: chatroomId,
@@ -542,7 +542,7 @@ export class ChatService {
         protected: true,
       },
     });
-    console.log(changed);
+    // console.log(changed);
   }
 
   async isBlocked(username: string, target: string) {
