@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Username_ } from "../../interfaces";

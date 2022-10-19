@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect, useContext } from "react";
 import ProfileBodyStyle from "./ProfileBody.module.css";
 import FriendCardStyle from "./FriendCard.module.css";
@@ -29,7 +30,7 @@ export const FriendButton = (props: FriendButtonProps) => {
       );
     }
     fetchAsync();
-  }, [props.friendUsername, friendStatus]);
+  }, [props.friendUsername, friendStatus, profileName]);
 
   async function addFriend() {
     const resp = await fetch(

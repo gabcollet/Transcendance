@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect } from "react";
 import styles from "./ProfileBody.module.css";
 import data from "./data_placeholder";

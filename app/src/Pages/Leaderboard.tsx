@@ -12,7 +12,7 @@ export const TopTenCard = (props: any) => {
     if (props.player.username) {
       fetchObject("users/" + props.player.username, setPlayerObject);
     }
-  }, []);
+  }, [props.player.username]);
 
   let winRatio = props.player.wins / props.player.losses;
   let winRatioDecimal = "";

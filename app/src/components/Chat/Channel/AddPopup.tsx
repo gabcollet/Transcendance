@@ -69,8 +69,8 @@ const AddPopup = (props: AddPopup_) => {
             );
           } else {
             const listMessage = error.response.data.message.map(
-              (message: string) => (
-                <li key="2" className={styles["msg-list"]}>
+              (message: string, index: number) => (
+                <li key={index} className={styles["msg-list"]}>
                   <p className={styles["error-msg"]}>{message}</p>
                 </li>
               )

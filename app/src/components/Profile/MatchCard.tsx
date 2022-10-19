@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect, useContext } from "react";
 import MatchCardStyle from "./MatchCard.module.css";
 import { fetchObject, fetchText } from "./FetchValue";
